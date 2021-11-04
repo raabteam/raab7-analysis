@@ -11,5 +11,5 @@ Once populated, these pages will contain a suite of scripts for analysing raw RA
 
 ## More information
 
-Hannah Kuper, Sarah Polack, Hans Limburg. Rapid assessment of avoidable blindness. Community Eye Health. 2006; 19(60): 68–69. [Available here] (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1871676/)
+Hannah Kuper, Sarah Polack, Hans Limburg. Rapid assessment of avoidable blindness. Community Eye Health. 2006; 19(60): 68–69. (Availbale here: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1871676/)
 
