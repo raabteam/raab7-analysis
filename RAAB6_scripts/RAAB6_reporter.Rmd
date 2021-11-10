@@ -7,6 +7,7 @@ output:
 ```{r setup, include=FALSE}
 
 require(rmarkdown)
+require(readxl)
 require(knitr)
 require(tinytex)
 require(kableExtra)
@@ -23,18 +24,20 @@ options(knitr.table.format = "latex")
 knitr::opts_knit$set(root.dir = path.to.scripts)
 knitr::opts_chunk$set(echo = FALSE)
 
-raab<-read.csv(paste0(path.to.raab,"raabs_612.csv"))
+raab<-read.csv(paste0(path.to.raab,"raabs_612_repo.csv"))
 raab<-raab[raab$raab_id==ID,]
 
-pop<-read.csv(paste0(path.to.pop,"raabs_pop_612_peek_format.csv"))
+pop<-read.csv(paste0(path.to.pop,"raabs_pop_612_repo.csv"))
 popfives<-pop[pop$raab_id==ID,]
 
-meta<-read.csv(paste0(path.to.raab,"raab-log_v3.csv"))
-raab_meta<-meta[meta$raab_id==ID,]
+mrm_vars<-c("raab_id","survey_title","year_end","iso_2","level1","level2","OSM_ID","ISO3166-1","ISO3166-2","admin_level","national","sample_size","response_rate","raab_version_saved","va_threshold","raab_dr","raab_wgq","iceh_data","pi_name","pi_institution","pi_email1","trainer_name","trainer_email1","implementing_org","facilitating_org","funder","pub_doi1","pub_doi2","pub_doi3","pub_url")
+
+#meta<-read_xlsx(paste0(path.to.raab,"raab-log_v3.xlsx"),sheet=1)
+raab_meta<-meta[meta$raab_id==ID,mrm_vars]
 PI<-raab_meta$pi_name
 TITLE<-raab_meta$survey_title
 
-write.table(raab_meta,file=paste0(outdir,"/raw/meta.csv"),row.names=F,col.names=T,sep=",")
+write.table(raab_meta,file=paste0(outdir,"/raw/meta.csv"),row.names=F,col.names=T,sep=",",na="")
 write.table(raab,file=paste0(outdir,"/raw/data/survey_data.csv"),row.names=F,col.names=T,sep=",")
 write.table(popfives,file=paste0(outdir,"/raw/data/population.csv"),row.names=F,col.names=T,sep=",")
 
@@ -88,9 +91,13 @@ knitr::kable(sum1.nice.names, booktabs=T, linesep = "", caption = "Eligible pers
 
 ```
 
-The response rate indicates the proportion of the eligible sample who were examined.  The sample size calculator includes the expected non-response rate in the sample and increases the sample size accordingly. This ensures that the sample size is powerful enough to estimate the proposed condition with the expected accuracy. If the response rate is lower than 80-90%, there is a concern that the condition under review in the 10-20% who were not examined may be different to those that were examined. If the response rate is close to 100%, this might be an indication that eligible participants who were absent or refused were replaced by eligible participants in the next household, which would introduce bias and mean that results are less representative. The reason is that people with impaired vision are more likely to stay at home and people with good vision are more likely to be away. Absent participants should not be replaced with participants who are at home, because that would increased the chance of including more people with vision problems and falsely inflate the outcome.
+The response rate indicates the proportion of eligible, enumerated people who were examined.  The RAAB sample size calculator includes the expected non-response rate in the sample and increases the sample size accordingly. This ensures that the sample size is powerful enough to estimate the prevalence of blindness with the desired precision. 
 
-Conversely, in certain settings participants may be more compliant with leadership requests to stay home, or more likely to work in the environment surrounding their home. It is important to review this information in relation to the tables on representativeness of the sample below to identify whether a high response rate is valid.
+If the response rate is lower than 80-90%, there is a concern that the conditions under review in the 10-20% who were not examined may be different to those that were examined (non-response bias). For example, non-responders in a RAAB may be younger than responders (e.g., working age vs retired) and may, on average, be less likely to be vision impaired. 
+
+If the response rate is over 95%, this might be an indication that eligible participants who were absent or refused to participate were not enumerated but rather replaced by eligible participants in the next household, which would introduce selection bias and mean that results are not representative of the population. For example, people with impaired vision may be more likely to be at home and people with good vision may be more likely to be away and unavailable. In certain settings (e.g., rural or remote) a response rate over 95% is not uncommon – participants may be more compliant with requests to stay home on the day of data collection, or more likely to work in the environment close to their home.
+
+It is important to review this information in relation to the tables on representativeness of the sample below to identify whether a high response rate is valid.
 
 ## Table 2, table 3
 
@@ -166,25 +173,39 @@ bp3<-barplot(fasa1x,horiz=T,yaxt='n',xaxt='n',col=c("white","purple"),border = "
 axis(1,at=c(-10,0,10,20,30,40,50,60,70,80,90,100),labels=c(-10,0,10,20,30,40,50,60,70,80,90,100),cex.axis=0.6)
 axis(2,at=bp3[1:4],labels = NA,tick=F)
 text(x=par("usr")[3]-6, y=bp3[1:4], labels=c("50-59","60-69","70-79","80+"), xpd=NA, srt=325, cex=0.6)
-legend("top",col="purple",pch=c(0,15),c("Examined","Nonresponders"),bty='n',cex=0.6,title = expression(bold("Enumerated females")),horiz=T,title.adj=0)
+legend("top",col="purple",pch=c(0,15),c("Examined","Non-responders"),bty='n',cex=0.6,title = expression(bold("Enumerated females")),horiz=T,title.adj=0)
 
 bp4<-barplot(masa1x,horiz=T,yaxt='n',xaxt='n',col=c("white","gold"),border = "gold",xlab="Proportion (%)",ylab="Age group (years)",cex.lab=0.6,ylim=c(0,6))
 axis(1,at=c(-10,0,10,20,30,40,50,60,70,80,90,100),labels=c(-10,0,10,20,30,40,50,60,70,80,90,100),cex.axis=0.6)
 axis(2,at=bp4[1:4],labels = NA,tick=F)
 text(x=par("usr")[3]-6, y=bp4[1:4], labels=c("50-59","60-69","70-79","80+"), xpd=NA, srt=325, cex=0.6)
-legend("top",col="gold",pch=c(0,15),c("Examined","Nonresponders"),bty='n',cex=0.6,title=expression(bold("Enumerated males")),horiz=T,title.adj=0)
+legend("top",col="gold",pch=c(0,15),c("Examined","Non-responders"),bty='n',cex=0.6,title=expression(bold("Enumerated males")),horiz=T,title.adj=0)
 
 ```
 
-For your results to be useful for planning, your sample needs to be representative of your population. By comparing the age-sex composition of your sample, to the age-sex composition of the population, we can assess whether the sample is representative. You can also use the age-sex composition of the population to weight your crude estimates, providing age-sex adjusted (ASA) estimates that are more representative than the crude sample outputs.
+For your results to be useful for planning, your sample needs to be representative of the population 50 years and older. After completing the survey, we can assess representativeness by comparing the age-sex composition of the sample to the age-sex composition of the population 50 years and older. 
 
-Important: if your sample differs from the population because one group was more likely to be unavailable (e.g. young men, or other seasonal labourers) then you would expect to see this reflected in the response rate (i.e. more people are unavailable).  If the difference between the sample and the population is high, but the proportion of people unavailable is low (e.g. response rate is still above 95%) this might be an indication that eligible participants who were absent or refused were replaced by others, which may introduce bias as explained above.
+We can also use the age-sex composition of the population 50 years and older to weight (post-stratify) crude estimates and provide age-sex adjusted (ASA) estimates for the population. We apply an ‘inflation factor’ – derived from sample vs population comparisons – to the counts of our conditions of interest in each sample age-sex group to generate extrapolated values in the population. 
+
+Often, there are more older females than younger males in the sample, and less younger males in the sample than in the population, because men are more likely to be away at work when the survey teams visit. If this is the case, use the age-sex adjusted estimates.
+
+Important: if your sample differs from the population because one group was more likely to be unavailable (e.g., younger men, or other seasonal labourers) then you would expect to see this reflected in the response rate (i.e., more people enumerated but unavailable).  If the difference between the sample and the population is high, but the proportion of people unavailable is low (e.g., response rate is still above 95%) this might be an indication that eligible participants who were absent or refused were replaced by others, which introduces bias and may mean that results are not accurate.
 
 \newpage
 
-# Prevalence and causes of vision impairment
+# Prevalence and causes of distance vision impairment
 
-We report the prevalence of vision impairment (VI) using presenting visual acuity (PVA) in the better eye. Presenting VA is measured with correction, if available.
+We report the prevalence of distance vision impairment (VI) in the population 50 years and older using presenting visual acuity (PVA) in the better eye. PVA is visual acuity measured with correction, if available.
+
+Distance vision impairment categories are defined according to the VA thresholds used in the World Health Organization’s International Classification of Diseases (ICD-11).
+
+Blindness: PVA less than 3/60 in the better eye
+
+Severe VI: PVA less than 6/60 to 3/60 in the better eye
+
+Moderate VI: PVA less than 6/18 to 6/60 in the better eye
+
+Mild VI: PVA less than 6/12 to 6/18 in the better eye
 
 ## Table 4, table 5
 
@@ -213,7 +234,7 @@ write.table(sum3a.nice.names,file=paste0(outdir,"/summary/data/t4.csv"),row.name
 
 names(sum3a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(sum3a.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of blindness (PVA <3/60), severe (PVA <6/60), moderate (PVA <6/18) and mild (PVA <6/12) vision impairment") %>% 
+knitr::kable(sum3a.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of blindness, severe, moderate and mild vision impairment") %>% 
   kable_styling(full_width=T,latex_options="HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
@@ -228,9 +249,9 @@ sum3b.nice.names<-sum3.nice.names[,c("vi.level","female.adj.pct","female.adj.ci"
 
 write.table(sum3b.nice.names,file=paste0(outdir,"/summary/data/t5.csv"),row.names=F,col.names=T,sep=",")
 
-names(sum3b.nice.names)<-c("","%","95% CI","Extraplotated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magintude")
+names(sum3b.nice.names)<-c("","%","95% CI","Extraplotated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude")
 
-knitr::kable(sum3b.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence and extrapolated magnitude of blindness (PVA <3/60), severe (PVA <6/60), moderate (PVA <6/18) and mild (PVA <6/12) vision impairment") %>% 
+knitr::kable(sum3b.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence and extrapolated magnitude of blindness, severe, moderate and mild vision impairment") %>% 
   kable_styling(latex_options=c("scale_down","HOLD_position")) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(c(4,7,10),width='2cm') %>%
@@ -238,7 +259,7 @@ knitr::kable(sum3b.nice.names, booktabs=T, linesep = "", caption = "Adjusted pre
 
 ```
 
-These tables show the crude and adjusted prevalence of vision impairment by impairment level and gender. Table 5 also shows the estimated magnitude of vision impairment in the study area by gender, by multiplying the sample prevalence by the total population according to the uploaded population data. The 95% confidence interval is calculated to account for cluster sampling.
+These tables show the crude and adjusted prevalence of vision impairment by impairment level and gender. The sample size for RAAB is calculated to provide an acceptable level of precision for the total prevalence of blindness. The accuracy of prevalence estimates for population subgroups is lower and caution should be taken in the interpretation of these data. Table 5 shows the estimated magnitude of vision impairment in the study area by gender, calculated by multiplying the crude prevalence by the population count (e.g., census data). Throughout, the 95% confidence intervals are calculated to account for RAAB's cluster sampling design.
 
 ## Table 6, table 7
 
@@ -267,7 +288,7 @@ write.table(asa6a.nice.names,file=paste0(outdir,"/summary/data/t6.csv"),row.name
 
 names(asa6a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(asa6a.nice.names, booktabs=T, linesep = "", caption = "Crude cumulative prevalence of blindness, severe, moderate and mild vision impairment") %>% 
+knitr::kable(asa6a.nice.names, booktabs=T, linesep = "", caption = "Crude cumulative prevalence of blindness (any PVA <3/60), severe (any PVA <6/60), moderate (any PVA <6/18) and mild (any PVA <6/12) vision impairment") %>% 
   kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
   row_spec(0,italic=TRUE) %>%
   add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold = T)
@@ -284,7 +305,7 @@ write.table(asa6b.nice.names,file=paste0(outdir,"/summary/data/t7.csv"),row.name
 
 names(asa6b.nice.names)<-c("","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude")
 
-knitr::kable(asa6b.nice.names, booktabs=T, linesep = "", caption = "Adjusted cumulative prevalence and extrapolated magnitude of blindness, severe, moderate and mild vision impairment") %>%
+knitr::kable(asa6b.nice.names, booktabs=T, linesep = "", caption = "Adjusted cumulative prevalence of blindness (any PVA <3/60), severe (any PVA <6/60), moderate (any PVA <6/18) and mild (any PVA <6/12) vision impairment") %>%
   kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(c(4,7,10),width='2cm') %>%
@@ -321,7 +342,7 @@ sum6.for.tree<-sum6.numeric
 
 names(sum6.nice.names) <- c(' ', 'n', '%', 'n', '%','n', '%','n', '%')
 
-knitr::kable(sum6.nice.names, booktabs=T, linesep = "", caption = " Principal cause of blindness (PVA <3/60), severe (PVA <6/60), moderate (PVA <6/18) and mild (PVA <6/12) vision impairment") %>% 
+knitr::kable(sum6.nice.names, booktabs=T, linesep = "", caption = " Principal cause of blindness, severe, moderate and mild vision impairment") %>% 
   kable_styling(full_width=T,latex_options = "HOLD_position") %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(13,hline_after=T) %>%
@@ -343,7 +364,7 @@ write.table(sum6ag,file=paste0(outdir,"/summary/data/t9.csv"),row.names=F,col.na
 
 names(sum6ag)<-c("","n", "%", "n", "%", "n","%","n","%")
 
-knitr::kable(sum6ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = " Principal cause of blindness (PVA <3/60), severe (PVA <6/60), moderate (PVA <6/18) and mild (PVA <6/12) vision impairment, by intervention category") %>% 
+knitr::kable(sum6ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = " Principal cause of blindness, severe, moderate and mild vision impairment, by intervention category") %>% 
   kable_styling(full_width=T,latex_options = "HOLD_position") %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='5cm') %>%
@@ -405,7 +426,7 @@ write.table(prev4.nice.names,file=paste0(outdir,"/summary/data/t10.csv"),row.nam
 
 names(prev4.nice.names)<-c("","n","%","n","%","n","%")
 
-knitr::kable(prev4.nice.names, booktabs=T, linesep = "", caption = "Principal cause of blindness (PVA<3/60) in males and females") %>% 
+knitr::kable(prev4.nice.names, booktabs=T, linesep = "", caption = "Principal cause of blindness in males and females") %>% 
   kable_styling(full_width=T,latex_options = "HOLD_position") %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(13,hline_after=T) %>%
@@ -414,7 +435,7 @@ knitr::kable(prev4.nice.names, booktabs=T, linesep = "", caption = "Principal ca
 
 ```
 
-This table shows the principal cause of blindness disaggregated by sex.
+This table shows the principal cause of blindness disaggregated by gender.
 
 ```{r prev4_agg, echo=FALSE}
 
@@ -429,7 +450,7 @@ write.table(prev4ag,file=paste0(outdir,"/summary/data/t11.csv"),row.names=F,col.
 
 names(prev4ag)<-c("","n", "%", "n", "%", "n","%")
 
-knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = " Principal cause of blindness (PVA <3/60) in bilaterally affected individuals, by gender and intervention category") %>% 
+knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = " Principal cause of blindness (PVA <3/60), by gender and intervention category") %>% 
   kable_styling(full_width=T,latex_options = "HOLD_position") %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='5cm') %>%
@@ -470,7 +491,8 @@ knitr::kable(unta.nice.names,booktabs=T, linesep = "",caption="Crude prevalence 
   kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='4cm') %>%
-  add_header_above(c("VI level" = 1, "Male" = 3, "Female" = 3, "Total" = 3),bold=T)
+  add_header_above(c("VI level" = 1, "Male" = 3, "Female" = 3, "Total" = 3),bold=T) %>%
+  add_footnote("Unilateral refers to cases where the other eye has PVA of 6/12",notation="symbol")
 
 ```
 
@@ -494,11 +516,12 @@ knitr::kable(untb.nice.names, booktabs=T, linesep = "", caption="Adjusted preval
   kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(c(4,7,10),width='2cm') %>%
-  add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
+  add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) %>%
+  add_footnote("Unilateral refers to cases where the other eye has PVA of 6/12",notation="symbol")
 
 ```
 
-Cases of unilateral vision impairment acknowledge an additional sight loss burden in the population not captured in the standard WHO definition of vision impairment which refers to bilateral impairment only.
+Cases of unilateral vision impairment acknowledge an additional sight loss burden in the population, not captured in the standard definition of bilateral vision impairment, but with the potential to impact on visual functioning.
 
 \newpage
 
@@ -558,7 +581,7 @@ knitr::kable(asa7b.nice.names, booktabs=T, linesep = "", caption = "Adjusted pre
   pack_rows("Bilateral",1,4) %>%
   pack_rows("Unilateral",5,8) %>%
   add_header_above(c("Operable cataract" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) %>%
-  add_footnote("Unilateral refers to cases where the other eye has normal PVA",notation="symbol")
+  add_footnote("Unilateral refers to cases where the other eye has PVA of 6/12",notation="symbol")
 
 ```
 
@@ -628,7 +651,7 @@ The standard RAAB survey protocol does not allow for in-depth interviews to dete
 
 # Surgical outcomes
 
-Surgical outcomes are reported for all operated eyes in the sample, not at the person level.
+Surgical outcomes are reported for all operated eyes in the sample, not at the person level. RAAB gives population based data on post-operative visual outcomes, not specific to one surgeon or one hospital and with follow-up periods ranging from months to decades.
 
 ## Table 18
 
@@ -729,8 +752,7 @@ knitr::kable(outc6a.nice.names, booktabs=T, linesep = "", caption = "Post-operat
   kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(3,hline_after=T) %>%
-  add_header_above(c("Post-surgical VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T) %>%
-  add_footnote(c("Gov. Hosp.: Government hospital","Vol. Hosp.: NGO hospital","Priv. Hosp.: Private hospital", "Camp Improv.: Improvised surgical camp", "Trad.: Traditional setting"), notation="symbol")
+  add_header_above(c("Post-surgical VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T)
 
 ```
 
@@ -753,16 +775,27 @@ knitr::kable(outc6b.nice.names, booktabs=T, linesep = "", caption = "Post-operat
   kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(3,hline_after=T) %>%
-  add_header_above(c("Post-surgical VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T) %>%
-  add_footnote(c("Gov. Hosp.: Government hospital","Vol. Hosp.: NGO hospital","Priv. Hosp.: Private hospital", "Camp Improv.: Improvised surgical camp", "Trad.: Traditional setting"), notation="symbol")  
+  add_header_above(c("Post-surgical VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T) 
 
 ```
 
-Variation in outcome by place of surgery allows for monitoring of quality across providers. Where providers are outliers, in terms of poor quality, steps to address this should be incorporated in eye health planning.
+Variation in outcome by place of surgery allows for monitoring of quality across providers. Where providers are outliers, in terms of poor quality, steps to address this should be incorporated in service planning.
+
+Gov. Hosp. = Government hospital
+
+Vol. Hosp .= NGO hospital
+
+Priv. Hosp. = Private hospital
+
+Camp Improv. = Improvised surgical camp
+
+Trad. = Traditional setting
 
 \newpage
 
 # Refractive error
+
+For RAAB6, refractive error as a cause of vision impairment is defined as PVA less than 6/12 improving to 6/12 with pinhole. Note: These estimates are based on presenting VA, i.e., with correction if available. Participants with corrected refractive error are not identified, only those with under- or uncorrected refractive error.
 
 ## Table 23, table 24
 
@@ -816,17 +849,15 @@ knitr::kable(newtab4b.nice.names, booktabs=T, linesep = "", caption = "Adjusted 
 ```
 
 
-Note: These estimates are based on presenting VA, i.e., with correction if available. Participants with corrected refractive error are not identifed, only those with under- or uncorreccted refractive error
-
 ## Table 25
 
-Refractive error coverage (REC) is defined as (A + B) / (A + B + C) where
+For RAAB6, refractive error coverage (REC) is defined as (A + B) / (A + B + C) where:
 
-A: Number of people surveyed who use spectacles and have a presenting visual acuity of logmar==0.3 or Snellen 6/12 or better
+A = Number of people who use spectacles and have a better eye PVA of 6/12 (met need)
 
-B: Number of people who use spectacles, have a presenting visual acuity of logmar>0.3 or Snellen <6/12 or better and have a pinhole visual acuity of logmar==0.3 or Snellen 6/12 or better.
+B = Number of people who use spectacles, have a better eye PVA <6/12 and a better eye PinVA of 6/12 (undermet need)
 
-C: Number of people who do not use spectacles, have a presenting visual acuity of logmar>0.3 or Snellen <6/12 or better and have a pinhole visual acuity of logmar==0.3 or Snellen 6/12 or better.
+C = Number of people who do not use spectacles, have a better eye PVA <6/12 and a better eye PinVA of 6/12 (unmet need)
 
 ```{r new_tab_5,echo=FALSE}
 
@@ -882,43 +913,102 @@ knitr::kable(newtab6.nice.names, booktabs=T, linesep = "", caption = "Spectacle 
 
 \newpage
 
-# Glossary of definitions
+# Notes
 
-VI = Vision Impairment
-PVA = Presenting Visual Acuity
-PinVA = Pinhole Visual Acuity
+## Abbreviations
 
-LogMAR 0.3 = Snellen 6/12
-LogMAR 0.47 = Snellen 6/18
-LogMAR 1.0 = Snellen 6/60
-LogMAR 1.8 = Snellen 3/60
+CI = Confidence interval
+
+CNS = Central nervous system
+
+CSC = Cataract surgical coverage
+
+NGO = Nongovernmental organisation
+
+PinVA = Pinhole visual acuity
+
+PVA = Presenting visual acuity
+
+REC = Refractive error coverage
+
+VI = Vision impairment
+
+## Snellen to logMAR conversion
+
+Historic RAAB survey data variables have been updated to align with RAAB7 variable names and levels. RAAB7 records visual acuity in logMAR notation (or a code number representing light perception)
+
+0.3 = Can see 6/12 [1]
+
+0.47 = Cannot see 6/12 but can see 6/18 [2]
+
+1.0 = Cannot see 6/18 but can see 6/60 [3]
+
+1.3 = Cannot see 6/60 but can see 3/60 [4]
+
+1.8 = Cannot see 3/60 but can see 1/60 [5]
+
+3 = Light perception [6]
+
+4 = No light perception [7]
+
 
 ## Bilateral VI
 
-Blindness: PVA of logMAR >=1.8 in the better eye
+Blindness: PVA less than 3/60 in the better eye
 
-Severe VI: PVA of logMAR >=1.3 in the better eye
+Severe VI: PVA less than 6/60 to 3/60 in the better eye
 
-Moderate VI: PVA of logMAR >=1.0 in the better eye
+Moderate VI: PVA less than 6/18 to 6/60 in the better eye
 
-Mild VI: PVA of logMAR >=0.47 in the better eye
+Mild VI: PVA less than 6/12 to 6/18 in the better eye
 
 ## Unilateral VI
 
-Blindness: PVA of logMAR >=1.8 in one eye and logMAR 0.3 or better in the other eye
+Blindness: PVA less than 3/60 in one eye, PVA 6/18 in the other eye
 
-Severe VI: PVA of logMAR >=1.3 in one eye and logMAR 0.3 or better in the other eye
+Severe VI: PVA less than 6/60 to 3/60 in one eye, PVA 6/18 in the other eye
 
-Moderate VI: PVA of logMAR >=1.0 in one eye and logMAR 0.3 or better in the other eye
+Moderate VI: PVA less than 6/18 to 6/60 in one eye, PVA 6/18 in the other eye
 
-Mild VI: PVA of logMAR >=0.47 in one eye and logMAR 0.3 or better in the other eye
+Mild VI: PVA less than 6/12 to 6/18 in one eye, PVA 6/12 in the other eye
 
 ## Cataract-related VI and surgical outcomes
 
-Operable cataract: PinVA at <3/60, <6/60, <6/18 and <6/12 thresholds plus opacity in the lens plus untreated cataract as principal cause 
+Operable cataract: PinVA at <3/60, <6/60 and <6/18 thresholds plus lens opacity plus untreated cataract as principal cause
 
 Operated cataract: Aphakia or pseudoaphakia (with or without posterior capsule opacification [PCO]) 
 
+## Cataract surgical coverage (CSC)
+
+CSC is calculated at the person level, not by eyes, and calculated at various thresholds of operable cataract (see above).
+
+CSC is defined as (X + Y) / (X + Y + Z) where:
+
+X = individuals with unilateral pseudo/aphakia (i.e. operated cataract) and operable cataract in the other eye
+
+Y = individuals with bilateral pseudo/aphakia, regardless of post-operative presenting visual acuity
+
+Z = individuals with bilateral operable cataract
+
+For further information see: Ramke J, Gilbert CE, Lee AC, Ackland P, Limburg H, Foster A (2017) Effective cataract surgical coverage: An indicator for measuring quality-of-care in the context of Universal Health Coverage. PLoS ONE 12(3): e0172342. doi:10.1371/journal.pone.0172342
+
+## Refractive error coverage
+
+For RAAB6, refractive error coverage (REC) is defined as (A + B) / (A + B + C) where:
+
+A = Number of people who use spectacles and have a better eye PVA of 6/12 (met need)
+
+B = Number of people who use spectacles, have a better eye PVA <6/12 and a better eye PinVA of 6/12 (undermet need)
+
+C = Number of people who do not use spectacles, have a better eye PVA <6/12 and a better eye PinVA of 6/12 (unmet need)
+
+Note: This is an 'alternative' definition of REC, used where uncorrected VA measurements are not available. It makes an assumption that all participants wearing spectacles for PVA measurement are vision-impaired without them and may slightly over-estimate coverage compared to the 'gold-standard' calculation described here: McCormick I, Mactaggart I, Bastawrous A, Burton MJ, Ramke J. Effective refractive error coverage: an eye health indicator to measure progress towards universal health coverage. Ophthalmic Physiol Opt. 2020;40(1):1-5. doi:10.1111/opo.12662
+
+## 95% Confidence Interval
+
+The 95% confidence intervals are based on standard errors calculated for the clustering of the sample and the variability between clusters, specifically using the formula provided by:
+
+Bennett S, Woods T, Liyanage WM, Smith DL. A simplified general method for cluster-sample surveys of health in developing countries. World Health Stat Q. 1991;44(3):98-106.
 
 
 ```{r big_boi_maker, include=FALSE}

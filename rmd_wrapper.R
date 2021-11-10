@@ -39,9 +39,10 @@ meta$raab_id<-gsub("\\_$","",meta$raab_id)
 fulls<-meta[meta$repo_meta==TRUE & meta$repo_data==TRUE,]
 
 empties<-meta[meta$repo_meta==TRUE & meta$repo_data==FALSE,]
+#emptids[149] 2019_Paksitan skipped because it has 3 ?s in the names
+#empties<-empties[-149,]
 emptids<-unique(empties$raab_id)
 
-#emptids[149] 2019_Paksitan skipped because it has 3 ?s in the names
 
 for (i in 1:length(unique(empties$raab_id)))
 {
@@ -52,7 +53,7 @@ dir.create(paste0(ID,"/summary/data"))
 dir.create(paste0(ID,"/raw"))
 dir.create(paste0(ID,"/raw/data"))
 empty_meta<-empties[empties$raab_id==ID,]
-write.table(empty_meta,file=paste0(outdir,"/raw/meta.csv"),row.names=F,col.names=T,sep=",")
+write.table(empty_meta,file=paste0(outdir,"/raw/meta.csv"),row.names=F,col.names=T,sep=",",na="")
 }
 
 #RAAB5
@@ -97,8 +98,7 @@ for (k in 1:length(raab5ids))
   dir.create(paste0(ID,"/summary/data"))
   dir.create(paste0(ID,"/raw"))
   dir.create(paste0(ID,"/raw/data"))
-# render(paste0(path.to.scripts,"RAAB5_reporter.Rmd"), output_file = paste0(ID,"_","report"), output_dir = paste0(outdir,"/summary"))
-  render(paste0(path.to.scripts,"RAAB5_reporter_IM.Rmd"), output_file = paste0(ID,"_","report"), output_dir = paste0(outdir,"/summary"))
+  render(paste0(path.to.scripts,"RAAB5_reporter.Rmd"), output_file = paste0(ID,"_","report"), output_dir = paste0(outdir,"/summary"))
   unlink(paste0(ID,"/summary/*_files"),recursive=T)
   print(paste0(raab5ids[k],": done!"))
   }
@@ -133,6 +133,7 @@ raab6ids<-as.data.frame(unique(raab6$raab_id))
 raab6ids<-raab6ids[raab6ids$`unique(raab6$raab_id)` %in% fulls$raab_id,]
 remove(raab6)
 
+#for (k in 1:3)
 for (k in 1:length(raab6ids))
   {
     ID<-raab6ids[k]
@@ -141,8 +142,7 @@ for (k in 1:length(raab6ids))
     dir.create(paste0(ID,"/summary/data"))
     dir.create(paste0(ID,"/raw"))
     dir.create(paste0(ID,"/raw/data"))
-#   render(paste0(path.to.scripts,"RAAB6_reporter.Rmd"), output_file = paste0(ID,"_","report", output_dir = paste0(outdir,"/summary"))
-    render(paste0(path.to.scripts,"RAAB6_reporter_IM.Rmd"), output_file = paste0(ID,"_","report"), output_dir = paste0(outdir,"/summary"))
+    render(paste0(path.to.scripts,"RAAB6_reporter.Rmd"), output_file = paste0(ID,"_","report", output_dir = paste0(outdir,"/summary"))
     unlink(paste0(ID,"/summary/*_files"),recursive=T)
     print(paste0(raab6ids[k],": done!"))
   }
