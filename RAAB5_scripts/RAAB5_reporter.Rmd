@@ -41,7 +41,7 @@ write.table(raab_meta,file=paste0(outdir,"/raw/meta.csv"),row.names=F,col.names=
 write.table(raab,file=paste0(outdir,"/raw/data/survey_data.csv"),row.names=F,col.names=T,sep=",")
 write.table(popfives,file=paste0(outdir,"/raw/data/population.csv"),row.names=F,col.names=T,sep=",")
 
-source("raab_functions_v210719.R")
+source("raab_functions.R")
 
 ```
 
