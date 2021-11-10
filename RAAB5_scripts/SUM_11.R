@@ -9,11 +9,11 @@ surgery.bars1.cat.total<-surgery.bars1.total[surgery.bars1.total$Var1==1,c("Var2
 names(surgery.bars1.cat.total)<-c("Barrier","total_count")
 
 surgery.bars1.male<-data.frame(table(raab$bilateral_operable_cataract[raab$gender=="male"],raab$surgery_none_reason[raab$gender=="male"]))
-surgery.bars1.cat.male<-surgery.bars1.male[surgery.bars.male$Var1==1,c("Var2","Freq")]
+surgery.bars1.cat.male<-surgery.bars1.male[surgery.bars1.male$Var1==1,c("Var2","Freq")]
 names(surgery.bars1.cat.male)<-c("Barrier","male_count")
 
 surgery.bars1.female<-data.frame(table(raab$bilateral_operable_cataract[raab$gender=="female"],raab$surgery_none_reason[raab$gender=="female"]))
-surgery.bars1.cat.female<-surgery.bars1.female[surgery.bars.female$Var1==1,c("Var2","Freq")]
+surgery.bars1.cat.female<-surgery.bars1.female[surgery.bars1.female$Var1==1,c("Var2","Freq")]
 names(surgery.bars1.cat.female)<-c("Barrier","female_count")
     
 if(all(is.na(raab$surgery_none_reason2))) {
