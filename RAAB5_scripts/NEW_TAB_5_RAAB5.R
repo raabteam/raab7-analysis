@@ -96,9 +96,11 @@ newtab5$female.adj.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$fem
 newtab5$male.adj.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$male.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
 newtab5$total.adj.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$total.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num,raab$erec_rec_denom,raab$clusterNumber)
 
+lcis<-grep("lci",names(newtab5))
+ucis<-grep("uci",names(newtab5))
+newtab5[,lcis][newtab5[,lcis]<0]<-0
+newtab5[,ucis][newtab5[,ucis]>1]<-1
+
 pcts<-grep("pct",names(newtab5))
 newtab5[,pcts]<-round(newtab5[,pcts] * 100, 1)
-lcis<-grep("lci",names(newtab5))
-newtab5[,lcis][newtab5[,lcis]<0]<-0.0
-ucis<-grep("uci",names(newtab5))
-newtab5[,ucis][newtab5[,ucis]>100]<-100.0
+newtab5[,pcts]<-format(newtab5[,pcts], nsmall=1)

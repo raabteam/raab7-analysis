@@ -69,6 +69,12 @@ sum3$extrapolated.female.n<-format( (sum3$female.adj.pct * sum(female.subpop$pop
 sum3$extrapolated.male.n<-format( (sum3$male.adj.pct * sum(male.subpop$population)), digits=0, big.interval = 3L, big.mark = " ", scientific=F)
 sum3$extrapolated.total.n<-format( (sum3$total.adj.pct * sum(popfives$population)), digits=0, big.interval = 3L, big.mark = " ", scientific=F)
 
+lcis<-grep("lci",names(sum3))
+ucis<-grep("uci",names(sum3))
+sum3[,lcis][sum3[,lcis]<0]<-0
+sum3[,ucis][sum3[,ucis]>1]<-1
+
 pcts<-grep("pct",names(sum3))
 sum3[,pcts]<-round( sum3[,pcts] * 100, 1 )
-sum3[,pcts]<-format(sum3[,pcts],nsmall=1)
+sum3[,pcts]<-format(sum3[,pcts], nsmall=1)
+

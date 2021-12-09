@@ -4,7 +4,6 @@
 #v2 - 08/10/21 - RB
 #v3 - 29/10/21 - RB
 
-
 surgery.bars1.total<-data.frame(table(raab$bilateral_operable_cataract,raab$surgery_none_reason))
 surgery.bars1.cat.total<-surgery.bars1.total[surgery.bars1.total$Var1==1,c("Var2","Freq")]
 names(surgery.bars1.cat.total)<-c("Barrier","total_count")
@@ -77,5 +76,7 @@ if(nrow(surgery.bars1.total[surgery.bars1.total$Var1==1,])==0) {
     
     surgery.bars.cat$Barrier<-as.character(surgery.bars.cat$Barrier)
     surgery.bars.cat[nrow(surgery.bars.cat),1]<-"Total"
+    
+    surgery.bars.cat[,sbpcts] <- format( surgery.bars.cat[,sbpcts], nsmall=1 )
     
   }

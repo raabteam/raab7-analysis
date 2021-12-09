@@ -68,11 +68,11 @@ newtab4$extrapolated.female.n<-format( newtab4$female.adj.pct * sum(female.subpo
 newtab4$extrapolated.male.n<-format( newtab4$male.adj.pct * sum(male.subpop$population), digits = 0 ,big.mark = " ", big.interval= 3L, scientific = F)
 newtab4$extrapolated.total.n<-format( newtab4$total.adj.pct * sum(popfives$population), digits = 0 ,big.mark = " ", big.interval= 3L, scientific = F)
 
+lcis<-grep("lci",names(newtab4))
+ucis<-grep("uci",names(newtab4))
+newtab4[,lcis][newtab4[,lcis]<0]<-0
+newtab4[,ucis][newtab4[,ucis]>1]<-1
+
 pcts<-grep("pct",names(newtab4))
 newtab4[,pcts]<-round(newtab4[,pcts] * 100, 1)
-lcis<-grep("lci",names(newtab4))
-newtab4[,lcis][newtab4[,lcis]<0]<-0.0
-ucis<-grep("uci",names(newtab4))
-newtab4[,ucis][newtab4[,ucis]>100]<-100.0
-
 newtab4[,pcts]<-format(newtab4[,pcts], nsmall=1)
