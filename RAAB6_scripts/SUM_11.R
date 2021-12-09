@@ -4,7 +4,6 @@
 #v2 - 08/10/21 - RB
 #v3 - 29/10/21 - RB
 
-
 surgery.bars1.total<-data.frame(table(raab$bilateral_operable_cataract,raab$surgery_none_reason))
 surgery.bars1.cat.total<-surgery.bars1.total[surgery.bars1.total$Var1==1,c("Var2","Freq")]
 names(surgery.bars1.cat.total)<-c("Barrier","total_count")
@@ -12,6 +11,7 @@ names(surgery.bars1.cat.total)<-c("Barrier","total_count")
 surgery.bars1.male<-data.frame(table(raab$bilateral_operable_cataract[raab$gender=="male"],raab$surgery_none_reason[raab$gender=="male"]))
 surgery.bars1.cat.male<-surgery.bars1.male[surgery.bars1.male$Var1==1,c("Var2","Freq")]
 names(surgery.bars1.cat.male)<-c("Barrier","male_count")
+
 
 surgery.bars1.female<-data.frame(table(raab$bilateral_operable_cataract[raab$gender=="female"],raab$surgery_none_reason[raab$gender=="female"]))
 surgery.bars1.cat.female<-surgery.bars1.female[surgery.bars1.female$Var1==1,c("Var2","Freq")]
@@ -44,13 +44,18 @@ if(all(is.na(raab$surgery_none_reason2[raab$gender=="male"]))) {
   surgery.bars12.male<-rbind(surgery.bars1.cat.male,surgery.bars2.cat.male)
 }
 
+#surgery.bars12.female<-surgery.bars12.male
+#names(surgery.bars12.female)[2]<-"female_count"
+#surgery.bars12.female$female_count<-0
 
 if(nrow(surgery.bars1.total[surgery.bars1.total$Var1==1,])==0) {
     surgery.bars.cat<-data.frame(Barrier=character(),female_count=numeric(),	female_percent=numeric(),	male_count=numeric(),	male_percent=numeric(),	total_count=numeric(),	total_percent=numeric())
     surgery.bars.cat[1,]<-NA
     surgery.bars.cat$Barrier[1]<-"Not applicable"
     surgery.bars.cat[1,2:7]<-"-"
-  } else {
+
+} else {
+
     surgery.bars.cat.total<-aggregate(surgery.bars12.total$total_count,by=list(surgery.bars12.total$Barrier),FUN=sum,na.rm=T)
     names(surgery.bars.cat.total)<-c("Barrier","total_count")
     surgery.bars.cat.total$total_percent<-round((surgery.bars.cat.total$total_count/sum(surgery.bars.cat.total$total_count,na.rm=T)*100),1)
@@ -78,4 +83,7 @@ if(nrow(surgery.bars1.total[surgery.bars1.total$Var1==1,])==0) {
     surgery.bars.cat$Barrier<-as.character(surgery.bars.cat$Barrier)
     surgery.bars.cat[nrow(surgery.bars.cat),1]<-"Total"
     
+    surgery.bars.cat[,sbpcts] <- format( surgery.bars.cat[,sbpcts], nsmall=1 )
+    
   }
+

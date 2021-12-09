@@ -209,13 +209,14 @@ prev14$total.adjusted.uci[prev14$num.thresh=="csc" & prev14$denom.thresh=="360"]
 
 lcis<-grep("lci",names(prev14))
 ucis<-grep("uci",names(prev14))
-
 prev14[,lcis][prev14[,lcis]<0]<-0
-prev14[,ucis][prev14[,ucis]>100]<-100
+prev14[,ucis][prev14[,ucis]>1]<-1
 
 apcts<-grep("adjusted",names(prev14))
 prev14[,apcts] <- round( prev14[,apcts] * 100, 1)
+prev14[,apcts] <- format( prev14[,apcts], nsmall=1)
 
 cpcts<-grep("crude",names(prev14))
 prev14[,cpcts] <- round( prev14[,cpcts] * 100, 1)
+prev14[,cpcts] <- format( prev14[,cpcts], nsmall=1)
 

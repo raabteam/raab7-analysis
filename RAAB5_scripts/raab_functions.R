@@ -1,5 +1,6 @@
 #v. 5th May 2021
 #v. 19th July 2021 - RB - updated to take input in RAAB7 format
+#v. 7th December 2021 - RB - updated to include functions for LCIs and UCIs
 
 #For binomial outcomes only
 
@@ -135,3 +136,8 @@ prop.age.adjust<-function(pop.subtab,raab.subtab,numerator.subpop,denominator.su
   p.age.adj<-sum(subpop$numerator * subpop$exam.infl.fact)/sum(subpop$denominator * subpop$exam.infl.fact)
   
 }
+
+#Where a confidence interval is over 100, replace with 100; where it is under 0, replace with 0.
+
+lci_0<-function(x){if(!is.na(x) & x < 0){x <- 0} else {x <- x}}
+hci_100<-function(x){if(!is.na(x) & x > 100){x <- 100} else {x <- x}}

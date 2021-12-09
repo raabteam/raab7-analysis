@@ -22,13 +22,13 @@ names(asa1) <- c("age.groups.tens",
 for (i in 1:length(age.groups.tens)) {
   
   asa1$female.examined.n[i] <- sum(raab$exam_status[raab$gender=="female" & raab$age.groups.tens==age.groups.tens[i]]=="exam_status_examined",na.rm=T) 
-  asa1$female.examined.pct[i] <- sum(raab$exam_status[raab$gender=="female" & raab$age.groups.tens==age.groups.tens[i]]=="exam_status_examined",na.rm=T) / length(raab$exam_status[raab$gender=="female"])
+  asa1$female.examined.pct[i] <- sum(raab$exam_status[raab$gender=="female" & raab$age.groups.tens==age.groups.tens[i]]=="exam_status_examined",na.rm=T) / sum(raab$exam_status[raab$gender=="female"]=="exam_status_examined",na.rm=T)
   
   asa1$male.examined.n[i] <- sum(raab$exam_status[raab$gender=="male" & raab$age.groups.tens==age.groups.tens[i]]=="exam_status_examined",na.rm=T) 
-  asa1$male.examined.pct[i] <- sum(raab$exam_status[raab$gender=="male" & raab$age.groups.tens==age.groups.tens[i]]=="exam_status_examined",na.rm=T) / length(raab$exam_status[raab$gender=="male"])
+  asa1$male.examined.pct[i] <- sum(raab$exam_status[raab$gender=="male" & raab$age.groups.tens==age.groups.tens[i]]=="exam_status_examined",na.rm=T) / sum(raab$exam_status[raab$gender=="male"]=="exam_status_examined",na.rm=T)
   
   asa1$total.examined.n[i] <- sum(raab$exam_status[raab$age.groups.tens==age.groups.tens[i]]=="exam_status_examined",na.rm=T) 
-  asa1$total.examined.pct[i] <- sum(raab$exam_status[raab$age.groups.tens==age.groups.tens[i]]=="exam_status_examined",na.rm=T) / length(raab$exam_status)
+  asa1$total.examined.pct[i] <- sum(raab$exam_status[raab$age.groups.tens==age.groups.tens[i]]=="exam_status_examined",na.rm=T) / sum(raab$exam_status=="exam_status_examined",na.rm=T)
 
   asa1$female.nonresponse.n[i] <- sum(raab$exam_status[raab$gender=="female" & raab$age.groups.tens==age.groups.tens[i]]!="exam_status_examined",na.rm=T) 
   asa1$female.nonresponse.pct[i] <- sum(raab$exam_status[raab$gender=="female" & raab$age.groups.tens==age.groups.tens[i]]!="exam_status_examined") / length(raab$exam_status[raab$gender=="female"])

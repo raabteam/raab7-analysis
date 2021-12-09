@@ -54,8 +54,13 @@ unt$extrapolated.female.n<-format( unt$female.adj.pct * sum(female.subpop$popula
 unt$extrapolated.male.n<-format( unt$male.adj.pct * sum(male.subpop$population), digits=0, big.interval = 3L, big.mark = " ", scientific=F)
 unt$extrapolated.total.n<-format( unt$total.adj.pct * sum(popfives$population), digits=0, big.interval = 3L, big.mark = " ", scientific=F)
 
+lcis<-grep("lci",names(unt))
+ucis<-grep("uci",names(unt))
+unt[,lcis][unt[,lcis]<0]<-0
+unt[,ucis][unt[,ucis]>1]<-1
 
 pcts<-grep("pct",names(unt))
 unt[,pcts] <- round( unt[,pcts] * 100, 1)
 unt[,pcts] <- format( unt[,pcts], nsmall=1 )
+
 unt[nrow(unt),c(2:ncol(unt))]<-"*"

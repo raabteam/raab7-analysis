@@ -256,6 +256,11 @@ asa7uni$vi.level <- recode_factor(asa7uni$vi.level,"blind" = "PinVA <3/60","seve
 
 asa7<-rbind(asa7bil,asa7uni)
 
+lcis<-grep("lci",names(asa7))
+ucis<-grep("uci",names(asa7))
+asa7[,lcis][asa7[,lcis]<0]<-0
+asa7[,ucis][asa7[,ucis]>1]<-1
+
 pcts<-grep("pct",names(asa7))
 asa7[,pcts] <- round( asa7[,pcts] * 100, 1)
 asa7[,pcts] <- format( asa7[,pcts], nsmall=1 )

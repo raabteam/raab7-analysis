@@ -27,7 +27,7 @@ names(sum1) <- c("Exam.Status",
 for (i in 1:length(Exam.Status)) {
   
   sum1$female.n[i] <- sum(raab$exam_status[raab$gender=='female']==Exam.Status[i],na.rm=T) 
-  sum1$female.pct[i] <- sum(raab$exam_status[raab$gender=='female']==Exam.Status[i],na.rm=T) / sum(raab$exam_status[raab$gender=='female']!=is.na(Exam.Status[i]))
+  sum1$female.pct[i] <- sum(raab$exam_status[raab$gender=='female']==Exam.Status[i],na.rm=T) / sum(raab$exam_status[raab$gender=='female']!=is.na(Exam.Status[i]),na.rm=T)
    
   sum1$male.n[i] <- sum(raab$exam_status[raab$gender=='male']==Exam.Status[i],na.rm=T) 
   sum1$male.pct[i] <- sum(raab$exam_status[raab$gender=='male']==Exam.Status[i],na.rm=T) / sum(raab$exam_status[raab$gender=='male']!=is.na(Exam.Status[i]),na.rm=T)

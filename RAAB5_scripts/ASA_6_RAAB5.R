@@ -53,6 +53,11 @@ asa6$extrapolated.female.n <- format( asa6$female.adj.pct * sum(female.subpop$po
 asa6$extrapolated.male.n<-format( asa6$male.adj.pct * sum(male.subpop$population), digits=0, big.interval = 3L, big.mark = " ", scientific=F)
 asa6$extrapolated.total.n<-format( asa6$total.adj.pct * sum(popfives$population), digits=0, big.interval = 3L, big.mark = " ", scientific=F)
 
+lcis<-grep("lci",names(asa6))
+ucis<-grep("uci",names(asa6))
+asa6[,lcis][asa6[,lcis]<0]<-0
+asa6[,ucis][asa6[,ucis]>1]<-1
+
 pcts<-grep("pct",names(asa6))
 asa6[,pcts]<-round( asa6[,pcts] * 100, 1 )
 asa6[,pcts]<-format( asa6[,pcts], nsmall=1 )
