@@ -2,7 +2,7 @@
 
 Written by Robert Butcher and Ian McCormick, on behalf of the RAAB Team
 
-*International Centre for Eye Health, London School of Hygiene & Tropcial Medicine*
+*International Centre for Eye Health, London School of Hygiene & Tropical Medicine*
 
 Please contact raab_team@lshtm.ac.uk with feedback, comments or questions.
 
