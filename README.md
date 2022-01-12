@@ -15,4 +15,8 @@ These pages contain a suite of scripts for analysing raw RAAB data and exporting
 
 ## More information
 
-Hannah Kuper, Sarah Polack, Hans Limburg. Rapid assessment of avoidable blindness. Community Eye Health. 2006; 19(60): 68–69. (Availbale here: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1871676/)
+Mactaggart I, Limburg H, Bastawrous A, Burton MJ, Kuper H. Rapid Assessment of Avoidable Blindness: looking back, looking forward. Br J Ophthalmol. 2019; 103(11):1549-1552. (Available here: https://pubmed.ncbi.nlm.nih.gov/31266777/)
+
+Mactaggart I, Wallace S, Ramke J, Burton M, Bastawrous A. et al. Rapid assessment of avoidable blindness for health service planning. Bulletin of the World Health Organization. 2018; 96(10): 726-728. (Available here: https://apps.who.int/iris/handle/10665/276014)
+
+Kuper H, Polack S, Limburg H. Rapid assessment of avoidable blindness. Community Eye Health. 2006; 19(60): 68–69. (Available here: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1871676/)
