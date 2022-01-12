@@ -300,11 +300,7 @@ raab <- raab %>% mutate(
 #Refractive error 
 
 raab <- raab %>% mutate(
-  
-  better.eye.ucva = pmin(raab$right_distance_acuity_uncorrected, raab$left_distance_acuity_uncorrected),
-  
-  better.eye.cva = pmin(raab$right_distance_acuity_corrected, raab$left_distance_acuity_corrected),
-  
+
   better.eye.pva = pmin(raab$right_distance_acuity_presenting, raab$left_distance_acuity_presenting),
   
   better.eye.pinva = pmin(raab$right_distance_acuity_pinhole, raab$left_distance_acuity_pinhole)
@@ -349,15 +345,6 @@ raab <- raab %>% mutate(
 )
 
 #eREC/REC variables
-
-#create some data in corrected and uncorrected variables for testing - this must go afterwards!
-#REMOVE ME
-raab$right_distance_acuity_uncorrected<-raab$right_distance_acuity_presenting
-raab$left_distance_acuity_uncorrected<-raab$left_distance_acuity_presenting
-raab$right_distance_acuity_corrected<-raab$right_distance_acuity_pinhole
-raab$left_distance_acuity_corrected<-raab$left_distance_acuity_pinhole
-
-
 
 raab <- raab %>% mutate(
   
