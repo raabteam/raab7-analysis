@@ -1,13 +1,15 @@
 # v1 12th Aug 2021
 
-# Script to create new variables to support major data analyses and visualisations (age group and visual impariment category)
+# v2 17.01.22 IM
 
-# Categorize continuous age variable into 10-year binds in RAAB data file
+# Script to create new variables to support major data analyses and visualisations (age group and vision impairment category)
+
+# Categorise continuous age variable into 10-year binds in RAAB data file
 
 age.groups.tens<-c("50-59","60-69","70-79","80+")
 raab$age.groups.tens<-cut(raab$age,breaks=c(49,59,69,79,150),labels=age.groups.tens)
 
-# Categorize continuous age variable into 10-year bins in population census file
+# Categorise continuous age variable into 10-year bins in population census file
 
 popfives$age.groups.tens<-cut(popfives$ageStart,breaks=c(49,59,69,79,110),labels=age.groups.tens)
 
@@ -16,12 +18,12 @@ popfives$age.groups.tens<-cut(popfives$ageStart,breaks=c(49,59,69,79,110),labels
 female.subpop<-popfives[popfives$gender=="female",]
 male.subpop<-popfives[popfives$gender=="male",]
 
-# Charatcerise study participant by visual acuity according to WHO thresholds
+# Characterise study participant by visual acuity according to WHO thresholds
 # Define numerators and denominators
 
 raab$vi.denom <- case_when(raab$exam_status=="exam_status_examined" ~ 1, TRUE ~ 0)
 
-#Bilateral VI cases by WHO categories using Peek Acuity logMAR vaules
+#Bilateral VI cases by WHO categories using Peek Acuity logMAR values
 
 raab <- raab %>% mutate(
   
@@ -70,7 +72,7 @@ raab.cause <- c("poor_vision_cause_uncorrected_refractive_error",
                 "poor_vision_cause_other_posterior_segment_disease",
                 "poor_vision_cause_other_globe_or_cns_abnormalities")
 				
-#Define cumulative visual accuity counts
+#Define cumulative visual acuity counts
 		
 raab <- raab %>% mutate(
   
@@ -93,7 +95,7 @@ raab <- raab %>% mutate(
 cumulative.vi<-c("blind.cumulative","severe.cumulative","moderate.cumulative","mild.cumulative")
 
 
-#Unilateral visual impairment
+#Unilateral vision impairment
 
 raab <- raab %>% mutate(
   
@@ -350,25 +352,19 @@ raab <- raab %>% mutate(
 
 #eREC/REC variables
 
-#create some data in corrected and uncorrected variables for testing - this must go afterwards!
-#REMOVE ME
-raab$right_distance_acuity_uncorrected<-raab$right_distance_acuity_presenting
-raab$left_distance_acuity_uncorrected<-raab$left_distance_acuity_presenting
-raab$right_distance_acuity_corrected<-raab$right_distance_acuity_pinhole
-raab$left_distance_acuity_corrected<-raab$left_distance_acuity_pinhole
+raab <- raab %>% mutate(
+  
+  aa_case = case_when(raab$spectacles_used_distance==TRUE & raab$better.eye.ucva>0.3 & raab$better.eye.cva==0.3 ~ 1, TRUE ~ 0)
 
-
+  )
 
 raab <- raab %>% mutate(
   
-  aa_case = case_when(raab$spectacles_used_distance==TRUE & raab$better.eye.pva==0.3 ~ 1, TRUE ~ 0)
-  
-)
+  bb_case = case_when(raab$aa_case==0 & raab$spectacles_used_distance==TRUE & raab$better.eye.ucva>0.3 & raab$better.eye.cva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0),
+  cc_case = case_when(raab$spectacles_used_distance==FALSE & raab$better.eye.ucva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0)
 
-raab <- raab %>% mutate(
-  
-  bb_case = case_when(raab$aa_case==0 & raab$spectacles_used_distance==TRUE & raab$better.eye.pva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0),
-  cc_case = case_when(raab$spectacles_used_distance==FALSE & raab$better.eye.pva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0)
-  
-)
+  )
+
+#Distance spectacle ownership
+
 
