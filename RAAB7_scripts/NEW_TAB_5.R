@@ -1,22 +1,19 @@
-#RAAB6
+#RAAB7
 
 #v1 03/08/21 - IM
 #v2 01/09/21 - RB
-#v3 12/01/22 - IM
+#v3 17/01/22 - IM
 
-# eREC: Crude calculation using the modified definition (without UCVA and CVA values)
+# eREC: Crude calculation using the gold standard definition
 
-# aa = Individuals who present with spectacles or contact lenses for distance and whose PVA is 6/12 in the better eye (Met Need);
-# bb = Individuals who present with spectacles or contact lenses for distance and whose PVA is <6/12 in the better eye but who improve to 6/12 on PinVA (Undermet Need);
-# cc = Individuals who present without spectacles and whose PVA is <6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
+# aa = Individuals who present with spectacles or contact lenses for distance and whose UCVA is <6/12 in the better eye and CVA is 6/12 in the better eye (Met Need);
+# bb = Individuals who present with spectacles or contact lenses for distance and whose UCVA is <6/12 in the better eye and whose CVA is <6/12 in the better eye, but who improve to 6/12 on PinVA (Undermet Need);
+# cc = Individuals who present without spectacles and whose UCVA is <6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
 
 raab$erec_num <-(raab$aa_case==1)+0
 raab$rec_num <-(raab$aa_case==1 | raab$bb_case==1)+0
 raab$erec_rec_denom <-(raab$aa_case==1 | raab$bb_case==1 | raab$cc_case==1)+0
 
-
-# erec_qual_gap_eq <- 
-# ignore this 'quality gap' between REC and eREC concept for now
   
 erec_output <- c("erec","rec")
 
