@@ -12,7 +12,8 @@ Because of minor differences between versions, separate scripts have been writte
 
 These pages contain a suite of scripts for analysing raw RAAB data and exporting key datapoints to a report. 
 
-
 ## More information
+
+Find out more about RAAB7 and see data from previous surveys here: https://www.raab.world/
 
 Hannah Kuper, Sarah Polack, Hans Limburg. Rapid assessment of avoidable blindness. Community Eye Health. 2006; 19(60): 68–69. (Availbale here: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1871676/)
