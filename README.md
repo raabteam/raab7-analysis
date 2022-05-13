@@ -12,8 +12,9 @@ Because of minor differences between versions, separate scripts have been writte
 
 These pages contain a suite of scripts for analysing raw RAAB data and exporting key datapoints to a report. 
 
-
 ## More information
+
+Find out more about RAAB7 and see data from previous surveys here: https://www.raab.world/
 
 Mactaggart I, Limburg H, Bastawrous A, Burton MJ, Kuper H. Rapid Assessment of Avoidable Blindness: looking back, looking forward. Br J Ophthalmol. 2019; 103(11):1549-1552. (Available here: https://pubmed.ncbi.nlm.nih.gov/31266777/)
 
