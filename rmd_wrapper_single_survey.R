@@ -3,7 +3,9 @@
 #                             v. 17 May 2022                                  #
 ###############################################################################
 
-#1. Install required packages (first run only)
+#1. Download all RAAB7 scripts and save in a folder. Download most recent version of raab_logfile from sharepoint
+
+#2. Install required packages (first run only)
 
 install.packages(rmarkdown)
 install.packages(readxl)
@@ -19,27 +21,27 @@ install.packages(stringr)
 install.packages(treemap)
 install.packages(maditr)
 
-#2. Load packages needed for wrapper script - others will be loaded in reporter script
+#3. Load packages needed for wrapper script - others will be loaded in reporter script
 require(rmarkdown)
 require(readxl)
 
-#3. Clear R environment
+#4. Clear R environment
 rm(list = ls())
 
-#4. Set directory for where you want to report to be saved
+#5. Set directory for where you want to report to be saved
 setwd("C:/Users/icrurbut/Dropbox/Bert/GBR/RAAB/RAAB7_eg/")
 
-#5. Set paths to data and scripts
+#6. Set paths to data and scripts
 path.to.raab<-"C:/Users/icrurbut/Dropbox/Bert/GBR/RAAB/RAAB7_eg/"
 path.to.pop<-"C:/Users/icrurbut/Dropbox/Bert/GBR/RAAB/RAAB7_eg/"
 path.to.scripts<-"C:/Users/icrurbut/Dropbox/Bert/GBR/RAAB/github_repo_sync/RAAB7_scripts/"
 
-#6. Read in meta file and trim unused rows
+#7. Read in meta file and trim unused rows
 meta<-read_xlsx("../raab-log_v5.xlsx",sheet=1)
 meta[meta=="NA"]<-NA
 meta<-meta[!is.na(meta$raab_id),]
 
-#7. Set data file names and retrieve RAAB ID
+#8. Set data file names and retrieve RAAB ID
 raab_id_hr<-"2022_Ethiopia_Amhara_West-Gojam"
 resident.data<-"ethiopia.csv"
 raab<-read.csv(paste0(path.to.raab,resident.data))
