@@ -164,11 +164,23 @@ raab <- raab %>%
     a_case_612_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<0.47)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<0.47)))  ~ 1, TRUE ~ 0),
     b_case_612 = case_when((raab$right_operated==1 & raab$left_operated==1 & pmin(raab$right_distance_acuity_presenting,raab$left_distance_acuity_presenting)<0.47) ~ 1, TRUE ~ 0),
     
-    a_case_618_612 = case_when(((raab$right_operated==1 & raab$left_operable_612==1 & (raab$right_distance_acuity_presenting<=0.47)) | (raab$left_operated==1 & raab$right_operable_612==1 & (raab$left_distance_acuity_presenting<=0.47)))  ~ 1, TRUE ~ 0),
-    a_case_618_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<=0.47)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<=0.47)))  ~ 1, TRUE ~ 0),
-    a_case_618_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<=0.47)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<=0.47)))  ~ 1, TRUE ~ 0),
-    a_case_618_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<=0.47)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<=0.47)))  ~ 1, TRUE ~ 0),
-    b_case_618 = case_when((raab$right_operated==1 & raab$left_operated==1 & ifelse(as.numeric(raab$right_distance_acuity_presenting) < as.numeric(raab$left_distance_acuity_presenting),(raab$right_distance_acuity_presenting<=0.47),(raab$left_distance_acuity_presenting<=0.47))) ~ 1, TRUE ~ 0)
+    a_case_618_612 = case_when(((raab$right_operated==1 & raab$left_operable_612==1 & (raab$right_distance_acuity_presenting<1.0)) | (raab$left_operated==1 & raab$right_operable_612==1 & (raab$left_distance_acuity_presenting<1.0)))  ~ 1, TRUE ~ 0),
+    a_case_618_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<1.0)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<1.0)))  ~ 1, TRUE ~ 0),
+    a_case_618_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<1.0)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<1.0)))  ~ 1, TRUE ~ 0),
+    a_case_618_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<1.0)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<1.0)))  ~ 1, TRUE ~ 0),
+    b_case_618 = case_when((raab$right_operated==1 & raab$left_operated==1 & ifelse(as.numeric(raab$right_distance_acuity_presenting) < as.numeric(raab$left_distance_acuity_presenting),(raab$right_distance_acuity_presenting<1.0),(raab$left_distance_acuity_presenting<1.0))) ~ 1, TRUE ~ 0),
+
+    a_case_660_612 = case_when(((raab$right_operated==1 & raab$left_operable_612==1 & (raab$right_distance_acuity_presenting<1.3)) | (raab$left_operated==1 & raab$right_operable_612==1 & (raab$left_distance_acuity_presenting<1.3)))  ~ 1, TRUE ~ 0),
+    a_case_660_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<1.3)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<1.3)))  ~ 1, TRUE ~ 0),
+    a_case_660_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<1.3)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<1.3)))  ~ 1, TRUE ~ 0),
+    a_case_660_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<1.3)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<1.3)))  ~ 1, TRUE ~ 0),
+    b_case_660 = case_when((raab$right_operated==1 & raab$left_operated==1 & pmin(raab$right_distance_acuity_presenting,raab$left_distance_acuity_presenting)<1.3) ~ 1, TRUE ~ 0),
+    
+    a_case_360_612 = case_when(((raab$right_operated==1 & raab$left_operable_612==1 & (raab$right_distance_acuity_presenting<1.8)) | (raab$left_operated==1 & raab$right_operable_612==1 & (raab$left_distance_acuity_presenting<1.8)))  ~ 1, TRUE ~ 0),
+    a_case_360_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<1.8)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<1.8)))  ~ 1, TRUE ~ 0),
+    a_case_360_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<1.8)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<1.8)))  ~ 1, TRUE ~ 0),
+    a_case_360_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<1.8)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<1.8)))  ~ 1, TRUE ~ 0),
+    b_case_360 = case_when((raab$right_operated==1 & raab$left_operated==1 & ifelse(as.numeric(raab$right_distance_acuity_presenting) < as.numeric(raab$left_distance_acuity_presenting),(raab$right_distance_acuity_presenting<1.8),(raab$left_distance_acuity_presenting<1.8))) ~ 1, TRUE ~ 0)
     
   )
 

@@ -16,6 +16,8 @@ setwd("C:/Users/icrurbut/Dropbox/Bert/GBR/RAAB/")
 path.to.raab<-"C:/Users/icrurbut/Dropbox/Bert/GBR/RAAB/"
 path.to.pop<-"C:/Users/icrurbut/Dropbox/Bert/GBR/RAAB/"
 
+resident.data<-"ethiopia.csv"
+pop.data<-""
 
 meta<-read_xlsx(paste0(path.to.raab,"raab-log_v5.xlsx"),sheet=1)
 meta[meta=="NA"]<-NA
