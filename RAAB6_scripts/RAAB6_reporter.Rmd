@@ -594,15 +594,13 @@ The pinhole visual acuity (PinVA) thresholds used in Tables 14 & 15 are aligned 
 
 source("PREV_14_RAAB6.R")
 
-prev14.nice.names<-prev14
+prev14.nice.names<-prev14[prev14$num.thresh=="csc" | prev14$num.thresh=="ecsc_612",]
 
 prev14.nice.names$male.adjusted.ci<-paste0(prev14.nice.names$male.adjusted.lci," - ",prev14.nice.names$male.adjusted.uci)
 prev14.nice.names$female.adjusted.ci<-paste0(prev14.nice.names$female.adjusted.lci," - ",prev14.nice.names$female.adjusted.uci)
 prev14.nice.names$total.adjusted.ci<-paste0(prev14.nice.names$total.adjusted.lci," - ",prev14.nice.names$total.adjusted.uci)
 
-prev14.nice.names$denom.thresh<-recode_factor(prev14.nice.names$denom.thresh,'612' = "<6/12",'618' = "<6/18", '660' = "<6/60",'360' = "<3/60")
-#prev14.nice.names$num.thresh<-recode_factor(prev14.nice.names$num.thresh,'csc' = "CSC",'ecsc_612' = "eCSC (outcome <6/12)", 'ecsc_618' = "eCSC (outcome <6/18)")
-prev14.nice.names$num.thresh<-recode_factor(prev14.nice.names$num.thresh,'csc' = "CSC")
+prev14.nice.names$num.thresh<-recode_factor(prev14.nice.names$num.thresh,'csc' = "CSC",'ecsc_612' = "eCSC (outcome <6/12)")
 
 prev14a.nice.names<-prev14.nice.names[,c("num.thresh","female.adjusted","female.adjusted.ci","male.adjusted","male.adjusted.ci","total.adjusted","total.adjusted.ci")]
 
@@ -610,16 +608,16 @@ write.table(prev14a.nice.names,file=paste0(outdir,"/summary/data/t16.csv"),row.n
 
 names(prev14a.nice.names)<-c("Post-operative PVA","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
 
-knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted Cataract Surgical Coverage at the person level") %>% 
+knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted Cataract Surgical Coverage at the person level",row.names=F) %>% 
   kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
   row_spec(0,italic=TRUE) %>%
-  column_spec(2,width='4cm') %>%
-  pack_rows("Operable threshold <6/12",1,1) %>%
-  pack_rows("Operable threshold <6/18",2,2) %>%
-  pack_rows("Operable threshold <6/60",3,3) %>%
-  pack_rows("Operable threshold <3/60",4,4) %>%
+  column_spec(1,width='4cm') %>%
+  pack_rows("Operable threshold <6/12",1,2) %>%
+  pack_rows("Operable threshold <6/18",3,4) %>%
+  pack_rows("Operable threshold <6/60",5,6) %>%
+  pack_rows("Operable threshold <3/60",7,8) %>%
   add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T) %>%
-  add_footnote("CSC: Cataract Surgical Coverage",notation="symbol")
+  add_footnote("CSC: Cataract Surgical Coverage; eCSC: Effective Cataract Surgical Coverage",notation="symbol")
 
 
 ```
@@ -862,7 +860,7 @@ C = Number of people who do not use spectacles, have a better eye PVA <6/12 and 
 
 ```{r new_tab_5,echo=FALSE}
 
-source("NEW_TAB_5.R")
+source("NEW_TAB_5_RAAB6.R")
 
 newtab5.nice.names<-newtab5[newtab5$rec_metric=="rec",]
 
@@ -892,7 +890,7 @@ knitr::kable(newtab5.nice.names, booktabs=T, linesep = "", caption = "Refractive
 
 ```{r new_tab_6,echo=FALSE}
 
-source("NEW_TAB_6.R")
+source("NEW_TAB_6_RAAB6.R")
 
 newtab6.nice.names<-newtab6[1:2,]
 
