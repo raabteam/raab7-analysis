@@ -21,20 +21,20 @@ require(treemap)
 require(maditr)
 
 options(knitr.table.format = "latex")
-knitr::opts_knit$set(root.dir = path.to.scripts)
+knitr::opts_knit$set(root.dir = path.to.raab)
 knitr::opts_chunk$set(echo = FALSE)
 
-raab<-read.csv(paste0(path.to.raab,"raabs_612_repo.csv"))
-raab<-raab[raab$raab_id==ID,]
+raab<-read.csv(paste0(path.to.raab,resident.data))
+raab$raab_id<-raab$regionId
 
-pop<-read.csv(paste0(path.to.pop,"raabs_pop_612_repo.csv"))
-popfives<-pop[pop$raab_id==ID,]
+pop<-read.csv(paste0(path.to.pop,pop.data))
+pop$raab_id<-pop$regionId
+popfives<-pop
 
 mrm_vars<-c("raab_id","survey_title","year_end","iso_2","level1","level2","osm_id","iso3166-1","iso3166-2","admin_level","national","sample_size","response_rate","raab_version","va_threshold","raab_dr","raab_wgq","iceh_data","pi_name","pi_institution","pi_email1","trainer_name","trainer_email1","implementing_org","facilitating_org","funder","pub_doi1","pub_doi2","pub_doi3")
 
-
-#meta<-read_xlsx(paste0(path.to.raab,"raab-log_v3.xlsx"),sheet=1)
-raab_meta<-meta[meta$raab_id==ID,mrm_vars]
+raab_meta<-meta[meta$regionId==ID,mrm_vars]
+raab_meta<-raab_meta[!is.na(raab_meta$raab_id),]
 PI<-raab_meta$pi_name
 TITLE<-raab_meta$survey_title
 
@@ -42,7 +42,7 @@ write.table(raab_meta,file=paste0(outdir,"/raw/meta.csv"),row.names=F,col.names=
 write.table(raab,file=paste0(outdir,"/raw/data/survey_data.csv"),row.names=F,col.names=T,sep=",")
 write.table(popfives,file=paste0(outdir,"/raw/data/population.csv"),row.names=F,col.names=T,sep=",")
 
-source("raab_functions.R")
+source(paste0(path.to.scripts,"raab_functions.R"))
 
 ```
 
@@ -63,7 +63,7 @@ tables:
 
 ```{r raab_report_setup, include=FALSE}
 
-source("RAAB6_report_setup.R")
+source(paste0(path.to.scripts,"RAAB7_report_setup.R"))
 
 ```
 
@@ -75,7 +75,7 @@ source("RAAB6_report_setup.R")
 
 ```{r sum1, echo=FALSE}
 
-source("SUM_1.R")
+source(paste0(path.to.scripts,"SUM_1.R"))
 
 sum1.nice.names<-sum1
 
@@ -104,7 +104,7 @@ It is important to review this information in relation to the tables on represen
 
 ```{r asa1, echo=FALSE}
 
-source("ASA_1.R")
+source(paste0(path.to.scripts,"ASA_1.R"))
 
 asa1.nice.names<-asa1[,c("age.groups.tens","female.examined.n","female.examined.pct","male.examined.n","male.examined.pct","total.examined.n","total.examined.pct")]
 
@@ -124,7 +124,7 @@ knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and sex d
 
 ```{r asa2, echo=FALSE}
 
-source("ASA_2.R")
+source(paste0(path.to.scripts,"ASA_2.R"))
 
 asa2.nice.names<-asa2
 
@@ -212,7 +212,7 @@ Mild VI: PVA less than 6/12 to 6/18 in the better eye
 
 ```{r sum3, echo=FALSE}
 
-source("SUM_3_SUM_4_RAAB6.R")
+source(paste0(path.to.scripts,"SUM_3_SUM_4_RAAB7.R"))
 
 sum3.nice.names<-sum3
 
@@ -266,7 +266,7 @@ These tables show the crude and adjusted prevalence of vision impairment by impa
 
 ```{r asa6, echo=FALSE}
 
-source("ASA_6_RAAB6.R")
+source(paste0(path.to.scripts,"ASA_6_RAAB7.R"))
 
 asa6.nice.names<-asa6
 asa6.nice.names$vi.level<-as.character(asa6.nice.names$vi.level)
@@ -319,7 +319,7 @@ knitr::kable(asa6b.nice.names, booktabs=T, linesep = "", caption = "Adjusted cum
 
 ```{r sum6, echo=FALSE}
 
-source("SUM_6_RAAB6.R")
+source(paste0(path.to.scripts,"SUM_6_RAAB7.R"))
 
 sum6.nice.names<-sum6[,1:9]
 
@@ -405,7 +405,7 @@ treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="ind
 
 ```{r prev4, echo=FALSE}
 
-source("PREV_4.R")
+source(paste0(path.to.scripts,"PREV_4.R"))
 
 prev4.nice.names<-prev4[,1:7]
 
@@ -464,7 +464,7 @@ knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), cap
 
 ```{r newtab1a, echo=FALSE}
 
-source("NEW_TAB_1_RAAB6.R")
+source(paste0(path.to.scripts,"NEW_TAB_1_RAAB7.R"))
 
 unt.nice.names<-unt
 
@@ -532,8 +532,8 @@ Cases of unilateral vision impairment acknowledge an additional sight loss burde
 
 ```{r asa7a, echo=FALSE}
 
-source("PREV_14_RAAB6.R")
-source("ASA_7_RAAB6.R")
+source(paste0(path.to.scripts,"PREV_14_RAAB7.R"))
+source(paste0(path.to.scripts,"ASA_7_RAAB7.R"))
 
 asa7a.int<-asa7[,c("vi.level","female.n","female.pct","female.pct.lci","female.pct.uci","male.n","male.pct","male.pct.lci","male.pct.uci","total.n","total.pct","total.pct.lci","total.pct.uci")]
 
@@ -560,8 +560,8 @@ knitr::kable(asa7a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
 
 ```{r asa7b, echo=FALSE}
 
-source("PREV_14_RAAB6.R")
-source("ASA_7_RAAB6.R")
+source(paste0(path.to.scripts,"PREV_14_RAAB7.R"))
+source(paste0(path.to.scripts,"ASA_7_RAAB7.R"))
 
 asa7b.int<-asa7[,c("vi.level","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.female.n","extrapolated.male.n","extrapolated.total.n")]
 
@@ -592,17 +592,15 @@ The pinhole visual acuity (PinVA) thresholds used in Tables 14 & 15 are aligned 
 
 ```{r prev14, echo=FALSE}
 
-source("PREV_14_RAAB6.R")
+source(paste0(path.to.scripts,"PREV_14_RAAB7.R"))
 
-prev14.nice.names<-prev14
+prev14.nice.names<-prev14[prev14$num.thresh=="csc" | prev14$num.thresh=="ecsc_612",]
 
 prev14.nice.names$male.adjusted.ci<-paste0(prev14.nice.names$male.adjusted.lci," - ",prev14.nice.names$male.adjusted.uci)
 prev14.nice.names$female.adjusted.ci<-paste0(prev14.nice.names$female.adjusted.lci," - ",prev14.nice.names$female.adjusted.uci)
 prev14.nice.names$total.adjusted.ci<-paste0(prev14.nice.names$total.adjusted.lci," - ",prev14.nice.names$total.adjusted.uci)
 
-prev14.nice.names$denom.thresh<-recode_factor(prev14.nice.names$denom.thresh,'612' = "<6/12",'618' = "<6/18", '660' = "<6/60",'360' = "<3/60")
-#prev14.nice.names$num.thresh<-recode_factor(prev14.nice.names$num.thresh,'csc' = "CSC",'ecsc_612' = "eCSC (outcome <6/12)", 'ecsc_618' = "eCSC (outcome <6/18)")
-prev14.nice.names$num.thresh<-recode_factor(prev14.nice.names$num.thresh,'csc' = "CSC")
+prev14.nice.names$num.thresh<-recode_factor(prev14.nice.names$num.thresh,'csc' = "CSC",'ecsc_612' = "eCSC (outcome <6/12)")
 
 prev14a.nice.names<-prev14.nice.names[,c("num.thresh","female.adjusted","female.adjusted.ci","male.adjusted","male.adjusted.ci","total.adjusted","total.adjusted.ci")]
 
@@ -610,16 +608,16 @@ write.table(prev14a.nice.names,file=paste0(outdir,"/summary/data/t16.csv"),row.n
 
 names(prev14a.nice.names)<-c("Post-operative PVA","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
 
-knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted Cataract Surgical Coverage at the person level") %>% 
+knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted Cataract Surgical Coverage at the person level",row.names=F) %>% 
   kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
   row_spec(0,italic=TRUE) %>%
-  column_spec(2,width='4cm') %>%
-  pack_rows("Operable threshold <6/12",1,1) %>%
-  pack_rows("Operable threshold <6/18",2,2) %>%
-  pack_rows("Operable threshold <6/60",3,3) %>%
-  pack_rows("Operable threshold <3/60",4,4) %>%
+  column_spec(1,width='4cm') %>%
+  pack_rows("Operable threshold <6/12",1,2) %>%
+  pack_rows("Operable threshold <6/18",3,4) %>%
+  pack_rows("Operable threshold <6/60",5,6) %>%
+  pack_rows("Operable threshold <3/60",7,8) %>%
   add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T) %>%
-  add_footnote("CSC: Cataract Surgical Coverage",notation="symbol")
+  add_footnote("CSC: Cataract Surgical Coverage; eCSC: Effective Cataract Surgical Coverage",notation="symbol")
 
 
 ```
@@ -630,7 +628,7 @@ CSC measures the accessibility of cataract surgical services. It describes the n
 
 ```{r sum11, echo=FALSE}
 
-source("SUM_11.R")
+source(paste0(path.to.scripts,"SUM_11.R"))
 
 sum11.nice.names<-surgery.bars.cat
 
@@ -658,7 +656,7 @@ Surgical outcomes are reported for all operated eyes in the sample, not at the p
 
 ```{r newtab2, echo=FALSE}
 
-source("OUTC_1_OUTC_2_SUM_12_RAAB6.R")
+source(paste0(path.to.scripts,"OUTC_1_OUTC_2_SUM_12_RAAB7.R"))
 
 newtab2.nice.names<-newtab2
 
@@ -682,7 +680,7 @@ knitr::kable(newtab2.nice.names, booktabs=T, linesep = "", caption = "Type of ca
 
 ```{r newtab3a, echo=FALSE}
 
-source("OUTC_1_OUTC_2_SUM_12_RAAB6.R")
+source(paste0(path.to.scripts,"OUTC_1_OUTC_2_SUM_12_RAAB7.R"))
 
 newtab3a.nice.names<-newtab3a
 
@@ -735,7 +733,7 @@ knitr::kable(newtab3b.nice.names, booktabs=T, linesep = "", caption = "Post-oper
 
 ```{r outc6, echo=FALSE}
 
-source("OUTC_6.R")
+source(paste0(path.to.scripts,"OUTC_6.R"))
 
 outc6a.nice.names<-male[,c("oc","male_surgery_place_gov_hospital_n","male_surgery_place_gov_hospital_percent","male_surgery_place_voluntary_hospital_n","male_surgery_place_voluntary_hospital_percent","male_surgery_place_private_hospital_n","male_surgery_place_private_hospital_percent","male_surgery_place_camp_improvised_n","male_surgery_place_camp_improvised_percent","male_surgery_place_traditional_n","male_surgery_place_traditional_percent")]
 
@@ -796,13 +794,13 @@ Trad. = Traditional setting
 
 # Refractive error
 
-For RAAB6, refractive error as a cause of vision impairment is defined as PVA less than 6/12 improving to 6/12 with pinhole. Note: These estimates are based on presenting VA, i.e., with correction if available. Participants with corrected refractive error are not identified, only those with under- or uncorrected refractive error.
+For RAAB7, refractive error as a cause of vision impairment is defined as PVA less than 6/12 improving to 6/12 with pinhole. Note: These estimates are based on presenting VA, i.e., with correction if available. Participants with corrected refractive error are not identified, only those with under- or uncorrected refractive error.
 
 ## Table 23, table 24
 
 ```{r new_tab_4a,echo=FALSE}
 
-source("NEW_TAB_4_RAAB6.R")
+source(paste0(path.to.scripts,"NEW_TAB_4_RAAB7.R"))
 
 newtab4.nice.names<-newtab4
 
@@ -852,7 +850,7 @@ knitr::kable(newtab4b.nice.names, booktabs=T, linesep = "", caption = "Adjusted 
 
 ## Table 25
 
-For RAAB6, refractive error coverage (REC) is defined as (A + B) / (A + B + C) where:
+For RAAB7, refractive error coverage (REC) is defined as (A + B) / (A + B + C) where:
 
 A = Number of people who use spectacles and have a better eye PVA of 6/12 (met need)
 
@@ -862,11 +860,12 @@ C = Number of people who do not use spectacles, have a better eye PVA <6/12 and 
 
 ```{r new_tab_5,echo=FALSE}
 
-source("NEW_TAB_5.R")
+source(paste0(path.to.scripts,"NEW_TAB_5_RAAB7.R"))
 
-newtab5.nice.names<-newtab5[newtab5$rec_metric=="rec",]
+newtab5.nice.names<-newtab5
 
 newtab5.nice.names$rec_metric[newtab5.nice.names$rec_metric=="rec"]<-"REC"
+newtab5.nice.names$rec_metric[newtab5.nice.names$rec_metric=="erec"]<-"eREC"
 
 newtab5.nice.names$female.pct.ci<-paste0(newtab5.nice.names$female.pct.lci," - ",newtab5.nice.names$female.pct.uci)
 newtab5.nice.names$female.adj.pct.ci<-paste0(newtab5.nice.names$female.adj.pct.lci," - ",newtab5.nice.names$female.adj.pct.uci)
@@ -884,7 +883,9 @@ names(newtab5.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %
 knitr::kable(newtab5.nice.names, booktabs=T, linesep = "", caption = "Refractive error coverage", row.names=F) %>% 
   kable_styling(full_width=T, latex_options = "HOLD_position") %>%
   row_spec(0,italic=TRUE) %>%
-  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
+  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T) %>% 
+  add_footnote("eREC: Effective Refractive Error Coverage; REC: Refractive Error Coverage",notation="symbol")
+
 
 ```
 
@@ -892,7 +893,7 @@ knitr::kable(newtab5.nice.names, booktabs=T, linesep = "", caption = "Refractive
 
 ```{r new_tab_6,echo=FALSE}
 
-source("NEW_TAB_6.R")
+source(paste0(path.to.scripts,"NEW_TAB_6_RAAB7.R"))
 
 newtab6.nice.names<-newtab6[1:2,]
 
@@ -995,7 +996,7 @@ For further information see: Ramke J, Gilbert CE, Lee AC, Ackland P, Limburg H, 
 
 ## Refractive error coverage
 
-For RAAB6, refractive error coverage (REC) is defined as (A + B) / (A + B + C) where:
+For RAAB7, refractive error coverage (REC) is defined as (A + B) / (A + B + C) where:
 
 A = Number of people who use spectacles and have a better eye PVA of 6/12 (met need)
 
@@ -1014,7 +1015,7 @@ Bennett S, Woods T, Liyanage WM, Smith DL. A simplified general method for clust
 
 ```{r big_boi_maker, include=FALSE}
 
-source("SUMMARY_OUT_RAAB6.R")
+source(paste0(path.to.scripts,"SUMMARY_OUT_RAAB7.R"))
 
 write.table(bigboi,file=paste0(outdir,"/summary/web_summary.csv"),row.names=F,col.names=T,sep=",",na="")
 
