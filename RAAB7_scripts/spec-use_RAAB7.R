@@ -1,7 +1,7 @@
 #v1 24/08/21 - IM
 #v2 02/09/21 - RB
 
-specs <- c("near","distance")
+specs <- c("distance", "near")
 
 newtab6<-data.frame(specs)
 newtab6[,2:7] <- NA
