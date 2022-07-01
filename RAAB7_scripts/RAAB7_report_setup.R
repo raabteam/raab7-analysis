@@ -394,6 +394,19 @@ raab <- raab %>% mutate(
 
   )
 
+#Washington Group Questions (Disability module) variables
+
+#Domain-specific disability
+raab <- raab %>% mutate(
+  
+  wgq.dis.see = case_when(raab$wg_difficulty_seeing=="wg_answer_alot" | raab$wg_difficulty_seeing=="wg_answer_cannot" ~ 1, TRUE ~ 0), 
+  wgq.dis.hear = case_when(raab$wg_difficulty_hearing=="wg_answer_alot" | raab$wg_difficulty_hearing=="wg_answer_cannot" ~ 1, TRUE ~ 0),
+  wgq.dis.mob = case_when(raab$wg_difficulty_mobility=="wg_answer_alot" | raab$wg_difficulty_mobility=="wg_answer_cannot" ~ 1, TRUE ~ 0),
+  wgq.dis.mem = case_when(raab$wg_difficulty_memory=="wg_answer_alot" | raab$wg_difficulty_memory=="wg_answer_cannot" ~ 1, TRUE ~ 0),
+  wgq.dis.comm = case_when(raab$wg_difficulty_communication=="wg_answer_alot" | raab$wg_difficulty_communication=="wg_answer_cannot" ~ 1, TRUE ~ 0),
+  wgq.dis.self = case_when(raab$wg_difficulty_selfcare=="wg_answer_alot" | raab$wg_difficulty_selfcare=="wg_answer_cannot" ~ 1, TRUE ~ 0)
+)
+
 #Disability in any domain and any domain excluding seeing
 raab <- raab %>% mutate(
   
