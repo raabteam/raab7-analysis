@@ -2,6 +2,8 @@
 
 # v2 17.01.22 IM
 
+# v3 30.06.22 IM - ADDITION OF NEW ECSC TERMS, NEW WGQ VARIABLES, NEW DR VARIABLES
+
 # Script to create new variables to support major data analyses and visualisations (age group and vision impairment category)
 
 # Categorise continuous age variable into 10-year binds in RAAB data file
@@ -135,56 +137,71 @@ raab <- raab %>% mutate(
   left_operable_660 = case_when((raab$lens_status_left=="lens_status_opacity" & raab$poor_vision_cause_left=="poor_vision_cause_cataract_untreated" & (raab$left_distance_acuity_pinhole>=1.3)) ~ 1, TRUE ~ 0),
   right_operable_360 = case_when((raab$lens_status_right=="lens_status_opacity" & raab$poor_vision_cause_right=="poor_vision_cause_cataract_untreated" & (raab$right_distance_acuity_pinhole>=1.8)) ~ 1, TRUE ~ 0),
   left_operable_360 = case_when((raab$lens_status_left=="lens_status_opacity" & raab$poor_vision_cause_left=="poor_vision_cause_cataract_untreated" & (raab$left_distance_acuity_pinhole>=1.8)) ~ 1, TRUE ~ 0),
-  right_operated = case_when((raab$lens_status_right=="lens_status_aphakia" | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0),
-  left_operated = case_when((raab$lens_status_left=="lens_status_aphakia" | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0)
+  right_operated = case_when((raab$lens_status_right=="lens_status_absent" | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0),
+  left_operated = case_when((raab$lens_status_left=="lens_status_absent" | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0)
+  # NB ABSENT IS USED IN RAAB7, NOT APHAKIA, UPDATED APHAKIA->ABSENT FOR OPERATED EYES DEFINITION
+  
+  # Option for excluding couched eyes from count of operated eyes:
+  # right_operated_new = case_when(((raab$lens_status_right=="lens_status_absent" & raab$surgery_type_right!="surgery_type_couching") | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0),
+  # left_operated_new = case_when(((raab$lens_status_left=="lens_status_absent" & raab$surgery_type_left!="surgery_type_couching") | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0)
   
 )
+
+# CSC and eCSC variables - new eCSC definition entered 16.06.22
 
 raab <- raab %>% 
   
   mutate( 
     
-    x_case_612 = case_when(((raab$right_operable_612==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_612==1)) ~ 1, TRUE ~ 0),
+    x_case_612 = case_when(((raab$right_distance_acuity_pinhole>0.3 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_distance_acuity_pinhole>0.3)) ~ 1, TRUE ~ 0),
     y_case_612 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
-    z_case_612 = case_when((raab$right_operable_612==1 & raab$left_operable_612==1) ~ 1, TRUE ~ 0),
+    z_case_612 = case_when((raab$right_distance_acuity_pinhole>0.3 & left_distance_acuity_pinhole>0.3) & (raab$right_operable_612==1 | raab$left_operable_612==1) ~ 1, TRUE ~ 0),
     
-    x_case_618 = case_when(((raab$right_operable_618==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_618==1)) ~ 1, TRUE ~ 0),
+    x_case_618 = case_when(((raab$right_distance_acuity_pinhole>0.47 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_distance_acuity_pinhole>0.47)) ~ 1, TRUE ~ 0),
     y_case_618 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
-    z_case_618 = case_when((raab$right_operable_618==1 & raab$left_operable_618==1) ~ 1, TRUE ~ 0),
+    z_case_618 = case_when((raab$right_distance_acuity_pinhole>0.47 & left_distance_acuity_pinhole>0.47) & (raab$right_operable_618==1 | raab$left_operable_618==1) ~ 1, TRUE ~ 0),
     
-    x_case_660 = case_when(((raab$right_operable_660==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_660==1)) ~ 1, TRUE ~ 0),
+    x_case_660 = case_when(((raab$right_distance_acuity_pinhole>1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_distance_acuity_pinhole>1)) ~ 1, TRUE ~ 0),
     y_case_660 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
-    z_case_660 = case_when((raab$right_operable_660==1 & raab$left_operable_660==1) ~ 1, TRUE ~ 0),
+    z_case_660 = case_when((raab$right_distance_acuity_pinhole>1 & left_distance_acuity_pinhole>1) & (raab$right_operable_660==1 | raab$left_operable_660==1) ~ 1, TRUE ~ 0),
     
-    x_case_360 = case_when(((raab$right_operable_360==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_360==1)) ~ 1, TRUE ~ 0),
+    x_case_360 = case_when(((raab$right_distance_acuity_pinhole>1.3 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_distance_acuity_pinhole>1.3)) ~ 1, TRUE ~ 0),
     y_case_360 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
-    z_case_360 = case_when((raab$right_operable_360==1 & raab$left_operable_360==1) ~ 1, TRUE ~ 0),
+    z_case_360 = case_when((raab$right_distance_acuity_pinhole>1.3 & left_distance_acuity_pinhole>1.3) & (raab$right_operable_360==1 | raab$left_operable_360==1) ~ 1, TRUE ~ 0),
     
-    a_case_612_612 = case_when(((raab$right_operated==1 & raab$left_operable_612==1 & (raab$right_distance_acuity_presenting<0.47)) | (raab$left_operated==1 & raab$right_operable_612==1 & (raab$left_distance_acuity_presenting<0.47)))  ~ 1, TRUE ~ 0),
-    a_case_612_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<0.47)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<0.47)))  ~ 1, TRUE ~ 0),
-    a_case_612_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<0.47)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<0.47)))  ~ 1, TRUE ~ 0),
-    a_case_612_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<0.47)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<0.47)))  ~ 1, TRUE ~ 0),
-    b_case_612 = case_when((raab$right_operated==1 & raab$left_operated==1 & pmin(raab$right_distance_acuity_presenting,raab$left_distance_acuity_presenting)<0.47) ~ 1, TRUE ~ 0),
+    a_case_612_612 = case_when(((raab$right_distance_acuity_pinhole>0.3 & (raab$left_operated==1 & raab$left_distance_acuity_presenting==0.3)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting==0.3) & raab$left_distance_acuity_pinhole>0.3)) ~ 1, TRUE ~ 0),
+    a_case_612_618 = case_when(((raab$right_distance_acuity_pinhole>0.47 & (raab$left_operated==1 & raab$left_distance_acuity_presenting==0.3)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting==0.3) & raab$left_distance_acuity_pinhole>0.47)) ~ 1, TRUE ~ 0),
+    a_case_612_660 = case_when(((raab$right_distance_acuity_pinhole>1 & (raab$left_operated==1 & raab$left_distance_acuity_presenting==0.3)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting==0.3) & raab$left_distance_acuity_pinhole>1)) ~ 1, TRUE ~ 0),
+    a_case_612_360 = case_when(((raab$right_distance_acuity_pinhole>1.3 & (raab$left_operated==1 & raab$left_distance_acuity_presenting==0.3)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting==0.3) & raab$left_distance_acuity_pinhole>1.3)) ~ 1, TRUE ~ 0),
+    b_case_612 = case_when((raab$right_operated==1 & raab$left_operated==1 & pmin(raab$right_distance_acuity_presenting,raab$left_distance_acuity_presenting)==0.3) ~ 1, TRUE ~ 0),
     
-	a_case_618_612 = case_when(((raab$right_operated==1 & raab$left_operable_612==1 & (raab$right_distance_acuity_presenting<1.0)) | (raab$left_operated==1 & raab$right_operable_612==1 & (raab$left_distance_acuity_presenting<1.0)))  ~ 1, TRUE ~ 0),
-    a_case_618_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<1.0)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<1.0)))  ~ 1, TRUE ~ 0),
-    a_case_618_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<1.0)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<1.0)))  ~ 1, TRUE ~ 0),
-    a_case_618_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<1.0)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<1.0)))  ~ 1, TRUE ~ 0),
-    b_case_618 = case_when((raab$right_operated==1 & raab$left_operated==1 & ifelse(as.numeric(raab$right_distance_acuity_presenting) < as.numeric(raab$left_distance_acuity_presenting),(raab$right_distance_acuity_presenting<1.0),(raab$left_distance_acuity_presenting<1.0))) ~ 1, TRUE ~ 0),
-
-    a_case_660_612 = case_when(((raab$right_operated==1 & raab$left_operable_612==1 & (raab$right_distance_acuity_presenting<1.3)) | (raab$left_operated==1 & raab$right_operable_612==1 & (raab$left_distance_acuity_presenting<1.3)))  ~ 1, TRUE ~ 0),
-    a_case_660_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<1.3)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<1.3)))  ~ 1, TRUE ~ 0),
-    a_case_660_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<1.3)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<1.3)))  ~ 1, TRUE ~ 0),
-    a_case_660_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<1.3)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<1.3)))  ~ 1, TRUE ~ 0),
-    b_case_660 = case_when((raab$right_operated==1 & raab$left_operated==1 & pmin(raab$right_distance_acuity_presenting,raab$left_distance_acuity_presenting)<1.3) ~ 1, TRUE ~ 0),
+    a_case_618_612 = case_when(((raab$right_distance_acuity_pinhole>0.3 & (raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_distance_acuity_pinhole>0.3)) ~ 1, TRUE ~ 0),
+    a_case_618_618 = case_when(((raab$right_distance_acuity_pinhole>0.47 & (raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_distance_acuity_pinhole>0.47)) ~ 1, TRUE ~ 0),
+    a_case_618_660 = case_when(((raab$right_distance_acuity_pinhole>1 & (raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_distance_acuity_pinhole>1)) ~ 1, TRUE ~ 0),
+    a_case_618_360 = case_when(((raab$right_distance_acuity_pinhole>1.3 & (raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_distance_acuity_pinhole>1.3)) ~ 1, TRUE ~ 0),
+    b_case_618 = case_when((raab$right_operated==1 & raab$left_operated==1 & ifelse(as.numeric(raab$right_distance_acuity_presenting) < as.numeric(raab$left_distance_acuity_presenting),(raab$right_distance_acuity_presenting<=0.47),(raab$left_distance_acuity_presenting<=0.47))) ~ 1, TRUE ~ 0),
     
-    a_case_360_612 = case_when(((raab$right_operated==1 & raab$left_operable_612==1 & (raab$right_distance_acuity_presenting<1.8)) | (raab$left_operated==1 & raab$right_operable_612==1 & (raab$left_distance_acuity_presenting<1.8)))  ~ 1, TRUE ~ 0),
-    a_case_360_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<1.8)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<1.8)))  ~ 1, TRUE ~ 0),
-    a_case_360_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<1.8)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<1.8)))  ~ 1, TRUE ~ 0),
-    a_case_360_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<1.8)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<1.8)))  ~ 1, TRUE ~ 0),
-    b_case_360 = case_when((raab$right_operated==1 & raab$left_operated==1 & ifelse(as.numeric(raab$right_distance_acuity_presenting) < as.numeric(raab$left_distance_acuity_presenting),(raab$right_distance_acuity_presenting<1.8),(raab$left_distance_acuity_presenting<1.8))) ~ 1, TRUE ~ 0)
+    a_case_660_612 = case_when(((raab$right_distance_acuity_pinhole>0.3 & (raab$left_operated==1 & raab$left_distance_acuity_presenting<=1)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1) & raab$left_distance_acuity_pinhole>0.3)) ~ 1, TRUE ~ 0),
+    a_case_660_618 = case_when(((raab$right_distance_acuity_pinhole>0.47 & (raab$left_operated==1 & raab$left_distance_acuity_presenting<=1)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1) & raab$left_distance_acuity_pinhole>0.47)) ~ 1, TRUE ~ 0),
+    a_case_660_660 = case_when(((raab$right_distance_acuity_pinhole>1 & (raab$left_operated==1 & raab$left_distance_acuity_presenting<=1)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1) & raab$left_distance_acuity_pinhole>1)) ~ 1, TRUE ~ 0),
+    a_case_660_360 = case_when(((raab$right_distance_acuity_pinhole>1.3 & (raab$left_operated==1 & raab$left_distance_acuity_presenting<=1)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1) & raab$left_distance_acuity_pinhole>1.3)) ~ 1, TRUE ~ 0),
+    b_case_660 = case_when((raab$right_operated==1 & raab$left_operated==1 & ifelse(as.numeric(raab$right_distance_acuity_presenting) < as.numeric(raab$left_distance_acuity_presenting),(raab$right_distance_acuity_presenting<=1),(raab$left_distance_acuity_presenting<=1))) ~ 1, TRUE ~ 0),
+    
+    a_case_360_612 = case_when(((raab$right_distance_acuity_pinhole>0.3 & (raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_distance_acuity_pinhole>0.3)) ~ 1, TRUE ~ 0),
+    a_case_360_618 = case_when(((raab$right_distance_acuity_pinhole>0.47 & (raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_distance_acuity_pinhole>0.47)) ~ 1, TRUE ~ 0),
+    a_case_360_660 = case_when(((raab$right_distance_acuity_pinhole>1 & (raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_distance_acuity_pinhole>1)) ~ 1, TRUE ~ 0),
+    a_case_360_360 = case_when(((raab$right_distance_acuity_pinhole>1.3 & (raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3)) | ((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_distance_acuity_pinhole>1.3)) ~ 1, TRUE ~ 0),
+    b_case_360 = case_when((raab$right_operated==1 & raab$left_operated==1 & ifelse(as.numeric(raab$right_distance_acuity_presenting) < as.numeric(raab$left_distance_acuity_presenting),(raab$right_distance_acuity_presenting<=1.3),(raab$left_distance_acuity_presenting<=1.3))) ~ 1, TRUE ~ 0),
     
   )
+
+# New vars for cataract VI at the person level (aligned with new eCSC definition denominator)
+raab$cataract.blind <- (raab$z_case_360)+0
+raab$cataract.severe.vi <- (raab$z_case_660)+0
+raab$cataract.moderate.vi <- (raab$z_case_618)+0
+raab$cataract.mild.vi <- (raab$z_case_612)+0
+
+#
 
 raab$bilateral_operable_cataract<-(raab$right_operable_660==1 & raab$left_operable_660)+0
 
@@ -377,5 +394,70 @@ raab <- raab %>% mutate(
 
   )
 
-#Washington Group Questions Variable
+#Disability in any domain and any domain excluding seeing
+raab <- raab %>% mutate(
+  
+  wgq.dis.any = case_when(wgq.dis.see==1 | wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0),
+  wgq.dis.nonvi = case_when(wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0)
+)
 
+dis.domains<- c("wgq.dis.see", "wgq.dis.hear", "wgq.dis.mob", "wgq.dis.mem", "wgq.dis.comm", "wgq.dis.self", "wgq.dis.any", "wgq.dis.nonvi")
+
+# DR Module variables
+
+raab <- raab %>% mutate(
+  
+  diabetes.denom = case_when(dr_diabetes_known=="true" | dr_diabetes_blood_consent=="true" ~1, TRUE~0),
+  diabetes.new = case_when((dr_diabetes_known=="false" & dr_diabetes_blood_consent=="true" & dr_diabetes_blood_sugar>=200) ~1, TRUE~0),
+  diabetes.known.susp = case_when((dr_diabetes_known=="true" | diabetes.new==1) ~1, TRUE~0 ),
+  dr.exam.denom = case_when(diabetes.known.susp==1 & dr_retinopathy_method_right=="dr_retinopathy_method_dilatation_fundoscopy" ~1, TRUE~0)
+)
+# Made grades numeric so more easily treated as ordinal values
+raab <- raab %>% mutate(  
+  dr.ret.grade.right = case_when(
+    dr_retinopathy_grade_right=="dr_retinopathy_grade_none" ~1,
+    dr_retinopathy_grade_right=="dr_retinopathy_grade_mild" ~2,
+    dr_retinopathy_grade_right=="dr_retinopathy_grade_observable" ~3,
+    dr_retinopathy_grade_right=="dr_retinopathy_grade_referable" ~4,
+    dr_retinopathy_grade_right=="dr_retinopathy_grade_proliferative" ~5,
+    dr_retinopathy_grade_right=="dr_retinopathy_grade_not_visualised" ~0),
+  dr.ret.grade.left = case_when(
+    dr_retinopathy_grade_left=="dr_retinopathy_grade_none" ~1,
+    dr_retinopathy_grade_left=="dr_retinopathy_grade_mild" ~2,
+    dr_retinopathy_grade_left=="dr_retinopathy_grade_observable" ~3,
+    dr_retinopathy_grade_left=="dr_retinopathy_grade_referable" ~4,
+    dr_retinopathy_grade_left=="dr_retinopathy_grade_proliferative" ~5,
+    dr_retinopathy_grade_left=="dr_retinopathy_grade_not_visualised" ~0),
+  dr.mac.grade.right = case_when(
+    dr_maculopathy_grade_right=="dr_maculopathy_grade_none" ~1,
+    dr_maculopathy_grade_right=="dr_maculopathy_grade_observable" ~2,
+    dr_maculopathy_grade_right=="dr_maculopathy_grade_referable" ~3,
+    dr_maculopathy_grade_right=="dr_maculopathy_grade_not_visualised" ~0),
+  dr.mac.grade.left = case_when(
+    dr_maculopathy_grade_left=="dr_maculopathy_grade_none" ~1,
+    dr_maculopathy_grade_left=="dr_maculopathy_grade_observable" ~2,
+    dr_maculopathy_grade_left=="dr_maculopathy_grade_referable" ~3,
+    dr_maculopathy_grade_left=="dr_maculopathy_grade_not_visualised" ~0),
+  
+  dr.ret.grade.person = pmax(dr.ret.grade.right, dr.ret.grade.left),
+  dr.mac.grade.person = pmax(dr.mac.grade.right, dr.mac.grade.left),
+  
+  dr.ret.any.person = case_when((dr.ret.grade.right>1 | dr.ret.grade.left>1) ~1, TRUE~0),
+  dr.mac.any.person = case_when((dr.mac.grade.right>1 | dr.mac.grade.left>1) ~1, TRUE~0),
+  dr.ret.mac.any.person = case_when(dr.ret.any.person==1 | dr.mac.any.person==1 ~1, TRUE~0),
+  dr.stdr.any.person = case_when((dr.ret.grade.right==5 | dr.ret.grade.left==5 | dr.mac.grade.right==3 | dr.mac.grade.left==3) ~1, TRUE~0),
+  dr.laser.person = case_when(dr_laser_photocoagulation_scars_right=="dr_laser_photocoagulation_scars_macular" | dr_laser_photocoagulation_scars_right=="dr_laser_photocoagulation_scars_pan_retinal" | dr_laser_photocoagulation_scars_right=="dr_laser_photocoagulation_scars_pan_retinal_and_macular" |
+                                dr_laser_photocoagulation_scars_left=="dr_laser_photocoagulation_scars_macular" | dr_laser_photocoagulation_scars_left=="dr_laser_photocoagulation_scars_pan_retinal" | dr_laser_photocoagulation_scars_left=="dr_laser_photocoagulation_scars_pan_retinal_and_macular" ~1, TRUE~0)
+)
+
+# Subjective SEP variables
+# Create three levels of income from five response options
+# raab <- raab %>% mutate(
+#   income = case_when(
+#     (sep_income_sufficiency=="sep_income_sufficiency_borrow" | sep_income_sufficiency=="sep_income_sufficiency_savings") ~1,
+#     sep_income_sufficiency=="sep_income_sufficiency_enough_just" ~2,
+#     (sep_income_sufficiency=="sep_income_sufficiency_enough_save" | sep_income_sufficiency=="sep_income_sufficiency_enough_building_savings") ~3, TRUE~0)
+# )
+# 
+# Food.Status <- c("sep_food_adequacy_less","sep_food_adequacy_adequate","sep_food_adequacy_more") 
+# Income.Status <- c(1,2,3) 
