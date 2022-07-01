@@ -1,65 +1,54 @@
 ###############################################################################
 #                  RAAB report wrapper - single survey                        #
-#                             v. 17 May 2022                                  #
+#                             v1. 17 May 2022 
+#                             v2. 01 Jul 2022 IM (uses here())  
 ###############################################################################
 
 #1. Download all RAAB7 scripts and save in a folder. Download most recent version of raab_logfile from sharepoint
 
 #2. Install required packages (first run only)
 
-install.packages(rmarkdown)
-install.packages(readxl)
-install.packages(knitr)
-install.packages(tinytex)
-install.packages(kableExtra)
-install.packages(float)
-install.packages(RColorBrewer)
-install_tinytex()
-
-install.packages(tidyverse)
-install.packages(stringr)
-install.packages(treemap)
-install.packages(maditr)
+install.packages("rmarkdown")
+install.packages("readxl")
+install.packages("knitr")
+install.packages("tinytex")
+install.packages("kableExtra")
+install.packages("float")
+install.packages("RColorBrewer")
+library(tinytex)
+install.packages("tidyverse")
+install.packages("stringr")
+install.packages("treemap")
+install.packages("maditr")
 
 #3. Load packages needed for wrapper script - others will be loaded in reporter script
 require(rmarkdown)
 require(readxl)
+require(here)
 
-#4. Clear R environment
-rm(list = ls())
-
-#5. Set directory for where you want to report to be saved
-setwd("C:/Users/icrurbut/Dropbox/Bert/GBR/RAAB/RAAB7_eg/")
-
-#6. Set paths to data and scripts
-path.to.raab<-"C:/Users/icrurbut/Dropbox/Bert/GBR/RAAB/RAAB7_eg/"
-path.to.pop<-"C:/Users/icrurbut/Dropbox/Bert/GBR/RAAB/RAAB7_eg/"
-path.to.scripts<-"C:/Users/icrurbut/Dropbox/Bert/GBR/RAAB/github_repo_sync/RAAB7_scripts/"
-
-#7. Read in meta file and trim unused rows
-meta<-read_xlsx("../raab-log_v5.xlsx",sheet=1)
+#4. Read in meta file and trim unused rows
+meta<-read_xlsx(here('data', "raab-log_v5.xlsx"))
 meta[meta=="NA"]<-NA
 meta<-meta[!is.na(meta$raab_id),]
 
-#8. Set data file names and retrieve RAAB ID
+#5. Set data file names and retrieve RAAB ID
 raab_id_hr<-"2022_Ethiopia_Amhara_West-Gojam"
 resident.data<-"ethiopia.csv"
-raab<-read.csv(paste0(path.to.raab,resident.data))
+raab<-read.csv(here("data", resident.data))
 pop.data<-"ethiopia_pop.csv"
 raab_id<-raab$regionId[1]
 
-
-#9. Make folders for output (will override any previous outputs in the same folder)
+#6. Make folders for output (will override any previous outputs in the same folder)
 ID<-raab_id
-if(file.exists(ID)){outdir<-ID}else{dir.create(ID);outdir<-ID}
-dir.create(paste0(ID,"/summary"))
-dir.create(paste0(ID,"/summary/data"))
-dir.create(paste0(ID,"/raw"))
-dir.create(paste0(ID,"/raw/data"))
+if (file.exists(here("outputs",ID))) {outdir<-ID} else {dir.create(here("outputs",ID)); outdir<-ID}
+dir.create(here("outputs",ID,"/summary"))
+dir.create(here("outputs",ID,"/summary/data"))
+dir.create(here("outputs",ID,"/raw"))
+dir.create(here("outputs",ID,"/raw/data"))
 
-#10. Run reporter script
-render(paste0(path.to.scripts,"RAAB7_reporter.Rmd"), output_file = paste0(ID,"_","report"), output_dir = paste0(outdir,"/summary"))
+#7. Run reporter script
+render(here("RAAB7_scripts","RAAB7_reporter_new-script-names.Rmd"), output_file = here("outputs", paste0(ID,"_","report")), output_dir = here("outputs", ID, "summary"))
 
-#11. Delete intermediate files
-unlink(paste0(ID,"/summary/*_files"),recursive=T)
+#8. Delete intermediate files
+unlink(here("outputs", "summary", "*_files"),recursive=T)
 
