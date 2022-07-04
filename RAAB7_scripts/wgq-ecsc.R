@@ -98,7 +98,7 @@ wgq.ecsc$no.dis.num[wgq.ecsc$num.thresh=="ecsc_360" & wgq.ecsc$denom.thresh=="61
 wgq.ecsc$no.dis.num[wgq.ecsc$num.thresh=="ecsc_360" & wgq.ecsc$denom.thresh=="660"]<-sum(raab$a_case_360_660[raab$wgq.dis.any==0],na.rm=T)+sum(raab$b_case_360[raab$wgq.dis.any==0],na.rm=T)
 wgq.ecsc$no.dis.num[wgq.ecsc$num.thresh=="ecsc_360" & wgq.ecsc$denom.thresh=="360"]<-sum(raab$a_case_360_360[raab$wgq.dis.any==0],na.rm=T)+sum(raab$b_case_360[raab$wgq.dis.any==0],na.rm=T)
 
-#calculate csc
+#calculate ecsc
 
 wgq.ecsc$any.dis.crude<-wgq.ecsc$any.dis.num/wgq.ecsc$any.dis.denom
 wgq.ecsc$any.non.vi.dis.crude<-wgq.ecsc$any.non.vi.dis.num/wgq.ecsc$any.non.vi.dis.denom
