@@ -40,8 +40,6 @@ raab <- raab %>% mutate(vi.levels = case_when(mild.vi==1 ~ "mild.vi", moderate.v
 
 vi.levels<-c("blind","severe.vi","moderate.vi","mild.vi")
 
-
-
 right.vi.levels<-c("right.blind","right.severe.vi","right.moderate.vi","right.mild.vi")
 left.vi.levels<-c("left.blind","left.severe.vi","left.moderate.vi","left.mild.vi")
 right.pinva.levels<-c("right.pinva.blind","right.pinva.severe.vi","right.pinva.moderate.vi","right.pinva.mild.vi")
@@ -85,14 +83,11 @@ raab <- raab %>% mutate(
   
 )
 
-
-
 raab <- raab %>% mutate(
   
   cumulative.vi = case_when(mild.cumulative==1 ~ "mild.cumulative", moderate.cumulative==1 ~ "moderate.cumulative", severe.cumulative==1 ~ "severe.cumulative", blind.cumulative==1 ~ "blind.cumulative")
   
 )
-
 
 cumulative.vi<-c("blind.cumulative","severe.cumulative","moderate.cumulative","mild.cumulative")
 
@@ -121,7 +116,6 @@ raab <- raab %>% mutate(
   unilat.vi = case_when(mild.unilat==1 ~ "mild.unilat", moderate.unilat==1 ~ "moderate.unilat", severe.unilat==1 ~ "severe.unilat", blind.unilat==1 ~ "blind.unilat")
   
 )
-
 
 unilat.vi<-c("mild.unilat","moderate.unilat","severe.unilat","blind.unilat")
 
@@ -201,8 +195,16 @@ raab$cataract.severe.vi <- (raab$z_case_660)+0
 raab$cataract.moderate.vi <- (raab$z_case_618)+0
 raab$cataract.mild.vi <- (raab$z_case_612)+0
 
-#
+# Vars for counting operated people (bilateral or unilateral, exclusive categories)
+raab <- raab %>% mutate(
+  bilat.operated = case_when(raab$right_operated==1 & raab$left_operated==1 ~1, TRUE~0)
+)
+raab <- raab %>% mutate(
+  unilat.operated = case_when(bilat.operated!=1 & (raab$right_operated==1 | raab$left_operated==1) ~1, TRUE~0)
+)
 
+  
+# Bilateral operable cataract cases used to report barriers to cataract surgery  
 raab$bilateral_operable_cataract<-(raab$right_operable_660==1 & raab$left_operable_660)+0
 
 #
@@ -418,14 +420,29 @@ dis.domains<- c("wgq.dis.see", "wgq.dis.hear", "wgq.dis.mob", "wgq.dis.mem", "wg
 
 # DR Module variables
 
+# Notes
+# diabetes.denom = denominator for reporting DM status among DR module participants via self-reported or RBG consent, excludes anyone not previously diagnosed and not consenting to RBG
+# diabetes.new = cases of suspected DM based on RBG result among those not self-reporting history of DM
+# diabetes.known.susp = cases of self-reported DM & suspected DM based on RBG result combined
+# diabetes.no = cases where no history of DM self-reported and normal RBG result among diabetes.denom
+# dr.exam.denom = denominator for reporting fundus examination results
+
+dr.response.cascade <-c("Enrolled","Examined","Self-reported diabetes or consented to blood test", "Known or suspected diabetes", "Consented dilated examination") 
+
 raab <- raab %>% mutate(
   
   diabetes.denom = case_when(dr_diabetes_known=="true" | dr_diabetes_blood_consent=="true" ~1, TRUE~0),
   diabetes.new = case_when((dr_diabetes_known=="false" & dr_diabetes_blood_consent=="true" & dr_diabetes_blood_sugar>=200) ~1, TRUE~0),
-  diabetes.known.susp = case_when((dr_diabetes_known=="true" | diabetes.new==1) ~1, TRUE~0 ),
-  dr.exam.denom = case_when(diabetes.known.susp==1 & dr_retinopathy_method_right=="dr_retinopathy_method_dilatation_fundoscopy" ~1, TRUE~0)
+  diabetes.known.susp = case_when((dr_diabetes_known=="true" | diabetes.new==1) ~1, TRUE~0),
+  dr.exam.denom = case_when(diabetes.known.susp==1 & (dr_retinopathy_method_right=="dr_retinopathy_method_dilatation_fundoscopy" | dr_retinopathy_method_right=="dr_retinopathy_method_fundus_camera")  ~1, TRUE~0)
 )
+raab <- raab %>% mutate(
+diabetes.no = case_when((diabetes.denom==1 & diabetes.known.susp==0) ~1, TRUE~0))
+
 # Made grades numeric so more easily treated as ordinal values
+retinopathy.grade <- c("dr_retinopathy_grade_none", "dr_retinopathy_grade_mild", "dr_retinopathy_grade_observable", "dr_retinopathy_grade_referable", "dr_retinopathy_grade_proliferative", "dr_retinopathy_grade_not_visualised")
+dr.ret.grade.person <- c(1,2,3,4,5,0)
+
 raab <- raab %>% mutate(  
   dr.ret.grade.right = case_when(
     dr_retinopathy_grade_right=="dr_retinopathy_grade_none" ~1,
@@ -462,6 +479,8 @@ raab <- raab %>% mutate(
   dr.laser.person = case_when(dr_laser_photocoagulation_scars_right=="dr_laser_photocoagulation_scars_macular" | dr_laser_photocoagulation_scars_right=="dr_laser_photocoagulation_scars_pan_retinal" | dr_laser_photocoagulation_scars_right=="dr_laser_photocoagulation_scars_pan_retinal_and_macular" |
                                 dr_laser_photocoagulation_scars_left=="dr_laser_photocoagulation_scars_macular" | dr_laser_photocoagulation_scars_left=="dr_laser_photocoagulation_scars_pan_retinal" | dr_laser_photocoagulation_scars_left=="dr_laser_photocoagulation_scars_pan_retinal_and_macular" ~1, TRUE~0)
 )
+
+dr.last.exam <- c("dr_diabetic_last_exam_none", "dr_diabetic_last_exam_0_12_months", "dr_diabetic_last_exam_13_24_months", "dr_diabetic_last_exam_over_24_months")
 
 # Subjective SEP variables
 # Create three levels of income from five response options
