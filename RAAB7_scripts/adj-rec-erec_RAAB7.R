@@ -14,27 +14,27 @@ raab$erec_num <-(raab$aa_case==1)+0
 raab$rec_num <-(raab$aa_case==1 | raab$bb_case==1)+0
 raab$erec_rec_denom <-(raab$aa_case==1 | raab$bb_case==1 | raab$cc_case==1)+0
 
-  
+
 erec_output <- c("erec","rec")
 
 newtab5<-data.frame(erec_output)
 newtab5[,2:19] <- NA
 names(newtab5) <- c("rec_metric",
-                             
+                    
                     "female.pct",
                     "female.pct.lci",
                     "female.pct.uci",
                     "female.adj.pct",
                     "female.adj.pct.lci",
                     "female.adj.pct.uci",
-                             
+                    
                     "male.pct",
                     "male.pct.lci",
                     "male.pct.uci",
                     "male.adj.pct",
                     "male.adj.pct.lci",
                     "male.adj.pct.uci",
-                       
+                    
                     "total.pct",
                     "total.pct.lci",
                     "total.pct.uci",
@@ -101,5 +101,4 @@ newtab5[,ucis][newtab5[,ucis]>1]<-1
 
 pcts<-grep("pct",names(newtab5))
 newtab5[,pcts]<-format(round(newtab5[,pcts]*100,1),nsmall=1)
-
 
