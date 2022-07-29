@@ -50,9 +50,9 @@ for (i in 1:length(unilat.vi))
   
 }  
 
-unt$extrapolated.female.n<-format( unt$female.adj.pct * sum(female.subpop$population), digits=0, big.interval = 3L, big.mark = " ", scientific=F)
-unt$extrapolated.male.n<-format( unt$male.adj.pct * sum(male.subpop$population), digits=0, big.interval = 3L, big.mark = " ", scientific=F)
-unt$extrapolated.total.n<-format( unt$total.adj.pct * sum(popfives$population), digits=0, big.interval = 3L, big.mark = " ", scientific=F)
+unt$extrapolated.female.n<-format( unt$female.adj.pct * sum(female.subpop$population), digits = 1, big.interval = 3L, big.mark = " ", scientific=F)
+unt$extrapolated.male.n<-format( unt$male.adj.pct * sum(male.subpop$population), digits = 1, big.interval = 3L, big.mark = " ", scientific=F)
+unt$extrapolated.total.n<-format( unt$total.adj.pct * sum(popfives$population), digits = 1, big.interval = 3L, big.mark = " ", scientific=F)
 
 lcis<-grep("lci",names(unt))
 ucis<-grep("uci",names(unt))
