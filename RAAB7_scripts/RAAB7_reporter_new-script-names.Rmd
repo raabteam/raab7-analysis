@@ -25,6 +25,14 @@ options(knitr.table.format = "latex")
 # knitr::opts_knit$set(root.dir = path.to.raab)
 knitr::opts_chunk$set(echo = FALSE)
 
+unlink(here("outputs",ID),recursive = T)
+dir.create(here("outputs",ID))
+outdir<-ID
+dir.create(here("outputs",ID,"/summary"))
+dir.create(here("outputs",ID,"/summary/data"))
+dir.create(here("outputs",ID,"/raw"))
+dir.create(here("outputs",ID,"/raw/data"))
+
 raab<-read.csv(here("data", resident.data))
 raab$raab_id<-raab$regionId
 
@@ -62,6 +70,10 @@ output:
 header-includes:
 - \usepackage{float}
 - \usepackage{tabu}
+- \usepackage{graphicx}
+- \usepackage{fancyhdr}
+- \fancypagestyle{plain}{\pagestyle{fancy}}
+- \fancyhead[R]{\includegraphics[width=5cm]{logo.png}}
 tables:
   yes
 ---
@@ -635,7 +647,7 @@ CSC measures the accessibility of cataract surgical services. It describes the n
 
 source(here("RAAB7_scripts","cat-barriers.R"))
 
-sum11.nice.names<-surgery.bars.cat
+sum11.nice.names<-surgery.bars[, c("Barrier","total_count","total_percent","female_count","female_percent","male_count","male_percent")]
 
 write.table(sum11.nice.names,here("outputs", ID, "summary", "data", "t17.csv"),row.names=F,col.names=T,sep=",")
 

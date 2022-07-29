@@ -65,9 +65,9 @@ for (i in 1:length(vi.levels[1:3]))
   
 }
 
-sum3$extrapolated.female.n<-format( (sum3$female.adj.pct * sum(female.subpop$population)), digits=0, big.interval = 3L, big.mark = " ", scientific=F)
-sum3$extrapolated.male.n<-format( (sum3$male.adj.pct * sum(male.subpop$population)), digits=0, big.interval = 3L, big.mark = " ", scientific=F)
-sum3$extrapolated.total.n<-format( (sum3$total.adj.pct * sum(popfives$population)), digits=0, big.interval = 3L, big.mark = " ", scientific=F)
+sum3$extrapolated.female.n<-format( (sum3$female.adj.pct * sum(female.subpop$population)), digits=1, big.interval = 3L, big.mark = " ", scientific=F)
+sum3$extrapolated.male.n<-format( (sum3$male.adj.pct * sum(male.subpop$population)), digits=1, big.interval = 3L, big.mark = " ", scientific=F)
+sum3$extrapolated.total.n<-format( (sum3$total.adj.pct * sum(popfives$population)), digits=1, big.interval = 3L, big.mark = " ", scientific=F)
 
 lcis<-grep("lci",names(sum3))
 ucis<-grep("uci",names(sum3))

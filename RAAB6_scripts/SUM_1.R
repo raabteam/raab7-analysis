@@ -47,4 +47,4 @@ pcts<-grep("pct",names(sum1))
 sum1[,pcts]<-round( sum1[,pcts] * 100, 1 )
 
 cnts<-grep("n",names(sum1))
-sum1[,cnts]<-format( sum1[,cnts], digits=0, big.interval = 3L, big.mark = " ", scientific=F )
+sum1[,cnts]<-format( sum1[,cnts], digits=1, big.interval = 3L, big.mark = " ", scientific=F )
