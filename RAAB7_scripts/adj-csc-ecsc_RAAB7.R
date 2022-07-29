@@ -76,7 +76,7 @@ prev14$male.num[prev14$num.thresh=="ecsc_660" & prev14$denom.thresh=="360"]<-sum
 prev14$male.num[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="612"]<-sum(raab$a_case_360_612[raab$gender=="male"],na.rm=T)+sum(raab$b_case_360[raab$gender=="male"],na.rm=T)
 prev14$male.num[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="618"]<-sum(raab$a_case_360_618[raab$gender=="male"],na.rm=T)+sum(raab$b_case_360[raab$gender=="male"],na.rm=T)
 prev14$male.num[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="660"]<-sum(raab$a_case_360_660[raab$gender=="male"],na.rm=T)+sum(raab$b_case_360[raab$gender=="male"],na.rm=T)
-prev14$male.num[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="360"]<-sum(raab$a_case_360_360[raab$gender=="male"],na.rm=T)+sum(raab$b_case_36[raab$gender=="male"],na.rm=T)
+prev14$male.num[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="360"]<-sum(raab$a_case_360_360[raab$gender=="male"],na.rm=T)+sum(raab$b_case_360[raab$gender=="male"],na.rm=T)
 
 prev14$female.num[prev14$num.thresh=="csc" & prev14$denom.thresh=="612"]<-sum(raab$x_case_612[raab$gender=="female"],na.rm=T)+sum(raab$y_case_612[raab$gender=="female"],na.rm=T)
 prev14$female.num[prev14$num.thresh=="csc" & prev14$denom.thresh=="618"]<-sum(raab$x_case_618[raab$gender=="female"],na.rm=T)+sum(raab$y_case_618[raab$gender=="female"],na.rm=T)
@@ -97,7 +97,7 @@ prev14$female.num[prev14$num.thresh=="ecsc_660" & prev14$denom.thresh=="360"]<-s
 prev14$female.num[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="612"]<-sum(raab$a_case_360_612[raab$gender=="female"],na.rm=T)+sum(raab$b_case_360[raab$gender=="female"],na.rm=T)
 prev14$female.num[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="618"]<-sum(raab$a_case_360_618[raab$gender=="female"],na.rm=T)+sum(raab$b_case_360[raab$gender=="female"],na.rm=T)
 prev14$female.num[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="660"]<-sum(raab$a_case_360_660[raab$gender=="female"],na.rm=T)+sum(raab$b_case_360[raab$gender=="female"],na.rm=T)
-prev14$female.num[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="360"]<-sum(raab$a_case_360_360[raab$gender=="female"],na.rm=T)+sum(raab$b_case_36[raab$gender=="female"],na.rm=T)
+prev14$female.num[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="360"]<-sum(raab$a_case_360_360[raab$gender=="female"],na.rm=T)+sum(raab$b_case_360[raab$gender=="female"],na.rm=T)
 
 
 prev14$total.num[prev14$num.thresh=="csc" & prev14$denom.thresh=="612"]<-sum(raab$x_case_612,na.rm=T)+sum(raab$y_case_612,na.rm=T)
