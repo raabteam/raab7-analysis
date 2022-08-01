@@ -125,32 +125,60 @@ raab <- raab %>% mutate(
   left_operable_660 = case_when((raab$lens_status_left=="lens_status_opacity" & raab$poor_vision_cause_left=="poor_vision_cause_cataract_untreated" & raab$left_distance_acuity_pinhole>=1.3) ~ 1, TRUE ~ 0),
   right_operable_360 = case_when((raab$lens_status_right=="lens_status_opacity" & raab$poor_vision_cause_right=="poor_vision_cause_cataract_untreated" & raab$right_distance_acuity_pinhole>=1.8) ~ 1, TRUE ~ 0),
   left_operable_360 = case_when((raab$lens_status_left=="lens_status_opacity" & raab$poor_vision_cause_left=="poor_vision_cause_cataract_untreated" & raab$left_distance_acuity_pinhole>=1.8) ~ 1, TRUE ~ 0),
-  right_operated = case_when((raab$lens_status_right=="lens_status_aphakia" | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0),
-  left_operated = case_when((raab$lens_status_left=="lens_status_aphakia" | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0)
   
+#Operated definition 1: Any aphakia
+#  right_operated = case_when((raab$lens_status_right=="lens_status_aphakia" | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0),
+#  left_operated = case_when((raab$lens_status_left=="lens_status_aphakia" | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0)
+
+#Operated definition 2: Excluded couched eyes from aphakia definition
+  right_operated = case_when(((raab$lens_status_right=="lens_status_aphakia" & raab$surgery_type_right!="surgery_type_couching") | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0),
+  left_operated = case_when(((raab$lens_status_left=="lens_status_aphakia" & raab$surgery_type_left!="surgery_type_couching") | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0)
+
 )
 
 raab <- raab %>% 
   
   mutate( 
     
-    x_case_618 = case_when(((raab$right_operable_618==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_618==1)) ~ 1, TRUE ~ 0),
+#eCSC and CSC denominator definition 1: Cataract as cause of VI in non-operated eyes
+    
+#    x_case_618 = case_when(((raab$right_operable_618==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_618==1)) ~ 1, TRUE ~ 0),
+#    x_case_660 = case_when(((raab$right_operable_660==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_660==1)) ~ 1, TRUE ~ 0),
+#    x_case_360 = case_when(((raab$right_operable_360==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_360==1)) ~ 1, TRUE ~ 0),
+
+#eCSC and CSC denominator definition 2: Any cause of VI in non-operated eyes
+    
+    x_case_618 = case_when(((raab$right_distance_acuity_pinhole>=1.0 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_distance_acuity_pinhole>=1.0)) ~ 1, TRUE ~ 0),
+    x_case_660 = case_when(((raab$right_distance_acuity_pinhole>=1.3 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_distance_acuity_pinhole>=1.3)) ~ 1, TRUE ~ 0),
+    x_case_360 = case_when(((raab$right_distance_acuity_pinhole>=1.8 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_distance_acuity_pinhole>=1.8)) ~ 1, TRUE ~ 0),
+    
+        
     y_case_618 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
     z_case_618 = case_when((raab$right_operable_618==1 & raab$left_operable_618==1) ~ 1, TRUE ~ 0),
     
-    x_case_660 = case_when(((raab$right_operable_660==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_660==1)) ~ 1, TRUE ~ 0),
     y_case_660 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
     z_case_660 = case_when((raab$right_operable_660==1 & raab$left_operable_660==1) ~ 1, TRUE ~ 0),
     
-    x_case_360 = case_when(((raab$right_operable_360==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_360==1)) ~ 1, TRUE ~ 0),
     y_case_360 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
     z_case_360 = case_when((raab$right_operable_360==1 & raab$left_operable_360==1) ~ 1, TRUE ~ 0),
 
-    a_case_360_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<=1.3)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<=1.3)))  ~ 1, TRUE ~ 0),
-    a_case_660_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<=1.0)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<=1.0)))  ~ 1, TRUE ~ 0),
-    a_case_618_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<=0.47)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<=0.47)))  ~ 1, TRUE ~ 0),
-    a_case_618_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<=0.47)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<=0.47)))  ~ 1, TRUE ~ 0),
-    a_case_618_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<=0.47)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<=0.47)))  ~ 1, TRUE ~ 0),
+#NB syntax is a_case_[operatedthresh]_[operablethresh]
+#eCSC numerator definition 1: cataract as cause of VI in non-operated eye
+
+#    a_case_360_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<=1.3)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<=1.3)))  ~ 1, TRUE ~ 0),
+#    a_case_660_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<=1.0)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<=1.0)))  ~ 1, TRUE ~ 0),
+#    a_case_618_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<=0.47)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<=0.47)))  ~ 1, TRUE ~ 0),
+#    a_case_618_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<=0.47)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<=0.47)))  ~ 1, TRUE ~ 0),
+#    a_case_618_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<=0.47)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<=0.47)))  ~ 1, TRUE ~ 0),
+
+#eCSC numerator definition 2: any cause of VI in non-operated eye
+
+    a_case_360_360 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_distance_acuity_pinhole>=1.8) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3) & raab$right_distance_acuity_pinhole>=1.8)  ~ 1, TRUE ~ 0),
+    a_case_660_660 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.0) & raab$left_distance_acuity_pinhole>=1.3) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.0) & raab$right_distance_acuity_pinhole>=1.3)  ~ 1, TRUE ~ 0),
+    a_case_618_618 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_distance_acuity_pinhole>=1.0) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47) & raab$right_distance_acuity_pinhole>=1.0)  ~ 1, TRUE ~ 0),
+    a_case_618_660 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_distance_acuity_pinhole>=1.3) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47) & raab$right_distance_acuity_pinhole>=1.3)  ~ 1, TRUE ~ 0),
+    a_case_618_360 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_distance_acuity_pinhole>=1.8) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47) & raab$right_distance_acuity_pinhole>=1.8)  ~ 1, TRUE ~ 0),
+
     b_case_618 = case_when((raab$right_operated==1 & raab$left_operated==1 & ifelse(as.numeric(raab$right_distance_acuity_presenting) < as.numeric(raab$left_distance_acuity_presenting),(raab$right_distance_acuity_presenting<=0.47),(raab$left_distance_acuity_presenting<=0.47))) ~ 1, TRUE ~ 0)
     
   )

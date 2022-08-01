@@ -109,11 +109,11 @@ knitr::kable(sum1.nice.names, booktabs=T, linesep = "", caption = "Eligible pers
 
 ```
 
-The response rate indicates the proportion of eligible, enumerated people who were examined.  The RAAB sample size calculator includes the expected non-response rate in the sample and increases the sample size accordingly. This ensures that the sample size is powerful enough to estimate the prevalence of blindness with the desired precision. 
+The response rate indicates the proportion of eligible, enumerated people who were examined. The RAAB sample size calculator includes the expected non-response rate in the sample and increases the sample size accordingly. This ensures that the sample size is powerful enough to estimate the prevalence of blindness with the desired precision.
 
-If the response rate is lower than 80-90%, there is a concern that the conditions under review in the 10-20% who were not examined may be different to those that were examined (non-response bias). For example, non-responders in a RAAB may be younger than responders (e.g., working age vs retired) and may, on average, be less likely to be vision impaired. 
+If the response rate is lower than 80-90%, there is a concern that the conditions under review in the 10-20% who were not examined may be different to those that were examined (non-response bias). For example, non-responders in a RAAB may be younger than responders (e.g., working age vs retired) and may, on average, be less likely to be vision impaired.
 
-If the response rate is over 95%, this might be an indication that eligible participants who were absent or refused to participate were not enumerated but rather replaced by eligible participants in the next household, which would introduce selection bias and mean that results are not representative of the population. For example, people with impaired vision may be more likely to be at home and people with good vision may be more likely to be away and unavailable. In certain settings (e.g., rural or remote) a response rate over 95% is not uncommon – participants may be more compliant with requests to stay home on the day of data collection, or more likely to work in the environment close to their home.
+If the response rate is over 95%, this might be an indication that eligible participants who were absent or refused to participate were not enumerated but rather replaced by eligible participants in the next household, which would introduce selection bias and mean that results are not representative of the population. For example, people with impaired vision may be more likely to be at home and people with good vision may be more likely to be away and unavailable. In certain settings (e.g., rural or remote) a response rate over 95% is not uncommon -- participants may be more compliant with requests to stay home on the day of data collection, or more likely to work in the environment close to their home.
 
 It is important to review this information in relation to the tables on representativeness of the sample below to identify whether a high response rate is valid.
 
@@ -137,7 +137,6 @@ knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and sex d
 
 
 ```
-
 
 ```{r asa2, echo=FALSE}
 
@@ -201,13 +200,13 @@ legend("top",col="gold",pch=c(0,15),c("Examined","Non-responders"),bty='n',cex=0
 
 ```
 
-For your results to be useful for planning, your sample needs to be representative of the population 50 years and older. After completing the survey, we can assess representativeness by comparing the age-sex composition of the sample to the age-sex composition of the population 50 years and older. 
+For your results to be useful for planning, your sample needs to be representative of the population 50 years and older. After completing the survey, we can assess representativeness by comparing the age-sex composition of the sample to the age-sex composition of the population 50 years and older.
 
-We can also use the age-sex composition of the population 50 years and older to weight (post-stratify) crude estimates and provide age-sex adjusted (ASA) estimates for the population. We apply an ‘inflation factor’ – derived from sample vs population comparisons – to the counts of our conditions of interest in each sample age-sex group to generate extrapolated values in the population. 
+We can also use the age-sex composition of the population 50 years and older to weight (post-stratify) crude estimates and provide age-sex adjusted (ASA) estimates for the population. We apply an 'inflation factor' -- derived from sample vs population comparisons -- to the counts of our conditions of interest in each sample age-sex group to generate extrapolated values in the population.
 
 Often, there are more older females than younger males in the sample, and less younger males in the sample than in the population, because men are more likely to be away at work when the survey teams visit. If this is the case, use the age-sex adjusted estimates.
 
-Important: if your sample differs from the population because one group was more likely to be unavailable (e.g., younger men, or other seasonal labourers) then you would expect to see this reflected in the response rate (i.e., more people enumerated but unavailable).  If the difference between the sample and the population is high, but the proportion of people unavailable is low (e.g., response rate is still above 95%) this might be an indication that eligible participants who were absent or refused were replaced by others, which introduces bias and may mean that results are not accurate.
+Important: if your sample differs from the population because one group was more likely to be unavailable (e.g., younger men, or other seasonal labourers) then you would expect to see this reflected in the response rate (i.e., more people enumerated but unavailable). If the difference between the sample and the population is high, but the proportion of people unavailable is low (e.g., response rate is still above 95%) this might be an indication that eligible participants who were absent or refused were replaced by others, which introduces bias and may mean that results are not accurate.
 
 \newpage
 
@@ -215,7 +214,7 @@ Important: if your sample differs from the population because one group was more
 
 We report the prevalence of distance vision impairment (VI) in the population 50 years and older using presenting visual acuity (PVA) in the better eye. PVA is visual acuity measured with correction, if available.
 
-Distance vision impairment categories are defined according to the VA thresholds used in the World Health Organization’s International Classification of Diseases (ICD-11).
+Distance vision impairment categories are defined according to the VA thresholds used in the World Health Organization's International Classification of Diseases (ICD-11).
 
 Blindness: PVA less than 3/60 in the better eye
 
@@ -258,8 +257,6 @@ knitr::kable(sum3a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
   add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
 
 ```
-
-
 
 ```{r sum4, echo=FALSE}
 
@@ -313,8 +310,6 @@ knitr::kable(asa6a.nice.names, booktabs=T, linesep = "", caption = "Crude cumula
 
 ```
 
-
-
 ```{r asa6b,echo=FALSE}
 
 asa6b.nice.names<-asa6.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
@@ -330,7 +325,6 @@ knitr::kable(asa6b.nice.names, booktabs=T, linesep = "", caption = "Adjusted cum
   add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold = T)
 
 ```
-
 
 ## Table 8, table 9
 
@@ -391,7 +385,6 @@ knitr::kable(sum6ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), capt
 
 ```
 
-
 Table 8 compares the main cause of blindness, severe vision impairment, moderate vision impairment and mild visual impairment in the person. Table 9 shows what proportion of vision impairment is attributable to treatable, preventable and posterior segment disease. From these tables the priorities for intervention can be determined. The distribution of cases of blindness in the sample are visualised below.
 
 ## Plot 3
@@ -415,8 +408,6 @@ sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_
 treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="index",palette = "RdYlBu",title="Principal causes of bilateral blindness",position.legend="right",fontsize.title=12)
 
 ```
-
-
 
 ## Table 10, table 11
 
@@ -476,7 +467,6 @@ knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), cap
 
 ```
 
-
 ## Table 12, table 13
 
 ```{r newtab1a, echo=FALSE}
@@ -514,8 +504,6 @@ knitr::kable(unta.nice.names,booktabs=T, linesep = "",caption="Crude prevalence 
 
 ```
 
-
-
 ```{r newtab1b, echo=FALSE}
 
 
@@ -545,7 +533,7 @@ Cases of unilateral vision impairment acknowledge an additional sight loss burde
 
 # Cataract
 
-## Table 14, table 15 
+## Table 14, table 15
 
 ```{r asa7a, echo=FALSE}
 
@@ -573,7 +561,6 @@ knitr::kable(asa7a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
   add_footnote("Unilateral refers to cases where the other eye has PVA of 6/12",notation="symbol")
 
 ```
-
 
 ```{r asa7b, echo=FALSE}
 
@@ -647,7 +634,7 @@ CSC measures the accessibility of cataract surgical services. It describes the n
 
 source(here("RAAB7_scripts","cat-barriers.R"))
 
-sum11.nice.names<-surgery.bars[, c("Barrier","total_count","total_percent","female_count","female_percent","male_count","male_percent")]
+sum11.nice.names<-surgery.bars[, c("Barrier","female_count","female_percent","male_count","male_percent","total_count","total_percent")]
 
 write.table(sum11.nice.names,here("outputs", ID, "summary", "data", "t17.csv"),row.names=F,col.names=T,sep=",")
 
@@ -720,7 +707,6 @@ knitr::kable(newtab3a.nice.names, booktabs=T, linesep = "", caption = "Post-oper
 
 ```
 
-
 ```{r newtab3b, echo=FALSE}
 
 newtab3b.nice.names<-newtab3b
@@ -744,7 +730,6 @@ knitr::kable(newtab3b.nice.names, booktabs=T, linesep = "", caption = "Post-oper
   add_header_above(c("Outcome (PinVA)" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
 
 ```
-
 
 ## Table 21, table 22
 
@@ -771,7 +756,6 @@ knitr::kable(outc6a.nice.names, booktabs=T, linesep = "", caption = "Post-operat
   add_header_above(c("Post-surgical VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T)
 
 ```
-
 
 ```{r outc6b, echo=FALSE}
 
@@ -847,7 +831,6 @@ knitr::kable(newtab4a.nice.names, booktabs=T, linesep = "", caption = "Crude pre
 
 ```
 
-
 ```{r new_tab_4b, echo=FALSE}
 
 newtab4b.nice.names<-newtab4.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
@@ -864,20 +847,19 @@ knitr::kable(newtab4b.nice.names, booktabs=T, linesep = "", caption = "Adjusted 
 
 ```
 
-
 ## Table 25
 
-Refractive error coverage (REC) is defined as (A + B) / (A + B + C) 
+Refractive error coverage (REC) is defined as (A + B) / (A + B + C)
 
 Effective refractive error coverage (eREC) is defined as (A) / (A + B + C)
 
 where:
 
-A = Individuals who present with spectacles or contact lenses for distance and whose UCVA is <6/12 in the better eye and CVA is 6/12 in the better eye (Met Need)
+A = Individuals who present with spectacles or contact lenses for distance and whose UCVA is \<6/12 in the better eye and CVA is 6/12 in the better eye (Met Need)
 
-B = Individuals who present with spectacles or contact lenses for distance and whose UCVA is <6/12 in the better eye and whose CVA is <6/12 in the better eye, but who improve to 6/12 on PinVA (Undermet Need)
+B = Individuals who present with spectacles or contact lenses for distance and whose UCVA is \<6/12 in the better eye and whose CVA is \<6/12 in the better eye, but who improve to 6/12 on PinVA (Undermet Need)
 
-C = Individuals who present without spectacles and whose UCVA is <6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
+C = Individuals who present without spectacles and whose UCVA is \<6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
 
 Note: Both indicators refer to distance refractive error
 
@@ -982,7 +964,6 @@ Historic RAAB survey data variables have been updated to align with RAAB7 variab
 
 4 = No light perception [7]
 
-
 ## Bilateral VI
 
 Blindness: PVA less than 3/60 in the better eye
@@ -1005,31 +986,31 @@ Mild VI: PVA less than 6/12 to 6/18 in one eye, PVA 6/12 in the other eye
 
 ## Cataract-related VI and surgical outcomes
 
-Cataract surgical threshold (operable cataract): PinVA at <3/60, <6/60 and <6/18 thresholds plus lens opacity plus untreated cataract as principal cause
+Cataract surgical threshold (operable cataract): PinVA at \<3/60, \<6/60 and \<6/18 thresholds plus lens opacity plus untreated cataract as principal cause
 
-Operated cataract: Aphakia or pseudoaphakia (with or without posterior capsule opacification [PCO]) 
+Operated cataract: Aphakia or pseudoaphakia (with or without posterior capsule opacification [PCO])
 
 ## Cataract surgical coverage (CSC) and effective cataract surgical coverage (eCSC)
 
 eCSC and CSC are calculated at the person level, not by eyes, and calculated at various cataract surgical thresholds.
 
-CSC is defined as (X + Y) / (X + Y + Z) 
+CSC is defined as (X + Y) / (X + Y + Z)
 
 eCSC is defined as (A + B) / (X + Y + Z)
 
 where:
 
-A = individuals with unilateral operated cataract attaining 6/12 or better post-operative presenting VA in the operated eye, who have operable cataract in the other eye 
+A = individuals with unilateral operated cataract attaining 6/12 or better post-operative presenting VA in the operated eye, who have vision impairment from any cause in the other eye
 
 B = individuals with bilateral operated cataract attaining 6/12 or better post-operative presenting VA in at least one eye
 
-X = individuals with unilateral pseudo/aphakia (i.e. operated cataract) and operable cataract in the other eye
+X = individuals with unilateral pseudo/aphakia (i.e. operated cataract, excluding couched eyes) and vision impairment in the other eye
 
-Y = individuals with bilateral pseudo/aphakia, regardless of post-operative presenting visual acuity
+Y = individuals with bilateral pseudo/aphakia (i.e. operated cataract, excluding couched eyes), regardless of post-operative presenting visual acuity
 
 Z = individuals with bilateral operable cataract
 
-For further information see: Ramke J, Gilbert CE, Lee AC, Ackland P, Limburg H, Foster A (2017) Effective cataract surgical coverage: An indicator for measuring quality-of-care in the context of Universal Health Coverage. PLoS ONE 12(3): e0172342. doi:10.1371/journal.pone.0172342
+For further information see: Ramke J, Gilbert CE, Lee AC, Ackland P, Limburg H, Foster A (2017) Effective cataract surgical coverage: An indicator for measuring quality-of-care in the context of Universal Health Coverage. PLoS ONE 12(3): e0172342. <doi:10.1371/journal.pone.0172342>
 
 ## Refractive error coverage (REC) and effective refractive error coverage (eREC)
 
@@ -1039,20 +1020,19 @@ eREC is defined as (A) / (A + B + C)
 
 where:
 
-A = Individuals who present with spectacles or contact lenses for distance and whose UCVA is <6/12 in the better eye and CVA is 6/12 in the better eye (Met Need)
+A = Individuals who present with spectacles or contact lenses for distance and whose UCVA is \<6/12 in the better eye and CVA is 6/12 in the better eye (Met Need)
 
-B = Individuals who present with spectacles or contact lenses for distance and whose UCVA is <6/12 in the better eye and whose CVA is <6/12 in the better eye, but who improve to 6/12 on PinVA (Undermet Need)
+B = Individuals who present with spectacles or contact lenses for distance and whose UCVA is \<6/12 in the better eye and whose CVA is \<6/12 in the better eye, but who improve to 6/12 on PinVA (Undermet Need)
 
-C = Individuals who present without spectacles and whose UCVA is <6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
+C = Individuals who present without spectacles and whose UCVA is \<6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
 
-Note: This is the 'gold-standard' eREC calculation described here: McCormick I, Mactaggart I, Bastawrous A, Burton MJ, Ramke J. Effective refractive error coverage: an eye health indicator to measure progress towards universal health coverage. Ophthalmic Physiol Opt. 2020;40(1):1-5. doi:10.1111/opo.12662
+Note: This is the 'gold-standard' eREC calculation described here: McCormick I, Mactaggart I, Bastawrous A, Burton MJ, Ramke J. Effective refractive error coverage: an eye health indicator to measure progress towards universal health coverage. Ophthalmic Physiol Opt. 2020;40(1):1-5. <doi:10.1111/opo.12662>
 
 ## 95% Confidence Interval
 
 The 95% confidence intervals are based on standard errors calculated for the clustering of the sample and the variability between clusters, specifically using the formula provided by:
 
 Bennett S, Woods T, Liyanage WM, Smith DL. A simplified general method for cluster-sample surveys of health in developing countries. World Health Stat Q. 1991;44(3):98-106.
-
 
 ```{r big_boi_maker, include=FALSE}
 
@@ -1061,4 +1041,3 @@ source(here("RAAB7_scripts","SUMMARY_OUT_RAAB7.R"))
 write.table(bigboi,here("outputs", ID, "summary", "web_summary.csv"),row.names=F,col.names=T,sep=",",na="")
 
 ```
-

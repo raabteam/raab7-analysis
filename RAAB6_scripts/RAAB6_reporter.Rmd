@@ -981,11 +981,19 @@ Operated cataract: Aphakia or pseudoaphakia (with or without posterior capsule o
 
 CSC is calculated at the person level, not by eyes, and calculated at various thresholds of operable cataract (see above).
 
-CSC is defined as (X + Y) / (X + Y + Z) where:
+CSC is defined as (X + Y) / (X + Y + Z) 
 
-X = individuals with unilateral pseudo/aphakia (i.e. operated cataract) and operable cataract in the other eye
+eCSC is defined as (A + B) / (X + Y + Z)
 
-Y = individuals with bilateral pseudo/aphakia, regardless of post-operative presenting visual acuity
+where:
+
+A = individuals with unilateral operated cataract attaining 6/12 or better post-operative presenting VA in the operated eye, who have vision impairment from any cause in the other eye
+
+B = individuals with bilateral operated cataract attaining 6/12 or better post-operative presenting VA in at least one eye
+
+X = individuals with unilateral pseudo/aphakia (i.e. operated cataract, excluding couched eyes) and vision impairment in the other eye
+
+Y = individuals with bilateral pseudo/aphakia (i.e. operated cataract, excluding couched eyes), regardless of post-operative presenting visual acuity
 
 Z = individuals with bilateral operable cataract
 
