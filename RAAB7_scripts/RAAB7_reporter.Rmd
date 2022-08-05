@@ -22,7 +22,6 @@ require(maditr)
 require(here)
 
 options(knitr.table.format = "latex")
-# knitr::opts_knit$set(root.dir = path.to.raab)
 knitr::opts_chunk$set(echo = FALSE)
 
 unlink(here("outputs",ID),recursive = T)

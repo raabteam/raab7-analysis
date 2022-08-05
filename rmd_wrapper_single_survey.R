@@ -50,7 +50,7 @@ raab_id<-raab$regionId[1]
 ID<-raab_id
 
 #6. Run reporter script
-render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_","report")), output_dir = here("outputs", ID, "summary"))
+render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
 
 #7. Delete intermediate files
 unlink(here("outputs", "summary", "*_files"),recursive=T)
