@@ -17,9 +17,9 @@ surgery.bars<-as.data.frame(c(
 names(surgery.bars)<-"Barrier"
 for (i in 1:nrow(surgery.bars))
 {
-  surgery.bars$total_count[i]<-sum(table(grep(surgery.bars$Barrier[i],raab$surgery_none_reason)))
-  surgery.bars$male_count[i]<-sum(table(grep(surgery.bars$Barrier[i],raab$surgery_none_reason[raab$gender=="male"])))
-  surgery.bars$female_count[i]<-sum(table(grep(surgery.bars$Barrier[i],raab$surgery_none_reason[raab$gender=="female"])))
+  surgery.bars$total_count[i]<-sum(table(grep(surgery.bars$Barrier[i],raab$surgery_none_reason[raab$bilateral_operable_cataract==1])))
+  surgery.bars$male_count[i]<-sum(table(grep(surgery.bars$Barrier[i],raab$surgery_none_reason[raab$gender=="male" & raab$bilateral_operable_cataract==1])))
+  surgery.bars$female_count[i]<-sum(table(grep(surgery.bars$Barrier[i],raab$surgery_none_reason[raab$gender=="female" & raab$bilateral_operable_cataract==1])))
 }
 
 surgery.bars$total_percent<-round((surgery.bars$total_count/sum(surgery.bars$total_count,na.rm=T)*100),1)
