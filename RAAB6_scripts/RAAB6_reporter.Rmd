@@ -21,13 +21,20 @@ require(treemap)
 require(maditr)
 
 options(knitr.table.format = "latex")
-knitr::opts_knit$set(root.dir = path.to.scripts)
 knitr::opts_chunk$set(echo = FALSE)
 
-raab<-read.csv(paste0(path.to.raab,"raabs_612_repo.csv"))
+unlink(here("outputs",ID),recursive = T)
+dir.create(here("outputs",ID))
+outdir<-ID
+dir.create(here("outputs",ID,"/summary"))
+dir.create(here("outputs",ID,"/summary/data"))
+dir.create(here("outputs",ID,"/raw"))
+dir.create(here("outputs",ID,"/raw/data"))
+
+raab<-read.csv(here("data","raabs_612.csv"))
 raab<-raab[raab$raab_id==ID,]
 
-pop<-read.csv(paste0(path.to.pop,"raabs_pop_612_repo.csv"))
+pop<-read.csv(here("data","raabs_pop_612_repo.csv"))
 popfives<-pop[pop$raab_id==ID,]
 
 mrm_vars<-c("raab_id","survey_title","year_end","iso_2","level1","level2","osm_id","iso3166-1","iso3166-2","admin_level","national","sample_size","response_rate","raab_version","va_threshold","raab_dr","raab_wgq","iceh_data","pi_name","pi_institution","pi_email1","trainer_name","trainer_email1","implementing_org","facilitating_org","funder","pub_doi1","pub_doi2","pub_doi3")
@@ -38,9 +45,9 @@ raab_meta<-meta[meta$raab_id==ID,mrm_vars]
 PI<-raab_meta$pi_name
 TITLE<-raab_meta$survey_title
 
-write.table(raab_meta,file=paste0(outdir,"/raw/meta.csv"),row.names=F,col.names=T,sep=",",na="")
-write.table(raab,file=paste0(outdir,"/raw/data/survey_data.csv"),row.names=F,col.names=T,sep=",")
-write.table(popfives,file=paste0(outdir,"/raw/data/population.csv"),row.names=F,col.names=T,sep=",")
+write.table(raab_meta,file=here("outputs",ID,"/raw/meta.csv"),row.names=F,col.names=T,sep=",",na="")
+write.table(raab,file=here("outputs",ID,"/raw/data/survey_data.csv"),row.names=F,col.names=T,sep=",")
+write.table(popfives,file=here("outputs",ID,"/raw/data/population.csv"),row.names=F,col.names=T,sep=",")
 
 source("raab_functions.R")
 
@@ -79,7 +86,7 @@ source("SUM_1.R")
 
 sum1.nice.names<-sum1
 
-write.table(sum1.nice.names,file=paste0(outdir,"/summary/data/t1.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum1.nice.names,file=here("outputs",ID,"/summary/data/t1.csv"),row.names=F,col.names=T,sep=",")
 
 names(sum1.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -108,7 +115,7 @@ source("ASA_1.R")
 
 asa1.nice.names<-asa1[,c("age.groups.tens","female.examined.n","female.examined.pct","male.examined.n","male.examined.pct","total.examined.n","total.examined.pct")]
 
-write.table(asa1.nice.names,file=paste0(outdir,"/summary/data/t2.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa1.nice.names,file=here("outputs",ID,"/summary/data/t2.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa1.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -128,7 +135,7 @@ source("ASA_2.R")
 
 asa2.nice.names<-asa2
 
-write.table(asa2.nice.names,file=paste0(outdir,"/summary/data/t3.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa2.nice.names,file=here("outputs",ID,"/summary/data/t3.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa2.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -231,7 +238,7 @@ sum3.nice.names$total.ci<-paste0(sum3.nice.names$total.pct.lci," - ",sum3.nice.n
 
 sum3a.nice.names<-sum3.nice.names[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(sum3a.nice.names,file=paste0(outdir,"/summary/data/t4.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum3a.nice.names,file=here("outputs",ID,"/summary/data/t4.csv"),row.names=F,col.names=T,sep=",")
 
 names(sum3a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
@@ -248,7 +255,7 @@ knitr::kable(sum3a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
 
 sum3b.nice.names<-sum3.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
 
-write.table(sum3b.nice.names,file=paste0(outdir,"/summary/data/t5.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum3b.nice.names,file=here("outputs",ID,"/summary/data/t5.csv"),row.names=F,col.names=T,sep=",")
 
 names(sum3b.nice.names)<-c("","%","95% CI","Extraplotated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude")
 
@@ -285,7 +292,7 @@ asa6.nice.names$total.ci<-paste0(asa6.nice.names$total.pct.lci," - ",asa6.nice.n
 
 asa6a.nice.names<-asa6.nice.names[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(asa6a.nice.names,file=paste0(outdir,"/summary/data/t6.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa6a.nice.names,file=here("outputs",ID,"/summary/data/t6.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa6a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
@@ -302,7 +309,7 @@ knitr::kable(asa6a.nice.names, booktabs=T, linesep = "", caption = "Crude cumula
 
 asa6b.nice.names<-asa6.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
 
-write.table(asa6b.nice.names,file=paste0(outdir,"/summary/data/t7.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa6b.nice.names,file=here("outputs",ID,"/summary/data/t7.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa6b.nice.names)<-c("","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude")
 
@@ -337,7 +344,7 @@ sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_ca
 sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"12. Other posterior segment disease"
 sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"13. Other globe or CNS abnomalities"
 
-write.table(sum6.nice.names,file=paste0(outdir,"/summary/data/t8.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum6.nice.names,file=here("outputs",ID,"/summary/data/t8.csv"),row.names=F,col.names=T,sep=",")
 
 sum6.for.tree<-sum6.numeric
 
@@ -361,7 +368,7 @@ s6tag<-aggregate(sum6.numeric[,2:9],by=list(sum6.numeric$cause_group_2), FUN=sum
 
 sum6ag<-rbind(sum6intag,s6tag)
 
-write.table(sum6ag,file=paste0(outdir,"/summary/data/t9.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum6ag,file=here("outputs",ID,"/summary/data/t9.csv"),row.names=F,col.names=T,sep=",")
 
 names(sum6ag)<-c("","n", "%", "n", "%", "n","%","n","%")
 
@@ -423,7 +430,7 @@ prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_
 prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"12. Other posterior segment disease"
 prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"13. Other globe or CNS abnomalities"
 
-write.table(prev4.nice.names,file=paste0(outdir,"/summary/data/t10.csv"),row.names=F,col.names=T,sep=",")
+write.table(prev4.nice.names,file=here("outputs",ID,"/summary/data/t10.csv"),row.names=F,col.names=T,sep=",")
 
 names(prev4.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -447,7 +454,7 @@ p4tag<-aggregate(prev4[,2:7],by=list(prev4$cause_group_2), FUN=sum,na.rm=T)
 
 prev4ag<-rbind(prev4intag,p4tag)
 
-write.table(prev4ag,file=paste0(outdir,"/summary/data/t11.csv"),row.names=F,col.names=T,sep=",")
+write.table(prev4ag,file=here("outputs",ID,"/summary/data/t11.csv"),row.names=F,col.names=T,sep=",")
 
 names(prev4ag)<-c("","n", "%", "n", "%", "n","%")
 
@@ -484,7 +491,7 @@ unt.nice.names$vi.level[unt.nice.names$vi.level=="blind.unilat"]<-"Blind in one 
 unta.nice.names<-unt.nice.names[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
 
-write.table(unta.nice.names,file=paste0(outdir,"/summary/data/t12.csv"),row.names=F,col.names=T,sep=",")
+write.table(unta.nice.names,file=here("outputs",ID,"/summary/data/t12.csv"),row.names=F,col.names=T,sep=",")
 
 names(unta.nice.names) <- c(' ', 'n', '%', '95% CI', 'n', '%', '95% CI', 'n', '%', '95% CI')
 
@@ -509,7 +516,7 @@ unt.nice.names$total.adj.ci<-paste0(unt.nice.names$total.adj.pct.lci," - ",unt.n
 
 untb.nice.names<-unt.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
 
-write.table(untb.nice.names,file=paste0(outdir,"/summary/data/t13.csv"),row.names=F,col.names=T,sep=",")
+write.table(untb.nice.names,file=here("outputs",ID,"/summary/data/t13.csv"),row.names=F,col.names=T,sep=",")
 
 names(untb.nice.names) <- c("", "%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude")
 
@@ -543,7 +550,7 @@ asa7a.int$total.ci<-paste0(asa7a.int$total.pct.lci," - ", asa7a.int$total.pct.uc
 
 asa7a.nice.names<-asa7a.int[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(asa7a.nice.names,file=paste0(outdir,"/summary/data/t14.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa7a.nice.names,file=here("outputs",ID,"/summary/data/t14.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa7a.nice.names)<-c(" ","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
@@ -571,7 +578,7 @@ asa7b.int$total.adj.ci<-paste0(asa7b.int$total.adj.pct.lci," - ",asa7b.int$total
 
 asa7b.nice.names<-asa7b.int[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
 
-write.table(asa7b.nice.names,file=paste0(outdir,"/summary/data/t15.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa7b.nice.names,file=here("outputs",ID,"/summary/data/t15.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa7b.nice.names)<-c(" ","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude")
 
@@ -604,7 +611,7 @@ prev14.nice.names$num.thresh<-recode_factor(prev14.nice.names$num.thresh,'csc' =
 
 prev14a.nice.names<-prev14.nice.names[,c("num.thresh","female.adjusted","female.adjusted.ci","male.adjusted","male.adjusted.ci","total.adjusted","total.adjusted.ci")]
 
-write.table(prev14a.nice.names,file=paste0(outdir,"/summary/data/t16.csv"),row.names=F,col.names=T,sep=",")
+write.table(prev14a.nice.names,file=here("outputs",ID,"/summary/data/t16.csv"),row.names=F,col.names=T,sep=",")
 
 names(prev14a.nice.names)<-c("Post-operative PVA","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
 
@@ -632,7 +639,7 @@ source("SUM_11.R")
 
 sum11.nice.names<-surgery.bars.cat
 
-write.table(sum11.nice.names,file=paste0(outdir,"/summary/data/t17.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum11.nice.names,file=here("outputs",ID,"/summary/data/t17.csv"),row.names=F,col.names=T,sep=",")
 
 names(sum11.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -664,7 +671,7 @@ newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_i
 newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_non_iol"]<-"Non-IOL"
 newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_couching"]<-"Couching"
 
-write.table(newtab2.nice.names,file=paste0(outdir,"/summary/data/t18.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab2.nice.names,file=here("outputs",ID,"/summary/data/t18.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab2.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -690,7 +697,7 @@ newtab3a.nice.names$oc.levels[newtab3a.nice.names$oc.levels=="good.oc"]<-"Good (
 newtab3a.nice.names$oc.levels[newtab3a.nice.names$oc.levels=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
 newtab3a.nice.names$oc.levels[newtab3a.nice.names$oc.levels=="poor.oc"]<-"Poor (<6/60)"
 
-write.table(newtab3a.nice.names,file=paste0(outdir,"/summary/data/t19.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab3a.nice.names,file=here("outputs",ID,"/summary/data/t19.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab3a.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -715,7 +722,7 @@ newtab3b.nice.names$oc.levels[newtab3b.nice.names$oc.levels=="borderline.oc"]<-"
 newtab3b.nice.names$oc.levels[newtab3b.nice.names$oc.levels=="poor.oc"]<-"Poor (<6/60)"
 
 
-write.table(newtab3b.nice.names,file=paste0(outdir,"/summary/data/t20.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab3b.nice.names,file=here("outputs",ID,"/summary/data/t20.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab3b.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -743,7 +750,7 @@ outc6a.nice.names$oc[outc6a.nice.names$oc=="good.oc"]<-"Good (6/12)"
 outc6a.nice.names$oc[outc6a.nice.names$oc=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
 outc6a.nice.names$oc[outc6a.nice.names$oc=="poor.oc"]<-"Poor (<6/60)"
 
-write.table(outc6a.nice.names,file=paste0(outdir,"/summary/data/t21.csv"),row.names=F,col.names=T,sep=",")
+write.table(outc6a.nice.names,file=here("outputs",ID,"/summary/data/t21.csv"),row.names=F,col.names=T,sep=",")
 
 names(outc6a.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
 
@@ -766,7 +773,7 @@ outc6b.nice.names$oc[outc6b.nice.names$oc=="good.oc"]<-"Good (6/12)"
 outc6b.nice.names$oc[outc6b.nice.names$oc=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
 outc6b.nice.names$oc[outc6b.nice.names$oc=="poor.oc"]<-"Poor (<6/60)"
 
-write.table(outc6b.nice.names,file=paste0(outdir,"/summary/data/t22.csv"),row.names=F,col.names=T,sep=",")
+write.table(outc6b.nice.names,file=here("outputs",ID,"/summary/data/t22.csv"),row.names=F,col.names=T,sep=",")
 
 names(outc6b.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
 
@@ -819,7 +826,7 @@ newtab4.nice.names$total.ci<-paste0(newtab4.nice.names$total.pct.lci," - ",newta
 
 newtab4a.nice.names<-newtab4.nice.names[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(newtab4a.nice.names,file=paste0(outdir,"/summary/data/t23.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab4a.nice.names,file=here("outputs",ID,"/summary/data/t23.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab4a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
@@ -835,7 +842,7 @@ knitr::kable(newtab4a.nice.names, booktabs=T, linesep = "", caption = "Crude pre
 
 newtab4b.nice.names<-newtab4.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
 
-write.table(newtab4b.nice.names,file=paste0(outdir,"/summary/data/t24.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab4b.nice.names,file=here("outputs",ID,"/summary/data/t24.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab4b.nice.names)<-c("","%","95% CI","Extraplotated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magintude")
 
@@ -875,7 +882,7 @@ newtab5.nice.names$total.adj.pct.ci<-paste0(newtab5.nice.names$total.adj.pct.lci
 
 newtab5.nice.names<-newtab5.nice.names[,c("rec_metric","female.adj.pct","female.adj.pct.ci","male.adj.pct","male.adj.pct.ci","total.adj.pct","total.adj.pct.ci")]
 
-write.table(newtab5.nice.names,file=paste0(outdir,"/summary/data/t25.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab5.nice.names,file=here("outputs",ID,"/summary/data/t25.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab5.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %", "95% CI")
 
@@ -898,7 +905,7 @@ newtab6.nice.names$specs[newtab6.nice.names$specs=="near"]<-"Use near vision spe
 newtab6.nice.names$specs[newtab6.nice.names$specs=="distance"]<-"Use distance vision 
 spectacles"
 
-write.table(newtab6.nice.names,file=paste0(outdir,"/summary/data/t26.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab6.nice.names,file=here("outputs",ID,"/summary/data/t26.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab6.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -1022,7 +1029,7 @@ Bennett S, Woods T, Liyanage WM, Smith DL. A simplified general method for clust
 
 source("SUMMARY_OUT_RAAB6.R")
 
-write.table(bigboi,file=paste0(outdir,"/summary/web_summary.csv"),row.names=F,col.names=T,sep=",",na="")
+write.table(bigboi,file=here("outputs",ID,"/summary/web_summary.csv"),row.names=F,col.names=T,sep=",",na="")
 
 ```
 
