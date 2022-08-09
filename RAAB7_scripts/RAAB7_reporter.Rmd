@@ -403,6 +403,7 @@ sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"Diabetic retinopathy"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"Age-related macular degeneration"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"Other posterior segment disease"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_myopic_degeneration" ]<-"Myopic degeneration"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"Other globe or CNS abnomalities"
 
 treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="index",palette = "RdYlBu",title="Principal causes of bilateral blindness",position.legend="right",fontsize.title=12)
@@ -428,8 +429,9 @@ prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_
 prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_glaucoma" ]<-"9. Glaucoma"
 prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"10. Diabetic retinopathy"
 prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"11. Age-related macular degeneration"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"12. Other posterior segment disease"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"13. Other globe or CNS abnomalities"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease"]<-"12. Other posterior segment disease"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_myopic_degeneration"]<-"13. Myopic degeneration"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"14. Other globe or CNS abnomalities"
 
 write.table(prev4.nice.names,here("outputs", ID, "summary", "data", "t10.csv"),row.names=F,col.names=T,sep=",")
 
@@ -438,7 +440,7 @@ names(prev4.nice.names)<-c("","n","%","n","%","n","%")
 knitr::kable(prev4.nice.names, booktabs=T, linesep = "", caption = "Principal cause of blindness in males and females") %>% 
   kable_styling(full_width=T,latex_options = "HOLD_position") %>%
   row_spec(0,italic=TRUE) %>%
-  row_spec(13,hline_after=T) %>%
+  row_spec(14,hline_after=T) %>%
   column_spec(1,width='6cm') %>%
   add_header_above(c("Principal cause" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold = T)
 
