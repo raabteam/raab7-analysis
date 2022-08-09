@@ -4,6 +4,8 @@
 
 # v3 30.06.22 IM - ADDITION OF NEW ECSC TERMS, NEW WGQ VARIABLES, NEW DR VARIABLES
 
+# v4 09.08.22 IM - added myopic degeneration to list of VI causes
+
 # Script to create new variables to support major data analyses and visualisations (age group and vision impairment category)
 
 # Categorise continuous age variable into 10-year binds in RAAB data file
@@ -70,6 +72,7 @@ raab.cause <- c("poor_vision_cause_uncorrected_refractive_error",
                 "poor_vision_cause_diabetic_retinopathy",            
                 "poor_vision_cause_age_related_macular_degeneration", 
                 "poor_vision_cause_other_posterior_segment_disease",
+                "poor_vision_cause_myopic_degeneration",
                 "poor_vision_cause_other_globe_or_cns_abnormalities")
 				
 #Define cumulative visual acuity counts
@@ -438,8 +441,8 @@ raab <- raab %>% mutate(
 
 #Domain-specific disability
 raab <- raab %>% mutate(
-  
-  wgq.dis.see = case_when(raab$wg_difficulty_seeing=="wg_answer_alot" | raab$wg_difficulty_seeing=="wg_answer_cannot" ~ 1, TRUE ~ 0), 
+
+  wgq.dis.see = case_when(raab$wg_difficulty_seeing=="wg_answer_alot" | raab$wg_difficulty_seeing=="wg_answer_cannot" ~ 1, TRUE ~ 0),
   wgq.dis.hear = case_when(raab$wg_difficulty_hearing=="wg_answer_alot" | raab$wg_difficulty_hearing=="wg_answer_cannot" ~ 1, TRUE ~ 0),
   wgq.dis.mob = case_when(raab$wg_difficulty_mobility=="wg_answer_alot" | raab$wg_difficulty_mobility=="wg_answer_cannot" ~ 1, TRUE ~ 0),
   wgq.dis.mem = case_when(raab$wg_difficulty_memory=="wg_answer_alot" | raab$wg_difficulty_memory=="wg_answer_cannot" ~ 1, TRUE ~ 0),
@@ -449,7 +452,7 @@ raab <- raab %>% mutate(
 
 #Disability in any domain and any domain excluding seeing
 raab <- raab %>% mutate(
-  
+
   wgq.dis.any = case_when(wgq.dis.see==1 | wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0),
   wgq.dis.nonvi = case_when(wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0)
 )
