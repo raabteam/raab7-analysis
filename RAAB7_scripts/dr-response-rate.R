@@ -61,3 +61,4 @@ dr.response$total.pct[dr.response$Exam.Status=="Consented dilated examination"] 
 pcts<-grep("pct",names(dr.response))
 dr.response[,pcts]<-round(dr.response[,pcts], 1)
 
+write.csv(dr.response, here('outputs', 'dr.response.csv'))

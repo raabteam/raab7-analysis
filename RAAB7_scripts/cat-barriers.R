@@ -30,7 +30,7 @@ surgery.bars$female_percent<-round((surgery.bars$female_count/sum(surgery.bars$f
 surgery.bars[nrow(surgery.bars)+1,]<-NA
 surgery.bars[nrow(surgery.bars),1]<-"Total"
 
-surgery.bars$Barrier<-recode_factor(surgery.bars$Barrier,surgery_none_reason_access = "Access", surgery_none_reason_cost = "Cost", surgery_none_reason_denied = "Denied", surgery_none_reason_fear = "Fear", surgery_none_reason_other = "Other", surgery_none_reason_unaware = "Unaware", surgery_none_reason_unnecessary = "Felt not needed", Total = "Total")    
+surgery.bars$Barrier<-recode_factor(surgery.bars$Barrier,surgery_none_reason_access = "Cannot access surgery", surgery_none_reason_cost = "Cost", surgery_none_reason_denied = "Surgery denied by provider", surgery_none_reason_fear = "Fear", surgery_none_reason_other = "Other", surgery_none_reason_unaware = "Unaware treatment possible", surgery_none_reason_unnecessary = "Felt not needed", Total = "Total")    
 
 sbcnts<-grep("count",names(surgery.bars))
 sbpcts<-grep("percent",names(surgery.bars))

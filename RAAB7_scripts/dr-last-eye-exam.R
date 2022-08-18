@@ -1,5 +1,5 @@
 # DR module: Last fundus examination for DR among self-reported/known diabetics
-# 04.07.22 IM
+# 04.07.22 IM - not totaling to 100%s in test on SCEH as they added one female known diabetic in admin but didnt add clinical details.
 
 dr.last.exam.table <- data.frame(dr.last.exam)
 dr.last.exam.table[,2:7] <- NA
@@ -34,4 +34,4 @@ dr.last.exam.table$last.dr.exam[5]<-"Total"
 pcts <- grep("pct",names(dr.last.exam.table))
 dr.last.exam.table[,pcts] <- round(dr.last.exam.table[,pcts] * 100, 1)
 
-
+write.csv(dr.last.exam.table, here('outputs', 'dr.last.exam.table.csv'))
