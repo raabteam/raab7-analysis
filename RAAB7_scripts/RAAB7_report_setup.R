@@ -1,10 +1,9 @@
 # v1 12th Aug 2021
 
 # v2 17.01.22 IM
-
 # v3 30.06.22 IM - ADDITION OF NEW ECSC TERMS, NEW WGQ VARIABLES, NEW DR VARIABLES
-
 # v4 09.08.22 IM - added myopic degeneration to list of VI causes
+# v5 18.08.22 IM - fix to new eCSC calculation x and a case defs
 
 # Script to create new variables to support major data analyses and visualisations (age group and vision impairment category)
 
@@ -159,12 +158,12 @@ raab <- raab %>%
 #    x_case_660 = case_when(((raab$right_operable_660==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_660==1)) ~ 1, TRUE ~ 0),
 #    x_case_360 = case_when(((raab$right_operable_360==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_360==1)) ~ 1, TRUE ~ 0),
 
-#eCSC and CSC denominator definition 2: Any cause of VI in non-operated eyes
+#eCSC and CSC denominator definition 2: Any cause of VI in non-operated eyes (with addition of !=operated to define non-operated eye)
 
-    x_case_612 = case_when(((raab$right_distance_acuity_pinhole>=0.47 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_distance_acuity_pinhole>=0.47)) ~ 1, TRUE ~ 0),
-    x_case_618 = case_when(((raab$right_distance_acuity_pinhole>=1.0 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_distance_acuity_pinhole>=1.0)) ~ 1, TRUE ~ 0),
-    x_case_660 = case_when(((raab$right_distance_acuity_pinhole>=1.3 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_distance_acuity_pinhole>=1.3)) ~ 1, TRUE ~ 0),
-    x_case_360 = case_when(((raab$right_distance_acuity_pinhole>=1.8 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_distance_acuity_pinhole>=1.8)) ~ 1, TRUE ~ 0),
+    x_case_612 = case_when(((raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=0.47 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operated!=1 &raab$left_distance_acuity_pinhole>=0.47)) ~ 1, TRUE ~ 0),
+    x_case_618 = case_when(((raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.0 & raab$left_operated==1)  | (raab$right_operated==1 & raab$left_operated!=1 &raab$left_distance_acuity_pinhole>=1.0)) ~ 1, TRUE ~ 0),
+    x_case_660 = case_when(((raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.3 & raab$left_operated==1)  | (raab$right_operated==1 & raab$left_operated!=1 &raab$left_distance_acuity_pinhole>=1.3)) ~ 1, TRUE ~ 0),
+    x_case_360 = case_when(((raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.8 & raab$left_operated==1)  | (raab$right_operated==1 & raab$left_operated!=1 &raab$left_distance_acuity_pinhole>=1.8)) ~ 1, TRUE ~ 0),
 
     y_case_612 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
     z_case_612 = case_when((raab$right_distance_acuity_pinhole>0.3 & left_distance_acuity_pinhole>0.3) & (raab$right_operable_612==1 | raab$left_operable_612==1) ~ 1, TRUE ~ 0),
@@ -203,25 +202,25 @@ raab <- raab %>%
 
 #eCSC numerator definition 2: any cause of VI in non-operated eye
 
-    a_case_612_612 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.3) & raab$left_distance_acuity_pinhole>=0.47) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.3) & raab$right_distance_acuity_pinhole>=0.47)  ~ 1, TRUE ~ 0),
-    a_case_612_618 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.3) & raab$left_distance_acuity_pinhole>=1.0) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.3) & raab$right_distance_acuity_pinhole>=1.0)  ~ 1, TRUE ~ 0),
-    a_case_612_660 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.3) & raab$left_distance_acuity_pinhole>=1.3) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.3) & raab$right_distance_acuity_pinhole>=1.3)  ~ 1, TRUE ~ 0),
-    a_case_612_360 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.3) & raab$left_distance_acuity_pinhole>=1.8) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.3) & raab$right_distance_acuity_pinhole>=1.8)  ~ 1, TRUE ~ 0),
+    a_case_612_612 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.3) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=0.47) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.3) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=0.47)  ~ 1, TRUE ~ 0),
+    a_case_612_618 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.3) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.0)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.3) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.0)  ~ 1, TRUE ~ 0),
+    a_case_612_660 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.3) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.3)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.3) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.3)  ~ 1, TRUE ~ 0),
+    a_case_612_360 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.3) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.8)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.3) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.8)  ~ 1, TRUE ~ 0),
 
-    a_case_618_612 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_distance_acuity_pinhole>=0.47) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47) & raab$right_distance_acuity_pinhole>=0.47)  ~ 1, TRUE ~ 0),
-    a_case_618_618 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_distance_acuity_pinhole>=1.0) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47) & raab$right_distance_acuity_pinhole>=1.0)  ~ 1, TRUE ~ 0),
-    a_case_618_660 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_distance_acuity_pinhole>=1.3) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47) & raab$right_distance_acuity_pinhole>=1.3)  ~ 1, TRUE ~ 0),
-    a_case_618_360 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_distance_acuity_pinhole>=1.8) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47) & raab$right_distance_acuity_pinhole>=1.8)  ~ 1, TRUE ~ 0),
+    a_case_618_612 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=0.47) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=0.47)  ~ 1, TRUE ~ 0),
+    a_case_618_618 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.0)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.0)  ~ 1, TRUE ~ 0),
+    a_case_618_660 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.3)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.3)  ~ 1, TRUE ~ 0),
+    a_case_618_360 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.47) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.8)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.47) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.8)  ~ 1, TRUE ~ 0),
 
-    a_case_660_612 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.0) & raab$left_distance_acuity_pinhole>=0.47) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.0) & raab$right_distance_acuity_pinhole>=0.47)  ~ 1, TRUE ~ 0),
-    a_case_660_618 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.0) & raab$left_distance_acuity_pinhole>=1.0) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.0) & raab$right_distance_acuity_pinhole>=1.0)  ~ 1, TRUE ~ 0),
-    a_case_660_660 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.0) & raab$left_distance_acuity_pinhole>=1.3) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.0) & raab$right_distance_acuity_pinhole>=1.3)  ~ 1, TRUE ~ 0),
-    a_case_660_360 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.0) & raab$left_distance_acuity_pinhole>=1.8) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.0) & raab$right_distance_acuity_pinhole>=1.8)  ~ 1, TRUE ~ 0),
+    a_case_660_612 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.0) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=0.47) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.0) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=0.47)  ~ 1, TRUE ~ 0),
+    a_case_660_618 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.0) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.0)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.0) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.0)  ~ 1, TRUE ~ 0),
+    a_case_660_660 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.0) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.3)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.0) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.3)  ~ 1, TRUE ~ 0),
+    a_case_660_360 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.0) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.8)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.0) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.8)  ~ 1, TRUE ~ 0),
 
-    a_case_360_612 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_distance_acuity_pinhole>=0.47) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3) & raab$right_distance_acuity_pinhole>=0.47)  ~ 1, TRUE ~ 0),
-    a_case_360_618 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_distance_acuity_pinhole>=1.0) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3) & raab$right_distance_acuity_pinhole>=1.0)  ~ 1, TRUE ~ 0),
-    a_case_360_660 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_distance_acuity_pinhole>=1.3) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3) & raab$right_distance_acuity_pinhole>=1.3)  ~ 1, TRUE ~ 0),
-    a_case_360_360 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_distance_acuity_pinhole>=1.8) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3) & raab$right_distance_acuity_pinhole>=1.8)  ~ 1, TRUE ~ 0),
+    a_case_360_612 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=0.47) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=0.47)  ~ 1, TRUE ~ 0),
+    a_case_360_618 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.0)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.0)  ~ 1, TRUE ~ 0),
+    a_case_360_660 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.3)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.3)  ~ 1, TRUE ~ 0),
+    a_case_360_360 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=1.3) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.8)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=1.3) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.8)  ~ 1, TRUE ~ 0),
 
     b_case_612 = case_when((raab$right_operated==1 & raab$left_operated==1 & pmin(raab$right_distance_acuity_presenting,raab$left_distance_acuity_presenting)<0.47) ~ 1, TRUE ~ 0),
     b_case_618 = case_when((raab$right_operated==1 & raab$left_operated==1 & ifelse(as.numeric(raab$right_distance_acuity_presenting) < as.numeric(raab$left_distance_acuity_presenting),(raab$right_distance_acuity_presenting<1.0),(raab$left_distance_acuity_presenting<1.0))) ~ 1, TRUE ~ 0),
