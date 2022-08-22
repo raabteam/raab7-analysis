@@ -345,7 +345,8 @@ sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_ca
 sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"10. Diabetic retinopathy"
 sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"11. Age-related macular degeneration"
 sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"12. Other posterior segment disease"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"13. Other globe or CNS abnomalities"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_myopic_degeneration" ]<-"13. Myopic degeneration"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"14. Other globe or CNS abnomalities"
 
 write.table(sum6.nice.names,here("outputs", ID, "summary", "data", "t8.csv"),row.names=F,col.names=T,sep=",")
 
@@ -356,7 +357,7 @@ names(sum6.nice.names) <- c(' ', 'n', '%', 'n', '%','n', '%','n', '%')
 knitr::kable(sum6.nice.names, booktabs=T, linesep = "", caption = " Principal cause of blindness, severe, moderate and mild vision impairment") %>% 
   kable_styling(full_width=T,latex_options = "HOLD_position") %>%
   row_spec(0,italic=TRUE) %>%
-  row_spec(13,hline_after=T) %>%
+  row_spec(14,hline_after=T) %>%
   column_spec(1,width='6cm') %>%
   add_header_above(c("Principal cause" = 1, "Blind" = 2, "Severe" = 2, "Moderate" = 2, "Mild" = 2),bold = T)
 
@@ -402,6 +403,7 @@ sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"Diabetic retinopathy"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"Age-related macular degeneration"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"Other posterior segment disease"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_myopic_degeneration" ]<-"Myopic degeneration"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"Other globe or CNS abnomalities"
 
 treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="index",palette = "RdYlBu",title="Principal causes of bilateral blindness",position.legend="right",fontsize.title=12)
@@ -427,8 +429,9 @@ prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_
 prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_glaucoma" ]<-"9. Glaucoma"
 prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"10. Diabetic retinopathy"
 prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"11. Age-related macular degeneration"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"12. Other posterior segment disease"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"13. Other globe or CNS abnomalities"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease"]<-"12. Other posterior segment disease"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_myopic_degeneration"]<-"13. Myopic degeneration"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"14. Other globe or CNS abnomalities"
 
 write.table(prev4.nice.names,here("outputs", ID, "summary", "data", "t10.csv"),row.names=F,col.names=T,sep=",")
 
@@ -437,7 +440,7 @@ names(prev4.nice.names)<-c("","n","%","n","%","n","%")
 knitr::kable(prev4.nice.names, booktabs=T, linesep = "", caption = "Principal cause of blindness in males and females") %>% 
   kable_styling(full_width=T,latex_options = "HOLD_position") %>%
   row_spec(0,italic=TRUE) %>%
-  row_spec(13,hline_after=T) %>%
+  row_spec(14,hline_after=T) %>%
   column_spec(1,width='6cm') %>%
   add_header_above(c("Principal cause" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold = T)
 
@@ -643,7 +646,7 @@ knitr::kable(sum11.nice.names,booktabs=T, linesep = "", caption="Barriers to cat
   kable_styling(full_width=T,latex_options = "HOLD_position") %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(nrow(sum11.nice.names)-1,hline_after=T) %>%
-  column_spec(1,width='4cm') %>%
+  column_spec(1,width='5cm') %>%
   add_header_above(c("Barrier" = 1, "Female" = 2, "Male" = 2, "Total" = 2)) %>%
   add_footnote("Participants can report 1 or 2 barriers each", notation="symbol") 
 
@@ -975,11 +978,11 @@ Mild VI: PVA less than 6/12 to 6/18 in the better eye
 
 ## Unilateral VI
 
-Blindness: PVA less than 3/60 in one eye, PVA 6/18 in the other eye
+Blindness: PVA less than 3/60 in one eye, PVA 6/12 in the other eye
 
-Severe VI: PVA less than 6/60 to 3/60 in one eye, PVA 6/18 in the other eye
+Severe VI: PVA less than 6/60 to 3/60 in one eye, PVA 6/12 in the other eye
 
-Moderate VI: PVA less than 6/18 to 6/60 in one eye, PVA 6/18 in the other eye
+Moderate VI: PVA less than 6/18 to 6/60 in one eye, PVA 6/12 in the other eye
 
 Mild VI: PVA less than 6/12 to 6/18 in one eye, PVA 6/12 in the other eye
 
@@ -987,7 +990,7 @@ Mild VI: PVA less than 6/12 to 6/18 in one eye, PVA 6/12 in the other eye
 
 Cataract surgical threshold (operable cataract): PinVA at \<3/60, \<6/60 and \<6/18 thresholds plus lens opacity plus untreated cataract as principal cause
 
-Operated cataract: Aphakia or pseudoaphakia (with or without posterior capsule opacification [PCO])
+Operated cataract: Aphakia (excluding couched eyes) or pseudoaphakia (with or without posterior capsule opacification [PCO])
 
 ## Cataract surgical coverage (CSC) and effective cataract surgical coverage (eCSC)
 
@@ -997,19 +1000,18 @@ CSC is defined as (X + Y) / (X + Y + Z)
 
 eCSC is defined as (A + B) / (X + Y + Z)
 
-where:
+where, e.g., at the <6/12 cataract surgical threshold:
 
-A = individuals with unilateral operated cataract attaining 6/12 or better post-operative presenting VA in the operated eye, who have vision impairment from any cause in the other eye
+A = individuals with unilateral operated cataract attaining 6/12 or better post-operative presenting VA in the operated eye, who have BCVA <6/12 in the other eye
 
 B = individuals with bilateral operated cataract attaining 6/12 or better post-operative presenting VA in at least one eye
 
-X = individuals with unilateral pseudo/aphakia (i.e. operated cataract, excluding couched eyes) and vision impairment in the other eye
+X = individuals with unilateral operated cataract (regardless of visual acuity in the operated eye) and BCVA <6/12 in the other eye
 
-Y = individuals with bilateral pseudo/aphakia (i.e. operated cataract, excluding couched eyes), regardless of post-operative presenting visual acuity
+Y = individuals with bilateral operated cataract (regardless of visual acuity in the operated eyes)
 
-Z = individuals with bilateral operable cataract
+Z = individuals with BCVA <6/12 in both eyes with cataract as the main cause of vision impairment in one or both eyes
 
-For further information see: Ramke J, Gilbert CE, Lee AC, Ackland P, Limburg H, Foster A (2017) Effective cataract surgical coverage: An indicator for measuring quality-of-care in the context of Universal Health Coverage. PLoS ONE 12(3): e0172342. <doi:10.1371/journal.pone.0172342>
 
 ## Refractive error coverage (REC) and effective refractive error coverage (eREC)
 
