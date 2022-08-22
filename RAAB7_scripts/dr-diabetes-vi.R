@@ -47,3 +47,5 @@ dm.vi.table[,ucis][dm.vi.table[,ucis]>1]<-1
 
 pcts<-grep("pct",names(dm.vi.table))
 dm.vi.table[,pcts]<-round(dm.vi.table[,pcts] * 100, 1 )
+
+write.csv(dm.vi.table, here('outputs', 'dm.vi.table.csv'))
