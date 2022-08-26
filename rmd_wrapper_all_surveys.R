@@ -75,8 +75,10 @@ raab5<-read.csv(here("data","raabs_618.csv"))
 raab5ids_all<-as.data.frame(unique(raab5$raab_id))
 raab5ids<-raab5ids_all[raab5ids_all$`unique(raab5$raab_id)` %in% fulls$raab_id,]
 
-#for (k in 1:length(raab5ids))
+#First, run the loop on the first three RAABs to make sure everything works
 for (k in 1:3)
+#If it does work, run through all the RAABs
+#for (k in 1:length(raab5ids))
 {
   ID<-raab5ids[k]
   render(here("RAAB5_scripts","RAAB5_reporter.Rmd"), output_file = paste0(ID,"_report"), output_dir = here("outputs", ID, "summary"))
@@ -92,8 +94,10 @@ raab6<-read.csv(here("data","raabs_612.csv"))
 raab6ids_all<-as.data.frame(unique(raab6$raab_id))
 raab6ids<-raab6ids_all[raab6ids_all$`unique(raab6$raab_id)` %in% fulls$raab_id,]
 
-#for (k in 1:length(raab6ids))
+#First, run the loop on the first three RAABs to make sure everything works
 for (k in 1:3)
+#If it does work, run through all the RAABs
+#for (k in 1:length(raab6ids))
 {
   ID<-raab6ids[k]
   render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = paste0(ID,"_report"), output_dir = here("outputs", ID, "summary"))
@@ -105,6 +109,21 @@ remove(raab6)
 
 #RAAB7
 
-#TBC
+raab7<-read.csv(here("data",<RAAB7_COMBINED_DATASET>))
+raab7ids_all<-as.data.frame(unique(raab7$raab_id))
+raab7ids<-raab7ids_all[raab7ids_all$`unique(raab7$raab_id)` %in% fulls$raab_id,]
+
+#First, run the loop on the first three RAABs to make sure everything works
+for (k in 1:3)
+#If it does work, run through all the RAABs
+#for (k in 1:length(raab7ids))
+{
+  ID<-raab7ids[k]
+  render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = paste0(ID,"_report"), output_dir = here("outputs", ID, "summary"))
+  unlink(here("outputs",ID,"/summary/*_files"),recursive=T)
+  print(paste0(raab7ids[k],": done!"))
+}
+
+remove(raab7)
 
 raabids<-c(raab5ids,raab6ids,raab7ids)
