@@ -467,12 +467,14 @@ raab <- raab %>% mutate(
 # diabetes.no = cases where no history of DM self-reported and normal RBG result among diabetes.denom
 # dr.exam.denom = denominator for reporting fundus examination results
 
-dr.response.cascade <-c("Enrolled","Examined","Self-reported diabetes or consented to blood test", "Known or suspected diabetes", "Consented dilated examination") 
+# dr.response.cascade <-c("Enrolled","Examined","Diabetes status assessed", "Known or suspected diabetes", "Consented dilated examination")
+dr.response.cascade <-c("Enrolled","Examined","Diabetes status assessed")
 
 raab <- raab %>% mutate(
   
   diabetes.denom = case_when(dr_diabetes_known=="true" | dr_diabetes_blood_consent=="true" ~1, TRUE~0),
   diabetes.new = case_when((dr_diabetes_known=="false" & dr_diabetes_blood_consent=="true" & dr_diabetes_blood_sugar>=200) ~1, TRUE~0),
+  diabetes.known = case_when(dr_diabetes_known=="true" ~1, TRUE~0),
   diabetes.known.susp = case_when((dr_diabetes_known=="true" | diabetes.new==1) ~1, TRUE~0),
   dr.exam.denom = case_when(diabetes.known.susp==1 & (dr_retinopathy_method_right=="dr_retinopathy_method_dilatation_fundoscopy" | dr_retinopathy_method_right=="dr_retinopathy_method_fundus_camera")  ~1, TRUE~0)
 )

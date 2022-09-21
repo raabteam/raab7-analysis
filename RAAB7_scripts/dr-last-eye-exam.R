@@ -34,4 +34,6 @@ dr.last.exam.table$last.dr.exam[5]<-"Total"
 pcts <- grep("pct",names(dr.last.exam.table))
 dr.last.exam.table[,pcts] <- round(dr.last.exam.table[,pcts] * 100, 1)
 
-write.csv(dr.last.exam.table, here('outputs', 'dr.last.exam.table.csv'))
+# dr.last.exam.table[1:4,1] <- c("No previous DR exam", "Within 1 year", "1 to 2 years ago", "More than 2 years ago")
+
+write.csv(dr.last.exam.table, here('outputs', 'dr.last.exam.table.csv'), row.names = FALSE)
