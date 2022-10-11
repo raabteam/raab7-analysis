@@ -42,16 +42,30 @@ meta[meta=="NA"]<-NA
 meta<-meta[!is.na(meta$raab_id),]
 
 #5. Set data file names and retrieve RAAB ID
-raab_id_hr<-"2022_Ethiopia_Amhara_West-Gojam"
-resident.data<-"ethiopia.csv"
+
+#For RAAB5 and 6 [no alphanumeric region ID]
+raab_id_hr<-"2015_Uganda_Northern_Karamoja"
+raab_id<-"2015_Uganda_Northern_Karamoja"
+resident.data<-read.csv(here("data","raabs_618.csv"))
+raab<-resident.data[resident.data$raab_id==raab_id,]
+population.data<-read.csv(here("data","raabs_pop_618_repo.csv"))
+pop.data<-population.data[population.data$raab_id==raab_id,]
+ID<-raab_id
+
+#For RAAB7 [alphanumeric region ID]
+raab_id_hr<-"2022_India_Uttar-Pradesh_Shahjahanpur-Kheri"
+resident.data<-"mohammadi.csv"
 raab<-read.csv(here("data", resident.data))
-pop.data<-"ethiopia_pop.csv"
+pop.data<-"mohammadi_pop.csv"
 raab_id<-raab$regionId[1]
 ID<-raab_id
 
-#6. Run reporter script
-render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
+#6. Run appropriate reporter script
+render(here("RAAB5_scripts","RAAB5_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
+render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
+#render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
 
 #7. Delete intermediate files
 unlink(here("outputs", "summary", "*_files"),recursive=T)
+
 

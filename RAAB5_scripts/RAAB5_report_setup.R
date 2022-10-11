@@ -391,3 +391,91 @@ raab <- raab %>% mutate(
   
 )
 
+#Washington Group Questions (Disability module) variables
+
+#Domain-specific disability
+# raab <- raab %>% mutate(
+# 
+#   wgq.dis.see = case_when(raab$wg_difficulty_seeing=="wg_answer_alot" | raab$wg_difficulty_seeing=="wg_answer_cannot" ~ 1, TRUE ~ 0),
+#   wgq.dis.hear = case_when(raab$wg_difficulty_hearing=="wg_answer_alot" | raab$wg_difficulty_hearing=="wg_answer_cannot" ~ 1, TRUE ~ 0),
+#   wgq.dis.mob = case_when(raab$wg_difficulty_mobility=="wg_answer_alot" | raab$wg_difficulty_mobility=="wg_answer_cannot" ~ 1, TRUE ~ 0),
+#   wgq.dis.mem = case_when(raab$wg_difficulty_memory=="wg_answer_alot" | raab$wg_difficulty_memory=="wg_answer_cannot" ~ 1, TRUE ~ 0),
+#   wgq.dis.comm = case_when(raab$wg_difficulty_communication=="wg_answer_alot" | raab$wg_difficulty_communication=="wg_answer_cannot" ~ 1, TRUE ~ 0),
+#   wgq.dis.self = case_when(raab$wg_difficulty_selfcare=="wg_answer_alot" | raab$wg_difficulty_selfcare=="wg_answer_cannot" ~ 1, TRUE ~ 0)
+# )
+# 
+# #Disability in any domain and any domain excluding seeing
+# raab <- raab %>% mutate(
+# 
+#   wgq.dis.any = case_when(wgq.dis.see==1 | wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0),
+#   wgq.dis.nonvi = case_when(wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0)
+# )
+# 
+# dis.domains<- c("wgq.dis.see", "wgq.dis.hear", "wgq.dis.mob", "wgq.dis.mem", "wgq.dis.comm", "wgq.dis.self", "wgq.dis.any", "wgq.dis.nonvi")
+
+# DR Module variables
+
+# Notes
+# diabetes.denom = denominator for reporting DM status among DR module participants via self-reported or RBG consent, excludes anyone not previously diagnosed and not consenting to RBG
+# diabetes.new = cases of suspected DM based on RBG result among those not self-reporting history of DM
+# diabetes.known.susp = cases of self-reported DM & suspected DM based on RBG result combined
+# diabetes.no = cases where no history of DM self-reported and normal RBG result among diabetes.denom
+# dr.exam.denom = denominator for reporting fundus examination results
+
+dr.response.cascade <-c("Enrolled","Examined","Self-reported diabetes or consented to blood test", "Known or suspected diabetes", "Consented dilated examination") 
+
+raab <- raab %>% mutate(
+  
+  diabetes.denom = case_when((dr_diabetes_known==2 | is.na(dr_diabetes_blood_consent)) ~1, TRUE~0),
+  diabetes.new = case_when((dr_diabetes_known==1 & is.na(dr_diabetes_blood_consent) & dr_diabetes_blood_sugar>=200) ~1, TRUE~0),
+  diabetes.known.susp = case_when((dr_diabetes_known==2 | diabetes.new==1) ~1, TRUE~0),
+  dr.exam.denom = case_when(diabetes.known.susp==1 & (dr_retinopathy_method_right=="dr_retinopathy_method_dilatation_fundoscopy" | dr_retinopathy_method_right=="dr_retinopathy_method_fundus_camera")  ~1, TRUE~0)
+  
+)
+
+raab <- raab %>% mutate(
+  diabetes.no = case_when((diabetes.denom==1 & diabetes.known.susp==0) ~1, TRUE~0)
+)
+
+# Made grades numeric so more easily treated as ordinal values
+retinopathy.grade <- c("dr_retinopathy_grade_none", "dr_retinopathy_grade_mild", "dr_retinopathy_grade_observable", "dr_retinopathy_grade_referable", "dr_retinopathy_grade_proliferative", "dr_retinopathy_grade_not_visualised")
+dr.ret.grade.person <- c(1,2,3,4,5,0)
+
+raab <- raab %>% mutate(  
+  dr.ret.grade.right = case_when(
+    dr_retinopathy_grade_right=="dr_retinopathy_grade_none" ~1,
+    dr_retinopathy_grade_right=="dr_retinopathy_grade_mild" ~2,
+    dr_retinopathy_grade_right=="dr_retinopathy_grade_observable" ~3,
+    dr_retinopathy_grade_right=="dr_retinopathy_grade_referable" ~4,
+    dr_retinopathy_grade_right=="dr_retinopathy_grade_proliferative" ~5,
+    dr_retinopathy_grade_right=="dr_retinopathy_grade_not_visualised" ~0),
+  dr.ret.grade.left = case_when(
+    dr_retinopathy_grade_left=="dr_retinopathy_grade_none" ~1,
+    dr_retinopathy_grade_left=="dr_retinopathy_grade_mild" ~2,
+    dr_retinopathy_grade_left=="dr_retinopathy_grade_observable" ~3,
+    dr_retinopathy_grade_left=="dr_retinopathy_grade_referable" ~4,
+    dr_retinopathy_grade_left=="dr_retinopathy_grade_proliferative" ~5,
+    dr_retinopathy_grade_left=="dr_retinopathy_grade_not_visualised" ~0),
+  dr.mac.grade.right = case_when(
+    dr_maculopathy_grade_right=="dr_maculopathy_grade_none" ~1,
+    dr_maculopathy_grade_right=="dr_maculopathy_grade_observable" ~2,
+    dr_maculopathy_grade_right=="dr_maculopathy_grade_referable" ~3,
+    dr_maculopathy_grade_right=="dr_maculopathy_grade_not_visualised" ~0),
+  dr.mac.grade.left = case_when(
+    dr_maculopathy_grade_left=="dr_maculopathy_grade_none" ~1,
+    dr_maculopathy_grade_left=="dr_maculopathy_grade_observable" ~2,
+    dr_maculopathy_grade_left=="dr_maculopathy_grade_referable" ~3,
+    dr_maculopathy_grade_left=="dr_maculopathy_grade_not_visualised" ~0),
+  
+  dr.ret.grade.person = pmax(dr.ret.grade.right, dr.ret.grade.left),
+  dr.mac.grade.person = pmax(dr.mac.grade.right, dr.mac.grade.left),
+  
+  dr.ret.any.person = case_when((dr.ret.grade.right>1 | dr.ret.grade.left>1) ~1, TRUE~0),
+  dr.mac.any.person = case_when((dr.mac.grade.right>1 | dr.mac.grade.left>1) ~1, TRUE~0),
+  dr.ret.mac.any.person = case_when(dr.ret.any.person==1 | dr.mac.any.person==1 ~1, TRUE~0),
+  dr.stdr.any.person = case_when((dr.ret.grade.right==5 | dr.ret.grade.left==5 | dr.mac.grade.right==3 | dr.mac.grade.left==3) ~1, TRUE~0),
+  dr.laser.person = case_when(dr_laser_photocoagulation_scars_right=="dr_laser_photocoagulation_scars_macular" | dr_laser_photocoagulation_scars_right=="dr_laser_photocoagulation_scars_pan_retinal" | dr_laser_photocoagulation_scars_right=="dr_laser_photocoagulation_scars_pan_retinal_and_macular" |
+                                dr_laser_photocoagulation_scars_left=="dr_laser_photocoagulation_scars_macular" | dr_laser_photocoagulation_scars_left=="dr_laser_photocoagulation_scars_pan_retinal" | dr_laser_photocoagulation_scars_left=="dr_laser_photocoagulation_scars_pan_retinal_and_macular" ~1, TRUE~0)
+)
+
+dr.last.exam <- c("dr_diabetic_last_exam_none", "dr_diabetic_last_exam_0_12_months", "dr_diabetic_last_exam_13_24_months", "dr_diabetic_last_exam_over_24_months")

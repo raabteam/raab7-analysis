@@ -31,10 +31,10 @@ dir.create(here("outputs",ID,"/summary/data"))
 dir.create(here("outputs",ID,"/raw"))
 dir.create(here("outputs",ID,"/raw/data"))
 
-#raab<-read.csv(here("data","raabs_618.csv"))
-raab<-raab5[raab5$raab_id==ID,]
+raab<-read.csv(here("data","raabs_618.csv"))
+raab<-raab[raab$raab_id==ID,]
 
-#pop<-read.csv(here("data","raabs_pop_618_repo.csv"))
+pop<-read.csv(here("data","raabs_pop_618_repo.csv"))
 popfives<-pop[pop$raab_id==ID,]
 
 mrm_vars<-c("raab_id","survey_title","year_end","iso_2","level1","level2","osm_id","iso3166-1","iso3166-2","admin_level","national","sample_size","response_rate","raab_version","va_threshold","raab_dr","raab_wgq","iceh_data","pi_name","pi_institution","pi_email1","trainer_name","trainer_email1","implementing_org","facilitating_org","funder","pub_doi1","pub_doi2","pub_doi3")
@@ -81,7 +81,7 @@ source("RAAB5_report_setup.R")
 
 ```{r sum1, echo=FALSE}
 
-source("SUM_1.R")
+source("cause-blind-gender.R")
 
 sum1.nice.names<-sum1
 
@@ -111,7 +111,7 @@ It is important to review this information in relation to the tables on represen
 
 ```{r asa1, echo=FALSE}
 
-source("ASA_1.R")
+source("sample-age-gender.R")
 
 asa1.nice.names<-asa1[,c("age.groups.tens","female.examined.n","female.examined.pct","male.examined.n","male.examined.pct","total.examined.n","total.examined.pct")]
 
@@ -131,7 +131,7 @@ knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and sex d
 
 ```{r asa2, echo=FALSE}
 
-source("ASA_2.R")
+source("pop-age-gender.R")
 
 asa2.nice.names<-asa2
 
@@ -219,7 +219,7 @@ Mild VI: PVA less than 6/12 to 6/18 in the better eye
 
 ```{r sum3, echo=FALSE}
 
-source("SUM_3_SUM_4_RAAB5.R")
+source("crude-adj-prev-vi_RAAB5.R")
 
 sum3.nice.names<-sum3
 
@@ -274,7 +274,7 @@ These tables show the crude and adjusted prevalence of vision impairment by impa
 
 ```{r asa6, echo=FALSE}
 
-source("ASA_6_RAAB5.R")
+source("crude-adj-cum-prev-vi_RAAB5.R")
 
 asa6.nice.names<-asa6
 asa6.nice.names$vi.level<-as.character(asa6.nice.names$vi.level)
@@ -330,7 +330,7 @@ knitr::kable(asa6b.nice.names, booktabs=T, linesep = "", caption = "Adjusted cum
 
 ```{r sum6, echo=FALSE}
 
-source("SUM_6_RAAB5.R")
+source("cause-vi_RAAB5.R")
 
 sum6.nice.names<-sum6[,1:9]
 
@@ -420,7 +420,7 @@ treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="ind
 
 ```{r prev4, echo=FALSE}
 
-source("PREV_4.R")
+source("cause-blind-gender.R")
 
 prev4.nice.names<-prev4[,1:7]
 
@@ -480,7 +480,7 @@ knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), cap
 
 ```{r newtab1a, echo=FALSE}
 
-source("NEW_TAB_1_RAAB5.R")
+source("crude-adj-prev-vi-unilat_RAAB5.R")
 
 unt.nice.names<-unt
 
@@ -546,8 +546,8 @@ Cases of unilateral vision impairment acknowledge an additional sight loss burde
 
 ```{r asa7a, echo=FALSE}
 
-source("PREV_14_RAAB5.R")
-source("ASA_7_RAAB5.R")
+source("adj-csc-ecsc_RAAB5.R")
+source("crude-adj-cat-vi-prev_RAAB5.R")
 
 asa7a.int<-asa7[,c("vi.level","female.n","female.pct","female.pct.lci","female.pct.uci","male.n","male.pct","male.pct.lci","male.pct.uci","total.n","total.pct","total.pct.lci","total.pct.uci")]
 
@@ -575,8 +575,8 @@ knitr::kable(asa7a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
 
 ```{r asa7b, echo=FALSE}
 
-source("PREV_14_RAAB5.R")
-source("ASA_7_RAAB5.R")
+source("adj-csc-ecsc_RAAB5.R")
+source("crude-adj-cat-vi-prev_RAAB5.R")
 
 asa7b.int<-asa7[,c("vi.level","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.female.n","extrapolated.male.n","extrapolated.total.n")]
 
@@ -607,7 +607,7 @@ The pinhole visual acuity (PinVA) thresholds used in Tables 14 & 15 are aligned 
 
 ```{r prev14, echo=FALSE}
 
-source("PREV_14_RAAB5.R")
+source("adj-csc-ecsc_RAAB5.R")
 
 prev14.nice.names<-prev14[prev14$num.thresh=="csc" | prev14$num.thresh=="ecsc_618",]
 
@@ -642,7 +642,7 @@ CSC measures the accessibility of cataract surgical services. It describes the n
 
 ```{r sum11, echo=FALSE}
 
-source("SUM_11.R")
+source("cat-barriers.R")
 
 sum11.nice.names<-surgery.bars.cat
 
@@ -670,7 +670,7 @@ Surgical outcomes are reported for all operated eyes in the sample, not at the p
 
 ```{r newtab2, echo=FALSE}
 
-source("OUTC_1_OUTC_2_SUM_12_RAAB5.R")
+source("surg-type-outcome-gender_RAAB5.R")
 
 newtab2.nice.names<-newtab2
 
@@ -694,7 +694,7 @@ knitr::kable(newtab2.nice.names, booktabs=T, linesep = "", caption = "Type of ca
 
 ```{r newtab3a, echo=FALSE}
 
-source("OUTC_1_OUTC_2_SUM_12_RAAB5.R")
+source("surg-type-outcome-gender_RAAB5.R")
 
 newtab3a.nice.names<-newtab3a
 
@@ -747,7 +747,7 @@ knitr::kable(newtab3b.nice.names, booktabs=T, linesep = "", caption = "Post-oper
 
 ```{r outc6, echo=FALSE}
 
-source("OUTC_6.R")
+source("surg-place-outcome_RAAB5.R")
 
 outc6a.nice.names<-male[,c("oc","male_surgery_place_gov_hospital_n","male_surgery_place_gov_hospital_percent","male_surgery_place_voluntary_hospital_n","male_surgery_place_voluntary_hospital_percent","male_surgery_place_private_hospital_n","male_surgery_place_private_hospital_percent","male_surgery_place_camp_improvised_n","male_surgery_place_camp_improvised_percent","male_surgery_place_traditional_n","male_surgery_place_traditional_percent")]
 
