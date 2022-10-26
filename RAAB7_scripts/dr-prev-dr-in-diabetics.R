@@ -21,24 +21,24 @@ names(dr.ret.prev) <- c("retinopathy.grade",
                         "total.pct.lci",
                         "total.pct.uci")
 
-for (i in 1:length(dr.ret.grade.person)) {
+#for (i in 1:length(dr.ret.grade.person)) {
   
-  dr.ret.prev$female.n[i] <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.ret.grade.person==dr.ret.grade.person[i]]==1,na.rm=T) 
-  dr.ret.prev$female.pct[i] <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.ret.grade.person==dr.ret.grade.person[i]]==1,na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"]==1,na.rm=T) 
-  # dr.ret.prev$female.pct.lci[i] <- bennett.lci()
-  # dr.ret.prev$female.pct.uci[i] <- bennett.uci()
+  dr.ret.prev$female.n[i] <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.ret.grade.person==dr.ret.grade.person[i]],na.rm=T) 
+  dr.ret.prev$female.pct[i] <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.ret.grade.person==dr.ret.grade.person[i]],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"],na.rm=T) 
+  dr.ret.prev$female.pct.lci[i] <- bennett.lci(dr.ret.prev$female.pct[i],raab$dr.exam.denom[raab$gender=="female" & raab$dr.ret.grade.person==dr.ret.grade.person[i]],raab$dr.exam.denom[raab$gender=="female" & raab$dr.ret.grade.person==dr.ret.grade.person[i]],raab$clusterNumber[raab$gender=="female" & raab$dr.ret.grade.person==dr.ret.grade.person[i]])
+  dr.ret.prev$female.pct.uci[i] <- bennett.uci(dr.ret.prev$female.pct[i],raab$dr.exam.denom[raab$gender=="female" & raab$dr.ret.grade.person==dr.ret.grade.person[i]],raab$dr.exam.denom[raab$gender=="female" & raab$dr.ret.grade.person==dr.ret.grade.person[i]],raab$clusterNumber[raab$gender=="female" & raab$dr.ret.grade.person==dr.ret.grade.person[i]])
   
-  dr.ret.prev$male.n[i] <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.ret.grade.person==dr.ret.grade.person[i]]==1,na.rm=T) 
-  dr.ret.prev$male.pct[i] <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.ret.grade.person==dr.ret.grade.person[i]]==1,na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"]==1,na.rm=T)
-  # dr.ret.prev$male.pct.lci[i] <- bennett.lci()
-  # dr.ret.prev$male.pct.uci[i] <- bennett.uci()
+  dr.ret.prev$male.n[i] <- sum(raab$dr.ret.grade.person[raab$gender=="male" & raab$dr.ret.grade.person==dr.ret.grade.person[i]],na.rm=T) 
+  dr.ret.prev$male.pct[i] <- sum(raab$dr.ret.grade.person[raab$gender=="male" & raab$dr.ret.grade.person==dr.ret.grade.person[i]],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"],na.rm=T)
+  dr.ret.prev$male.pct.lci[i] <- bennett.lci(dr.ret.prev$male.pct[i],raab$dr.ret.grade.person[raab$gender=="male" & raab$dr.ret.grade.person==dr.ret.grade.person[i]],raab$dr.exam.denom[raab$gender=="male" & raab$dr.ret.grade.person==dr.ret.grade.person[i]],raab$clusterNumber[raab$gender=="male" & raab$dr.ret.grade.person==dr.ret.grade.person[i]])
+  dr.ret.prev$male.pct.uci[i] <- bennett.uci(dr.ret.prev$male.pct[i],raab$dr.ret.grade.person[raab$gender=="male" & raab$dr.ret.grade.person==dr.ret.grade.person[i]],raab$dr.exam.denom[raab$gender=="male" & raab$dr.ret.grade.person==dr.ret.grade.person[i]],raab$clusterNumber[raab$gender=="male" & raab$dr.ret.grade.person==dr.ret.grade.person[i]])
   
-  dr.ret.prev$total.n[i] <- sum(raab$dr.exam.denom[raab$dr.ret.grade.person==dr.ret.grade.person[i]]==1,na.rm=T) 
-  dr.ret.prev$total.pct[i] <- sum(raab$dr.exam.denom[raab$dr.ret.grade.person==dr.ret.grade.person[i]]==1,na.rm=T) / sum(raab$dr.exam.denom==1,na.rm=T)
-  # dr.ret.prev$total.pct.lci[i] <- bennett.lci()
-  # dr.ret.prev$total.pct.uci[i] <- bennett.uci()
+  dr.ret.prev$total.n[i] <- sum(raab$dr.ret.grade.person[raab$dr.ret.grade.person==dr.ret.grade.person[i]]==1,na.rm=T) 
+  dr.ret.prev$total.pct[i] <- sum(raab$dr.ret.grade.person[raab$dr.ret.grade.person==dr.ret.grade.person[i]]==1,na.rm=T) / sum(raab$dr.exam.denom,na.rm=T)
+  dr.ret.prev$total.pct.lci[i] <- bennett.lci(dr.ret.prev$total.pct[i],raab$dr.ret.grade.person[raab$dr.ret.grade.person==dr.ret.grade.person[i]],raab$dr.exam.denom[raab$dr.ret.grade.person==dr.ret.grade.person[i]],raab$clusterNumber[raab$dr.ret.grade.person==dr.ret.grade.person[i]])
+  dr.ret.prev$total.pct.uci[i] <- bennett.uci(dr.ret.prev$total.pct[i],raab$dr.ret.grade.person[raab$dr.ret.grade.person==dr.ret.grade.person[i]],raab$dr.exam.denom[raab$dr.ret.grade.person==dr.ret.grade.person[i]],raab$clusterNumber[raab$dr.ret.grade.person==dr.ret.grade.person[i]])
   
-}
+#}
 
 # row for any retinopathy  
 dr.ret.any.person <- data.frame("retinopathy.grade")
@@ -60,19 +60,20 @@ names(dr.ret.any.person) <- c("retinopathy.grade",
                               "total.pct.lci",
                               "total.pct.uci")
 
-dr.ret.any.person$female.n <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.ret.any.person==1],na.rm=T) 
-dr.ret.any.person$female.pct <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.ret.any.person==1],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"]==1,na.rm=T) 
-# dr.ret.any.person$female.pct.lci[i] <- bennett.lci()
-# dr.ret.any.person$female.pct.uci[i] <- bennett.uci()
+dr.ret.any.person$female.n <- sum(raab$dr.ret.any.person[raab$gender=="female"],na.rm=T) 
+dr.ret.any.person$female.pct <- sum(raab$dr.ret.any.person[raab$gender=="female"],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"],na.rm=T) 
+dr.ret.any.person$female.pct.lci <- bennett.lci(dr.ret.any.person$female.pct,raab$dr.ret.any.person[raab$gender=="female"],raab$dr.exam.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+dr.ret.any.person$female.pct.uci <- bennett.uci(dr.ret.any.person$female.pct,raab$dr.ret.any.person[raab$gender=="female"],raab$dr.exam.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
 
-dr.ret.any.person$male.n <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.ret.any.person==1],na.rm=T) 
-dr.ret.any.person$male.pct <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.ret.any.person==1],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"]==1,na.rm=T) 
-# dr.ret.any.person$male.pct.lci[i] <- bennett.lci()
-# dr.ret.any.person$male.pct.uci[i] <- bennett.uci()
-dr.ret.any.person$total.n <- sum(raab$dr.exam.denom[raab$dr.ret.any.person==1],na.rm=T) 
-dr.ret.any.person$total.pct <- sum(raab$dr.exam.denom[raab$dr.ret.any.person==1],na.rm=T) / sum(raab$dr.exam.denom==1,na.rm=T)
-# dr.ret.any.person$total.pct.lci[i] <- bennett.lci()
-# dr.ret.any.person$total.pct.uci[i] <- bennett.uci()
+dr.ret.any.person$male.n <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.ret.any.person],na.rm=T) 
+dr.ret.any.person$male.pct <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.ret.any.person],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"],na.rm=T) 
+dr.ret.any.person$male.pct.lci <- bennett.lci(dr.ret.any.person$male.pct,raab$dr.ret.any.person[raab$gender=="male"],raab$dr.exam.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+dr.ret.any.person$male.pct.uci <- bennett.uci(dr.ret.any.person$male.pct,raab$dr.ret.any.person[raab$gender=="male"],raab$dr.exam.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+
+dr.ret.any.person$total.n <- sum(raab$dr.exam.denom[raab$dr.ret.any.person],na.rm=T) 
+dr.ret.any.person$total.pct <- sum(raab$dr.exam.denom[raab$dr.ret.any.person],na.rm=T) / sum(raab$dr.exam.denom,na.rm=T)
+dr.ret.any.person$total.pct.lci <- bennett.lci(dr.ret.any.person$total.pct,raab$dr.ret.any.person,raab$dr.exam.denom,raab$clusterNumber)
+dr.ret.any.person$total.pct.uci <- bennett.uci(dr.ret.any.person$total.pct,raab$dr.ret.any.person,raab$dr.exam.denom,raab$clusterNumber)
 
 # Bind grades and any DR row
 retinopathy.grade.prev <- rbind(dr.ret.prev, dr.ret.any.person)
@@ -106,22 +107,23 @@ names(dr.mac.prev) <- c("maculopathy.grade",
 
 for (i in 1:length(dr.mac.grade.person)) {
   
-  dr.mac.prev$female.n[i] <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.mac.grade.person==dr.mac.grade.person[i]]==1,na.rm=T) 
-  dr.mac.prev$female.pct[i] <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.mac.grade.person==dr.mac.grade.person[i]]==1,na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"]==1,na.rm=T) 
-  # dr.mac.prev$female.pct.lci[i] <- bennett.lci()
-  # dr.mac.prev$female.pct.uci[i] <- bennett.uci()
+  dr.mac.prev$female.n[i] <- sum(raab$dr.mac.grade.person[raab$gender=="female" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],na.rm=T) 
+  dr.mac.prev$female.pct[i] <- sum(raab$dr.mac.grade.person[raab$gender=="female" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],na.rm=T) 
+  dr.mac.prev$female.pct.lci[i] <- bennett.lci(dr.mac.prev$female.pct[i],raab$dr.mac.grade.person[raab$gender=="female" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],raab$dr.exam.denom[raab$gender=="female" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],raab$clusterNumber[raab$gender=="female" & raab$dr.mac.grade.person==dr.mac.grade.person[i]])
+  dr.mac.prev$female.pct.uci[i] <- bennett.uci(dr.mac.prev$female.pct[i],raab$dr.mac.grade.person[raab$gender=="female" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],raab$dr.exam.denom[raab$gender=="female" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],raab$clusterNumber[raab$gender=="female" & raab$dr.mac.grade.person==dr.mac.grade.person[i]])
   
-  dr.mac.prev$male.n[i] <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.mac.grade.person==dr.mac.grade.person[i]]==1,na.rm=T) 
-  dr.mac.prev$male.pct[i] <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.mac.grade.person==dr.mac.grade.person[i]]==1,na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"]==1,na.rm=T)
-  # dr.mac.prev$male.pct.lci[i] <- bennett.lci()
-  # dr.mac.prev$male.pct.uci[i] <- bennett.uci()
+  dr.mac.prev$male.n[i] <- sum(raab$dr.mac.grade.person[raab$gender=="male" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],na.rm=T) 
+  dr.mac.prev$male.pct[i] <- sum(raab$dr.mac.grade.person[raab$gender=="male" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],na.rm=T)
+  dr.mac.prev$male.pct.lci[i] <- bennett.lci(dr.mac.prev$male.pct[i],raab$dr.mac.grade.person[raab$gender=="male" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],raab$dr.exam.denom[raab$gender=="male" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],raab$clusterNumber[raab$gender=="male" & raab$dr.mac.grade.person==dr.mac.grade.person[i]])
+  dr.mac.prev$male.pct.uci[i] <- bennett.uci(dr.mac.prev$male.pct[i],raab$dr.mac.grade.person[raab$gender=="male" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],raab$dr.exam.denom[raab$gender=="male" & raab$dr.mac.grade.person==dr.mac.grade.person[i]],raab$clusterNumber[raab$gender=="male" & raab$dr.mac.grade.person==dr.mac.grade.person[i]])
   
-  dr.mac.prev$total.n[i] <- sum(raab$dr.exam.denom[raab$dr.mac.grade.person==dr.mac.grade.person[i]]==1,na.rm=T) 
-  dr.mac.prev$total.pct[i] <- sum(raab$dr.exam.denom[raab$dr.mac.grade.person==dr.mac.grade.person[i]]==1,na.rm=T) / sum(raab$dr.exam.denom==1,na.rm=T)
-  # dr.mac.prev$total.pct.lci[i] <- bennett.lci()
-  # dr.mac.prev$total.pct.uci[i] <- bennett.uci()
+  dr.mac.prev$total.n[i] <- sum(raab$dr.mac.grade.person[raab$dr.mac.grade.person==dr.mac.grade.person[i]],na.rm=T) 
+  dr.mac.prev$total.pct[i] <- sum(raab$dr.mac.grade.person[raab$dr.mac.grade.person==dr.mac.grade.person[i]],na.rm=T) / sum(raab$dr.exam.denom[raab$dr.mac.grade.person==dr.mac.grade.person[i]],na.rm=T)
+  dr.mac.prev$total.pct.lci[i] <- bennett.lci(dr.mac.prev$total.pct[i],raab$dr.mac.grade.person[raab$dr.mac.grade.person==dr.mac.grade.person[i]],raab$dr.exam.denom[raab$dr.mac.grade.person==dr.mac.grade.person[i]],raab$clusterNumber[raab$dr.mac.grade.person==dr.mac.grade.person[i]])
+  dr.mac.prev$total.pct.uci[i] <- bennett.uci(dr.mac.prev$total.pct[i],raab$dr.mac.grade.person[raab$dr.mac.grade.person==dr.mac.grade.person[i]],raab$dr.exam.denom[raab$dr.mac.grade.person==dr.mac.grade.person[i]],raab$clusterNumber[raab$dr.mac.grade.person==dr.mac.grade.person[i]])
   
 }
+
 # row for any maculaopathy
 dr.mac.any.person <- data.frame("maculopathy.grade")
 dr.mac.any.person[,2:13] <- NA
@@ -142,20 +144,20 @@ names(dr.mac.any.person) <- c("maculopathy.grade",
                               "total.pct.lci",
                               "total.pct.uci")
 
-dr.mac.any.person$female.n <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.mac.any.person==1],na.rm=T) 
-dr.mac.any.person$female.pct <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.mac.any.person==1],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"]==1,na.rm=T) 
-# dr.mac.any.person$female.pct.lci[i] <- bennett.lci()
-# dr.mac.any.person$female.pct.uci[i] <- bennett.uci()
+dr.mac.any.person$female.n <- sum(raab$dr.mac.any.person[raab$gender=="female"],na.rm=T) 
+dr.mac.any.person$female.pct <- sum(raab$dr.mac.any.person[raab$gender=="female"],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"],na.rm=T) 
+dr.mac.any.person$female.pct.lci <- bennett.lci(dr.mac.any.person$female.pct,raab$dr.mac.any.person[raab$gender=="female"],raab$dr.exam.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+dr.mac.any.person$female.pct.uci <- bennett.uci(dr.mac.any.person$female.pct,raab$dr.mac.any.person[raab$gender=="female"],raab$dr.exam.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
 
-dr.mac.any.person$male.n <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.mac.any.person==1],na.rm=T) 
-dr.mac.any.person$male.pct <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.mac.any.person==1],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"]==1,na.rm=T) 
-# dr.mac.any.person$male.pct.lci[i] <- bennett.lci()
-# dr.mac.any.person$male.pct.uci[i] <- bennett.uci()
+dr.mac.any.person$male.n <- sum(raab$dr.mac.any.person[raab$gender=="male" & raab$dr.mac.any.person==1],na.rm=T) 
+dr.mac.any.person$male.pct <- sum(raab$dr.mac.any.person[raab$gender=="male" & raab$dr.mac.any.person==1],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"],na.rm=T) 
+dr.mac.any.person$male.pct.lci <- bennett.lci(dr.mac.any.person$male.pct,raab$dr.mac.any.person[raab$gender=="male"],raab$dr.exam.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+dr.mac.any.person$male.pct.uci <- bennett.uci(dr.mac.any.person$male.pct,raab$dr.mac.any.person[raab$gender=="male"],raab$dr.exam.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
 
-dr.mac.any.person$total.n <- sum(raab$dr.exam.denom[raab$dr.mac.any.person==1],na.rm=T) 
-dr.mac.any.person$total.pct <- sum(raab$dr.exam.denom[raab$dr.mac.any.person==1],na.rm=T) / sum(raab$dr.exam.denom==1,na.rm=T)
-# dr.mac.any.person$total.pct.lci[i] <- bennett.lci()
-# dr.mac.any.person$total.pct.uci[i] <- bennett.uci()
+dr.mac.any.person$total.n <- sum(raab$dr.mac.any.person,na.rm=T) 
+dr.mac.any.person$total.pct <- sum(raab$dr.mac.any.person,na.rm=T) / sum(raab$dr.exam.denom,na.rm=T)
+dr.mac.any.person$total.pct.lci <- bennett.lci(dr.mac.any.person$total.pct,raab$dr.mac.any.person,raab$dr.exam.denom,raab$clusterNumber)
+dr.mac.any.person$total.pct.uci <- bennett.uci(dr.mac.any.person$total.pct,raab$dr.mac.any.person,raab$dr.exam.denom,raab$clusterNumber)
 
 # Bind mac grades and any maculopathy row
 maculopathy.grade.prev <- rbind(dr.mac.prev, dr.mac.any.person)
@@ -185,20 +187,20 @@ names(any.dr.mac.person) <- c("dr.summary",
                               "total.pct.lci",
                               "total.pct.uci")
 
-any.dr.mac.person$female.n <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.ret.mac.any.person==1],na.rm=T) 
-any.dr.mac.person$female.pct <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.ret.mac.any.person==1],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"]==1,na.rm=T) 
-# any.dr.mac.person$female.pct.lci[i] <- bennett.lci()
-# any.dr.mac.person$female.pct.uci[i] <- bennett.uci()
+any.dr.mac.person$female.n <- sum(raab$dr.ret.mac.any.person[raab$gender=="female"],na.rm=T) 
+any.dr.mac.person$female.pct <- sum(raab$dr.ret.mac.any.person[raab$gender=="female"],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"],na.rm=T) 
+any.dr.mac.person$female.pct.lci <- bennett.lci(any.dr.mac.person$female.pct,raab$dr.ret.mac.any.person[raab$gender=="female"],raab$dr.exam.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+any.dr.mac.person$female.pct.uci <- bennett.uci(any.dr.mac.person$female.pct,raab$dr.ret.mac.any.person[raab$gender=="female"],raab$dr.exam.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
 
-any.dr.mac.person$male.n <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.ret.mac.any.person==1],na.rm=T) 
-any.dr.mac.person$male.pct <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.ret.mac.any.person==1],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"]==1,na.rm=T) 
-# any.dr.mac.person$male.pct.lci[i] <- bennett.lci()
-# any.dr.mac.person$male.pct.uci[i] <- bennett.uci()
+any.dr.mac.person$male.n <- sum(raab$dr.ret.mac.any.person[raab$gender=="male"],na.rm=T) 
+any.dr.mac.person$male.pct <- sum(raab$dr.ret.mac.any.person[raab$gender=="male"],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"],na.rm=T) 
+any.dr.mac.person$male.pct.lci <- bennett.lci(any.dr.mac.person$male.pct,raab$dr.ret.mac.any.person[raab$gender=="male"],raab$dr.exam.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+any.dr.mac.person$male.pct.uci <- bennett.uci(any.dr.mac.person$male.pct,raab$dr.ret.mac.any.person[raab$gender=="male"],raab$dr.exam.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
 
-any.dr.mac.person$total.n <- sum(raab$dr.exam.denom[raab$dr.ret.mac.any.person==1],na.rm=T) 
-any.dr.mac.person$total.pct <- sum(raab$dr.exam.denom[raab$dr.ret.mac.any.person==1],na.rm=T) / sum(raab$dr.exam.denom==1,na.rm=T)
-# any.dr.mac.person$total.pct.lci[i] <- bennett.lci()
-# any.dr.mac.person$total.pct.uci[i] <- bennett.uci()
+any.dr.mac.person$total.n <- sum(raab$dr.ret.mac.any.person, na.rm=T) 
+any.dr.mac.person$total.pct <- sum(raab$dr.ret.mac.any.person, na.rm=T) / sum(raab$dr.exam.denom, na.rm=T)
+any.dr.mac.person$total.pct.lci <- bennett.lci(any.dr.mac.person$total.pct,raab$dr.ret.mac.any.person,raab$dr.exam.denom,raab$clusterNumber)
+any.dr.mac.person$total.pct.uci <- bennett.uci(any.dr.mac.person$total.pct,raab$dr.ret.mac.any.person,raab$dr.exam.denom,raab$clusterNumber)
 
 # any STDR
 any.stdr.person <- data.frame("any.stdr")
@@ -220,20 +222,20 @@ names(any.stdr.person) <- c("dr.summary",
                             "total.pct.lci",
                             "total.pct.uci")
 
-any.stdr.person$female.n <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.stdr.any.person==1],na.rm=T) 
-any.stdr.person$female.pct <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.stdr.any.person==1],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"]==1,na.rm=T) 
-# any.stdr.person$female.pct.lci[i] <- bennett.lci()
-# any.stdr.person$female.pct.uci[i] <- bennett.uci()
+any.stdr.person$female.n <- sum(raab$dr.stdr.any.person[raab$gender=="female"],na.rm=T) 
+any.stdr.person$female.pct <- sum(raab$dr.stdr.any.person[raab$gender=="female"],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"],na.rm=T) 
+any.stdr.person$female.pct.lci <- bennett.lci(any.stdr.person$female.pct,raab$dr.stdr.any.person[raab$gender=="female"],raab$dr.exam.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+any.stdr.person$female.pct.uci <- bennett.uci(any.stdr.person$female.pct,raab$dr.stdr.any.person[raab$gender=="female"],raab$dr.exam.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
 
-any.stdr.person$male.n <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.stdr.any.person==1],na.rm=T) 
-any.stdr.person$male.pct <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.stdr.any.person==1],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"]==1,na.rm=T) 
-# any.stdr.person$male.pct.lci[i] <- bennett.lci()
-# any.stdr.person$male.pct.uci[i] <- bennett.uci()
+any.stdr.person$male.n <- sum(raab$dr.stdr.any.person[raab$gender=="male"],na.rm=T) 
+any.stdr.person$male.pct <- sum(raab$dr.stdr.any.person[raab$gender=="male"],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"],na.rm=T) 
+any.stdr.person$male.pct.lci <- bennett.lci(any.stdr.person$male.pct,raab$dr.stdr.any.person[raab$gender=="male"],raab$dr.exam.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+any.stdr.person$male.pct.uci <- bennett.uci(any.stdr.person$male.pct,raab$dr.stdr.any.person[raab$gender=="male"],raab$dr.exam.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
 
-any.stdr.person$total.n <- sum(raab$dr.exam.denom[raab$dr.stdr.any.person==1],na.rm=T) 
-any.stdr.person$total.pct <- sum(raab$dr.exam.denom[raab$dr.stdr.any.person==1],na.rm=T) / sum(raab$dr.exam.denom==1,na.rm=T)
-# any.stdr.person$total.pct.lci[i] <- bennett.lci()
-# any.stdr.person$total.pct.uci[i] <- bennett.uci()
+any.stdr.person$total.n <- sum(raab$dr.stdr.any.person,na.rm=T) 
+any.stdr.person$total.pct <- sum(raab$dr.stdr.any.person,na.rm=T) / sum(raab$dr.exam.denom,na.rm=T)
+any.stdr.person$total.pct.lci <- bennett.lci(any.stdr.person$total.pct,raab$dr.stdr.any.person,raab$dr.exam.denom,raab$clusterNumber)
+any.stdr.person$total.pct.uci <- bennett.uci(any.stdr.person$total.pct,raab$dr.stdr.any.person,raab$dr.exam.denom,raab$clusterNumber)
 
 # any laser scars
 any.laser.person <- data.frame("any.laser")
@@ -255,20 +257,20 @@ names(any.laser.person) <- c("dr.summary",
                              "total.pct.lci",
                              "total.pct.uci")
 
-any.laser.person$female.n <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.laser.person==1],na.rm=T) 
-any.laser.person$female.pct <- sum(raab$dr.exam.denom[raab$gender=="female" & raab$dr.laser.person==1],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"]==1,na.rm=T) 
-# any.laser.person$female.pct.lci[i] <- bennett.lci()
-# any.laser.person$female.pct.uci[i] <- bennett.uci()
+any.laser.person$female.n <- sum(raab$dr.laser.person[raab$gender=="female"],na.rm=T) 
+any.laser.person$female.pct <- sum(raab$dr.laser.person[raab$gender=="female"],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="female"],na.rm=T) 
+any.laser.person$female.pct.lci <- bennett.lci(any.laser.person$female.pct,raab$dr.laser.person[raab$gender=="female"],raab$dr.exam.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+any.laser.person$female.pct.uci <- bennett.uci(any.laser.person$female.pct,raab$dr.laser.person[raab$gender=="female"],raab$dr.exam.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
 
-any.laser.person$male.n <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.laser.person==1],na.rm=T) 
-any.laser.person$male.pct <- sum(raab$dr.exam.denom[raab$gender=="male" & raab$dr.laser.person==1],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"]==1,na.rm=T) 
-# any.laser.person$male.pct.lci[i] <- bennett.lci()
-# any.laser.person$male.pct.uci[i] <- bennett.uci()
+any.laser.person$male.n <- sum(raab$dr.laser.person[raab$gender=="male"],na.rm=T) 
+any.laser.person$male.pct <- sum(raab$dr.laser.person[raab$gender=="male"],na.rm=T) / sum(raab$dr.exam.denom[raab$gender=="male"],na.rm=T) 
+any.laser.person$male.pct.lci <- bennett.lci(any.laser.person$male.pct,raab$dr.laser.person[raab$gender=="male"],raab$dr.exam.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+any.laser.person$male.pct.uci <- bennett.uci(any.laser.person$male.pct,raab$dr.laser.person[raab$gender=="male"],raab$dr.exam.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
 
-any.laser.person$total.n <- sum(raab$dr.exam.denom[raab$dr.laser.person==1],na.rm=T) 
-any.laser.person$total.pct <- sum(raab$dr.exam.denom[raab$dr.laser.person==1],na.rm=T) / sum(raab$dr.exam.denom==1,na.rm=T)
-# any.laser.person$total.pct.lci[i] <- bennett.lci()
-# any.laser.person$total.pct.uci[i] <- bennett.uci()
+any.laser.person$total.n <- sum(raab$dr.laser.person,na.rm=T) 
+any.laser.person$total.pct <- sum(raab$dr.laser.person,na.rm=T) / sum(raab$dr.exam.denom,na.rm=T)
+any.laser.person$total.pct.lci <- bennett.lci(any.laser.person$total.pct,raab$dr.laser.person,raab$dr.exam.denom,raab$clusterNumber)
+any.laser.person$total.pct.uci <- bennett.uci(any.laser.person$total.pct,raab$dr.laser.person,raab$dr.exam.denom,raab$clusterNumber)
 
 # Bind any ret/mac, STDR and laser tx counts
 dr.summary <- rbind(any.dr.mac.person, any.stdr.person, any.laser.person)
@@ -287,6 +289,3 @@ names(dr.summary)[1] <- "grade"
 
 dr.prev.big.table <- rbind(retinopathy.grade.prev, maculopathy.grade.prev)
 dr.prev.big.table <- rbind(dr.prev.big.table, dr.summary)
-
-write.csv(dr.prev.big.table, here('outputs', 'dr.prev.big.table.csv'), row.names = F)
-  
