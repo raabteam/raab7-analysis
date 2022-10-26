@@ -62,11 +62,7 @@ dr.response.a$total.pct[dr.response.a$Exam.Status=="Diabetes status assessed"] <
 pcts<-grep("pct",names(dr.response.a))
 dr.response.a[,pcts]<-round(dr.response.a[,pcts], 1)
 
-write.csv(dr.response.a, here('outputs', 'dr.response.a.csv'), row.names = FALSE)
-
 ## Splitting response table in two and adding row for known vs suspected
-
-dr.response.cascade.b <- (c("Known or suspected diabetes", "Known", "Suspected", "Consented dilated examination"))
 
 dr.response.b <- data.frame(dr.response.cascade.b)
 dr.response.b[,2:7] <- NA
@@ -114,6 +110,3 @@ dr.response.b$total.pct[dr.response.b$Exam.Status=="Consented dilated examinatio
 pcts<-grep("pct",names(dr.response.b))
 dr.response.b[,pcts]<-round(dr.response.b[,pcts], 1)
 
-write.csv(dr.response.b, here('outputs', 'dr.response.b.csv'), row.names = FALSE)
-
-  

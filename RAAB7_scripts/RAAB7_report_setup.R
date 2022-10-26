@@ -145,6 +145,7 @@ raab <- raab %>% mutate(
   
 )
 
+
 # CSC and eCSC variables - new eCSC definition entered 16.06.22
 
 raab <- raab %>% 
@@ -167,16 +168,20 @@ raab <- raab %>%
 
     y_case_612 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
     z_case_612 = case_when((raab$right_distance_acuity_pinhole>0.3 & raab$left_distance_acuity_pinhole>0.3) & (raab$right_operated!=1 & raab$left_operated!=1) & (raab$right_operable_612==1 | raab$left_operable_612==1) ~ 1, TRUE ~ 0),
-    
+    old_z_case_612 = case_when((raab$right_operable_612==1 & raab$left_operable_612==1) ~ 1, TRUE ~ 0),
+
     y_case_618 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
     z_case_618 = case_when((raab$right_distance_acuity_pinhole>0.47 & raab$left_distance_acuity_pinhole>0.47) & (raab$right_operated!=1 & raab$left_operated!=1) & (raab$right_operable_618==1 | raab$left_operable_618==1) ~ 1, TRUE ~ 0),
-    
+    old_z_case_618 = case_when((raab$right_operable_618==1 & raab$left_operable_618==1) ~ 1, TRUE ~ 0),
+
     y_case_660 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
     z_case_660 = case_when((raab$right_distance_acuity_pinhole>1 & raab$left_distance_acuity_pinhole>1) & (raab$right_operated!=1 & raab$left_operated!=1) & (raab$right_operable_660==1 | raab$left_operable_660==1) ~ 1, TRUE ~ 0),
-    
+    old_z_case_660 = case_when((raab$right_operable_660==1 & raab$left_operable_660==1) ~ 1, TRUE ~ 0),
+
     y_case_360 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
     z_case_360 = case_when((raab$right_distance_acuity_pinhole>1.3 & raab$left_distance_acuity_pinhole>1.3) & (raab$right_operated!=1 & raab$left_operated!=1) & (raab$right_operable_360==1 | raab$left_operable_360==1) ~ 1, TRUE ~ 0),
-    
+    old_z_case_360 = case_when((raab$right_operable_360==1 & raab$left_operable_360==1) ~ 1, TRUE ~ 0),
+
 #NB syntax is a_case_[operatedthresh]_[operablethresh]
 #eCSC numerator definition 1: cataract as cause of VI in non-operated eye
     
@@ -243,7 +248,8 @@ raab <- raab %>% mutate(
   unilat.operated = case_when(bilat.operated!=1 & (raab$right_operated==1 | raab$left_operated==1) ~1, TRUE~0)
 )
 
-  
+raab$total.operated<-(raab$bilat.operated==1 | raab$unilat.operated==1)+0
+
 # Bilateral operable cataract cases used to report barriers to cataract surgery  
 raab$bilateral_operable_cataract<-(raab$right_operable_660==1 & raab$left_operable_660)+0
 
@@ -425,14 +431,14 @@ raab <- raab %>% mutate(
 
 raab <- raab %>% mutate(
   
-  aa_case = case_when(raab$spectacles_used_distance=="true" & raab$better.eye.ucva>0.3 & raab$better.eye.cva==0.3 ~ 1, TRUE ~ 0)
+  aa_case = case_when(raab$spectacles_used_distance==TRUE & raab$better.eye.ucva>0.3 & raab$better.eye.cva==0.3 ~ 1, TRUE ~ 0)
 
   )
 
 raab <- raab %>% mutate(
   
-  bb_case = case_when(raab$aa_case==0 & raab$spectacles_used_distance=="true" & raab$better.eye.ucva>0.3 & raab$better.eye.cva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0),
-  cc_case = case_when(raab$spectacles_used_distance=="false" & raab$better.eye.ucva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0)
+  bb_case = case_when(raab$aa_case==0 & raab$spectacles_used_distance==TRUE & raab$better.eye.ucva>0.3 & raab$better.eye.cva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0),
+  cc_case = case_when(raab$spectacles_used_distance==FALSE & raab$better.eye.ucva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0)
 
   )
 
@@ -469,6 +475,7 @@ raab <- raab %>% mutate(
 
 # dr.response.cascade <-c("Enrolled","Examined","Diabetes status assessed", "Known or suspected diabetes", "Consented dilated examination")
 dr.response.cascade <-c("Enrolled","Examined","Diabetes status assessed")
+dr.response.cascade.b <- (c("Known or suspected diabetes", "Known", "Suspected", "Consented dilated examination"))
 
 raab <- raab %>% mutate(
   

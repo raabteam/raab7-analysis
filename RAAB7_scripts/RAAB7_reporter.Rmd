@@ -126,13 +126,13 @@ asa1.nice.names<-asa1[,c("age.groups.tens","female.examined.n","female.examined.
 
 write.table(asa1.nice.names,here("outputs", ID, "summary", "data", "t2.csv"),row.names=F,col.names=T,sep=",")
 
-names(asa1.nice.names)<-c("","n","%","n","%","n","%")
+names(asa1.nice.names)<-c("Years","n","%","n","%","n","%")
 
 knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and sex distribution of people examined in the sample") %>% 
   kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(4,hline_after=T) %>%
-  add_header_above(c("Age group (years)" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
+  add_header_above(c("Age group" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
 
 
 ```
@@ -145,13 +145,13 @@ asa2.nice.names<-asa2
 
 write.table(asa2.nice.names,here("outputs", ID, "summary", "data", "t3.csv"),row.names=F,col.names=T,sep=",")
 
-names(asa2.nice.names)<-c("","n","%","n","%","n","%")
+names(asa2.nice.names)<-c("Years","n","%","n","%","n","%")
 
 knitr::kable(asa2.nice.names, booktabs=T, linesep = "", caption = "Total number of people aged 50+ in survey area") %>% 
   kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(4,hline_after=T) %>%
-  add_header_above(c("Exam status" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
+  add_header_above(c("Age group" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
 
 ```
 
@@ -535,7 +535,87 @@ Cases of unilateral vision impairment acknowledge an additional sight loss burde
 
 # Cataract
 
-## Table 14, table 15
+## Table 14
+
+```{r catops, echo=FALSE}
+
+source(here("RAAB7_scripts","crude_cat_ops_RAAB7.R"))
+
+catops.nice.names<-catops
+
+write.table(catops.nice.names,here("outputs", ID, "summary", "data", "t14.csv"),row.names=F,col.names=T,sep=",")
+  
+catops.nice.names$cat.ops[catops.nice.names$cat.ops=="bilateral.operated"]<-"Bilateral operated"
+catops.nice.names$cat.ops[catops.nice.names$cat.ops=="unilateral.operated"]<-"Unilateral operated"
+catops.nice.names$cat.ops[catops.nice.names$cat.ops=="total.operated"]<-"Total operated"
+
+names(catops.nice.names)<-c(" ","n","%","n","%","n","%")
+
+knitr::kable(catops.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of people bilaterally and unilaterally cataract operated") %>% 
+  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  column_spec(1,width='3cm') %>%
+  add_header_above(c("Oerated cataract" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T) 
+
+```
+
+This table reports the prevalence of people in the sample with one or both eyes operated, irrespective of post-operative visual acuity or pinhole acuity in the unoperated eye.
+
+## Table 15, table 16
+
+```{r catcovdenom.a, echo=FALSE}
+
+source(here("RAAB7_scripts","crude-adj-prev-cat-cov-denom_RAAB7.R"))
+
+catcovdenom.a<-catcovdenom[,c("vi.level","female.n","female.pct","female.pct.lci","female.pct.uci","male.n","male.pct","male.pct.lci","male.pct.uci","total.n","total.pct","total.pct.lci","total.pct.uci")]
+
+catcovdenom.a$female.ci<-paste0(catcovdenom.a$female.pct.lci," - ", catcovdenom.a$female.pct.uci)
+catcovdenom.a$male.ci<-paste0(catcovdenom.a$male.pct.lci," - ", catcovdenom.a$male.pct.uci)
+catcovdenom.a$total.ci<-paste0(catcovdenom.a$total.pct.lci," - ", catcovdenom.a$total.pct.uci)
+
+catcovdenom.a.nice.names<-catcovdenom.a[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
+
+write.table(catcovdenom.a.nice.names,here("outputs", ID, "summary", "data", "t15.csv"),row.names=F,col.names=T,sep=",")
+
+names(catcovdenom.a.nice.names)<-c(" ","n","%","95% CI","n","%","95% CI","n","%","95% CI")
+
+knitr::kable(catcovdenom.a.nice.names, booktabs=T, linesep = "", caption = "Crude unmet need for cataract surgery at pinhole VA thresholds <3/60, <6/60, <6/18 and <6/12") %>% 
+  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  add_header_above(c("Unmet need threshold" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) 
+
+```
+
+```{r catcovdenom.b, echo=FALSE}
+
+source(here("RAAB7_scripts","crude-adj-prev-cat-cov-denom_RAAB7.R"))
+
+catcovdenom.b<-catcovdenom[,c("vi.level","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.female.n","extrapolated.male.n","extrapolated.total.n")]
+
+catcovdenom.b$male.adj.ci<-paste0(catcovdenom.b$male.adj.pct.lci," - ",catcovdenom.b$male.adj.pct.uci)
+catcovdenom.b$female.adj.ci<-paste0(catcovdenom.b$female.adj.pct.lci," - ",catcovdenom.b$female.adj.pct.uci)
+catcovdenom.b$total.adj.ci<-paste0(catcovdenom.b$total.adj.pct.lci," - ",catcovdenom.b$total.adj.pct.uci)
+
+catcovdenom.b.nice.names<-catcovdenom.b[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
+
+write.table(catcovdenom.b.nice.names,here("outputs", ID, "summary", "data", "t16.csv"),row.names=F,col.names=T,sep=",")
+
+names(catcovdenom.b.nice.names)<-c(" ","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude")
+
+knitr::kable(catcovdenom.b.nice.names, booktabs=T, linesep = "", caption = "Extrapolated magnitude of unmet need for cataract surgery at pinhole VA thresholds <3/60, <6/60, <6/18 and <6/12") %>% 
+  kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
+  row_spec(0,italic=TRUE) %>%
+  column_spec(c(4,7,10),width='2cm') %>%
+  add_header_above(c("Unmet need threshold" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) 
+
+```
+
+The number of people at each threshold here correspond to the unmet need for cataract surgery in the calculation for effective cataract surgical coverage (see notes). People with unmet need may have cataract in one or both eyes. Those with cataract in one eye and another cause of VI in the other eye would potentially benefit from cataract surgery. This group with unilateral cataract excludes people with refractive error or uncorrected aphakia in the other eye.
+
+## Table 17, table 18
+
+In tables 17 & 18, the unmet need for cataract surgery is broken down by bilateral and unilateral cataract cases at each of the cataract surgical thresholds. Here, cataract cases are defined by the presence of an obvious lens opacity and assignment as the main cause of vision impairment.
+
 
 ```{r asa7a, echo=FALSE}
 
@@ -550,7 +630,7 @@ asa7a.int$total.ci<-paste0(asa7a.int$total.pct.lci," - ", asa7a.int$total.pct.uc
 
 asa7a.nice.names<-asa7a.int[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(asa7a.nice.names,here("outputs", ID, "summary", "data", "t14.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa7a.nice.names,here("outputs", ID, "summary", "data", "t17.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa7a.nice.names)<-c(" ","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
@@ -577,7 +657,7 @@ asa7b.int$total.adj.ci<-paste0(asa7b.int$total.adj.pct.lci," - ",asa7b.int$total
 
 asa7b.nice.names<-asa7b.int[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
 
-write.table(asa7b.nice.names,here("outputs", ID, "summary", "data", "t15.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa7b.nice.names,here("outputs", ID, "summary", "data", "t18.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa7b.nice.names)<-c(" ","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude")
 
@@ -592,9 +672,9 @@ knitr::kable(asa7b.nice.names, booktabs=T, linesep = "", caption = "Adjusted pre
 
 ```
 
-The cataract surgical thresholds (based on PinVA) used in Tables 14 & 15 describe the prevalence and magnitude of operable cataract at WHO vision impairment thresholds. They are used in the definitions of cataract surgical coverage and effective cataract surgical coverage (Table 16).
+The cataract surgical thresholds (based on PinVA) used in Tables 17 & 18 describe the prevalence and magnitude of operable cataract at WHO vision impairment thresholds. They are used in the definitions of cataract surgical coverage and effective cataract surgical coverage (Table 18).
 
-## Table 16
+## Table 19
 
 ```{r prev14, echo=FALSE}
 
@@ -610,7 +690,7 @@ prev14.nice.names$num.thresh<-recode_factor(prev14.nice.names$num.thresh,'csc' =
 
 prev14a.nice.names<-prev14.nice.names[,c("num.thresh","female.adjusted","female.adjusted.ci","male.adjusted","male.adjusted.ci","total.adjusted","total.adjusted.ci")]
 
-write.table(prev14a.nice.names,here("outputs", ID, "summary", "data", "t16.csv"),row.names=F,col.names=T,sep=",")
+write.table(prev14a.nice.names,here("outputs", ID, "summary", "data", "t19.csv"),row.names=F,col.names=T,sep=",")
 
 names(prev14a.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
 
@@ -630,7 +710,7 @@ knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted c
 
 CSC measures the accessibility of cataract surgical services. It describes the number of people in a population with operated cataract as a proportion of those having operated cataract plus people with cataract and pinhole visual acuity worse than a specified surgical threshold (sometimes referred to as operable cataract). Effective CSC (eCSC) is a quality-corrected version of the same metric. It describes the number of people with operated cataract and a good (6/12 or better PVA) post-operative visual acuity outcome as a proportion of those having operated plus operable cataract. This indicator therefore incorporates a measure of service quality concurrently with access. eCSC and CSC are reported at four cataract surgical thresholds.
 
-## Table 17
+## Table 20
 
 ```{r sum11, echo=FALSE}
 
@@ -638,7 +718,7 @@ source(here("RAAB7_scripts","cat-barriers.R"))
 
 sum11.nice.names<-surgery.bars[, c("Barrier","female_count","female_percent","male_count","male_percent","total_count","total_percent")]
 
-write.table(sum11.nice.names,here("outputs", ID, "summary", "data", "t17.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum11.nice.names,here("outputs", ID, "summary", "data", "t20.csv"),row.names=F,col.names=T,sep=",")
 
 names(sum11.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -658,7 +738,7 @@ The standard RAAB survey protocol does not allow for in-depth interviews to dete
 
 Surgical outcomes are reported for all operated eyes in the sample, not at the person level. RAAB gives population based data on post-operative visual outcomes, not specific to one surgeon or one hospital and with follow-up periods ranging from months to decades.
 
-## Table 18
+## Table 21
 
 ```{r newtab2, echo=FALSE}
 
@@ -682,7 +762,7 @@ knitr::kable(newtab2.nice.names, booktabs=T, linesep = "", caption = "Type of ca
 
 ```
 
-## Table 19, table 20
+## Table 22, table 23
 
 ```{r newtab3a, echo=FALSE}
 
@@ -696,7 +776,7 @@ newtab3a.nice.names$oc.levels[newtab3a.nice.names$oc.levels=="good.oc"]<-"Good (
 newtab3a.nice.names$oc.levels[newtab3a.nice.names$oc.levels=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
 newtab3a.nice.names$oc.levels[newtab3a.nice.names$oc.levels=="poor.oc"]<-"Poor (<6/60)"
 
-write.table(newtab3a.nice.names,here("outputs", ID, "summary", "data", "t19.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab3a.nice.names,here("outputs", ID, "summary", "data", "t22.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab3a.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -720,7 +800,7 @@ newtab3b.nice.names$oc.levels[newtab3b.nice.names$oc.levels=="borderline.oc"]<-"
 newtab3b.nice.names$oc.levels[newtab3b.nice.names$oc.levels=="poor.oc"]<-"Poor (<6/60)"
 
 
-write.table(newtab3b.nice.names,here("outputs", ID, "summary", "data", "t20.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab3b.nice.names,here("outputs", ID, "summary", "data", "t23.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab3b.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -733,7 +813,7 @@ knitr::kable(newtab3b.nice.names, booktabs=T, linesep = "", caption = "Post-oper
 
 ```
 
-## Table 21, table 22
+## Table 24, table 25
 
 ```{r outc6, echo=FALSE}
 
@@ -747,7 +827,7 @@ outc6a.nice.names$oc[outc6a.nice.names$oc=="good.oc"]<-"Good (6/12)"
 outc6a.nice.names$oc[outc6a.nice.names$oc=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
 outc6a.nice.names$oc[outc6a.nice.names$oc=="poor.oc"]<-"Poor (<6/60)"
 
-write.table(outc6a.nice.names,here("outputs", ID, "summary", "data", "t21.csv"),row.names=F,col.names=T,sep=",")
+write.table(outc6a.nice.names,here("outputs", ID, "summary", "data", "t24.csv"),row.names=F,col.names=T,sep=",")
 
 names(outc6a.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
 
@@ -769,7 +849,7 @@ outc6b.nice.names$oc[outc6b.nice.names$oc=="good.oc"]<-"Good (6/12)"
 outc6b.nice.names$oc[outc6b.nice.names$oc=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
 outc6b.nice.names$oc[outc6b.nice.names$oc=="poor.oc"]<-"Poor (<6/60)"
 
-write.table(outc6b.nice.names,here("outputs", ID, "summary", "data", "t22.csv"),row.names=F,col.names=T,sep=",")
+write.table(outc6b.nice.names,here("outputs", ID, "summary", "data", "t25.csv"),row.names=F,col.names=T,sep=",")
 
 names(outc6b.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
 
@@ -799,7 +879,7 @@ Trad. = Traditional setting
 
 Refractive error as a cause of vision impairment is defined as better eye PVA worse than 6/12 improving to 6/12 with pinhole. Note: As these estimates are based on presenting VA, i.e., with correction if available, participants with corrected refractive error are not included, only those with under- or uncorrected refractive error.
 
-## Table 23, table 24
+## Table 26, table 27
 
 ```{r new_tab_4a,echo=FALSE}
 
@@ -822,7 +902,7 @@ newtab4.nice.names$total.ci<-paste0(newtab4.nice.names$total.pct.lci," - ",newta
 
 newtab4a.nice.names<-newtab4.nice.names[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(newtab4a.nice.names,here("outputs", ID, "summary", "data", "t23.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab4a.nice.names,here("outputs", ID, "summary", "data", "t26.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab4a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
@@ -837,7 +917,7 @@ knitr::kable(newtab4a.nice.names, booktabs=T, linesep = "", caption = "Crude pre
 
 newtab4b.nice.names<-newtab4.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
 
-write.table(newtab4b.nice.names,here("outputs", ID, "summary", "data", "t24.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab4b.nice.names,here("outputs", ID, "summary", "data", "t27.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab4b.nice.names)<-c("","%","95% CI","Extraplotated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magintude")
 
@@ -849,7 +929,7 @@ knitr::kable(newtab4b.nice.names, booktabs=T, linesep = "", caption = "Adjusted 
 
 ```
 
-## Table 25
+## Table 28
 
 Refractive error coverage (REC) is defined as (A + B) / (A + B + C)
 
@@ -883,7 +963,7 @@ newtab5.nice.names$total.adj.pct.ci<-paste0(newtab5.nice.names$total.adj.pct.lci
 
 newtab5.nice.names<-newtab5.nice.names[,c("rec_metric","female.adj.pct","female.adj.pct.ci","male.adj.pct","male.adj.pct.ci","total.adj.pct","total.adj.pct.ci")]
 
-write.table(newtab5.nice.names,here("outputs", ID, "summary", "data", "t25.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab5.nice.names,here("outputs", ID, "summary", "data", "t28.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab5.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %", "95% CI")
 
@@ -896,7 +976,7 @@ knitr::kable(newtab5.nice.names, booktabs=T, linesep = "", caption = "Adjusted d
 
 ```
 
-## Table 26
+## Table 29
 
 ```{r new_tab_6,echo=FALSE}
 
@@ -908,7 +988,7 @@ newtab6.nice.names$specs[newtab6.nice.names$specs=="near"]<-"Near vision spectac
 newtab6.nice.names$specs[newtab6.nice.names$specs=="distance"]<-"Distance vision 
 spectacles"
 
-write.table(newtab6.nice.names,here("outputs", ID, "summary", "data", "t26.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab6.nice.names,here("outputs", ID, "summary", "data", "t29.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab6.nice.names)<-c("","n","%","n","%","n","%")
 
