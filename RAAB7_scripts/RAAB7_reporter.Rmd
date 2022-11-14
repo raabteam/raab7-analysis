@@ -1,7 +1,7 @@
 ---
 output:
   pdf_document:
-    toc: TRUE
+    toc: FALSE
 ---
 
 ```{r setup, include=FALSE}
@@ -32,23 +32,20 @@ dir.create(here("outputs",ID,"/summary/data"))
 dir.create(here("outputs",ID,"/raw"))
 dir.create(here("outputs",ID,"/raw/data"))
 
-raab<-read.csv(here("data", resident.data))
-raab$raab_id<-raab$regionId
+raab_merged<-read.csv(here("data", "surveys.csv"))
+raab<-raab_merged[raab_merged$raab_id==ID,]
+raab$finished<-as.Date(raab$finished)
 
-pop<-read.csv(here("data", pop.data))
-pop$raab_id<-pop$regionId
+pop_merged<-read.csv(here("data", "population.csv"))
+pop<-pop_merged[pop_merged$raab_id==ID,]
 popfives<-pop
 
 mrm_vars<-c("raab_id","survey_title","year_end","iso_2","level1","level2","osm_id","iso3166-1","iso3166-2","admin_level","national","sample_size","response_rate","raab_version","va_threshold","raab_dr","raab_wgq","iceh_data","pi_name","pi_institution","pi_email1","trainer_name","trainer_email1","implementing_org","facilitating_org","funder","pub_doi1","pub_doi2","pub_doi3")
 
-raab_meta<-meta[meta$regionId==ID,mrm_vars]
-raab_meta<-raab_meta[!is.na(raab_meta$raab_id),]
+meta<-read.csv(here("data","raab-log_v5.csv"))
+raab_meta<-meta[meta$raab_id==ID,mrm_vars]
 PI<-raab_meta$pi_name
 TITLE<-raab_meta$survey_title
-
-# write.table(raab_meta,file=paste0(outdir,"/raw/meta.csv"),row.names=F,col.names=T,sep=",",na="")
-# write.table(raab,file=paste0(outdir,"/raw/data/survey_data.csv"),row.names=F,col.names=T,sep=",")
-# write.table(popfives,file=paste0(outdir,"/raw/data/population.csv"),row.names=F,col.names=T,sep=",")
 
 write.table(raab_meta, here("outputs", ID, "raw", "meta.csv"),row.names=F,col.names=T,sep=",",na="")
 write.table(raab, here("outputs", ID, "raw", "data", "survey_data.csv"),row.names=F,col.names=T,sep=",")
@@ -62,10 +59,9 @@ source(here("RAAB7_scripts", "raab_functions.R"))
 title: Rapid Assessment of Avoidable Blindness
 subtitle: Report of findings from `r TITLE`
 author: Principal Investigator `r PI`
-date: Report generated `r format(Sys.time(), '%d %B %Y')`
 output:
   pdf_document: 
-    toc: TRUE
+    toc: FALSE
 header-includes:
 - \usepackage{float}
 - \usepackage{tabu}
@@ -81,6 +77,20 @@ tables:
 
 source(here("RAAB7_scripts","RAAB7_report_setup.R"))
 
+```
+
+\center
+
+Survey completed: `r format(max(raab$finished), '%d %B %Y')` 
+
+Report generated: `r format(Sys.time(), '%d %B %Y')`
+
+\raggedright
+
+
+
+```{=latex}
+\tableofcontents
 ```
 
 \newpage
