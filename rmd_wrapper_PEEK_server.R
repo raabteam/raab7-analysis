@@ -7,10 +7,11 @@
 #This script should be run in a folder where raw RAAB data are contained in data subfolder
 
 rm(list = ls())
-#setwd("path/to/folder")
+# setwd("/raab7")
 require(rmarkdown)
 require(here)
-ID<-<SURVEY ID>
+arguments <- commandArgs(trailingOnly = TRUE)
+ID <- arguments[1]
 render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
 unlink(here("outputs", "summary", "*_files"),recursive=T)
 unlink(here("RAAB7_scripts", "*.log"))
