@@ -32,4 +32,4 @@ dr.last.exam.table[nrow(dr.last.exam.table)+1,2:7]<-colSums(dr.last.exam.table[,
 dr.last.exam.table$last.dr.exam[5]<-"Total"
 
 pcts <- grep("pct",names(dr.last.exam.table))
-dr.last.exam.table[,pcts] <- round(dr.last.exam.table[,pcts] * 100, 1)
+dr.last.exam.table[,pcts] <- format( round(dr.last.exam.table[,pcts] * 100, 1), nsmall=1)

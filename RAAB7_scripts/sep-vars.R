@@ -131,25 +131,25 @@ for (i in 1:length(vi.levels))
   income.vi$just.enough.pct[i]<-sum(raab[raab$income==2,vi.levels[i]],na.rm=T)/sum(raab$vi.denom[raab$income==2],na.rm=T)
   income.vi$more.enough.pct[i]<-sum(raab[raab$income==3,vi.levels[i]],na.rm=T)/sum(raab$vi.denom[raab$income==3],na.rm=T)
 
-  income.vi$not.enough.pct.lci[i]<-bennett.lci(income.vi$not.enough.pct[i],raab[raab$income==1,vi.levels[i]],raab$vi.denom[raab$income==1],raab$clusterNumber[raab$income==1])
-  income.vi$just.enough.pct.lci[i]<-bennett.lci(income.vi$just.enough.pct[i],raab[raab$income==2,vi.levels[i]],raab$vi.denom[raab$income==2],raab$clusterNumber[raab$income==2])
-  income.vi$more.enough.pct.lci[i]<-bennett.lci(income.vi$more.enough.pct[i],raab[raab$income==3,vi.levels[i]],raab$vi.denom[raab$income==3],raab$clusterNumber[raab$income==3])
+  income.vi$not.enough.pct.lci[i]<-bennett.lci(income.vi$not.enough.pct[i],raab[raab$income==1,vi.levels[i]],raab$vi.denom[raab$income==1],raab$clusterId[raab$income==1])
+  income.vi$just.enough.pct.lci[i]<-bennett.lci(income.vi$just.enough.pct[i],raab[raab$income==2,vi.levels[i]],raab$vi.denom[raab$income==2],raab$clusterId[raab$income==2])
+  income.vi$more.enough.pct.lci[i]<-bennett.lci(income.vi$more.enough.pct[i],raab[raab$income==3,vi.levels[i]],raab$vi.denom[raab$income==3],raab$clusterId[raab$income==3])
   
-  income.vi$not.enough.pct.uci[i]<-bennett.uci(income.vi$not.enough.pct[i],raab[raab$income==1,vi.levels[i]],raab$vi.denom[raab$income==1],raab$clusterNumber[raab$income==1])
-  income.vi$just.enough.pct.uci[i]<-bennett.uci(income.vi$just.enough.pct[i],raab[raab$income==2,vi.levels[i]],raab$vi.denom[raab$income==2],raab$clusterNumber[raab$income==2])
-  income.vi$more.enough.pct.uci[i]<-bennett.uci(income.vi$more.enough.pct[i],raab[raab$income==3,vi.levels[i]],raab$vi.denom[raab$income==3],raab$clusterNumber[raab$income==3])
+  income.vi$not.enough.pct.uci[i]<-bennett.uci(income.vi$not.enough.pct[i],raab[raab$income==1,vi.levels[i]],raab$vi.denom[raab$income==1],raab$clusterId[raab$income==1])
+  income.vi$just.enough.pct.uci[i]<-bennett.uci(income.vi$just.enough.pct[i],raab[raab$income==2,vi.levels[i]],raab$vi.denom[raab$income==2],raab$clusterId[raab$income==2])
+  income.vi$more.enough.pct.uci[i]<-bennett.uci(income.vi$more.enough.pct[i],raab[raab$income==3,vi.levels[i]],raab$vi.denom[raab$income==3],raab$clusterId[raab$income==3])
 
   income.vi$not.enough.adj.pct[i]<-prop.age.sex.adjust(popfives, raab[raab$income==1,], raab[raab$income==1,vi.levels[i]], raab$vi.denom[raab$income==1])
   income.vi$just.enough.adj.pct[i]<-prop.age.sex.adjust(popfives, raab[raab$income==2,], raab[raab$income==2,vi.levels[i]], raab$vi.denom[raab$income==2])
   income.vi$more.enough.adj.pct[i]<-prop.age.sex.adjust(popfives, raab[raab$income==3,], raab[raab$income==3,vi.levels[i]], raab$vi.denom[raab$income==3])
   
-  income.vi$not.enough.adj.pct.lci[i]<-bennett.lci(income.vi$not.enough.adj.pct[i],raab[raab$income==1,vi.levels[i]],raab$vi.denom[raab$income==1],raab$clusterNumber[raab$income==1])
-  income.vi$just.enough.adj.pct.lci[i]<-bennett.lci(income.vi$just.enough.adj.pct[i],raab[raab$income==2,vi.levels[i]],raab$vi.denom[raab$income==2],raab$clusterNumber[raab$income==2])
-  income.vi$more.enough.adj.pct.lci[i]<-bennett.lci(income.vi$more.enough.adj.pct[i],raab[raab$income==3,vi.levels[i]],raab$vi.denom[raab$income==3],raab$clusterNumber[raab$income==3])
+  income.vi$not.enough.adj.pct.lci[i]<-bennett.lci(income.vi$not.enough.adj.pct[i],raab[raab$income==1,vi.levels[i]],raab$vi.denom[raab$income==1],raab$clusterId[raab$income==1])
+  income.vi$just.enough.adj.pct.lci[i]<-bennett.lci(income.vi$just.enough.adj.pct[i],raab[raab$income==2,vi.levels[i]],raab$vi.denom[raab$income==2],raab$clusterId[raab$income==2])
+  income.vi$more.enough.adj.pct.lci[i]<-bennett.lci(income.vi$more.enough.adj.pct[i],raab[raab$income==3,vi.levels[i]],raab$vi.denom[raab$income==3],raab$clusterId[raab$income==3])
   
-  income.vi$not.enough.adj.pct.uci[i]<-bennett.uci(income.vi$not.enough.adj.pct[i],raab[raab$income==1,vi.levels[i]],raab$vi.denom[raab$income==1],raab$clusterNumber[raab$income==1])
-  income.vi$just.enough.adj.pct.uci[i]<-bennett.uci(income.vi$just.enough.adj.pct[i],raab[raab$income==2,vi.levels[i]],raab$vi.denom[raab$income==2],raab$clusterNumber[raab$income==2])
-  income.vi$more.enough.adj.pct.uci[i]<-bennett.uci(income.vi$more.enough.adj.pct[i],raab[raab$income==3,vi.levels[i]],raab$vi.denom[raab$income==3],raab$clusterNumber[raab$income==3])
+  income.vi$not.enough.adj.pct.uci[i]<-bennett.uci(income.vi$not.enough.adj.pct[i],raab[raab$income==1,vi.levels[i]],raab$vi.denom[raab$income==1],raab$clusterId[raab$income==1])
+  income.vi$just.enough.adj.pct.uci[i]<-bennett.uci(income.vi$just.enough.adj.pct[i],raab[raab$income==2,vi.levels[i]],raab$vi.denom[raab$income==2],raab$clusterId[raab$income==2])
+  income.vi$more.enough.adj.pct.uci[i]<-bennett.uci(income.vi$more.enough.adj.pct[i],raab[raab$income==3,vi.levels[i]],raab$vi.denom[raab$income==3],raab$clusterId[raab$income==3])
   
 }
 
@@ -204,25 +204,25 @@ for (i in 1:length(vi.levels))
   food.vi$just.enough.pct[i]<-sum(raab[raab$sep_food_adequacy=="sep_food_adequacy_adequate",vi.levels[i]],na.rm=T)/sum(raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_adequate"],na.rm=T)
   food.vi$more.enough.pct[i]<-sum(raab[raab$sep_food_adequacy=="sep_food_adequacy_more",vi.levels[i]],na.rm=T)/sum(raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_more"],na.rm=T)
   
-  food.vi$not.enough.pct.lci[i]<-bennett.lci(food.vi$not.enough.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_less",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_less"],raab$clusterNumber[raab$sep_food_adequacy=="sep_food_adequacy_less"])
-  food.vi$just.enough.pct.lci[i]<-bennett.lci(food.vi$just.enough.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_adequate",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_adequate"],raab$clusterNumber[raab$sep_food_adequacy=="sep_food_adequacy_adequate"])
-  food.vi$more.enough.pct.lci[i]<-bennett.lci(food.vi$more.enough.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_more",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_more"],raab$clusterNumber[raab$sep_food_adequacy=="sep_food_adequacy_more"])
+  food.vi$not.enough.pct.lci[i]<-bennett.lci(food.vi$not.enough.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_less",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_less"],raab$clusterId[raab$sep_food_adequacy=="sep_food_adequacy_less"])
+  food.vi$just.enough.pct.lci[i]<-bennett.lci(food.vi$just.enough.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_adequate",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_adequate"],raab$clusterId[raab$sep_food_adequacy=="sep_food_adequacy_adequate"])
+  food.vi$more.enough.pct.lci[i]<-bennett.lci(food.vi$more.enough.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_more",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_more"],raab$clusterId[raab$sep_food_adequacy=="sep_food_adequacy_more"])
   
-  food.vi$not.enough.pct.uci[i]<-bennett.uci(food.vi$not.enough.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_less",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_less"],raab$clusterNumber[raab$sep_food_adequacy=="sep_food_adequacy_less"])
-  food.vi$just.enough.pct.uci[i]<-bennett.uci(food.vi$just.enough.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_adequate",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_adequate"],raab$clusterNumber[raab$sep_food_adequacy=="sep_food_adequacy_adequate"])
-  food.vi$more.enough.pct.uci[i]<-bennett.uci(food.vi$more.enough.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_more",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_more"],raab$clusterNumber[raab$sep_food_adequacy=="sep_food_adequacy_more"])
+  food.vi$not.enough.pct.uci[i]<-bennett.uci(food.vi$not.enough.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_less",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_less"],raab$clusterId[raab$sep_food_adequacy=="sep_food_adequacy_less"])
+  food.vi$just.enough.pct.uci[i]<-bennett.uci(food.vi$just.enough.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_adequate",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_adequate"],raab$clusterId[raab$sep_food_adequacy=="sep_food_adequacy_adequate"])
+  food.vi$more.enough.pct.uci[i]<-bennett.uci(food.vi$more.enough.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_more",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_more"],raab$clusterId[raab$sep_food_adequacy=="sep_food_adequacy_more"])
   
   food.vi$not.enough.adj.pct[i]<-prop.age.sex.adjust(popfives, raab[raab$sep_food_adequacy=="sep_food_adequacy_less",], raab[raab$sep_food_adequacy=="sep_food_adequacy_less",vi.levels[i]], raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_less"])
   food.vi$just.enough.adj.pct[i]<-prop.age.sex.adjust(popfives, raab[raab$sep_food_adequacy=="sep_food_adequacy_adequate",], raab[raab$sep_food_adequacy=="sep_food_adequacy_adequate",vi.levels[i]], raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_adequate"])
   food.vi$more.enough.adj.pct[i]<-prop.age.sex.adjust(popfives, raab[raab$sep_food_adequacy=="sep_food_adequacy_more",], raab[raab$sep_food_adequacy=="sep_food_adequacy_more",vi.levels[i]], raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_more"])
   
-  food.vi$not.enough.adj.pct.lci[i]<-bennett.lci(food.vi$not.enough.adj.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_less",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_less"],raab$clusterNumber[raab$sep_food_adequacy=="sep_food_adequacy_less"])
-  food.vi$just.enough.adj.pct.lci[i]<-bennett.lci(food.vi$just.enough.adj.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_adequate",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_adequate"],raab$clusterNumber[raab$sep_food_adequacy=="sep_food_adequacy_adequate"])
-  food.vi$more.enough.adj.pct.lci[i]<-bennett.lci(food.vi$more.enough.adj.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_more",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_more"],raab$clusterNumber[raab$sep_food_adequacy=="sep_food_adequacy_more"])
+  food.vi$not.enough.adj.pct.lci[i]<-bennett.lci(food.vi$not.enough.adj.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_less",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_less"],raab$clusterId[raab$sep_food_adequacy=="sep_food_adequacy_less"])
+  food.vi$just.enough.adj.pct.lci[i]<-bennett.lci(food.vi$just.enough.adj.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_adequate",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_adequate"],raab$clusterId[raab$sep_food_adequacy=="sep_food_adequacy_adequate"])
+  food.vi$more.enough.adj.pct.lci[i]<-bennett.lci(food.vi$more.enough.adj.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_more",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_more"],raab$clusterId[raab$sep_food_adequacy=="sep_food_adequacy_more"])
   
-  food.vi$not.enough.adj.pct.uci[i]<-bennett.uci(food.vi$not.enough.adj.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_less",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_less"],raab$clusterNumber[raab$sep_food_adequacy=="sep_food_adequacy_less"])
-  food.vi$just.enough.adj.pct.uci[i]<-bennett.uci(food.vi$just.enough.adj.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_adequate",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_adequate"],raab$clusterNumber[raab$sep_food_adequacy=="sep_food_adequacy_adequate"])
-  food.vi$more.enough.adj.pct.uci[i]<-bennett.uci(food.vi$more.enough.adj.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_more",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_more"],raab$clusterNumber[raab$sep_food_adequacy=="sep_food_adequacy_more"])
+  food.vi$not.enough.adj.pct.uci[i]<-bennett.uci(food.vi$not.enough.adj.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_less",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_less"],raab$clusterId[raab$sep_food_adequacy=="sep_food_adequacy_less"])
+  food.vi$just.enough.adj.pct.uci[i]<-bennett.uci(food.vi$just.enough.adj.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_adequate",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_adequate"],raab$clusterId[raab$sep_food_adequacy=="sep_food_adequacy_adequate"])
+  food.vi$more.enough.adj.pct.uci[i]<-bennett.uci(food.vi$more.enough.adj.pct[i],raab[raab$sep_food_adequacy=="sep_food_adequacy_more",vi.levels[i]],raab$vi.denom[raab$sep_food_adequacy=="sep_food_adequacy_more"],raab$clusterId[raab$sep_food_adequacy=="sep_food_adequacy_more"])
   
 }
 
