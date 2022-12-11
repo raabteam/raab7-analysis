@@ -28,7 +28,7 @@
 
 #2. Navigate to downloaded folder (replace path with)
 rm(list = ls())
-setwd("X:/path/to/folder")
+setwd("../raab7")
 
 
 #3. Load packages needed for wrapper script - others will be loaded in reporter script
