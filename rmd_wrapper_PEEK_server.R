@@ -13,7 +13,7 @@ require(rmarkdown)
 require(here)
 arguments <- commandArgs(trailingOnly = TRUE)
 ID <- arguments[1]
-ID<-SURVEY_ID
+ID<-"b871319b-08ee-4508-bd41-413733c51075"
 DR_check<-read.csv(here("data", "surveys.csv"))
 DR_check<-DR_check[DR_check$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
 

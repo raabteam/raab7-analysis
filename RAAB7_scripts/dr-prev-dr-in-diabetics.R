@@ -243,8 +243,10 @@ any.dr.mac.laser.prev[,ucis][any.dr.mac.laser.prev[,ucis]>1]<-1
 
 pcts <- grep("pct",names(any.dr.mac.laser.prev))
 any.dr.mac.laser.prev[,pcts] <- round(any.dr.mac.laser.prev[,pcts] * 100, 1)
+any.dr.mac.laser.prev[,pcts] <- format(any.dr.mac.laser.prev[,pcts], nsmall=1)
 
 ret.mac.prev <- rbind(dr.ret.prev, dr.mac.prev)
 
 pcts <- grep("pct",names(ret.mac.prev))
 ret.mac.prev[,pcts] <- round(ret.mac.prev[,pcts] * 100, 1)
+ret.mac.prev[,pcts] <- format(ret.mac.prev[,pcts], nsmall=1)

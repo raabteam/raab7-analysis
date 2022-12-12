@@ -78,5 +78,11 @@ dm.prev.total$total.pct.uci <- bennett.uci(dm.prev.total$total.pct, raab$diabete
 dm.prev.final <- rbind(dm.prev, dm.prev.total)
 dm.prev.final[5,1] <- "Total"
 
+lcis<-grep("lci",names(dm.prev.final))
+ucis<-grep("uci",names(dm.prev.final))
+dm.prev.final[,lcis][dm.prev.final[,lcis]<0]<-0
+dm.prev.final[,ucis][dm.prev.final[,ucis]>1]<-1
+
 pcts <- grep("pct",names(dm.prev.final))
 dm.prev.final[,pcts] <- round(dm.prev.final[,pcts] * 100, 1)
+dm.prev.final[,pcts] <- format(dm.prev.final[,pcts], nsmall=1)
