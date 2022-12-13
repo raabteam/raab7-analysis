@@ -27,7 +27,7 @@
 
 #2. Navigate to downloaded folder (replace path with)
 rm(list = ls())
-setwd("X:/path/to/folder")
+setwd("../raab7")
 
 
 #3. Load packages needed for wrapper script - others will be loaded in reporter script
@@ -36,7 +36,7 @@ require(readxl)
 require(here)
 
 #4. Read in meta file and trim unused rows
-meta<-read_xlsx(here('data', "raab-log_v5.xlsx"))
+meta<-read_xlsx(here('data', "meta_data_logfile.xlsx"))
 meta[meta=="NA"]<-NA
 meta<-meta[!is.na(meta$raab_id),]
 

@@ -23,12 +23,12 @@
 #install.packages("treemap")
 #install.packages("maditr")
 
-#1. Download all RAAB7 scripts and save in a folder. Download most recent version of raab_logfile from sharepoint
+#1. Download all RAAB7 scripts and save in a folder. Download most recent version of meta_data_logfile from sharepoint
 
 
 #2. Navigate to downloaded folder (replace path with)
 rm(list = ls())
-setwd("X:/path/to/folder")
+setwd("../raab7")
 
 
 #3. Load packages needed for wrapper script - others will be loaded in reporter script
@@ -37,15 +37,15 @@ require(readxl)
 require(here)
 
 #4. Read in meta file and trim unused rows
-meta<-read_xlsx(here('data', "raab-log_v5.xlsx"))
+meta<-read_xlsx(here('data', "meta_data_logfile.xlsx"))
 meta[meta=="NA"]<-NA
 meta<-meta[!is.na(meta$raab_id),]
 
 #5. Set data file names and retrieve RAAB ID
 
 #For RAAB5 and 6 [no alphanumeric region ID]
-#raab_id_hr<-"2015_Uganda_Northern_Karamoja"
-#raab_id<-"2015_Uganda_Northern_Karamoja"
+#raab_id_hr<-<HUMAN READABLE SUVEY ID>
+#raab_id<-<HUMAN READABLE SUVEY ID>
 #resident.data<-read.csv(here("data","raabs_618.csv"))
 #raab<-resident.data[resident.data$raab_id==raab_id,]
 #population.data<-read.csv(here("data","raabs_pop_618_repo.csv"))
@@ -53,17 +53,13 @@ meta<-meta[!is.na(meta$raab_id),]
 #ID<-raab_id
 
 #For RAAB7 [alphanumeric region ID]
-raab_id_hr<-"2022_Tanzania_Kilimanjaro"
-resident.data<-"tanzania.csv"
-raab<-read.csv(here("data", resident.data))
-pop.data<-"tanzania_pop.csv"
-raab_id<-raab$regionId[1]
-ID<-"7ba2a0bb-4d30-4672-9432-f100a910d6cb"
+ID<-<ALPHANUMERIC ID>
+raab<-read.csv(here("data", "surveys.csv"))
 
 #6. Run appropriate reporter script
 #render(here("RAAB5_scripts","RAAB5_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
 #render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
-render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
+render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
 #render(here("RAAB7_scripts","DR_RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
 
 #7. Delete intermediate files

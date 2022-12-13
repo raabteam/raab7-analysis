@@ -1,7 +1,7 @@
 ---
 output:
   pdf_document:
-    toc: TRUE
+    toc: FALSE
 ---
 
 ```{r setup, include=FALSE}
@@ -33,6 +33,7 @@ dir.create(here("outputs",ID,"/raw/data"))
 
 raab<-read.csv(here("data","raabs_612.csv"))
 raab<-raab[raab$raab_id==ID,]
+raab$finished<-as.Date(raab$finished)
 
 pop<-read.csv(here("data","raabs_pop_612_repo.csv"))
 popfives<-pop[pop$raab_id==ID,]
@@ -57,10 +58,9 @@ source(here("RAAB6_scripts","raab_functions.R"))
 title: Rapid Assessment of Avoidable Blindness
 subtitle: Report of findings from `r TITLE`
 author: Principal Investigator `r PI`
-date: Report generated `r format(Sys.time(), '%d %B %Y')`
 output:
   pdf_document: 
-    toc: TRUE
+    toc: FALSE
 header-includes:
 - \usepackage{float}
 - \usepackage{tabu}
@@ -72,6 +72,18 @@ tables:
 
 source(here("RAAB6_scripts","RAAB6_report_setup.R"))
 
+```
+
+\center
+
+Survey completed: `r format(max(raab$finished), '%d %B %Y')` 
+
+Report generated: `r format(Sys.time(), '%d %B %Y')`
+
+\center
+
+```{=latex}
+\tableofcontents
 ```
 
 \newpage
