@@ -7,12 +7,12 @@
 
 surgery.bars<-as.data.frame(c(
   "surgery_none_reason_unaware",
-  "surgery_none_reason_other",
   "surgery_none_reason_denied",
   "surgery_none_reason_access",
   "surgery_none_reason_cost",
   "surgery_none_reason_unnecessary",
-  "surgery_none_reason_fear"))
+  "surgery_none_reason_fear",
+  "surgery_none_reason_other"))
 
 names(surgery.bars)<-"Barrier"
 for (i in 1:nrow(surgery.bars))

@@ -376,6 +376,8 @@ raab <- raab %>% mutate(
   
 )
 
+raab$surgery_none_reason<-paste0("first_",raab$surgery_none_reason_1," second_",raab$surgery_none_reason_2)
+
 #Refractive error 
 
 raab <- raab %>% mutate(
@@ -431,14 +433,14 @@ raab <- raab %>% mutate(
 
 raab <- raab %>% mutate(
   
-  aa_case = case_when(raab$spectacles_used_distance==TRUE & raab$better.eye.ucva>0.3 & raab$better.eye.cva==0.3 ~ 1, TRUE ~ 0)
+  aa_case = case_when(raab$spectacles_used_distance=="true" & raab$better.eye.ucva>0.3 & raab$better.eye.cva==0.3 ~ 1, TRUE ~ 0)
 
   )
 
 raab <- raab %>% mutate(
   
-  bb_case = case_when(raab$aa_case==0 & raab$spectacles_used_distance==TRUE & raab$better.eye.ucva>0.3 & raab$better.eye.cva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0),
-  cc_case = case_when(raab$spectacles_used_distance==FALSE & raab$better.eye.ucva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0)
+  bb_case = case_when(raab$aa_case==0 & raab$spectacles_used_distance=="true" & raab$better.eye.ucva>0.3 & raab$better.eye.cva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0),
+  cc_case = case_when(raab$spectacles_used_distance=="false" & raab$better.eye.ucva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0)
 
   )
 
