@@ -33,15 +33,9 @@ setwd("../raab7")
 
 #3. Load packages needed for wrapper script - others will be loaded in reporter script
 require(rmarkdown)
-require(readxl)
 require(here)
 
-#4. Read in meta file and trim unused rows
-meta<-read_xlsx(here('data', "meta_data_logfile.xlsx"))
-meta[meta=="NA"]<-NA
-meta<-meta[!is.na(meta$raab_id),]
-
-#5. Set data file names and retrieve RAAB ID
+#4. Set data file names and retrieve RAAB ID
 
 #For RAAB5 and 6 [no alphanumeric region ID]
 #raab_id_hr<-<HUMAN READABLE SUVEY ID>
@@ -53,16 +47,29 @@ meta<-meta[!is.na(meta$raab_id),]
 #ID<-raab_id
 
 #For RAAB7 [alphanumeric region ID]
-ID<-<ALPHANUMERIC ID>
-raab<-read.csv(here("data", "surveys.csv"))
+ID<-<surveyID>
 
-#6. Run appropriate reporter script
+DR_check<-read.csv(here("data", "surveys.csv"))
+DR_check<-DR_check[DR_check$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
+
+#5. Run appropriate reporter script
 #render(here("RAAB5_scripts","RAAB5_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
 #render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
-render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
-#render(here("RAAB7_scripts","DR_RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
 
-#7. Delete intermediate files
+if(sum(!is.na(DR_check$dr_diabetes_blood_consent)==TRUE)>0)
+{
+  render(here("RAAB7_scripts","DR_RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
+} else {
+  render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
+}
+
 unlink(here("outputs", "summary", "*_files"),recursive=T)
+unlink(here("RAAB7_scripts", "*.log"))
+
+#6. Delete intermediate files
+unlink(here("outputs", "summary", "*_files"),recursive=T)
+
+
+
 
 

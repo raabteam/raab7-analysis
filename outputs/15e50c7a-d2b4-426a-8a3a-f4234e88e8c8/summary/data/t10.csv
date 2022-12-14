@@ -1,0 +1,16 @@
+"principal.cause","female.n","female.pct","male.n","male.pct","total.n","total.pct"
+"1. Uncorrected refractive error",0,0,0,0,0,0
+"2. Uncorrected aphakia",0,0,0,0,0,0
+"3. Untreated cataract",23,65.7,11,64.7,34,65.4
+"4. Cataract surgical complications",3,8.6,1,5.9,4,7.7
+"5. Trachomatous corneal opacity",0,0,0,0,0,0
+"6. Other corneal opacity",7,20,3,17.6,10,19.2
+"7. Phthisis",0,0,0,0,0,0
+"8. Onchocerciasis",0,0,0,0,0,0
+"9. Glaucoma",0,0,0,0,0,0
+"10. Diabetic retinopathy",0,0,0,0,0,0
+"11. Age-related macular degeneration",1,2.9,1,5.9,2,3.8
+"12. Other posterior segment disease",1,2.9,1,5.9,2,3.8
+"13. Myopic degeneration",0,0,0,0,0,0
+"14. Other globe or CNS abnomalities",0,0,0,0,0,0
+"Total",35,100,17,100,52,100

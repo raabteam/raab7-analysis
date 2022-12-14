@@ -711,7 +711,7 @@ knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted c
   pack_rows("Cataract surgical threshold <6/18",3,4) %>%
   pack_rows("Cataract surgical threshold <6/60",5,6) %>%
   pack_rows("Cataract surgical threshold <3/60",7,8) %>%
-  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2," Relative Quality Gap" = 1),bold=T) %>%
+  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2,"Relative Quality Gap" = 1),bold=T) %>%
   add_footnote("CSC: Cataract Surgical Coverage; eCSC: Effective Cataract Surgical Coverage",notation="symbol")
 
 
