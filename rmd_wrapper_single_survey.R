@@ -63,12 +63,12 @@ if(sum(!is.na(DR_check$dr_diabetes_blood_consent)==TRUE)>0)
   render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
 }
 
-unlink(here("outputs", "summary", "*_files"),recursive=T)
-unlink(here("RAAB7_scripts", "*.log"))
-
 #6. Delete intermediate files
 unlink(here("outputs", "summary", "*_files"),recursive=T)
 
+unlink(here("RAAB5_scripts", "*.log"))
+unlink(here("RAAB6_scripts", "*.log"))
+unlink(here("RAAB7_scripts", "*.log"))
 
 
 
