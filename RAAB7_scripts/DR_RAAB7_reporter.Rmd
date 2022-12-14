@@ -38,8 +38,6 @@ raab<-raab_merged[raab_merged$raab_id==ID,]
 raab$date<-as.Date(raab$date)
 
 pop_merged<-read.csv(here("data", "population.csv"))
-
-													   
 									   
 pop<-pop_merged[pop_merged$raab_id==ID,]
 popfives<-pop
@@ -557,7 +555,6 @@ catops.nice.names<-catops
 
 write.table(catops.nice.names,here("outputs", ID, "summary", "data", "t14.csv"),row.names=F,col.names=T,sep=",")
 
-  
 catops.nice.names$cat.ops[catops.nice.names$cat.ops=="bilateral.operated"]<-"Bilateral operated"
 catops.nice.names$cat.ops[catops.nice.names$cat.ops=="unilateral.operated"]<-"Unilateral operated"
 catops.nice.names$cat.ops[catops.nice.names$cat.ops=="total.operated"]<-"Total operated"
