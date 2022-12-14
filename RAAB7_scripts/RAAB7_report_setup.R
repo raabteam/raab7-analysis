@@ -4,6 +4,7 @@
 # v3 30.06.22 IM - ADDITION OF NEW ECSC TERMS, NEW WGQ VARIABLES, NEW DR VARIABLES
 # v4 09.08.22 IM - added myopic degeneration to list of VI causes
 # v5 18.08.22 IM - fix to new eCSC calculation x and a case defs
+# v6 13.12.22 IM - update to definition of cataract operated eye
 
 # Script to create new variables to support major data analyses and visualisations (age group and vision impairment category)
 
@@ -135,14 +136,18 @@ raab <- raab %>% mutate(
   left_operable_360 = case_when((raab$lens_status_left=="lens_status_opacity" & raab$poor_vision_cause_left=="poor_vision_cause_cataract_untreated" & (raab$left_distance_acuity_pinhole>=1.8)) ~ 1, TRUE ~ 0),
  
 #Operated definition 1: Any aphakia
-  
  #right_operated = case_when((raab$lens_status_right=="lens_status_absent" | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0),
  #left_operated = case_when((raab$lens_status_left=="lens_status_absent" | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0)
   
-#Operated definition 2: Excluded couched eyes from aphakia definition
-  right_operated = case_when(((raab$lens_status_right=="lens_status_absent" & raab$surgery_type_right!="surgery_type_couching") | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0),
-  left_operated = case_when(((raab$lens_status_left=="lens_status_absent" & raab$surgery_type_left!="surgery_type_couching") | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0)
+#Operated definition 2: Excludes couched eyes from aphakia definition
+  # right_operated = case_when(((raab$lens_status_right=="lens_status_absent" & raab$surgery_type_right!="surgery_type_couching") | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0),
+  # left_operated = case_when(((raab$lens_status_left=="lens_status_absent" & raab$surgery_type_left!="surgery_type_couching") | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0)
+  # )
+
+#Operated definition 3: Excludes couched eyes and includes "no view of lens" if cataract surgical complications is recorded as cause of poor vision
   
+  right_operated = case_when(((raab$lens_status_right=="lens_status_absent" & raab$surgery_type_right!="surgery_type_couching") | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco" | (raab$lens_status_right=="lens_status_no_view" & raab$poor_vision_cause_right=="poor_vision_cause_cataract_surgical_complications")) ~ 1, TRUE ~ 0),
+  left_operated = case_when(((raab$lens_status_left=="lens_status_absent" & raab$surgery_type_left!="surgery_type_couching") | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco" | (raab$lens_status_left=="lens_status_no_view" & raab$poor_vision_cause_left=="poor_vision_cause_cataract_surgical_complications")) ~ 1, TRUE ~ 0)
 )
 
 

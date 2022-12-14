@@ -620,12 +620,11 @@ knitr::kable(catcovdenom.b.nice.names, booktabs=T, linesep = "", caption = "Extr
 
 ```
 
-The number of people at each threshold here correspond to the unmet need for cataract surgery in the calculation for effective cataract surgical coverage (see notes). People with unmet need may have cataract in one or both eyes. Those with cataract in one eye and another cause of VI in the other eye would potentially benefit from cataract surgery. This group with unilateral cataract excludes people with refractive error or uncorrected aphakia in the other eye.
+The number of people at each PinVA threshold in these tables correspond to the unmet need for cataract surgery in the calculation for effective cataract surgical coverage (see notes). People with unmet need for surgery may have cataract in one or both eyes. Those with cataract in one eye and different cause of VI in the other eye would potentially benefit from cataract surgery. Note, this group with unilateral cataract excludes people with previous cataract surgery, refractive error or uncorrected aphakia in the non-cataract eye.
 
 ## Table 17, table 18
 
-In tables 17 & 18, the unmet need for cataract surgery is broken down by bilateral and unilateral cataract cases at each of the cataract surgical thresholds. Here, cataract cases are defined by the presence of an obvious lens opacity and assignment as the main cause of vision impairment.
-
+In tables 17 & 18, the unmet need for cataract surgery is broken down by bilateral and unilateral cataract cases at each of the cataract surgical thresholds. Here, cataract cases are defined by the presence of an obvious lens opacity and assignment of cataract as the main cause of vision impairment in both eyes (bilateral) or only one eye (unilateral).
 
 ```{r asa7a, echo=FALSE}
 
@@ -650,7 +649,7 @@ knitr::kable(asa7a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
   pack_rows("Bilateral",1,4) %>%
   pack_rows("Unilateral",5,8) %>%
   add_header_above(c("Cataract surgical threshold" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) %>%
-  add_footnote("Unilateral refers to cases where the other eye has PVA of 6/12",notation="symbol")
+  add_footnote("Unilateral cases can have any level of VA in the eye without operable cataract",notation="symbol")
 
 ```
 
@@ -678,11 +677,11 @@ knitr::kable(asa7b.nice.names, booktabs=T, linesep = "", caption = "Adjusted pre
   pack_rows("Bilateral",1,4) %>%
   pack_rows("Unilateral",5,8) %>%
   add_header_above(c("Cataract surgical threshold" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) %>%
-  add_footnote("Unilateral refers to cases where the other eye has PVA of 6/12",notation="symbol")
+  add_footnote("Unilateral cases can have any level of VA in the eye without operable cataract",notation="symbol")
 
 ```
 
-The cataract surgical thresholds (based on PinVA) used in Tables 17 & 18 describe the prevalence and magnitude of operable cataract at WHO vision impairment thresholds. They are used in the definitions of cataract surgical coverage and effective cataract surgical coverage (Table 18).
+These tables enable planning the number of surgeries required to eliminate vision impairment from cataract at a particular PinVA threshold. Assuming services will aim to operate on all eyes of people with vision impairing cataract, two surgeries are required for ‘bilateral cases’ and one surgery is required for ‘unilateral cases’.
 
 ## Table 19
 
@@ -712,13 +711,13 @@ knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted c
   pack_rows("Cataract surgical threshold <6/18",3,4) %>%
   pack_rows("Cataract surgical threshold <6/60",5,6) %>%
   pack_rows("Cataract surgical threshold <3/60",7,8) %>%
-  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2,"Quality Gap" = 1),bold=T) %>%
+  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2," Relative Quality Gap" = 1),bold=T) %>%
   add_footnote("CSC: Cataract Surgical Coverage; eCSC: Effective Cataract Surgical Coverage",notation="symbol")
 
 
 ```
 
-CSC measures the accessibility of cataract surgical services. It describes the number of people in a population with operated cataract as a proportion of those having operated cataract plus people with cataract and pinhole visual acuity worse than a specified surgical threshold (sometimes referred to as operable cataract). Effective CSC (eCSC) is a quality-corrected version of the same metric. It describes the number of people with operated cataract and a good (6/12 or better PVA) post-operative visual acuity outcome as a proportion of those having operated plus operable cataract. This indicator therefore incorporates a measure of service quality concurrently with access. eCSC and CSC are reported at four cataract surgical thresholds. The gap between CSC and eCSC values can be considered a quality gap; the relative quality gap is calculated as (total CSC–total eCSC)/ total CSC, with lower values reflecting better quality of cataract surgical services.  
+Effective cataract surgical coverage (eCSC) measures the number of people in a population who have been operated on for cataract, and had a good outcome (at least 6/12 post-operative presenting VA), as a proportion of all people operated on or still requiring surgery. Therefore, eCSC describes service access (ie, cataract surgical coverage, [CSC]) adjusted for quality. eCSC and CSC are reported at four cataract surgical thresholds. The gap between CSC and eCSC values can be considered a quality gap; the relative quality gap is calculated as (total CSC–total eCSC)/ total CSC, with lower values reflecting better quality of cataract surgical services. See notes section for more details.
 
 ## Table 20
 
@@ -941,17 +940,7 @@ knitr::kable(newtab4b.nice.names, booktabs=T, linesep = "", caption = "Adjusted 
 
 ## Table 28
 
-Refractive error coverage (REC) is defined as (A + B) / (A + B + C)
-
-Effective refractive error coverage (eREC) is defined as (A) / (A + B + C)
-
-where:
-
-A = Individuals who present with spectacles or contact lenses for distance and whose UCVA is \<6/12 in the better eye and CVA is 6/12 in the better eye (Met Need)
-
-B = Individuals who present with spectacles or contact lenses for distance and whose UCVA is \<6/12 in the better eye and whose CVA is \<6/12 in the better eye, but who improve to 6/12 on PinVA (Undermet Need)
-
-C = Individuals who present without spectacles and whose UCVA is \<6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
+Effective refractive error coverage (eREC) measures the number of people in a population in need of optical correction who have received correction and had a good outcome (ie, can see at least 6/12 corrected) as a proportion of all people in need of optical correction who have accessed correction or still require it. Therefore, eREC describes service access (ie, refractive error coverage, [REC]) adjusted for quality. See notes section for more details.
 
 Note: Both indicators refer to distance refractive error
 
@@ -1042,19 +1031,19 @@ VI = Vision impairment
 
 Historic RAAB survey data variables have been updated to align with RAAB7 variable names and levels. RAAB7 records visual acuity in logMAR notation (or a code number representing light perception)
 
-0.3 = Can see 6/12 [1]
+0.3 = Can see 6/12
 
-0.47 = Cannot see 6/12 but can see 6/18 [2]
+0.47 = Cannot see 6/12 but can see 6/18
 
-1.0 = Cannot see 6/18 but can see 6/60 [3]
+1.0 = Cannot see 6/18 but can see 6/60
 
-1.3 = Cannot see 6/60 but can see 3/60 [4]
+1.3 = Cannot see 6/60 but can see 3/60
 
-1.8 = Cannot see 3/60 but can see 1/60 [5]
+1.8 = Cannot see 3/60 but can see 1/60
 
-3 = Light perception [6]
+3 = Light perception
 
-4 = No light perception [7]
+4 = No light perception
 
 ## Bilateral VI
 
@@ -1080,7 +1069,7 @@ Mild VI: PVA less than 6/12 to 6/18 in one eye, PVA 6/12 in the other eye
 
 Cataract surgical threshold (operable cataract): PinVA at \<3/60, \<6/60 and \<6/18 thresholds plus lens opacity plus untreated cataract as principal cause
 
-Operated cataract: Aphakia (excluding couched eyes) or pseudoaphakia (with or without posterior capsule opacification [PCO])
+Operated cataract: Aphakia (excluding couched eyes) or pseudoaphakia (with or without posterior capsule opacification [PCO]) or no view of lens but cataract surgical complications as cause of vision impairment
 
 ## Cataract surgical coverage (CSC) and effective cataract surgical coverage (eCSC)
 
@@ -1102,6 +1091,7 @@ Y = individuals with bilateral operated cataract (regardless of visual acuity in
 
 Z = individuals with BCVA <6/12 in both eyes with cataract as the main cause of vision impairment in one or both eyes
 
+For more information see: McCormick, I, Butcher, R, Evans, JR et al. Effective cataract surgical coverage in adults aged 50 years and older: estimates from population-based surveys in 55 countries. Lancet Global Health. 2022. https://doi.org/10.1016/S2214-109X(22)00419-3 
 
 ## Refractive error coverage (REC) and effective refractive error coverage (eREC)
 
@@ -1117,7 +1107,7 @@ B = Individuals who present with spectacles or contact lenses for distance and w
 
 C = Individuals who present without spectacles and whose UCVA is \<6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
 
-Note: This is the 'gold-standard' eREC calculation described here: McCormick I, Mactaggart I, Bastawrous A, Burton MJ, Ramke J. Effective refractive error coverage: an eye health indicator to measure progress towards universal health coverage. Ophthalmic Physiol Opt. 2020;40(1):1-5. <doi:10.1111/opo.12662>
+Note: This is the 'gold-standard' eREC calculation described here: McCormick I, Mactaggart I, Bastawrous A, Burton MJ, Ramke J. Effective refractive error coverage: an eye health indicator to measure progress towards universal health coverage. Ophthalmic Physiol Opt. 2020;40(1):1-5. https://doi:10.1111/opo.12662
 
 ## 95% Confidence Interval
 
