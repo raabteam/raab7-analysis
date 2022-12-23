@@ -47,10 +47,13 @@ require(here)
 #ID<-raab_id
 
 #For RAAB7 [alphanumeric region ID]
-ID<-<surveyID>
+ID<-"6dc67dae-48fd-4b79-9ca4-f0f2a0fb0d0c"
 
 DR_check<-read.csv(here("data", "surveys.csv"))
-DR_check<-DR_check[DR_check$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
+DR_check<-DR_check[DR_check$regionId==ID,c('raab_id','dr_diabetes_blood_consent')]
+
+WGQ_check<-read.csv(here("data", "surveys.csv"))
+WGQ_check<-WGQ_check[WGQ_check$raab_id==ID,c('raab_id',)]
 
 #5. Run appropriate reporter script
 #render(here("RAAB5_scripts","RAAB5_reporter.Rmd"), output_file = here("outputs", paste0(raab_id_hr,"_report")), output_dir = here("outputs", ID, "summary"))
@@ -70,6 +73,7 @@ unlink(here("RAAB5_scripts", "*.log"))
 unlink(here("RAAB6_scripts", "*.log"))
 unlink(here("RAAB7_scripts", "*.log"))
 
-
+render(here("RAAB7_scripts","RAAB7_DR_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_DR_module_report")), output_dir = here("outputs", ID, "summary"))
+render(here("RAAB7_scripts","RAAB7_WGQ_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_WGQ_module_report")), output_dir = here("outputs", ID, "summary"))
 
 

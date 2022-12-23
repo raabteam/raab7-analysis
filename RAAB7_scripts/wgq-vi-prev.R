@@ -40,18 +40,31 @@ for (i in 1:length(vi.levels))
   wgq.vi.table$any.dis.n[i]<-sum(raab[raab$wgq.dis.any==1,vi.levels[i]])
   wgq.vi.table$any.non.vi.dis.n[i]<-sum(raab[raab$wgq.dis.nonvi==1,vi.levels[i]])
   wgq.vi.table$no.dis.n[i]<-sum(raab[raab$wgq.dis.any==0,vi.levels[i]])
+  
+  wgq.vi.table$any.dis.pct[i]<-sum(raab[raab$wgq.dis.any==1,vi.levels[i]])/sum(raab$wgq.dis.any==1)
+  wgq.vi.table$any.non.vi.dis.pct[i]<-sum(raab[raab$wgq.dis.nonvi==1,vi.levels[i]])/sum(raab$wgq.dis.nonvi==1)
+  wgq.vi.table$no.dis.pct[i]<-sum(raab[raab$wgq.dis.any==0,vi.levels[i]])/sum(raab$wgq.dis.any==0)
 
-  wgq.vi.table$any.dis.pct[i]<-sum(raab[raab$wgq.dis.any==1,vi.levels[i]])/sum(raab$wgq.dis.any==1)*100
-  wgq.vi.table$any.non.vi.dis.pct[i]<-sum(raab[raab$wgq.dis.nonvi==1,vi.levels[i]])/sum(raab$wgq.dis.nonvi==1)*100
-  wgq.vi.table$no.dis.pct[i]<-sum(raab[raab$wgq.dis.any==0,vi.levels[i]])/sum(raab$wgq.dis.any==0)*100
-  
   wgq.vi.table$any.dis.pct.lci[i]<-bennett.lci(wgq.vi.table$any.dis.pct[i],raab[raab$wgq.dis.any==1,vi.levels[i]],raab$vi.denom[raab$wgq.dis.any==1],raab$clusterId[raab$wgq.dis.any==1])
-  wgq.vi.table$any.non.vi.dis.pct.lci[i]<-bennett.lci(wgq.vi.table$any.non.vi.dis.pct[i],raab[raab$wgq.dis.nonvi==1,vi.levels[i]],raab$vi.denom[raab$wgq.dis.nonvi==1],raab$clusterId[raab$wgq.dis.nonvi==1])
-  wgq.vi.table$no.dis.pct.lci[i]<-bennett.lci(wgq.vi.table$no.dis.pct[i],raab[raab$wgq.dis.any==0,vi.levels[i]],raab$vi.denom[raab$wgq.dis.any==0],raab$clusterId[raab$wgq.dis.any==0])
-  
   wgq.vi.table$any.dis.pct.uci[i]<-bennett.uci(wgq.vi.table$any.dis.pct[i],raab[raab$wgq.dis.any==1,vi.levels[i]],raab$vi.denom[raab$wgq.dis.any==1],raab$clusterId[raab$wgq.dis.any==1])
+  wgq.vi.table$any.non.vi.dis.pct.lci[i]<-bennett.lci(wgq.vi.table$any.non.vi.dis.pct[i],raab[raab$wgq.dis.nonvi==1,vi.levels[i]],raab$vi.denom[raab$wgq.dis.nonvi==1],raab$clusterId[raab$wgq.dis.nonvi==1])
   wgq.vi.table$any.non.vi.dis.pct.uci[i]<-bennett.uci(wgq.vi.table$any.non.vi.dis.pct[i],raab[raab$wgq.dis.nonvi==1,vi.levels[i]],raab$vi.denom[raab$wgq.dis.nonvi==1],raab$clusterId[raab$wgq.dis.nonvi==1])
+  wgq.vi.table$no.dis.pct.lci[i]<-bennett.lci(wgq.vi.table$no.dis.pct[i],raab[raab$wgq.dis.any==0,vi.levels[i]],raab$vi.denom[raab$wgq.dis.any==0],raab$clusterId[raab$wgq.dis.any==0])
   wgq.vi.table$no.dis.pct.uci[i]<-bennett.uci(wgq.vi.table$no.dis.pct[i],raab[raab$wgq.dis.any==0,vi.levels[i]],raab$vi.denom[raab$wgq.dis.any==0],raab$clusterId[raab$wgq.dis.any==0])
   
-  # No ASA included here
+  wgq.vi.table$any.dis.adj.pct[i]<-prop.age.sex.adjust(popfives,raab,raab[raab$wgq.dis.any==1,vi.levels[i]],raab$vi.denom[raab$wgq.dis.any==1])
+  wgq.vi.table$any.non.vi.dis.adj.pct[i]<-prop.age.sex.adjust(popfives,raab,raab[raab$wgq.dis.nonvi==1,vi.levels[i]],raab$vi.denom[raab$wgq.dis.nonvi==1])
+  wgq.vi.table$no.dis.adj.pct[i]<-prop.age.sex.adjust(popfives,raab,raab[raab$wgq.dis.any==0,vi.levels[i]],raab$vi.denom[raab$wgq.dis.any==0])
+  
+  wgq.vi.table$any.dis.adj.pct.lci[i]<-bennett.lci(wgq.vi.table$any.dis.adj.pct[i],raab[raab$wgq.dis.any==1,vi.levels[i]],raab$vi.denom[raab$wgq.dis.any==1],raab$clusterId[raab$wgq.dis.any==1])
+  wgq.vi.table$any.dis.adj.pct.uci[i]<-bennett.uci(wgq.vi.table$any.dis.adj.pct[i],raab[raab$wgq.dis.any==1,vi.levels[i]],raab$vi.denom[raab$wgq.dis.any==1],raab$clusterId[raab$wgq.dis.any==1])
+  wgq.vi.table$any.non.vi.dis.adj.pct.lci[i]<-bennett.lci(wgq.vi.table$any.non.vi.dis.adj.pct[i],raab[raab$wgq.dis.nonvi==1,vi.levels[i]],raab$vi.denom[raab$wgq.dis.nonvi==1],raab$clusterId[raab$wgq.dis.nonvi==1])
+  wgq.vi.table$any.non.vi.dis.adj.pct.uci[i]<-bennett.uci(wgq.vi.table$any.non.vi.dis.adj.pct[i],raab[raab$wgq.dis.nonvi==1,vi.levels[i]],raab$vi.denom[raab$wgq.dis.nonvi==1],raab$clusterId[raab$wgq.dis.nonvi==1])
+  wgq.vi.table$no.dis.adj.pct.lci[i]<-bennett.lci(wgq.vi.table$no.dis.adj.pct[i],raab[raab$wgq.dis.any==0,vi.levels[i]],raab$vi.denom[raab$wgq.dis.any==0],raab$clusterId[raab$wgq.dis.any==0])
+  wgq.vi.table$no.dis.adj.pct.uci[i]<-bennett.uci(wgq.vi.table$no.dis.adj.pct[i],raab[raab$wgq.dis.any==0,vi.levels[i]],raab$vi.denom[raab$wgq.dis.any==0],raab$clusterId[raab$wgq.dis.any==0])
+  
 }  
+
+pcts<-grep("pct",names(wgq.vi.table))
+wgq.vi.table[,pcts]<-round(wgq.vi.table[,pcts]*100,1)
+wgq.vi.table[,pcts]<-format(wgq.vi.table[,pcts], nsmall=1)
