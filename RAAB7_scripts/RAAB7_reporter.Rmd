@@ -6,20 +6,20 @@ output:
 
 ```{r setup, include=FALSE}
 
-require(rmarkdown)
-require(readxl)
-require(knitr)
-require(tinytex)
-require(kableExtra)
-require(float)
-require(RColorBrewer)
+library(rmarkdown)
+library(readxl)
+library(knitr)
+library(tinytex)
+library(kableExtra)
+library(float)
+library(RColorBrewer)
 #install_tinytex()
 
-require(tidyverse)
-require(stringr)
-require(treemap)
-require(maditr)
-require(here)
+library(tidyverse)
+library(stringr)
+library(treemap)
+library(maditr)
+library(here)
 
 options(knitr.table.format = "latex")
 knitr::opts_chunk$set(echo = FALSE)
