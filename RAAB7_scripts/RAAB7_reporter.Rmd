@@ -58,7 +58,8 @@ source(here("RAAB7_scripts", "raab_functions.R"))
 ```
 
 ---
-title: Rapid Assessment of Avoidable Blindness
+title: |
+ <center>Rapid Assessment of Avoidable Blindness
 subtitle: Report of findings from `r TITLE`
 author: Principal Investigator `r PI`
 output:
