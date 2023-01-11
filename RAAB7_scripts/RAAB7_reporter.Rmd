@@ -1,7 +1,7 @@
 ---
 output:
-  pdf_document:
-    toc: FALSE
+ pdf_document:
+  toc: FALSE
 ---
 
 ```{r setup, include=FALSE}
@@ -62,8 +62,10 @@ title: Rapid Assessment of Avoidable Blindness
 subtitle: Report of findings from `r TITLE`
 author: Principal Investigator `r PI`
 output:
-  pdf_document:
-    toc: FALSE
+ pdf_document:
+  toc: FALSE
+tables:
+ yes
 header-includes:
 - \usepackage{float}
 - \usepackage{tabu}
@@ -71,8 +73,6 @@ header-includes:
 - \usepackage{fancyhdr}
 - \fancypagestyle{plain}{\pagestyle{fancy}}
 - \fancyhead[R]{\includegraphics[width=5cm]{logo.png}}
-tables:
-  yes
 ---
 
 ```{r raab_report_setup, include=FALSE}
@@ -416,7 +416,9 @@ sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_myopic_degeneration" ]<-"Myopic degeneration"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"Other globe or CNS abnomalities"
 
-treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="index",palette = "Spectral",title="Principal causes of bilateral blindness",position.legend="right",fontsize.title=12)
+core_fig_cols<-brewer.pal(8,"Spectral")
+
+treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="index",palette = core_fig_cols, title="Principal causes of bilateral blindness",position.legend="right",fontsize.title=12)
 
 ```
 

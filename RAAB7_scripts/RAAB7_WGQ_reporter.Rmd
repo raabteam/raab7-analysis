@@ -1,7 +1,7 @@
 ---
 output:
-  pdf_document:
-    toc: FALSE
+ pdf_document:
+  toc: FALSE
 ---
 
 ```{r setup, include=FALSE}
@@ -60,15 +60,17 @@ source(here("RAAB7_scripts", "raab_functions.R"))
 
 ---
 title: |
-  <center>Rapid Assessment of Avoidable Blindness
-  <center>Washington Group Questions module sub-report 
+ <center>Rapid Assessment of Avoidable Blindness
+ <center>Washington Group Questions module sub-report 
 subtitle: |
-  | 
-  | Sub-report of findings from `r TITLE`
+ | 
+ | Sub-report of findings from `r TITLE`
 author: Principal Investigator `r PI`
 output:
-  pdf_document:
-    toc: FALSE
+ pdf_document:
+  toc: FALSE
+tables: 
+ yes
 header-includes:
 - \usepackage{float}
 - \usepackage{tabu}
@@ -76,8 +78,6 @@ header-includes:
 - \usepackage{fancyhdr}
 - \fancypagestyle{plain}{\pagestyle{fancy}}
 - \fancyhead[R]{\includegraphics[width=5cm]{logo.png}}
-tables:
-  yes
 ---
 
 ```{r raab_report_setup, include=FALSE}
