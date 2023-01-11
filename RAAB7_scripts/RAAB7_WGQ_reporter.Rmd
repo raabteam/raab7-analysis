@@ -61,7 +61,7 @@ source(here("RAAB7_scripts", "raab_functions.R"))
 ---
 title: |
  <center>Rapid Assessment of Avoidable Blindness
- <center>Washington Group Questions module sub-report 
+ <center>Washington Group Questions module sub-report
 subtitle: |
  | 
  | Sub-report of findings from `r TITLE`
@@ -69,7 +69,7 @@ author: Principal Investigator `r PI`
 output:
  pdf_document:
   toc: FALSE
-tables: 
+tables:
  yes
 header-includes:
 - \usepackage{float}
