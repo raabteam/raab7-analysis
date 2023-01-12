@@ -102,15 +102,23 @@ Report generated: `r format(Sys.time(), '%d %B %Y')`
 
 # Washington Group Questions
 
-The United Nations Convention on the Rights of Persons with Disabilities (UN CRPD, 2006) defines disability as “long-term physical, mental, intellectual or sensory impairments which, in interaction with various barriers, may hinder [a person’s] full and effective participation in society on an equal basis with others”. 
+The United Nations Convention on the Rights of Persons with Disabilities (UN CRPD, 2006) defines disability as “long-term physical, mental, intellectual or sensory impairments which, in interaction with various barriers, may hinder [a person’s] full and effective participation in society on an equal basis with others”. Measuring disability in RAAB allows us to determine how common disability is in the population 50 years and older, whether people with disabilities have equal access to eye health services or not, and what other functional limitations (e.g. hearing, mobility) people with vision impairment may have.
 
-The Washington Group Questions (WGQs) were developed by the Washington City Group, who were set up by the United Nations Statistical Division. They do NOT ask people whether or not they think they have a disability. Disability is strongly stigmatised in many settings, so instead they ask about difficulties in functioning, in line with the International Classification of Functioning, Disability and Health (the ICF).
+The Washington Group Questions (WGQs) were developed by the Washington City Group, who were set up by the United Nations Statistical Division. They are the main tool used to measure disability in national census’ and other population-based surveys. They do NOT ask people whether or not they think they have a disability. Disability is strongly stigmatised in many settings, so instead they ask about difficulties in functioning, in line with the International Classification of Functioning, Disability and Health (the ICF) and the CRPD.
 
-  \begin{figure}
-    \centering
-    \includegraphics[width=5cm]{disability_impact.png}
-    \caption{A schematic representation of the ways in which disability affects individuals and systems }
-  \end{figure}
+The most commonly used WG module is the Short Set, which is used in RAAB and outlined below. Participants are read each question, followed by four response options, in turn.
+
+1. Do you have difficulty in seeing, even if wearing glasses?
+2. Do you have difficulty in hearing, even if using a hearing aid?
+3. Do you have difficulty walking or climbing steps?
+4. Do you have difficulty remembering or concentrating?
+5. Do you have difficulty with self-care, such as washing all over or dressing?
+6. Using your usual language, do you have difficulty communicating, for example understanding or being understood?
+
+Response options: no difficulty, some difficulty, a lot of difficulty, cannot do at all
+
+Any participant reporting “a lot” or greater difficulty in any domain is considered to have a disability. The seeing domain will capture many people with vision impairment identified through VA screening, but also people with other types of vision loss such as contrast sensitivity, stereoacuity or visual fields . It can also provide information on how people with reduced VA perceive their vision loss.
+
 
 ## Table WGQ1
 
@@ -163,9 +171,7 @@ legend("topleft",c("Vision","Hearing","Mobility","Memory","Communication","Self-
 
 ```
 
-Comment on prevalence of disability with age.
-
-Comment on comparison of VI and eCSC among people with disability as a key equity indicator.
+Disability prevalence commonly increases with age on account of many age-related conditions that can affect functioning (e.g. cataract, ARMD, presbycusis, arthritis, dementia). Global population ageing means that without healthcare service intervention, prevalence estimates are likely to increase over time.
 
 ## Table WGQ2
 
