@@ -207,6 +207,12 @@ prev14$total.adjusted.uci[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="
 prev14$total.adjusted.uci[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="660"]<- bennett.uci(prev14$total.adjusted[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="660"],raab$ecsc.360.660.num.persons,raab$denom.660.persons,raab$clusterNumber)
 prev14$total.adjusted.uci[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="360"]<- bennett.uci(prev14$total.adjusted[prev14$num.thresh=="ecsc_360" & prev14$denom.thresh=="360"],raab$ecsc.360.360.num.persons,raab$denom.360.persons,raab$clusterNumber)
 
+prev14$quality_gap<-NA
+
+prev14$quality_gap[prev14$denom.thresh=="618" & prev14$num.thresh=="ecsc_618"]<-(prev14$total.adjusted[prev14$denom.thresh=="618" & prev14$num.thresh=="csc"]-prev14$total.adjusted[prev14$denom.thresh=="618" & prev14$num.thresh=="ecsc_618"])/prev14$total.adjusted[prev14$denom.thresh=="618" & prev14$num.thresh=="csc"]
+prev14$quality_gap[prev14$denom.thresh=="660" & prev14$num.thresh=="ecsc_618"]<-(prev14$total.adjusted[prev14$denom.thresh=="660" & prev14$num.thresh=="csc"]-prev14$total.adjusted[prev14$denom.thresh=="660" & prev14$num.thresh=="ecsc_618"])/prev14$total.adjusted[prev14$denom.thresh=="660" & prev14$num.thresh=="csc"]
+prev14$quality_gap[prev14$denom.thresh=="360" & prev14$num.thresh=="ecsc_618"]<-(prev14$total.adjusted[prev14$denom.thresh=="360" & prev14$num.thresh=="csc"]-prev14$total.adjusted[prev14$denom.thresh=="360" & prev14$num.thresh=="ecsc_618"])/prev14$total.adjusted[prev14$denom.thresh=="360" & prev14$num.thresh=="csc"]
+
 lcis<-grep("lci",names(prev14))
 ucis<-grep("uci",names(prev14))
 prev14[,lcis][prev14[,lcis]<0]<-0

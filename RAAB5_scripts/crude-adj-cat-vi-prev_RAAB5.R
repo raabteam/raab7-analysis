@@ -268,3 +268,4 @@ asa7[,pcts] <- format( asa7[,pcts], nsmall=1 )
 asa7[c(4,8),c(2:ncol(asa7))]<-"*"
 asa7$out.names[1:4]<-paste0("bilateral_cataract_",asa7$vi.level[1:4])
 asa7$out.names[5:8]<-paste0("unilateral_cataract_",asa7$vi.level[5:8])
+
