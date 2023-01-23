@@ -18,6 +18,11 @@ library(here)
 arguments <- commandArgs(trailingOnly = TRUE)
 ID <- arguments[1]
 
+checker<-read.csv(here("data", "surveys.csv"))
+DR_check<-checker[checker$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
+WQ_check<-checker[checker$raab_id==ID,c('raab_id',"wg_difficulty_seeing","wg_difficulty_hearing","wg_difficulty_memory","wg_difficulty_mobility","wg_difficulty_selfcare","wg_difficulty_communication")]
+remove(checker)
+
 #Running core analyses on everything
 
 render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
