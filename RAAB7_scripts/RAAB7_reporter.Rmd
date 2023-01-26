@@ -72,7 +72,9 @@ header-includes:
 - \usepackage{fancyhdr}
 - \fancypagestyle{plain}{\pagestyle{fancy}}
 - \fancyhead[R]{\includegraphics[width=5cm]{logo.png}}
+
 ---
+
 
 ```{r raab_report_setup, include=FALSE}
 
@@ -1180,7 +1182,7 @@ knitr::kable(any.dr.mac.laser.prev.nice.names, booktabs=T, linesep = "", caption
 
 ```{r, eval=sum(!is.na(DR_check$dr_diabetes_blood_consent)==TRUE)>0}
 
-asis_output("## Table DR6)
+asis_output("## Table DR6")
 
 ```
 
