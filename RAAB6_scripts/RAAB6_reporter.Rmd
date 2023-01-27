@@ -1372,7 +1372,7 @@ Y = individuals with bilateral operated cataract (regardless of visual acuity in
 
 Z = individuals with BCVA <6/12 in both eyes with cataract as the main cause of vision impairment in one or both eyes
 
-For more information see: McCormick, I, Butcher, R, Evans, JR et al. Effective cataract surgical coverage in adults aged 50 years and older: estimates from population-based surveys in 55 countries. Lancet Global Health. 2022. https://doi.org/10.1016/S2214-109X(22)00419-3 
+For more information see: McCormick I, Butcher R, Evans JR et al. Effective cataract surgical coverage in adults aged 50 years and older: estimates from population-based surveys in 55 countries. Lancet Global Health. 2022. https://doi.org/10.1016/S2214-109X(22)00419-3 
 
 ## Refractive error coverage (REC) and effective refractive error coverage (eREC)
 
@@ -1382,13 +1382,13 @@ eREC is defined as (A) / (A + B + C)
 
 where:
 
-A = Individuals who present with spectacles or contact lenses for distance and whose UCVA is \<6/12 in the better eye and CVA is 6/12 in the better eye (Met Need)
+A = Individuals who present with spectacles or contact lenses for distance and whose PVA is 6/12 in the better eye (Met Need)
 
-B = Individuals who present with spectacles or contact lenses for distance and whose UCVA is \<6/12 in the better eye and whose CVA is \<6/12 in the better eye, but who improve to 6/12 on PinVA (Undermet Need)
+B = Individuals who present with spectacles or contact lenses for distance and whose PVA is <6/12 in the better eye, but who improve to 6/12 on PinVA in the better eye (Undermet Need)
 
-C = Individuals who present without spectacles and whose UCVA is \<6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
+C = Individuals who present without spectacles or contact lenses for distance and whose PVA is <6/12 in the better eye, but who improve to 6/12 on PinVA in the better eye (Unmet Need)
 
-Note: This is the 'gold-standard' eREC calculation described here: McCormick I, Mactaggart I, Bastawrous A, Burton MJ, Ramke J. Effective refractive error coverage: an eye health indicator to measure progress towards universal health coverage. Ophthalmic Physiol Opt. 2020;40(1):1-5. https://doi:10.1111/opo.12662
+Note: This is an ‘alternative’ definition of eREC, used where uncorrected VA measurements are not available. It makes an assumption that all participants wearing correction for PVA measurement cannot see 6/12 without them and may over-estimate coverage compared to the ‘gold-standard’ calculation. For more information see: Keel S, Muller A, Block S et al. Keeping an eye on eye care: monitoring progress towards effective coverage. Lancet Global Health. 2021. https://doi.org/10.1016/S2214-109X(21)00212-6
 
 ## 95% Confidence Interval
 
