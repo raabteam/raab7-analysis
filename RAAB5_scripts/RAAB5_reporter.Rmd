@@ -950,32 +950,31 @@ Moderate VI: PVA less than 6/18 to 6/60 in one eye, PVA 6/18 in the other eye
 
 ## Cataract-related VI and surgical outcomes
 
-Operable cataract: PinVA at <3/60, <6/60 and <6/18 thresholds plus lens opacity plus untreated cataract as principal cause
+Cataract surgical threshold (operable cataract): PinVA at \<3/60, \<6/60 and \<6/18 thresholds plus lens opacity plus untreated cataract as principal cause
 
-Operated cataract: Aphakia or pseudoaphakia (with or without posterior capsule opacification [PCO]) 
+Operated cataract: Aphakia (excluding couched eyes) or pseudoaphakia (with or without posterior capsule opacification [PCO]) or no view of lens but cataract surgical complications as cause of vision impairment
 
-## Cataract surgical coverage (CSC)
+## Cataract surgical coverage (CSC) and effective cataract surgical coverage (eCSC)
 
-CSC is calculated at the person level, not by eyes, and calculated at various thresholds of operable cataract (see above).
+eCSC and CSC are calculated at the person level, not by eyes, and calculated at various cataract surgical thresholds.
 
 CSC is defined as (X + Y) / (X + Y + Z)
 
 eCSC is defined as (A + B) / (X + Y + Z)
 
-where:
+where, e.g., at the <6/12 cataract surgical threshold:
 
-A = individuals with unilateral operated cataract attaining 6/18 or better post-operative presenting VA in the operated eye, who have vision impairment from any cause in the other eye
+A = individuals with unilateral operated cataract attaining 6/12 or better post-operative presenting VA in the operated eye, who have BCVA <6/12 in the other eye
 
-B = individuals with bilateral operated cataract attaining 6/18 or better post-operative presenting VA in at least one eye
+B = individuals with bilateral operated cataract attaining 6/12 or better post-operative presenting VA in at least one eye
 
-X = individuals with unilateral pseudo/aphakia (i.e. operated cataract, excluding couched eyes) and vision impairment in the other eye
+X = individuals with unilateral operated cataract (regardless of visual acuity in the operated eye) and BCVA <6/12 in the other eye
 
-Y = individuals with bilateral pseudo/aphakia (i.e. operated cataract, excluding couched eyes), regardless of post-operative presenting visual acuity
+Y = individuals with bilateral operated cataract (regardless of visual acuity in the operated eyes)
 
-Z = individuals with bilateral operable cataract
+Z = individuals with BCVA <6/12 in both eyes with cataract as the main cause of vision impairment in one or both eyes
 
-
-For further information, see: Ramke J, Gilbert CE, Lee AC, Ackland P, Limburg H, Foster A (2017) Effective cataract surgical coverage: An indicator for measuring quality-of-care in the context of Universal Health Coverage. PLoS ONE 12(3): e0172342. doi:10.1371/journal.pone.0172342
+For more information see: McCormick I, Butcher R, Evans JR et al. Effective cataract surgical coverage in adults aged 50 years and older: estimates from population-based surveys in 55 countries. Lancet Global Health. 2022. https://doi.org/10.1016/S2214-109X(22)00419-3
 
 ## 95% Confidence Interval
 
