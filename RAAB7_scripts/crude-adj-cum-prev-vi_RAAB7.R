@@ -49,9 +49,9 @@ for (i in 1:length(cumulative.vi))
 }  
 
 
-asa6$extrapolated.female.n <- format( asa6$female.adj.pct * sum(female.subpop$population), digits = 1, big.interval = 3L, big.mark = " ", scientific=F)
-asa6$extrapolated.male.n<-format( asa6$male.adj.pct * sum(male.subpop$population), digits = 1, big.interval = 3L, big.mark = " ", scientific=F)
-asa6$extrapolated.total.n<-format( asa6$total.adj.pct * sum(popfives$population), digits = 1, big.interval = 3L, big.mark = " ", scientific=F)
+asa6$extrapolated.female.n <- format( asa6$female.adj.pct * sum(female.subpop$population), digits = 1, scientific=F)
+asa6$extrapolated.male.n<-format( asa6$male.adj.pct * sum(male.subpop$population), digits = 1, scientific=F)
+asa6$extrapolated.total.n<-format( asa6$total.adj.pct * sum(popfives$population), digits = 1, scientific=F)
 
 lcis<-grep("lci",names(asa6))
 ucis<-grep("uci",names(asa6))

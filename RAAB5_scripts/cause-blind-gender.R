@@ -39,6 +39,22 @@ prev4$cause_group_1[prev4$principal.cause=="poor_vision_cause_trachomatous_corne
 prev4$cause_group_1[prev4$principal.cause=="poor_vision_cause_cataract_surgical_complications" | prev4$principal.cause=="poor_vision_cause_glaucoma" | prev4$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"C. Preventable (Ophthalmic services) (4, 9, 10)"
 prev4$cause_group_2[prev4$principal.cause=="poor_vision_cause_onchocerciasis" | prev4$principal.cause=="poor_vision_cause_glaucoma" | prev4$principal.cause=="poor_vision_cause_diabetic_retinopathy" | prev4$principal.cause=="poor_vision_cause_age_related_macular_degeneration" | prev4$principal.cause=="poor_vision_cause_other_posterior_segment_disease"]<-"E. Posterior segment disease (8, 9, 10, 11, 12)"
 
+prev4intag<-aggregate(prev4[,2:7],by=list(prev4$cause_group_1), FUN=sum,na.rm=T)
+prev4intag[nrow(prev4intag)+1,2:7]<-colSums(prev4intag[1:3,2:7])
+prev4intag$Group.1[4]<-"D. Avoidable (A + B + C)"
+
+pcts<-grep("pct",names(prev4intag))
+prev4intag[,pcts]<-round( prev4intag[,pcts] * 100, 1 )
+prev4intag[,pcts]<-format( prev4intag[,pcts], nsmall=1 )
+
+p4tag<-aggregate(prev4[,2:7],by=list(prev4$cause_group_2), FUN=sum,na.rm=T)
+
+pcts<-grep("pct",names(p4tag))
+p4tag[,pcts]<-round( p4tag[,pcts] * 100, 1 )
+p4tag[,pcts]<-format( p4tag[,pcts], nsmall=1 )
 
 pcts<-grep("pct",names(prev4))
 prev4[,pcts]<-round( prev4[,pcts] * 100, 1 )
+prev4[,pcts]<-format( prev4[,pcts], nsmall=1 )
+
+

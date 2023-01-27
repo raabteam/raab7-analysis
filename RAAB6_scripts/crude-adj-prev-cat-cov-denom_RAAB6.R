@@ -137,9 +137,9 @@ catcovdenom$total.adj.pct.uci[catcovdenom$vi.level=="severe.vi"]<-bennett.uci(ca
 catcovdenom$total.adj.pct.uci[catcovdenom$vi.level=="moderate.vi"]<-bennett.uci(catcovdenom$total.adj.pct[catcovdenom$vi.level=="moderate.vi"], raab$z_case_618, raab$vi.denom,raab$clusterNumber)
 catcovdenom$total.adj.pct.uci[catcovdenom$vi.level=="mild.vi"]<-bennett.uci(catcovdenom$total.adj.pct[catcovdenom$vi.level=="mild.vi"], raab$z_case_612, raab$vi.denom,raab$clusterNumber)
 
-catcovdenom$extrapolated.female.n<-format( catcovdenom$female.adj.pct * sum(female.subpop$population), digits = 1, big.mark = " ", big.interval= 3L, scientific=F)
-catcovdenom$extrapolated.male.n<-format( catcovdenom$male.adj.pct * sum(male.subpop$population), digits = 1, big.mark = " ", big.interval= 3L, scientific=F)
-catcovdenom$extrapolated.total.n<-format( catcovdenom$total.adj.pct * sum(popfives$population), digits = 1, big.mark = " ", big.interval= 3L, scientific=F)
+catcovdenom$extrapolated.female.n<-format( catcovdenom$female.adj.pct * sum(female.subpop$population), digits = 1, scientific=F)
+catcovdenom$extrapolated.male.n<-format( catcovdenom$male.adj.pct * sum(male.subpop$population), digits = 1, scientific=F)
+catcovdenom$extrapolated.total.n<-format( catcovdenom$total.adj.pct * sum(popfives$population), digits = 1, scientific=F)
 
 catcovdenom$vi.level <- recode_factor(catcovdenom$vi.level,"blind" = "PinVA <3/60","severe.vi" = "PinVA <6/60","moderate.vi" = "PinVA <6/18","mild.vi" = "PinVA <6/12")
 

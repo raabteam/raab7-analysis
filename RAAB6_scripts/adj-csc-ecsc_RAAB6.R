@@ -338,3 +338,6 @@ cpcts<-grep("crude",names(prev14))
 prev14[,cpcts] <- round( prev14[,cpcts] * 100, 1)
 prev14[,cpcts] <- format( prev14[,cpcts], nsmall=1)
 
+prev14$quality_gap <- round( prev14$quality_gap * 100, 1)
+prev14$quality_gap[is.na(prev14$quality_gap)]<-""
+prev14$quality_gap <- format( prev14$quality_gap, nsmall=1)

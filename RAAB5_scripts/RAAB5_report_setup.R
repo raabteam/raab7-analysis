@@ -157,12 +157,15 @@ raab <- raab %>%
     
     y_case_618 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
     z_case_618 = case_when((raab$right_distance_acuity_pinhole>0.47 & raab$left_distance_acuity_pinhole>0.47) & (raab$right_operated!=1 & raab$left_operated!=1) & (raab$right_operable_618==1 | raab$left_operable_618==1) ~ 1, TRUE ~ 0),
+    old_z_case_618 = case_when((raab$right_operable_618==1 & raab$left_operable_618==1) ~ 1, TRUE ~ 0),
     
     y_case_660 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
     z_case_660 = case_when((raab$right_distance_acuity_pinhole>1 & raab$left_distance_acuity_pinhole>1) & (raab$right_operated!=1 & raab$left_operated!=1) & (raab$right_operable_660==1 | raab$left_operable_660==1) ~ 1, TRUE ~ 0),
+    old_z_case_660 = case_when((raab$right_operable_660==1 & raab$left_operable_660==1) ~ 1, TRUE ~ 0),
     
     y_case_360 = case_when((raab$right_operated==1 & raab$left_operated==1) ~ 1, TRUE ~ 0),
     z_case_360 = case_when((raab$right_distance_acuity_pinhole>1.3 & raab$left_distance_acuity_pinhole>1.3) & (raab$right_operated!=1 & raab$left_operated!=1) & (raab$right_operable_360==1 | raab$left_operable_360==1) ~ 1, TRUE ~ 0),
+    old_z_case_360 = case_when((raab$right_operable_360==1 & raab$left_operable_360==1) ~ 1, TRUE ~ 0),
     
 #NB syntax is a_case_[operatedthresh]_[operablethresh]
 #eCSC numerator definition 1: cataract as cause of VI in non-operated eye
@@ -200,9 +203,24 @@ raab <- raab %>%
   )
 
 
+# New vars for cataract VI at the person level (aligned with new eCSC definition denominator)
+raab$cataract.blind <- (raab$z_case_360)+0
+raab$cataract.severe.vi <- (raab$z_case_660)+0
+raab$cataract.moderate.vi <- (raab$z_case_618)+0
+
+# Vars for counting operated people (bilateral or unilateral, exclusive categories)
+raab <- raab %>% mutate(
+  bilat.operated = case_when(raab$right_operated==1 & raab$left_operated==1 ~1, TRUE~0)
+)
+raab <- raab %>% mutate(
+  unilat.operated = case_when(bilat.operated!=1 & (raab$right_operated==1 | raab$left_operated==1) ~1, TRUE~0)
+)
+
+raab$total.operated<-(raab$bilat.operated==1 | raab$unilat.operated==1)+0
+
+# Bilateral operable cataract cases used to report barriers to cataract surgery  
 raab$bilateral_operable_cataract<-(raab$right_operable_660==1 & raab$left_operable_660)+0
 
-#
 
 raab <- raab %>% mutate(
   
@@ -479,3 +497,4 @@ raab <- raab %>% mutate(
 )
 
 dr.last.exam <- c("dr_diabetic_last_exam_none", "dr_diabetic_last_exam_0_12_months", "dr_diabetic_last_exam_13_24_months", "dr_diabetic_last_exam_over_24_months")
+
