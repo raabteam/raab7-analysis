@@ -36,101 +36,101 @@ names(asa7bil)<-c("vi.level",
                "extrapolated.total.n")
 
 
-asa7bil$female.n[asa7bil$vi.level=="blind"]<-sum(raab$z_case_360[raab$gender=="female"],na.rm=T)
-asa7bil$female.n[asa7bil$vi.level=="severe.vi"]<-sum(raab$z_case_660[raab$gender=="female"],na.rm=T)
-asa7bil$female.n[asa7bil$vi.level=="moderate.vi"]<-sum(raab$z_case_618[raab$gender=="female"],na.rm=T)
+asa7bil$female.n[asa7bil$vi.level=="blind"]<-sum(raab$old_z_case_360[raab$gender=="female"],na.rm=T)
+asa7bil$female.n[asa7bil$vi.level=="severe.vi"]<-sum(raab$old_z_case_660[raab$gender=="female"],na.rm=T)
+asa7bil$female.n[asa7bil$vi.level=="moderate.vi"]<-sum(raab$old_z_case_618[raab$gender=="female"],na.rm=T)
 
-asa7bil$male.n[asa7bil$vi.level=="blind"]<-sum(raab$z_case_360[raab$gender=="male"],na.rm=T)
-asa7bil$male.n[asa7bil$vi.level=="severe.vi"]<-sum(raab$z_case_660[raab$gender=="male"],na.rm=T)
-asa7bil$male.n[asa7bil$vi.level=="moderate.vi"]<-sum(raab$z_case_618[raab$gender=="male"],na.rm=T)
+asa7bil$male.n[asa7bil$vi.level=="blind"]<-sum(raab$old_z_case_360[raab$gender=="male"],na.rm=T)
+asa7bil$male.n[asa7bil$vi.level=="severe.vi"]<-sum(raab$old_z_case_660[raab$gender=="male"],na.rm=T)
+asa7bil$male.n[asa7bil$vi.level=="moderate.vi"]<-sum(raab$old_z_case_618[raab$gender=="male"],na.rm=T)
 
-asa7bil$total.n[asa7bil$vi.level=="blind"]<-sum(raab$z_case_360,na.rm=T)
-asa7bil$total.n[asa7bil$vi.level=="severe.vi"]<-sum(raab$z_case_660,na.rm=T)
-asa7bil$total.n[asa7bil$vi.level=="moderate.vi"]<-sum(raab$z_case_618,na.rm=T)
+asa7bil$total.n[asa7bil$vi.level=="blind"]<-sum(raab$old_z_case_360,na.rm=T)
+asa7bil$total.n[asa7bil$vi.level=="severe.vi"]<-sum(raab$old_z_case_660,na.rm=T)
+asa7bil$total.n[asa7bil$vi.level=="moderate.vi"]<-sum(raab$old_z_case_618,na.rm=T)
 
-asa7bil$female.pct[asa7bil$vi.level=="blind"]<-sum(raab$z_case_360[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
-asa7bil$female.pct[asa7bil$vi.level=="severe.vi"]<-sum(raab$z_case_660[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
-asa7bil$female.pct[asa7bil$vi.level=="moderate.vi"]<-sum(raab$z_case_618[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
+asa7bil$female.pct[asa7bil$vi.level=="blind"]<-sum(raab$old_z_case_360[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
+asa7bil$female.pct[asa7bil$vi.level=="severe.vi"]<-sum(raab$old_z_case_660[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
+asa7bil$female.pct[asa7bil$vi.level=="moderate.vi"]<-sum(raab$old_z_case_618[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
 
-asa7bil$male.pct[asa7bil$vi.level=="blind"]<-sum(raab$z_case_360[raab$gender=="male"],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
-asa7bil$male.pct[asa7bil$vi.level=="severe.vi"]<-sum(raab$z_case_660[raab$gender=="male"],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
-asa7bil$male.pct[asa7bil$vi.level=="moderate.vi"]<-sum(raab$z_case_618[raab$gender=="male"],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
+asa7bil$male.pct[asa7bil$vi.level=="blind"]<-sum(raab$old_z_case_360[raab$gender=="male"],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
+asa7bil$male.pct[asa7bil$vi.level=="severe.vi"]<-sum(raab$old_z_case_660[raab$gender=="male"],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
+asa7bil$male.pct[asa7bil$vi.level=="moderate.vi"]<-sum(raab$old_z_case_618[raab$gender=="male"],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
 
-asa7bil$total.pct[asa7bil$vi.level=="blind"]<-sum(raab$z_case_360,na.rm=T)/sum(raab$vi.denom,na.rm=T)
-asa7bil$total.pct[asa7bil$vi.level=="severe.vi"]<-sum(raab$z_case_660,na.rm=T)/sum(raab$vi.denom,na.rm=T)
-asa7bil$total.pct[asa7bil$vi.level=="moderate.vi"]<-sum(raab$z_case_618,na.rm=T)/sum(raab$vi.denom,na.rm=T)
+asa7bil$total.pct[asa7bil$vi.level=="blind"]<-sum(raab$old_z_case_360,na.rm=T)/sum(raab$vi.denom,na.rm=T)
+asa7bil$total.pct[asa7bil$vi.level=="severe.vi"]<-sum(raab$old_z_case_660,na.rm=T)/sum(raab$vi.denom,na.rm=T)
+asa7bil$total.pct[asa7bil$vi.level=="moderate.vi"]<-sum(raab$old_z_case_618,na.rm=T)/sum(raab$vi.denom,na.rm=T)
 
-asa7bil$female.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$female.pct[asa7bil$vi.level=="blind"], raab$z_case_360[raab$gender=="female"], raab$vi.denom[raab$gender=="female"], raab$clusterNumber[raab$gender=="female"])
-asa7bil$female.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$female.pct[asa7bil$vi.level=="severe.vi"], raab$z_case_660[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-asa7bil$female.pct.lci[asa7bil$vi.level=="moderate.vi"]<-bennett.lci(asa7bil$female.pct[asa7bil$vi.level=="moderate.vi"], raab$z_case_618[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+asa7bil$female.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$female.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360[raab$gender=="female"], raab$vi.denom[raab$gender=="female"], raab$clusterNumber[raab$gender=="female"])
+asa7bil$female.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$female.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+asa7bil$female.pct.lci[asa7bil$vi.level=="moderate.vi"]<-bennett.lci(asa7bil$female.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
 
-asa7bil$female.pct.uci[asa7bil$vi.level=="blind"]<-bennett.uci(asa7bil$female.pct[asa7bil$vi.level=="blind"], raab$z_case_360[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-asa7bil$female.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$female.pct[asa7bil$vi.level=="severe.vi"], raab$z_case_660[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-asa7bil$female.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$female.pct[asa7bil$vi.level=="moderate.vi"], raab$z_case_618[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+asa7bil$female.pct.uci[asa7bil$vi.level=="blind"]<-bennett.uci(asa7bil$female.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+asa7bil$female.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$female.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+asa7bil$female.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$female.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
 
-asa7bil$male.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$male.pct[asa7bil$vi.level=="blind"], raab$z_case_360[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-asa7bil$male.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$male.pct[asa7bil$vi.level=="severe.vi"], raab$z_case_660[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-asa7bil$male.pct.lci[asa7bil$vi.level=="moderate.vi"]<-bennett.lci(asa7bil$male.pct[asa7bil$vi.level=="moderate.vi"], raab$z_case_618[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+asa7bil$male.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$male.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+asa7bil$male.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$male.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+asa7bil$male.pct.lci[asa7bil$vi.level=="moderate.vi"]<-bennett.lci(asa7bil$male.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
 
-asa7bil$male.pct.uci[asa7bil$vi.level=="blind"]<-bennett.uci(asa7bil$male.pct[asa7bil$vi.level=="blind"], raab$z_case_360[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-asa7bil$male.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$male.pct[asa7bil$vi.level=="severe.vi"], raab$z_case_660[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-asa7bil$male.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$male.pct[asa7bil$vi.level=="moderate.vi"], raab$z_case_618[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+asa7bil$male.pct.uci[asa7bil$vi.level=="blind"]<-bennett.uci(asa7bil$male.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+asa7bil$male.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$male.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+asa7bil$male.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$male.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
 
-asa7bil$total.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$total.pct[asa7bil$vi.level=="blind"], raab$z_case_360, raab$vi.denom,raab$clusterNumber)
-asa7bil$total.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$total.pct[asa7bil$vi.level=="severe.vi"], raab$z_case_660, raab$vi.denom,raab$clusterNumber)
-asa7bil$total.pct.lci[asa7bil$vi.level=="moderate.vi"]<-bennett.lci(asa7bil$total.pct[asa7bil$vi.level=="moderate.vi"], raab$z_case_618, raab$vi.denom,raab$clusterNumber)
+asa7bil$total.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$total.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360, raab$vi.denom,raab$clusterNumber)
+asa7bil$total.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$total.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660, raab$vi.denom,raab$clusterNumber)
+asa7bil$total.pct.lci[asa7bil$vi.level=="moderate.vi"]<-bennett.lci(asa7bil$total.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618, raab$vi.denom,raab$clusterNumber)
 
-asa7bil$total.pct.uci[asa7bil$vi.level=="blind"]<-bennett.uci(asa7bil$total.pct[asa7bil$vi.level=="blind"], raab$z_case_360, raab$vi.denom,raab$clusterNumber)
-asa7bil$total.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$total.pct[asa7bil$vi.level=="severe.vi"], raab$z_case_660, raab$vi.denom,raab$clusterNumber)
-asa7bil$total.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$total.pct[asa7bil$vi.level=="moderate.vi"], raab$z_case_618, raab$vi.denom,raab$clusterNumber)
+asa7bil$total.pct.uci[asa7bil$vi.level=="blind"]<-bennett.uci(asa7bil$total.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360, raab$vi.denom,raab$clusterNumber)
+asa7bil$total.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$total.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660, raab$vi.denom,raab$clusterNumber)
+asa7bil$total.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$total.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618, raab$vi.denom,raab$clusterNumber)
 
-asa7bil$female.adj.pct[asa7bil$vi.level=="blind"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$z_case_360[raab$gender=="female"],raab$vi.denom[raab$gender=="female"])
-asa7bil$female.adj.pct[asa7bil$vi.level=="severe.vi"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$z_case_660[raab$gender=="female"],raab$vi.denom[raab$gender=="female"])
-asa7bil$female.adj.pct[asa7bil$vi.level=="moderate.vi"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$z_case_618[raab$gender=="female"],raab$vi.denom[raab$gender=="female"])
+asa7bil$female.adj.pct[asa7bil$vi.level=="blind"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$old_z_case_360[raab$gender=="female"],raab$vi.denom[raab$gender=="female"])
+asa7bil$female.adj.pct[asa7bil$vi.level=="severe.vi"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$old_z_case_660[raab$gender=="female"],raab$vi.denom[raab$gender=="female"])
+asa7bil$female.adj.pct[asa7bil$vi.level=="moderate.vi"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$old_z_case_618[raab$gender=="female"],raab$vi.denom[raab$gender=="female"])
 
-asa7bil$male.adj.pct[asa7bil$vi.level=="blind"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$z_case_360[raab$gender=="male"],raab$vi.denom[raab$gender=="male"])
-asa7bil$male.adj.pct[asa7bil$vi.level=="severe.vi"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$z_case_660[raab$gender=="male"],raab$vi.denom[raab$gender=="male"])
-asa7bil$male.adj.pct[asa7bil$vi.level=="moderate.vi"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$z_case_618[raab$gender=="male"],raab$vi.denom[raab$gender=="male"])
+asa7bil$male.adj.pct[asa7bil$vi.level=="blind"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$old_z_case_360[raab$gender=="male"],raab$vi.denom[raab$gender=="male"])
+asa7bil$male.adj.pct[asa7bil$vi.level=="severe.vi"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$old_z_case_660[raab$gender=="male"],raab$vi.denom[raab$gender=="male"])
+asa7bil$male.adj.pct[asa7bil$vi.level=="moderate.vi"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$old_z_case_618[raab$gender=="male"],raab$vi.denom[raab$gender=="male"])
 
-asa7bil$total.adj.pct[asa7bil$vi.level=="blind"]<-prop.age.sex.adjust(popfives,raab,raab$z_case_360,raab$vi.denom)
-asa7bil$total.adj.pct[asa7bil$vi.level=="severe.vi"]<-prop.age.sex.adjust(popfives,raab,raab$z_case_660,raab$vi.denom)
-asa7bil$total.adj.pct[asa7bil$vi.level=="moderate.vi"]<-prop.age.sex.adjust(popfives,raab,raab$z_case_618,raab$vi.denom)
+asa7bil$total.adj.pct[asa7bil$vi.level=="blind"]<-prop.age.sex.adjust(popfives,raab,raab$old_z_case_360,raab$vi.denom)
+asa7bil$total.adj.pct[asa7bil$vi.level=="severe.vi"]<-prop.age.sex.adjust(popfives,raab,raab$old_z_case_660,raab$vi.denom)
+asa7bil$total.adj.pct[asa7bil$vi.level=="moderate.vi"]<-prop.age.sex.adjust(popfives,raab,raab$old_z_case_618,raab$vi.denom)
 
-asa7bil$female.adj.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$female.adj.pct[asa7bil$vi.level=="blind"], raab$z_case_360[raab$gender=="female"], raab$vi.denom[raab$gender=="female"], raab$clusterNumber[raab$gender=="female"])
-asa7bil$female.adj.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$female.adj.pct[asa7bil$vi.level=="severe.vi"], raab$z_case_660[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-asa7bil$female.adj.pct.lci[asa7bil$vi.level=="moderate.vi"]<-bennett.lci(asa7bil$female.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$z_case_618[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+asa7bil$female.adj.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$female.adj.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360[raab$gender=="female"], raab$vi.denom[raab$gender=="female"], raab$clusterNumber[raab$gender=="female"])
+asa7bil$female.adj.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$female.adj.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+asa7bil$female.adj.pct.lci[asa7bil$vi.level=="moderate.vi"]<-bennett.lci(asa7bil$female.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
 
-asa7bil$female.adj.pct.uci[asa7bil$vi.level=="blind"]<-bennett.uci(asa7bil$female.adj.pct[asa7bil$vi.level=="blind"], raab$z_case_360[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-asa7bil$female.adj.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$female.adj.pct[asa7bil$vi.level=="severe.vi"], raab$z_case_660[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-asa7bil$female.adj.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$female.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$z_case_618[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+asa7bil$female.adj.pct.uci[asa7bil$vi.level=="blind"]<-bennett.uci(asa7bil$female.adj.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+asa7bil$female.adj.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$female.adj.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
+asa7bil$female.adj.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$female.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
 
-asa7bil$male.adj.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$male.adj.pct[asa7bil$vi.level=="blind"], raab$z_case_360[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-asa7bil$male.adj.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$male.adj.pct[asa7bil$vi.level=="severe.vi"], raab$z_case_660[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-asa7bil$male.adj.pct.lci[asa7bil$vi.level=="moderate.vi"]<-bennett.lci(asa7bil$male.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$z_case_618[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+asa7bil$male.adj.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$male.adj.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+asa7bil$male.adj.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$male.adj.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+asa7bil$male.adj.pct.lci[asa7bil$vi.level=="moderate.vi"]<-bennett.lci(asa7bil$male.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
 
-asa7bil$male.adj.pct.uci[asa7bil$vi.level=="blind"]<-bennett.uci(asa7bil$male.adj.pct[asa7bil$vi.level=="blind"], raab$z_case_360[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-asa7bil$male.adj.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$male.adj.pct[asa7bil$vi.level=="severe.vi"], raab$z_case_660[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-asa7bil$male.adj.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$male.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$z_case_618[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+asa7bil$male.adj.pct.uci[asa7bil$vi.level=="blind"]<-bennett.uci(asa7bil$male.adj.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+asa7bil$male.adj.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$male.adj.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
+asa7bil$male.adj.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$male.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618[raab$gender=="male"], raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
 
-asa7bil$total.adj.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$total.adj.pct[asa7bil$vi.level=="blind"], raab$z_case_360, raab$vi.denom,raab$clusterNumber)
-asa7bil$total.adj.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$total.adj.pct[asa7bil$vi.level=="severe.vi"], raab$z_case_660, raab$vi.denom,raab$clusterNumber)
-asa7bil$total.adj.pct.lci[asa7bil$vi.level=="moderate.vi"]<-bennett.lci(asa7bil$total.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$z_case_618, raab$vi.denom,raab$clusterNumber)
+asa7bil$total.adj.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$total.adj.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360, raab$vi.denom,raab$clusterNumber)
+asa7bil$total.adj.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$total.adj.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660, raab$vi.denom,raab$clusterNumber)
+asa7bil$total.adj.pct.lci[asa7bil$vi.level=="moderate.vi"]<-bennett.lci(asa7bil$total.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618, raab$vi.denom,raab$clusterNumber)
 
-asa7bil$total.adj.pct.uci[asa7bil$vi.level=="blind"]<-bennett.uci(asa7bil$total.adj.pct[asa7bil$vi.level=="blind"], raab$z_case_360, raab$vi.denom,raab$clusterNumber)
-asa7bil$total.adj.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$total.adj.pct[asa7bil$vi.level=="severe.vi"], raab$z_case_660, raab$vi.denom,raab$clusterNumber)
-asa7bil$total.adj.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$total.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$z_case_618, raab$vi.denom,raab$clusterNumber)
+asa7bil$total.adj.pct.uci[asa7bil$vi.level=="blind"]<-bennett.uci(asa7bil$total.adj.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360, raab$vi.denom,raab$clusterNumber)
+asa7bil$total.adj.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$total.adj.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660, raab$vi.denom,raab$clusterNumber)
+asa7bil$total.adj.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$total.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618, raab$vi.denom,raab$clusterNumber)
 
-asa7bil$extrapolated.female.n<-format( asa7bil$female.adj.pct * sum(female.subpop$population), digits = 1, big.mark = " ", big.interval= 3L, scientific=F)
-asa7bil$extrapolated.male.n<-format( asa7bil$male.adj.pct * sum(male.subpop$population), digits = 1, big.mark = " ", big.interval= 3L, scientific=F)
-asa7bil$extrapolated.total.n<-format( asa7bil$total.adj.pct * sum(popfives$population), digits = 1, big.mark = " ", big.interval= 3L, scientific=F)
+asa7bil$extrapolated.female.n<-format( asa7bil$female.adj.pct * sum(female.subpop$population), digits = 1, scientific=F)
+asa7bil$extrapolated.male.n<-format( asa7bil$male.adj.pct * sum(male.subpop$population), digits = 1, scientific=F)
+asa7bil$extrapolated.total.n<-format( asa7bil$total.adj.pct * sum(popfives$population), digits = 1, scientific=F)
 
 asa7bil$vi.level <- recode_factor(asa7bil$vi.level,"blind" = "PinVA <3/60","severe.vi" = "PinVA <6/60","moderate.vi" = "PinVA <6/18","mild.vi" = "PinVA <6/12")
 
 #unilateral cataract cases
 
-raab$denom.618.unicat<-((raab$right_operable_618==1 | raab$left_operable_618==1) & !(raab$z_case_618))+0
-raab$denom.660.unicat<-((raab$right_operable_660==1 | raab$left_operable_660==1) & !(raab$z_case_660))+0
-raab$denom.360.unicat<-((raab$right_operable_360==1 | raab$left_operable_360==1) & !(raab$z_case_360))+0
+raab$denom.618.unicat<-((raab$right_operable_618==1 | raab$left_operable_618==1) & !(raab$old_z_case_618))+0
+raab$denom.660.unicat<-((raab$right_operable_660==1 | raab$left_operable_660==1) & !(raab$old_z_case_660))+0
+raab$denom.360.unicat<-((raab$right_operable_360==1 | raab$left_operable_360==1) & !(raab$old_z_case_360))+0
 
 asa7uni<-as.data.frame(vi.levels)
 asa7uni[,c(2:25)]<-NA
@@ -248,9 +248,9 @@ asa7uni$total.adj.pct.uci[asa7uni$vi.level=="blind"]<-bennett.uci(asa7uni$total.
 asa7uni$total.adj.pct.uci[asa7uni$vi.level=="severe.vi"]<-bennett.uci(asa7uni$total.adj.pct[asa7uni$vi.level=="severe.vi"], raab$denom.660.unicat, raab$vi.denom,raab$clusterNumber)
 asa7uni$total.adj.pct.uci[asa7uni$vi.level=="moderate.vi"]<-bennett.uci(asa7uni$total.adj.pct[asa7uni$vi.level=="moderate.vi"], raab$denom.618.unicat, raab$vi.denom,raab$clusterNumber)
 
-asa7uni$extrapolated.female.n<-format( asa7uni$female.adj.pct * sum(female.subpop$population), digits = 1, big.mark = " ", big.interval= 3L, scientific=F)
-asa7uni$extrapolated.male.n<-format( asa7uni$male.adj.pct * sum(male.subpop$population), digits = 1, big.mark = " ", big.interval= 3L, scientific=F)
-asa7uni$extrapolated.total.n<-format( asa7uni$total.adj.pct * sum(popfives$population), digits = 1, big.mark = " ", big.interval= 3L, scientific=F)
+asa7uni$extrapolated.female.n<-format( asa7uni$female.adj.pct * sum(female.subpop$population), digits = 1, scientific=F)
+asa7uni$extrapolated.male.n<-format( asa7uni$male.adj.pct * sum(male.subpop$population), digits = 1, scientific=F)
+asa7uni$extrapolated.total.n<-format( asa7uni$total.adj.pct * sum(popfives$population), digits = 1, scientific=F)
 
 asa7uni$vi.level <- recode_factor(asa7uni$vi.level,"blind" = "PinVA <3/60","severe.vi" = "PinVA <6/60","moderate.vi" = "PinVA <6/18","mild.vi" = "PinVA <6/12")
 

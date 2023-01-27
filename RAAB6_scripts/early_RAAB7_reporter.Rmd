@@ -32,12 +32,15 @@ dir.create(here("outputs",ID,"/summary/data"))
 dir.create(here("outputs",ID,"/raw"))
 dir.create(here("outputs",ID,"/raw/data"))
 
-raab_merged<-read.csv(here("data","raabs_612.csv"),check.names=F)
+raab_merged<-read.csv(here("data","surveys.csv"),check.names=F)
 raab<-raab_merged[raab_merged$raab_id==ID,]
 raab$date<-as.Date(raab$date)
-raab$surgery_none_reason<-paste0("first_",raab$surgery_none_reason," second_",raab$surgery_none_reason_2)
+raab$clusterNumber<-raab$clusterId
+raab$spectacles_used_distance<-raab$spectacles_used_distance=="true"
+raab$spectacles_used_near<-raab$spectacles_used_near=="true"
+raab$surgery_none_reason<-paste0("first_",raab$surgery_none_reason_1," second_",raab$surgery_none_reason_2)
 
-pop_merged<-read.csv(here("data","raabs_pop_612_repo.csv"),check.names=F)
+pop_merged<-read.csv(here("data","population.csv"),check.names=F)
 popfives<-pop_merged[pop_merged$raab_id==ID,]
 
 meta<-read.csv(here("data","meta.csv"),check.names=F)
@@ -1017,7 +1020,7 @@ This table reports the sample (crude) prevalence of distance and near spectacle 
 \newpage
 
 
-```{r, eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r, eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 asis_output("# Diabetic retinopathy
 
@@ -1028,7 +1031,7 @@ The response rate for the diabetic retinopathy (DR) module can be lower than the
 ```
 
 
-```{r dr-response-rate-a,echo=FALSE,eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r dr-response-rate-a,echo=FALSE,eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 source(here("RAAB6_scripts","dr-response-rate.R"))
 
@@ -1050,14 +1053,14 @@ knitr::kable(dr.response.a.nice.names, booktabs=T, linesep = "", caption = "RAAB
 ```
 
 
-```{r, eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r, eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 asis_output("## Table DR2")
 
 ```
 
 
-```{r dr-response-rate-b,echo=FALSE,eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r dr-response-rate-b,echo=FALSE,eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 source(here("RAAB6_scripts","dr-response-rate.R"))
 
@@ -1080,7 +1083,7 @@ knitr::kable(dr.response.b.nice.names, booktabs=T, linesep = "", caption = "Know
 ```
 
 
-```{r, eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r, eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 asis_output("The proportions of diabetes that is diagnosed and undiagnosed in a population varies by region. The 2021 International Diabetes Federation Atlas (https://diabetesatlas.org/) estimates that more than half of people with diabetes are undiagnosed in Africa (53.6%), Western Pacific (52.8%) and South-East Asia (51.3%).
 
@@ -1091,7 +1094,7 @@ Note: The use of random blood glucose testing without fasting may result in over
 ```
 
 
-```{r dr-prev-dm-age-gender, echo=FALSE,eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r dr-prev-dm-age-gender, echo=FALSE,eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 source(here("RAAB6_scripts","dr-prev-dm-age-gender.R"))
 
@@ -1116,7 +1119,7 @@ knitr::kable(dm.prev.final.nice.names, booktabs=T, linesep = "", caption = "The 
 ```
 
 
-```{r, eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r, eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 asis_output("The crude prevalence of diabetes among DR module participants by 10-year age group and gender is shown in Table DR2. A diagnosis of diabetes is based on either a self-reported history of diabetes (“known diabetes”), or, where diabetes is not self-reported, on a random blood sugar of 200 mg/dl or higher (“suspected diabetes”).
 
@@ -1125,7 +1128,7 @@ asis_output("The crude prevalence of diabetes among DR module participants by 10
 ```
 
 
-```{r dr-last-eye-exam,echo=FALSE,echo=FALSE,eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r dr-last-eye-exam,echo=FALSE,echo=FALSE,eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 source(here("RAAB6_scripts","dr-last-eye-exam.R"))
 
@@ -1150,7 +1153,7 @@ knitr::kable(dr.last.exam.table.nice.names, booktabs=T, linesep = "", caption = 
 ```
 
 
-```{r, eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r, eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 asis_output("Self-reported time since last eye examination for DR among known diabetics can be considered as a proxy for the coverage of DR (screening) services. Recall bias may affect the reliability of the findings and results should be reviewed alongside facility-based DR screening records where available.
 
@@ -1159,7 +1162,7 @@ asis_output("Self-reported time since last eye examination for DR among known di
 ```
 
 
-```{r dr-prev-dr-in-diabetics, echo=FALSE,eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r dr-prev-dr-in-diabetics, echo=FALSE,eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 source(here("RAAB6_scripts","dr-prev-dr-in-diabetics.R"))
 
@@ -1190,14 +1193,14 @@ knitr::kable(any.dr.mac.laser.prev.nice.names, booktabs=T, linesep = "", caption
 ```
 
 
-```{r, eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r, eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 asis_output("## Table DR6)
 
 ```
 
 
-```{r dr-grade-dr-in-diabetics, echo=FALSE,eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r dr-grade-dr-in-diabetics, echo=FALSE,eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 source(here("RAAB6_scripts","dr-prev-dr-in-diabetics.R"))
 
@@ -1232,7 +1235,7 @@ knitr::kable(ret.mac.prev.nice.names, booktabs=T, linesep = "", caption = "Grade
 ```
 
 
-```{r, eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r, eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 asis_output("Crude prevalence is reported among known or suspect diabetics who consented to dilated fundus examination (see Table DR5). At the person level, the grade of retinopathy and maculopathy is calculated as the higher of right and left eye grades (R0-4 and M0-2; see Table DR6).
 
@@ -1244,7 +1247,7 @@ A ‘rule of thirds’ has previously been applied to planning for diabetic reti
 ```
 
 
-```{r dr-diabetes-vi,echo=FALSE,eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r dr-diabetes-vi,echo=FALSE,eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 source(here("RAAB6_scripts","dr-diabetes-vi.R"))
 
@@ -1273,7 +1276,7 @@ knitr::kable(dm.vi.table.nice.names, booktabs=T, linesep = "", caption = "The pr
 ```
 
 
-```{r, eval=sum(!is.na(DR_check_r6$dr_diabetes_blood_consent)==TRUE)>0}
+```{r, eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
 asis_output("The crude prevalence of vision impairment (due to any cause) by WHO categories among DR module participants with and without diabetes.")
 

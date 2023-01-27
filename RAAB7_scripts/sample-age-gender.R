@@ -50,4 +50,4 @@ pcts <- grep("pct",names(asa1))
 asa1[,pcts] <- round( asa1[,pcts] * 100, 1)
 
 cnts<-grep("\\.n",names(asa1))
-asa1[,cnts]<-format( asa1[,cnts], digits = 1, big.interval = 3L, big.mark = " ", scientific=F )
+asa1[,cnts]<-format( asa1[,cnts], digits = 1, scientific=F )

@@ -140,9 +140,9 @@ asa7bil$total.adj.pct.uci[asa7bil$vi.level=="severe.vi"]<-bennett.uci(asa7bil$to
 asa7bil$total.adj.pct.uci[asa7bil$vi.level=="moderate.vi"]<-bennett.uci(asa7bil$total.adj.pct[asa7bil$vi.level=="moderate.vi"], raab$old_z_case_618, raab$vi.denom,raab$clusterId)
 asa7bil$total.adj.pct.uci[asa7bil$vi.level=="mild.vi"]<-bennett.uci(asa7bil$total.adj.pct[asa7bil$vi.level=="mild.vi"], raab$old_z_case_612, raab$vi.denom,raab$clusterId)
 
-asa7bil$extrapolated.female.n<-format( asa7bil$female.adj.pct * sum(female.subpop$population), digits = 1, big.mark = " ", big.interval= 3L, scientific=F)
-asa7bil$extrapolated.male.n<-format( asa7bil$male.adj.pct * sum(male.subpop$population), digits = 1, big.mark = " ", big.interval= 3L, scientific=F)
-asa7bil$extrapolated.total.n<-format( asa7bil$total.adj.pct * sum(popfives$population), digits = 1, big.mark = " ", big.interval= 3L, scientific=F)
+asa7bil$extrapolated.female.n<-format( asa7bil$female.adj.pct * sum(female.subpop$population), digits = 1, scientific=F)
+asa7bil$extrapolated.male.n<-format( asa7bil$male.adj.pct * sum(male.subpop$population), digits = 1, scientific=F)
+asa7bil$extrapolated.total.n<-format( asa7bil$total.adj.pct * sum(popfives$population), digits = 1, scientific=F)
 
 asa7bil$vi.level <- recode_factor(asa7bil$vi.level,"blind" = "PinVA <3/60","severe.vi" = "PinVA <6/60","moderate.vi" = "PinVA <6/18","mild.vi" = "PinVA <6/12")
 
@@ -289,9 +289,9 @@ asa7uni$total.adj.pct.uci[asa7uni$vi.level=="severe.vi"]<-bennett.uci(asa7uni$to
 asa7uni$total.adj.pct.uci[asa7uni$vi.level=="moderate.vi"]<-bennett.uci(asa7uni$total.adj.pct[asa7uni$vi.level=="moderate.vi"], raab$denom.618.unicat, raab$vi.denom,raab$clusterId)
 asa7uni$total.adj.pct.uci[asa7uni$vi.level=="mild.vi"]<-bennett.uci(asa7uni$total.adj.pct[asa7uni$vi.level=="mild.vi"], raab$denom.612.unicat, raab$vi.denom,raab$clusterId)
 
-asa7uni$extrapolated.female.n<-format( asa7uni$female.adj.pct * sum(female.subpop$population), digits = 1, big.mark = " ", big.interval= 3L, scientific = F)
-asa7uni$extrapolated.male.n<-format( asa7uni$male.adj.pct * sum(male.subpop$population), digits = 1, big.mark = " ", big.interval= 3L, scientific = F)
-asa7uni$extrapolated.total.n<-format( asa7uni$total.adj.pct * sum(popfives$population), digits = 1, big.mark = " ", big.interval= 3L, scientific = F)
+asa7uni$extrapolated.female.n<-format( asa7uni$female.adj.pct * sum(female.subpop$population), digits = 1, scientific = F)
+asa7uni$extrapolated.male.n<-format( asa7uni$male.adj.pct * sum(male.subpop$population), digits = 1, scientific = F)
+asa7uni$extrapolated.total.n<-format( asa7uni$total.adj.pct * sum(popfives$population), digits = 1, scientific = F)
 
 asa7uni$vi.level <- recode_factor(asa7uni$vi.level,"blind" = "PinVA <3/60","severe.vi" = "PinVA <6/60","moderate.vi" = "PinVA <6/18","mild.vi" = "PinVA <6/12")
 
