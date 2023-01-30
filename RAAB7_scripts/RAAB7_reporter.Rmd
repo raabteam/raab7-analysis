@@ -84,7 +84,7 @@ source(here("RAAB7_scripts","RAAB7_report_setup.R"))
 
 \center
 
-Survey completed: `r format(max(raab$date), '%d %B %Y')`
+Survey completed: `r format(max(raab$date),'%d %B %Y')`
 
 Report generated: `r format(Sys.time(), '%d %B %Y')`
 
