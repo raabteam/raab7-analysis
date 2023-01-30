@@ -18,7 +18,6 @@ library(here)
 arguments <- commandArgs(trailingOnly = TRUE)
 ID <- arguments[1]
 
-ID<-"2022_Ethiopia_Amhara_West-Gojam"
 checker<-read.csv(here("data", "surveys.csv"))
 DR_check<-checker[checker$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
 WQ_check<-checker[checker$raab_id==ID,c('raab_id',"wg_difficulty_seeing","wg_difficulty_hearing","wg_difficulty_memory","wg_difficulty_mobility","wg_difficulty_selfcare","wg_difficulty_communication")]
