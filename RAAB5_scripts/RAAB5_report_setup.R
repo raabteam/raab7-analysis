@@ -398,6 +398,27 @@ raab <- raab %>% mutate(
   
 )
 
+if(!is.logical(raab$spectacles_used_distance)){
+  
+    raab$spectacles_used_distance<-as.logical(raab$spectacles_used_distance)
+
+  }else{
+    
+    raab$spectacles_used_distance<-raab$spectacles_used_distance
+    
+  }
+
+if(!is.logical(raab$spectacles_used_near)){
+  
+  raab$spectacles_used_near<-as.logical(raab$spectacles_used_near)
+  
+}else{
+  
+  raab$spectacles_used_near<-raab$spectacles_used_near
+  
+}
+
+
 
 raab <- raab %>% mutate(
   

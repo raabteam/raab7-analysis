@@ -436,16 +436,37 @@ raab <- raab %>% mutate(
 
 #eREC/REC variables
 
+if(!is.logical(raab$spectacles_used_distance)){
+  
+   raab$spectacles_used_distance<-as.logical(raab$spectacles_used_distance)
+    
+  }else{
+  
+    raab$spectacles_used_distance<-raab$spectacles_used_distance
+  
+  }
+  
+if(!is.logical(raab$spectacles_used_near)){
+  
+  raab$spectacles_used_near<-as.logical(raab$spectacles_used_near)
+  
+}else{
+  
+  raab$spectacles_used_near<-raab$spectacles_used_near
+  
+}
+
+
 raab <- raab %>% mutate(
   
-  aa_case = case_when(raab$spectacles_used_distance=="true" & raab$better.eye.ucva>0.3 & raab$better.eye.cva==0.3 ~ 1, TRUE ~ 0)
+  aa_case = case_when(raab$spectacles_used_distance==TRUE & raab$better.eye.ucva>0.3 & raab$better.eye.cva==0.3 ~ 1, TRUE ~ 0)
 
   )
 
 raab <- raab %>% mutate(
   
-  bb_case = case_when(raab$aa_case==0 & raab$spectacles_used_distance=="true" & raab$better.eye.ucva>0.3 & raab$better.eye.cva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0),
-  cc_case = case_when(raab$spectacles_used_distance=="false" & raab$better.eye.ucva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0)
+  bb_case = case_when(raab$aa_case==0 & raab$spectacles_used_distance==TRUE & raab$better.eye.ucva>0.3 & raab$better.eye.cva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0),
+  cc_case = case_when(raab$spectacles_used_distance==FALSE & raab$better.eye.ucva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0)
 
   )
 

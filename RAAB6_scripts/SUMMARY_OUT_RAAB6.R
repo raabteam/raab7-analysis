@@ -16,7 +16,7 @@ names(prebigboi4)<-paste0(names(prebigboi4),"_operable_thresh_618")
 prebigboi5<-dcast(melt(prev14_612[,2:20], id.var="num.thresh"), 1~variable+num.thresh)
 names(prebigboi5)<-paste0(names(prebigboi5),"_operable_thresh_612")
 
-prebigboi6<-dcast(melt(asa7[,c("out.names","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.male.n","extrapolated.female.n","extrapolated.total.n")], id.var="out.names"), 1~variable+out.names)
+prebigboi6<-dcast(melt(catcovdenom[,c("out.names","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.male.n","extrapolated.female.n","extrapolated.total.n")], id.var="out.names"), 1~variable+out.names)
 names(prebigboi6)<-gsub("\\ <","_",names(prebigboi6))
 names(prebigboi6)<-gsub("/","",names(prebigboi6))
 
