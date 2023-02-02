@@ -422,6 +422,26 @@ raab <- raab %>% mutate(
 
 #eREC/REC variables
 
+if(!is.logical(raab$spectacles_used_distance)){
+  
+   raab$spectacles_used_distance<-as.logical(raab$spectacles_used_distance)
+    
+  }else{
+  
+    raab$spectacles_used_distance<-raab$spectacles_used_distance
+  
+  }
+
+if(!is.logical(raab$spectacles_used_near)){
+  
+  raab$spectacles_used_near<-as.logical(raab$spectacles_used_near)
+  
+}else{
+  
+  raab$spectacles_used_near<-raab$spectacles_used_near
+  
+}
+
 raab <- raab %>% mutate(
   
   aa_case = case_when(raab$spectacles_used_distance==TRUE & raab$better.eye.pva==0.3 ~ 1, TRUE ~ 0)
@@ -466,13 +486,34 @@ raab <- raab %>% mutate(
 # diabetes.no = cases where no history of DM self-reported and normal RBG result among diabetes.denom
 # dr.exam.denom = denominator for reporting fundus examination results
 
-dr.response.cascade <-c("Enrolled","Examined","Self-reported diabetes or consented to blood test", "Known or suspected diabetes", "Consented dilated examination") 
+if(!is.logical(raab$dr_diabetes_blood_consent)){
+  
+    raab$dr_diabetes_blood_consent<-as.logical(raab$dr_diabetes_blood_consent)
+  
+  }else{
+  
+    raab$dr_diabetes_blood_consent<-raab$dr_diabetes_blood_consent
+  
+  }
+
+if(!is.logical(raab$dr_diabetes_known)){
+  
+    raab$dr_diabetes_known<-as.logical(raab$dr_diabetes_known)
+  
+  }else{
+  
+    raab$dr_diabetes_known<-raab$dr_diabetes_known
+  
+  }
+
+dr.response.cascade <-c("Enrolled","Examined","Diabetes status assessed")
+dr.response.cascade.b <- (c("Known or suspected diabetes", "Known", "Suspected", "Consented dilated examination"))
 
 raab <- raab %>% mutate(
   
-  diabetes.denom = case_when((dr_diabetes_known==2 | is.na(dr_diabetes_blood_consent)) ~1, TRUE~0),
-  diabetes.new = case_when((dr_diabetes_known==1 & is.na(dr_diabetes_blood_consent) & dr_diabetes_blood_sugar>=200) ~1, TRUE~0),
-  diabetes.known.susp = case_when((dr_diabetes_known==2 | diabetes.new==1) ~1, TRUE~0),
+  diabetes.denom = case_when((dr_diabetes_known==TRUE | is.na(dr_diabetes_blood_consent)) ~1, TRUE~0),
+  diabetes.new = case_when((dr_diabetes_known==FALSE & is.na(dr_diabetes_blood_consent) & dr_diabetes_blood_sugar>=200) ~1, TRUE~0),
+  diabetes.known.susp = case_when((dr_diabetes_known==TRUE | diabetes.new==1) ~1, TRUE~0),
   dr.exam.denom = case_when(diabetes.known.susp==1 & (dr_retinopathy_method_right=="dr_retinopathy_method_dilatation_fundoscopy" | dr_retinopathy_method_right=="dr_retinopathy_method_fundus_camera")  ~1, TRUE~0)
 
 )

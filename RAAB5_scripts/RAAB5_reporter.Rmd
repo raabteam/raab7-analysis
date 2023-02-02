@@ -34,7 +34,6 @@ dir.create(here("outputs",ID,"/raw/data"))
 
 raab<-read.csv(here("data","raabs_618.csv"))
 raab<-raab[raab$raab_id==ID,]
-raab$date<-as.Date(raab$date)
 
 pop_merged<-read.csv(here("data","raabs_pop_618_repo.csv"))
 popfives<-pop_merged[pop_merged$raab_id==ID,]

@@ -7,49 +7,32 @@
 #DANGER: THIS SCRIPT WILL OVERWRITE PREVIOUS ANALYSES OF THE SAME RAAB DATA IN THE DATA OUTPUTS FOLDER
 #MOVE PREVIOUS ANALYSES TO A SAFE FOLDER IF YOU WANT TO KEEP THEM
 
-#Before first run, install required packages
+#This script should be run in a folder where raw RAAB data are contained in data subfolder
 
-#install.packages("rmarkdown")
-#install.packages("readxl")
-#install.packages("knitr")
-#install.packages("tinytex")
-#install.packages("kableExtra")
-#install.packages("float")
-#install.packages("RColorBrewer")
-#install_tinytex()
-#library(tinytex)
-#install.packages("tidyverse")
-#install.packages("stringr")
-#install.packages("treemap")
-#install.packages("maditr")
-
-#1. Download all RAAB7 scripts and save in a folder. Download most recent version of raab_logfile from sharepoint
-
-#2. Navigate to downloaded folder (replace path with)
 rm(list = ls())
-setwd("../raab7")
+setwd("path/to/folder/")
+
+library(rmarkdown)
+library(knitr)
+library(tinytex)
+library(kableExtra)
+library(float)
+library(here)
 
 
-#3. Load packages needed for wrapper script - others will be loaded in reporter script
-require(rmarkdown)
-require(readxl)
-require(here)
-
-#4. Read in meta file and trim unused rows
-meta<-read_xlsx(here('data', "meta_data_logfile.xlsx"))
+#Read in meta file and trim unused rows
+meta<-read.csv(here("data", "meta.csv"))
 meta[meta=="NA"]<-NA
 meta<-meta[!is.na(meta$raab_id),]
 
-#5. Split meta file into RAABs with permission to report (fulls) and no permission to report (empties)
+#Split meta file into RAABs with permission to report (fulls) and no permission to report (empties)
 fulls<-meta[meta$repo_meta==TRUE & meta$repo_data==TRUE,]
 fulls<-fulls[!is.na(fulls$raab_id),]
 
 empties<-meta[meta$repo_meta==TRUE & meta$repo_data==FALSE,]
 empties<-empties[!is.na(empties$raab_id),]
 
-mrm_vars<-c("raab_id","survey_title","year_end","iso_2","level1","level2","osm_id","iso3166-1","iso3166-2","admin_level","national","sample_size","response_rate","raab_version","va_threshold","raab_dr","raab_wgq","iceh_data","pi_name","pi_institution","pi_email1","trainer_name","trainer_email1","implementing_org","facilitating_org","funder","pub_doi1","pub_doi2","pub_doi3")
-
-#6. Create empty folders for RAABs with no permission
+#Create empty folders for RAABs with no permission
 
 emptids<-unique(empties$raab_id)
 
@@ -63,11 +46,11 @@ dir.create(here("outputs",ID,"/summary"))
 dir.create(here("outputs",ID,"/summary/data"))
 dir.create(here("outputs",ID,"/raw"))
 dir.create(here("outputs",ID,"/raw/data"))
-empty_meta<-empties[empties$raab_id==ID,mrm_vars]
+empty_meta<-empties[empties$raab_id==ID,]
 write.table(empty_meta,file=here("outputs",ID,"/raw/meta.csv"),row.names=F,col.names=T,sep=",",na="")
 }
 
-#7. Create reports for RAABs with permission
+# Create reports for RAABs with permission
 
 #RAAB5
 
@@ -76,9 +59,9 @@ raab5ids_all<-as.data.frame(unique(raab5$raab_id))
 raab5ids<-raab5ids_all[raab5ids_all$`unique(raab5$raab_id)` %in% fulls$raab_id,]
 
 #First, run the loop on the first three RAABs to make sure everything works
-for (k in 1:3)
+#for (k in 1:3)
 #If it does work, run through all the RAABs
-#for (k in 1:length(raab5ids))
+for (k in 74:length(raab5ids))
 {
   ID<-raab5ids[k]
   render(here("RAAB5_scripts","RAAB5_reporter.Rmd"), output_file = paste0(ID,"_report"), output_dir = here("outputs", ID, "summary"))
@@ -95,9 +78,9 @@ raab6ids_all<-as.data.frame(unique(raab6$raab_id))
 raab6ids<-raab6ids_all[raab6ids_all$`unique(raab6$raab_id)` %in% fulls$raab_id,]
 
 #First, run the loop on the first three RAABs to make sure everything works
-for (k in 1:3)
+#for (k in 1:3)
 #If it does work, run through all the RAABs
-#for (k in 1:length(raab6ids))
+for (k in 1:length(raab6ids))
 {
   ID<-raab6ids[k]
   render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = paste0(ID,"_report"), output_dir = here("outputs", ID, "summary"))
