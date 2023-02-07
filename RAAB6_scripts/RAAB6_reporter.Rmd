@@ -627,7 +627,7 @@ The number of people at each PinVA threshold in these tables correspond to the u
 
 ## Table 17, table 18
 
-In tables 17 & 18, the unmet need for cataract surgery is broken down by bilateral and unilateral cataract cases at each of the cataract surgical thresholds. Here, cataract cases are defined by the presence of an obvious lens opacity and assignment of cataract as the main cause of vision impairment in both eyes (bilateral) or only one eye (unilateral).
+In tables 17 & 18, the unmet need for cataract surgery is broken down by bilateral and unilateral cataract cases at each of the cataract surgical thresholds.
 
 ```{r asa7a, echo=FALSE}
 
@@ -1080,12 +1080,6 @@ Moderate VI: PVA less than 6/18 to 6/60 in one eye, PVA 6/12 in the other eye
 
 Mild VI: PVA less than 6/12 to 6/18 in one eye, PVA 6/12 in the other eye
 
-## Cataract-related VI and surgical outcomes
-
-Cataract surgical threshold (operable cataract): PinVA at \<3/60, \<6/60 and \<6/18 thresholds plus lens opacity plus untreated cataract as principal cause
-
-Operated cataract: Aphakia (excluding couched eyes) or pseudoaphakia (with or without posterior capsule opacification [PCO]) or no view of lens but cataract surgical complications as cause of vision impairment
-
 ## Cataract surgical coverage (CSC) and effective cataract surgical coverage (eCSC)
 
 eCSC and CSC are calculated at the person level, not by eyes, and calculated at various cataract surgical thresholds.
@@ -1106,7 +1100,19 @@ Y = individuals with bilateral operated cataract (regardless of visual acuity in
 
 Z = individuals with BCVA <6/12 in both eyes with cataract as the main cause of vision impairment in one or both eyes
 
-For more information see: McCormick I, Butcher R, Evans JR et al. Effective cataract surgical coverage in adults aged 50 years and older: estimates from population-based surveys in 55 countries. Lancet Global Health. 2022. https://doi.org/10.1016/S2214-109X(22)00419-3 
+Cataract surgical threshold (operable cataract): PinVA at \<3/60, \<6/60, \<6/18 and \<6/12 thresholds plus lens opacity plus untreated cataract as principal cause
+
+Operated cataract: Aphakia (excluding couched eyes) or pseudoaphakia (with or without posterior capsule opacification [PCO]) or no view of lens but cataract surgical complications as cause of vision impairment
+
+Post-operative PVA of 6/12 or better is considered a good outcome at all surgical thresholds reported
+
+For more information see: McCormick, I, Butcher, R, Evans, JR et al. Effective cataract surgical coverage in adults aged 50 years and older: estimates from population-based surveys in 55 countries. Lancet Global Health. 2022. https://doi.org/10.1016/S2214-109X(22)00419-3 
+
+## Cataract surgical outcomes
+
+Operated eyes: Aphakia or pseudophakia (with or without posterior capsule opacification [PCO]) or no view of lens but cataract surgical complications as cause of vision impairment
+
+Note that couched eyes are excluded from tables reporting on CSC/eCSC (Tables 14-19) but are included in the 'Surgical outcomes' tables (Tables 21-25)
 
 ## Refractive error coverage (REC) and effective refractive error coverage (eREC)
 

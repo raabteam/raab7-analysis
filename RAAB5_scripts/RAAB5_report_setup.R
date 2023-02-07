@@ -341,8 +341,8 @@ surgery_places <- c("surgery_place_camp_improvised","surgery_place_gov_hospital"
 
 raab <- raab %>% mutate(
   
-  right.operated.eyes.denom = case_when((lens_status_right=="lens_status_aphakia" | lens_status_right=="lens_status_pseudophakia_no_pco" | lens_status_right=="lens_status_pseudophakia_with_pco" | lens_status_right=="lens_status_aphakia") ~ 1, TRUE ~0),
-  left.operated.eyes.denom = case_when((lens_status_left=="lens_status_aphakia" | lens_status_left=="lens_status_pseudophakia_no_pco" | lens_status_left=="lens_status_pseudophakia_with_pco" | lens_status_left=="lens_status_aphakia") ~ 1, TRUE ~0)
+  right.operated.eyes.denom = case_when((lens_status_right=="lens_status_absent" | lens_status_right=="lens_status_pseudophakia_no_pco" | lens_status_right=="lens_status_pseudophakia_with_pco" | (raab$lens_status_right=="lens_status_no_view" & raab$poor_vision_cause_right=="poor_vision_cause_cataract_surgical_complications")) ~ 1, TRUE ~0),
+  left.operated.eyes.denom = case_when((lens_status_left=="lens_status_absent" | lens_status_left=="lens_status_pseudophakia_no_pco" | lens_status_left=="lens_status_pseudophakia_with_pco" | (raab$lens_status_left=="lens_status_no_view" & raab$poor_vision_cause_left=="poor_vision_cause_cataract_surgical_complications")) ~ 1, TRUE ~0)
   
 )
 
@@ -379,18 +379,7 @@ raab <- raab %>% mutate(
 
 #eREC/REC variables
 
-#create some data in corrected and uncorrected variables for testing - this must go afterwards!
-#REMOVE ME
-raab$right_distance_acuity_uncorrected<-raab$right_distance_acuity_presenting
-raab$left_distance_acuity_uncorrected<-raab$left_distance_acuity_presenting
-raab$right_distance_acuity_corrected<-raab$right_distance_acuity_pinhole
-raab$left_distance_acuity_corrected<-raab$left_distance_acuity_pinhole
-
 raab <- raab %>% mutate(
-  
-  better.eye.ucva = pmin(raab$right_distance_acuity_uncorrected, raab$left_distance_acuity_uncorrected),
-  
-  better.eye.cva = pmin(raab$right_distance_acuity_corrected, raab$left_distance_acuity_corrected),
   
   better.eye.pva = pmin(raab$right_distance_acuity_presenting, raab$left_distance_acuity_presenting),
   
@@ -433,27 +422,6 @@ raab <- raab %>% mutate(
   
 )
 
-#Washington Group Questions (Disability module) variables
-
-#Domain-specific disability
-# raab <- raab %>% mutate(
-# 
-#   wgq.dis.see = case_when(raab$wg_difficulty_seeing=="wg_answer_alot" | raab$wg_difficulty_seeing=="wg_answer_cannot" ~ 1, TRUE ~ 0),
-#   wgq.dis.hear = case_when(raab$wg_difficulty_hearing=="wg_answer_alot" | raab$wg_difficulty_hearing=="wg_answer_cannot" ~ 1, TRUE ~ 0),
-#   wgq.dis.mob = case_when(raab$wg_difficulty_mobility=="wg_answer_alot" | raab$wg_difficulty_mobility=="wg_answer_cannot" ~ 1, TRUE ~ 0),
-#   wgq.dis.mem = case_when(raab$wg_difficulty_memory=="wg_answer_alot" | raab$wg_difficulty_memory=="wg_answer_cannot" ~ 1, TRUE ~ 0),
-#   wgq.dis.comm = case_when(raab$wg_difficulty_communication=="wg_answer_alot" | raab$wg_difficulty_communication=="wg_answer_cannot" ~ 1, TRUE ~ 0),
-#   wgq.dis.self = case_when(raab$wg_difficulty_selfcare=="wg_answer_alot" | raab$wg_difficulty_selfcare=="wg_answer_cannot" ~ 1, TRUE ~ 0)
-# )
-# 
-# #Disability in any domain and any domain excluding seeing
-# raab <- raab %>% mutate(
-# 
-#   wgq.dis.any = case_when(wgq.dis.see==1 | wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0),
-#   wgq.dis.nonvi = case_when(wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0)
-# )
-# 
-# dis.domains<- c("wgq.dis.see", "wgq.dis.hear", "wgq.dis.mob", "wgq.dis.mem", "wgq.dis.comm", "wgq.dis.self", "wgq.dis.any", "wgq.dis.nonvi")
 
 # DR Module variables
 
