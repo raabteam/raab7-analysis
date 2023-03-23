@@ -35,12 +35,12 @@ dir.create(here("outputs",ID,"/raw/data"))
 raab_merged<-read.csv(here("data","raabs_612.csv"),check.names=F)
 raab<-raab_merged[raab_merged$raab_id==ID,]
 
-raab$surgery_none_reason<-paste0("first_",raab$surgery_none_reason," second_",raab$surgery_none_reason_2)
+raab$surgery_none_reason<-paste0("first_",raab$surgery_none_reason_1," second_",raab$surgery_none_reason_2)
 
 pop_merged<-read.csv(here("data","raabs_pop_612_repo.csv"),check.names=F)
 popfives<-pop_merged[pop_merged$raab_id==ID,]
 
-meta<-read.csv(here("data","meta.csv"),check.names=F)
+meta<-read.csv(here("data","historic_meta.csv"),check.names=F)
 
 raab_meta<-meta[meta$raab_id==ID,]
 PI<-raab_meta$pi_name
