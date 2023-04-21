@@ -568,7 +568,7 @@ knitr::kable(catops.nice.names, booktabs=T, linesep = "", caption = "Crude preva
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='3cm') %>%
-  add_header_above(c("Oerated cataract" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
+  add_header_above(c("Operated cataract" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
 
 ```
 
