@@ -1195,7 +1195,7 @@ knitr::kable(any.dr.mac.laser.prev.nice.names, booktabs=T, linesep = "", caption
 
 ```{r, eval=sum(!is.na(DR_check_early_r7$dr_diabetes_blood_consent)==TRUE)>0}
 
-asis_output("## Table DR6)
+asis_output("## Table DR6")
 
 ```
 
@@ -1313,8 +1313,6 @@ VI = Vision impairment
 
 Historic RAAB survey data variables have been updated to align with RAAB7 variable names and levels. RAAB7 records visual acuity in logMAR notation (or a code number representing light perception)
 
-
-					  
 0.3 = Can see 6/12
 
 0.47 = Cannot see 6/12 but can see 6/18
@@ -1349,12 +1347,6 @@ Moderate VI: PVA less than 6/18 to 6/60 in one eye, PVA 6/12 in the other eye
 
 Mild VI: PVA less than 6/12 to 6/18 in one eye, PVA 6/12 in the other eye
 
-## Cataract-related VI and surgical outcomes
-
-Cataract surgical threshold (operable cataract): PinVA at \<3/60, \<6/60 and \<6/18 thresholds plus lens opacity plus untreated cataract as principal cause
-
-Operated cataract: Aphakia (excluding couched eyes) or pseudoaphakia (with or without posterior capsule opacification [PCO]) or no view of lens but cataract surgical complications as cause of vision impairment
-
 ## Cataract surgical coverage (CSC) and effective cataract surgical coverage (eCSC)
 
 eCSC and CSC are calculated at the person level, not by eyes, and calculated at various cataract surgical thresholds.
@@ -1375,7 +1367,19 @@ Y = individuals with bilateral operated cataract (regardless of visual acuity in
 
 Z = individuals with BCVA <6/12 in both eyes with cataract as the main cause of vision impairment in one or both eyes
 
+Cataract surgical threshold (operable cataract): PinVA at \<3/60, \<6/60, \<6/18 and \<6/12 thresholds plus lens opacity plus untreated cataract as principal cause
+
+Operated cataract: Aphakia (excluding couched eyes) or pseudoaphakia (with or without posterior capsule opacification [PCO]) or no view of lens but cataract surgical complications as cause of vision impairment
+
+Post-operative PVA of 6/12 or better is considered a good outcome at all surgical thresholds reported
+
 For more information see: McCormick, I, Butcher, R, Evans, JR et al. Effective cataract surgical coverage in adults aged 50 years and older: estimates from population-based surveys in 55 countries. Lancet Global Health. 2022. https://doi.org/10.1016/S2214-109X(22)00419-3 
+
+## Cataract surgical outcomes
+
+Operated eyes: Aphakia or pseudophakia (with or without posterior capsule opacification [PCO]) or no view of lens but cataract surgical complications as cause of vision impairment
+
+Note that couched eyes are excluded from tables reporting on CSC/eCSC (Tables 14-19) but are included in the 'Surgical outcomes' tables (Tables 21-25)
 
 ## Refractive error coverage (REC) and effective refractive error coverage (eREC)
 
@@ -1385,13 +1389,13 @@ eREC is defined as (A) / (A + B + C)
 
 where:
 
-A = Individuals who present with spectacles or contact lenses for distance and whose UCVA is \<6/12 in the better eye and CVA is 6/12 in the better eye (Met Need)
+A = Individuals who present with spectacles or contact lenses for distance and whose PVA is 6/12 in the better eye (Met Need)
 
-B = Individuals who present with spectacles or contact lenses for distance and whose UCVA is \<6/12 in the better eye and whose CVA is \<6/12 in the better eye, but who improve to 6/12 on PinVA (Undermet Need)
+B = Individuals who present with spectacles or contact lenses for distance and whose PVA is <6/12 in the better eye, but who improve to 6/12 on PinVA in the better eye (Undermet Need)
 
-C = Individuals who present without spectacles and whose UCVA is \<6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
+C = Individuals who present without spectacles or contact lenses for distance and whose PVA is <6/12 in the better eye, but who improve to 6/12 on PinVA in the better eye (Unmet Need)
 
-Note: This is the 'gold-standard' eREC calculation described here: McCormick I, Mactaggart I, Bastawrous A, Burton MJ, Ramke J. Effective refractive error coverage: an eye health indicator to measure progress towards universal health coverage. Ophthalmic Physiol Opt. 2020;40(1):1-5. https://doi:10.1111/opo.12662
+Note: This is an ‘alternative’ definition of eREC, used where uncorrected VA measurements are not available. It makes an assumption that all participants wearing correction for PVA measurement cannot see 6/12 without them and may over-estimate coverage compared to the ‘gold-standard’ calculation. For more information see: Keel S, Muller A, Block S et al. Keeping an eye on eye care: monitoring progress towards effective coverage. Lancet Global Health. 2021. https://doi.org/10.1016/S2214-109X(21)00212-6
 
 ## 95% Confidence Interval
 
