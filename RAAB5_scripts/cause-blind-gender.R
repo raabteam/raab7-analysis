@@ -20,14 +20,14 @@ names(prev4) <- c("principal.cause",
 
 for (i in seq_along(raab.cause)) {
   
-  prev4$female.n[i] <- sum(raab$poor_vision_cause_principle[raab$gender=='female' & raab$blind==1]==raab.cause[i]) 
-  prev4$female.pct[i] <- sum(raab$poor_vision_cause_principle[raab$gender=='female' & raab$blind==1]==raab.cause[i]) / sum(raab$blind[raab$gender=='female'])
+  prev4$female.n[i] <- sum(raab$poor_vision_cause_principle[raab$gender=='female' & raab$blind==1]==raab.cause[i], na.rm=T) 
+  prev4$female.pct[i] <- sum(raab$poor_vision_cause_principle[raab$gender=='female' & raab$blind==1]==raab.cause[i], na.rm=T) / sum(raab$blind[raab$gender=='female'], na.rm=T)
 
-  prev4$male.n[i] <- sum(raab$poor_vision_cause_principle[raab$gender=='male' & raab$blind==1]==raab.cause[i])
-  prev4$male.pct[i] <- sum(raab$poor_vision_cause_principle[raab$gender=='male' & raab$blind==1]==raab.cause[i]) / sum(raab$blind[raab$gender=='male'])
+  prev4$male.n[i] <- sum(raab$poor_vision_cause_principle[raab$gender=='male' & raab$blind==1]==raab.cause[i], na.rm=T)
+  prev4$male.pct[i] <- sum(raab$poor_vision_cause_principle[raab$gender=='male' & raab$blind==1]==raab.cause[i], na.rm=T) / sum(raab$blind[raab$gender=='male'], na.rm=T)
   
-  prev4$total.n[i] <- sum(raab$poor_vision_cause_principle[raab$blind==1]==raab.cause[i])
-  prev4$total.pct[i] <- sum(raab$poor_vision_cause_principle[raab$blind==1]==raab.cause[i]) / sum(raab$blind==1)
+  prev4$total.n[i] <- sum(raab$poor_vision_cause_principle[raab$blind==1]==raab.cause[i], na.rm=T)
+  prev4$total.pct[i] <- sum(raab$poor_vision_cause_principle[raab$blind==1]==raab.cause[i], na.rm=T) / sum(raab$blind==1, na.rm=T)
   
 }
 

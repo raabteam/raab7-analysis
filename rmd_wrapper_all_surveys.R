@@ -2,6 +2,7 @@
 #                               RAAB report wrapper                           #
 #                                  v. 10 Nov 21                               #
 #                                  v. 5 Aug 22                                #
+#                                  v. 24 Apr 23                               #
 ###############################################################################
 
 #DANGER: THIS SCRIPT WILL OVERWRITE PREVIOUS ANALYSES OF THE SAME RAAB DATA IN THE DATA OUTPUTS FOLDER
@@ -13,15 +14,10 @@ rm(list = ls())
 setwd("path/to/folder/")
 
 library(rmarkdown)
-library(knitr)
-library(tinytex)
-library(kableExtra)
-library(float)
 library(here)
 
-
 #Read in meta file and trim unused rows
-meta<-read.csv(here("data", "meta.csv"))
+meta<-read.csv(here("data", "historic_meta.csv"))
 meta[meta=="NA"]<-NA
 meta<-meta[!is.na(meta$raab_id),]
 
@@ -36,7 +32,8 @@ empties<-empties[!is.na(empties$raab_id),]
 
 emptids<-unique(empties$raab_id)
 
-for (i in 1:length(unique(empties$raab_id)))
+for (i in 1:3)
+#for (i in 1:length(unique(empties$raab_id)))
 {
 ID<-emptids[i]
 unlink(here("outputs",ID),recursive = T)
@@ -59,9 +56,9 @@ raab5ids_all<-as.data.frame(unique(raab5$raab_id))
 raab5ids<-raab5ids_all[raab5ids_all$`unique(raab5$raab_id)` %in% fulls$raab_id,]
 
 #First, run the loop on the first three RAABs to make sure everything works
-#for (k in 1:3)
+for (k in 1:3)
 #If it does work, run through all the RAABs
-for (k in 74:length(raab5ids))
+#for (k in 4:length(raab5ids))
 {
   ID<-raab5ids[k]
   render(here("RAAB5_scripts","RAAB5_reporter.Rmd"), output_file = paste0(ID,"_report"), output_dir = here("outputs", ID, "summary"))
@@ -74,39 +71,24 @@ remove(raab5)
 #RAAB6
 
 raab6<-read.csv(here("data","raabs_612.csv"))
+checker6<-raab6
 raab6ids_all<-as.data.frame(unique(raab6$raab_id))
 raab6ids<-raab6ids_all[raab6ids_all$`unique(raab6$raab_id)` %in% fulls$raab_id,]
 
+
 #First, run the loop on the first three RAABs to make sure everything works
-#for (k in 1:3)
+for (k in 1:3)
 #If it does work, run through all the RAABs
-for (k in 1:length(raab6ids))
+#for (k in 4:length(raab6ids))
 {
   ID<-raab6ids[k]
+  DR_check<-checker6[checker6$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
+  WQ_check<-checker6[checker6$raab_id==ID,c('raab_id',"wg_difficulty_seeing","wg_difficulty_hearing","wg_difficulty_memory","wg_difficulty_mobility","wg_difficulty_selfcare","wg_difficulty_communication")]
   render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = paste0(ID,"_report"), output_dir = here("outputs", ID, "summary"))
   unlink(here("outputs",ID,"/summary/*_files"),recursive=T)
   print(paste0(raab6ids[k],": done!"))
 }
 
-remove(raab6)
+remove(raab6,checker6)
 
-#RAAB7
-
-raab7<-read.csv(here("data",<RAAB7_COMBINED_DATASET>))
-raab7ids_all<-as.data.frame(unique(raab7$raab_id))
-raab7ids<-raab7ids_all[raab7ids_all$`unique(raab7$raab_id)` %in% fulls$raab_id,]
-
-#First, run the loop on the first three RAABs to make sure everything works
-for (k in 1:3)
-#If it does work, run through all the RAABs
-#for (k in 1:length(raab7ids))
-{
-  ID<-raab7ids[k]
-  render(here("RAAB7_scripts","RAAB7_reporter.Rmd"), output_file = paste0(ID,"_report"), output_dir = here("outputs", ID, "summary"))
-  unlink(here("outputs",ID,"/summary/*_files"),recursive=T)
-  print(paste0(raab7ids[k],": done!"))
-}
-
-remove(raab7)
-
-raabids<-c(raab5ids,raab6ids,raab7ids)
+raabids<-c(raab5ids,raab6ids)
