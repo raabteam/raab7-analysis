@@ -1,6 +1,6 @@
 # v1 12th Aug 2021
 
-# Script to create new variables to support major data analyses and visualisations
+# Script to create new variables to support major data analyses and visualisations (age group and visual impariment category)
 
 # Categorize continuous age variable into 10-year binds in RAAB data file
 
@@ -35,6 +35,8 @@ raab <- raab %>% mutate(
 raab <- raab %>% mutate(vi.levels = case_when(mild.vi==1 ~ "mild.vi", moderate.vi==1 ~ "moderate.vi", severe.vi==1 ~ "severe.vi", blind==1 ~ "blind"))
 
 vi.levels<-c("blind","severe.vi","moderate.vi","mild.vi")
+
+
 
 right.vi.levels<-c("right.blind","right.severe.vi","right.moderate.vi","right.mild.vi")
 left.vi.levels<-c("left.blind","left.severe.vi","left.moderate.vi","left.mild.vi")
@@ -79,11 +81,14 @@ raab <- raab %>% mutate(
   
 )
 
+
+
 raab <- raab %>% mutate(
   
   cumulative.vi = case_when(mild.cumulative==1 ~ "mild.cumulative", moderate.cumulative==1 ~ "moderate.cumulative", severe.cumulative==1 ~ "severe.cumulative", blind.cumulative==1 ~ "blind.cumulative")
   
 )
+
 
 cumulative.vi<-c("blind.cumulative","severe.cumulative","moderate.cumulative","mild.cumulative")
 
@@ -106,11 +111,13 @@ raab <- raab %>% mutate(
   
 )
 
+
 raab <- raab %>% mutate(
   
   unilat.vi = case_when(mild.unilat==1 ~ "mild.unilat", moderate.unilat==1 ~ "moderate.unilat", severe.unilat==1 ~ "severe.unilat", blind.unilat==1 ~ "blind.unilat")
   
 )
+
 
 unilat.vi<-c("mild.unilat","moderate.unilat","severe.unilat","blind.unilat")
 
@@ -127,6 +134,15 @@ raab <- raab %>% mutate(
   right_operable_360 = case_when((raab$lens_status_right=="lens_status_opacity" & raab$poor_vision_cause_right=="poor_vision_cause_cataract_untreated" & (raab$right_distance_acuity_pinhole>=1.8)) ~ 1, TRUE ~ 0),
   left_operable_360 = case_when((raab$lens_status_left=="lens_status_opacity" & raab$poor_vision_cause_left=="poor_vision_cause_cataract_untreated" & (raab$left_distance_acuity_pinhole>=1.8)) ~ 1, TRUE ~ 0),
  
+#Operated definition 1: Any aphakia  
+ #right_operated = case_when((raab$lens_status_right=="lens_status_aphakia" | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0),
+ #left_operated = case_when((raab$lens_status_left=="lens_status_aphakia" | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0)
+  
+#Operated definition 2: Excluded couched eyes from aphakia definition
+ #right_operated = case_when(((raab$lens_status_right=="lens_status_aphakia" & raab$surgery_type_right!="surgery_type_couching") | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0),
+ #left_operated = case_when(((raab$lens_status_left=="lens_status_aphakia" & raab$surgery_type_left!="surgery_type_couching") | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~ 0)
+ #)
+
 #Operated definition 3: Excludes couched eyes and includes "no view of lens" if cataract surgical complications is recorded as cause of poor vision
   
   right_operated = case_when(((raab$lens_status_right=="lens_status_absent" & raab$surgery_type_right!="surgery_type_couching") | raab$lens_status_right=="lens_status_pseudophakia_no_pco" | raab$lens_status_right=="lens_status_pseudophakia_with_pco" | (raab$lens_status_right=="lens_status_no_view" & raab$poor_vision_cause_right=="poor_vision_cause_cataract_surgical_complications")) ~ 1, TRUE ~ 0),
@@ -139,7 +155,14 @@ raab <- raab %>%
   
   mutate( 
     
-#eCSC and CSC denominator definition: Any cause of VI in non-operated eyes (with addition of !=operated to define non-operated eye)
+#eCSC and CSC denominator definition 1: Cataract as cause of VI in non-operated eyes
+    
+#    x_case_612 = case_when(((raab$right_operable_612==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_612==1)) ~ 1, TRUE ~ 0),
+#    x_case_618 = case_when(((raab$right_operable_618==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_618==1)) ~ 1, TRUE ~ 0),
+#    x_case_660 = case_when(((raab$right_operable_660==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_660==1)) ~ 1, TRUE ~ 0),
+#    x_case_360 = case_when(((raab$right_operable_360==1 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operable_360==1)) ~ 1, TRUE ~ 0),
+
+#eCSC and CSC denominator definition 2: Any cause of VI in non-operated eyes (with addition of !=operated to define non-operated eye)
 
     x_case_612 = case_when(((raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=0.47 & raab$left_operated==1) | (raab$right_operated==1 & raab$left_operated!=1 &raab$left_distance_acuity_pinhole>=0.47)) ~ 1, TRUE ~ 0),
     x_case_618 = case_when(((raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.0 & raab$left_operated==1)  | (raab$right_operated==1 & raab$left_operated!=1 &raab$left_distance_acuity_pinhole>=1.0)) ~ 1, TRUE ~ 0),
@@ -162,9 +185,31 @@ raab <- raab %>%
     z_case_360 = case_when((raab$right_distance_acuity_pinhole>1.3 & raab$left_distance_acuity_pinhole>1.3) & (raab$right_operated!=1 & raab$left_operated!=1) & (raab$right_operable_360==1 | raab$left_operable_360==1) ~ 1, TRUE ~ 0),
     old_z_case_360 = case_when((raab$right_operable_360==1 & raab$left_operable_360==1) ~ 1, TRUE ~ 0),
     
-#eCSC numerator definition: any cause of VI in non-operated eye
+#NB syntax is a_case_[operatedthresh]_[operablethresh]
+#eCSC numerator definition 1: cataract as cause of VI in non-operated eye
+    
+#    a_case_612_612 = case_when(((raab$right_operated==1 & raab$left_operable_612==1 & (raab$right_distance_acuity_presenting<0.47)) | (raab$left_operated==1 & raab$right_operable_612==1 & (raab$left_distance_acuity_presenting<0.47)))  ~ 1, TRUE ~ 0),
+#    a_case_612_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<0.47)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<0.47)))  ~ 1, TRUE ~ 0),
+#    a_case_612_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<0.47)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<0.47)))  ~ 1, TRUE ~ 0),
+#    a_case_612_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<0.47)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<0.47)))  ~ 1, TRUE ~ 0),
+    
+#    a_case_618_612 = case_when(((raab$right_operated==1 & raab$left_operable_612==1 & (raab$right_distance_acuity_presenting<1.0)) | (raab$left_operated==1 & raab$right_operable_612==1 & (raab$left_distance_acuity_presenting<1.0)))  ~ 1, TRUE ~ 0),
+#    a_case_618_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<1.0)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<1.0)))  ~ 1, TRUE ~ 0),
+#    a_case_618_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<1.0)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<1.0)))  ~ 1, TRUE ~ 0),
+#    a_case_618_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<1.0)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<1.0)))  ~ 1, TRUE ~ 0),
 
-#NB syntax is a_case_[postopva]_[operablethresh]
+#    a_case_660_612 = case_when(((raab$right_operated==1 & raab$left_operable_612==1 & (raab$right_distance_acuity_presenting<1.3)) | (raab$left_operated==1 & raab$right_operable_612==1 & (raab$left_distance_acuity_presenting<1.3)))  ~ 1, TRUE ~ 0),
+#    a_case_660_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<1.3)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<1.3)))  ~ 1, TRUE ~ 0),
+#    a_case_660_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<1.3)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<1.3)))  ~ 1, TRUE ~ 0),
+#    a_case_660_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<1.3)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<1.3)))  ~ 1, TRUE ~ 0),
+    
+#    a_case_360_612 = case_when(((raab$right_operated==1 & raab$left_operable_612==1 & (raab$right_distance_acuity_presenting<1.8)) | (raab$left_operated==1 & raab$right_operable_612==1 & (raab$left_distance_acuity_presenting<1.8)))  ~ 1, TRUE ~ 0),
+#    a_case_360_618 = case_when(((raab$right_operated==1 & raab$left_operable_618==1 & (raab$right_distance_acuity_presenting<1.8)) | (raab$left_operated==1 & raab$right_operable_618==1 & (raab$left_distance_acuity_presenting<1.8)))  ~ 1, TRUE ~ 0),
+#    a_case_360_660 = case_when(((raab$right_operated==1 & raab$left_operable_660==1 & (raab$right_distance_acuity_presenting<1.8)) | (raab$left_operated==1 & raab$right_operable_660==1 & (raab$left_distance_acuity_presenting<1.8)))  ~ 1, TRUE ~ 0),
+#    a_case_360_360 = case_when(((raab$right_operated==1 & raab$left_operable_360==1 & (raab$right_distance_acuity_presenting<1.8)) | (raab$left_operated==1 & raab$right_operable_360==1 & (raab$left_distance_acuity_presenting<1.8)))  ~ 1, TRUE ~ 0),
+
+#eCSC numerator definition 2: any cause of VI in non-operated eye
+
     a_case_612_612 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.3) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=0.47) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.3) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=0.47)  ~ 1, TRUE ~ 0),
     a_case_612_618 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.3) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.0)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.3) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.0)  ~ 1, TRUE ~ 0),
     a_case_612_660 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.3) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=1.3)  | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.3) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=1.3)  ~ 1, TRUE ~ 0),
@@ -259,6 +304,8 @@ raab <- raab %>% mutate(
   left.pinva.levels = case_when(left.pinva.mild.vi==1 ~ "left.pinva.mild.vi", left.pinva.moderate.vi==1 ~ "left.pinva.moderate.vi", left.pinva.severe.vi==1 ~ "left.pinva.severe.vi", left.pinva.blind==1 ~ "left.pinva.blind")
   
 )
+
+
 
 raab <- raab %>% mutate(
   
@@ -407,29 +454,6 @@ raab <- raab %>% mutate(
   cc_case = case_when(raab$spectacles_used_distance==FALSE & raab$better.eye.pva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0)
   
 )
-
-#Washington Group Questions (Disability module) variables
-
-#Domain-specific disability
-
-raab <- raab %>% mutate(
-
-  wgq.dis.see = case_when(raab$wg_difficulty_seeing=="wg_answer_alot" | raab$wg_difficulty_seeing=="wg_answer_cannot" ~ 1, TRUE ~ 0),
-  wgq.dis.hear = case_when(raab$wg_difficulty_hearing=="wg_answer_alot" | raab$wg_difficulty_hearing=="wg_answer_cannot" ~ 1, TRUE ~ 0),
-  wgq.dis.mob = case_when(raab$wg_difficulty_mobility=="wg_answer_alot" | raab$wg_difficulty_mobility=="wg_answer_cannot" ~ 1, TRUE ~ 0),
-  wgq.dis.mem = case_when(raab$wg_difficulty_memory=="wg_answer_alot" | raab$wg_difficulty_memory=="wg_answer_cannot" ~ 1, TRUE ~ 0),
-  wgq.dis.comm = case_when(raab$wg_difficulty_communication=="wg_answer_alot" | raab$wg_difficulty_communication=="wg_answer_cannot" ~ 1, TRUE ~ 0),
-  wgq.dis.self = case_when(raab$wg_difficulty_selfcare=="wg_answer_alot" | raab$wg_difficulty_selfcare=="wg_answer_cannot" ~ 1, TRUE ~ 0)
-)
-
-#Disability in any domain and any domain excluding seeing
-raab <- raab %>% mutate(
-
-  wgq.dis.any = case_when(wgq.dis.see==1 | wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0),
-  wgq.dis.nonvi = case_when(wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0)
-)
-
-dis.domains<- c("wgq.dis.see", "wgq.dis.hear", "wgq.dis.mob", "wgq.dis.mem", "wgq.dis.comm", "wgq.dis.self", "wgq.dis.any", "wgq.dis.nonvi")
 
 # DR Module variables
 
