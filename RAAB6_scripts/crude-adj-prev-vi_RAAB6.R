@@ -43,25 +43,25 @@ for (i in 1:length(vi.levels))
   sum3$male.pct[i]<-sum(raab[raab$gender=="male",vi.levels[i]],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
   sum3$total.pct[i]<-sum(raab[,vi.levels[i]],na.rm=T)/sum(raab$vi.denom,na.rm=T)
   
-  sum3$female.pct.lci[i]<-bennett.lci(sum3$female.pct[i],raab[raab$gender=="female",vi.levels[i]],raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-  sum3$male.pct.lci[i]<-bennett.lci(sum3$male.pct[i],raab[raab$gender=="male",vi.levels[i]],raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-  sum3$total.pct.lci[i]<-bennett.lci(sum3$total.pct[i],raab[,vi.levels[i]],raab$vi.denom,raab$clusterNumber)
+  sum3$female.pct.lci[i]<-bennett.lci(sum3$female.pct[i],raab[raab$gender=="female",vi.levels[i]],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+  sum3$male.pct.lci[i]<-bennett.lci(sum3$male.pct[i],raab[raab$gender=="male",vi.levels[i]],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+  sum3$total.pct.lci[i]<-bennett.lci(sum3$total.pct[i],raab[,vi.levels[i]],raab$vi.denom,raab$clusterId)
   
-  sum3$female.pct.uci[i]<-bennett.uci(sum3$female.pct[i],raab[raab$gender=="female",vi.levels[i]],raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-  sum3$male.pct.uci[i]<-bennett.uci(sum3$male.pct[i],raab[raab$gender=="male",vi.levels[i]],raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-  sum3$total.pct.uci[i]<-bennett.uci(sum3$total.pct[i],raab[,vi.levels[i]],raab$vi.denom,raab$clusterNumber)
+  sum3$female.pct.uci[i]<-bennett.uci(sum3$female.pct[i],raab[raab$gender=="female",vi.levels[i]],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+  sum3$male.pct.uci[i]<-bennett.uci(sum3$male.pct[i],raab[raab$gender=="male",vi.levels[i]],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+  sum3$total.pct.uci[i]<-bennett.uci(sum3$total.pct[i],raab[,vi.levels[i]],raab$vi.denom,raab$clusterId)
   
   sum3$female.adj.pct[i]<-prop.age.adjust(female.subpop, raab[raab$gender=="female",], raab[raab$gender=="female",vi.levels[i]], raab$vi.denom[raab$gender=="female"])
   sum3$male.adj.pct[i]<-prop.age.adjust(male.subpop, raab[raab$gender=="male",], raab[raab$gender=="male",vi.levels[i]], raab$vi.denom[raab$gender=="male"])
   sum3$total.adj.pct[i]<-prop.age.sex.adjust(popfives, raab, raab[,vi.levels[i]], raab$vi.denom)
   
-  sum3$female.adj.pct.lci[i]<-bennett.lci(sum3$female.adj.pct[i],raab[raab$gender=="female",vi.levels[i]],raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-  sum3$male.adj.pct.lci[i]<-bennett.lci(sum3$male.adj.pct[i],raab[raab$gender=="male",vi.levels[i]],raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-  sum3$total.adj.pct.lci[i]<-bennett.lci(sum3$total.adj.pct[i],raab[,vi.levels[i]],raab$vi.denom,raab$clusterNumber)
+  sum3$female.adj.pct.lci[i]<-bennett.lci(sum3$female.adj.pct[i],raab[raab$gender=="female",vi.levels[i]],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+  sum3$male.adj.pct.lci[i]<-bennett.lci(sum3$male.adj.pct[i],raab[raab$gender=="male",vi.levels[i]],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+  sum3$total.adj.pct.lci[i]<-bennett.lci(sum3$total.adj.pct[i],raab[,vi.levels[i]],raab$vi.denom,raab$clusterId)
   
-  sum3$female.adj.pct.uci[i]<-bennett.uci(sum3$female.adj.pct[i],raab[raab$gender=="female",vi.levels[i]],raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-  sum3$male.adj.pct.uci[i]<-bennett.uci(sum3$male.adj.pct[i],raab[raab$gender=="male",vi.levels[i]],raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-  sum3$total.adj.pct.uci[i]<-bennett.uci(sum3$total.adj.pct[i],raab[,vi.levels[i]],raab$vi.denom,raab$clusterNumber)
+  sum3$female.adj.pct.uci[i]<-bennett.uci(sum3$female.adj.pct[i],raab[raab$gender=="female",vi.levels[i]],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+  sum3$male.adj.pct.uci[i]<-bennett.uci(sum3$male.adj.pct[i],raab[raab$gender=="male",vi.levels[i]],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+  sum3$total.adj.pct.uci[i]<-bennett.uci(sum3$total.adj.pct[i],raab[,vi.levels[i]],raab$vi.denom,raab$clusterId)
   
 }
 
