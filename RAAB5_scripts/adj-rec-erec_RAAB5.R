@@ -1,22 +1,16 @@
 #v1 03/08/21 - IM
 #v2 01/09/21 - RB
 
-# eREC: Crude calculation using the gold standard definition
+# eREC: Crude calculation using the modified definition (without UCVA and CVA values) and a 6/18 threshold
 
-# aa = Individuals who present with spectacles or contact lenses for distance and whose UCVA is <6/12 in the better eye and CVA is 6/12 in the better eye (Met Need);
-# bb = Individuals who present with spectacles or contact lenses for distance and whose UCVA is <6/12 in the better eye and whose CVA is <6/12 in the better eye, but who improve to 6/12 on PinVA (Undermet Need);
-# cc = Individuals who present without spectacles and whose UCVA is <6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
-
-# Does b_Case need !=a_case or was that only in the alternative calc done for WHO last year??
+# aa = Individuals who present with spectacles or contact lenses for distance and whose PVA is 6/18 in the better eye (Met Need);
+# bb = Individuals who present with spectacles or contact lenses for distance and whose PVA is <6/18 in the better eye but who improve to 6/18 on PinVA (Undermet Need);
+# cc = Individuals who present without spectacles and whose PVA is <6/18 in the better eye and whose PinVA is 6/18 in the better eye (Unmet Need)
 
 raab$erec_num <-(raab$aa_case==1)+0
 raab$rec_num <-(raab$aa_case==1 | raab$bb_case==1)+0
 raab$erec_rec_denom <-(raab$aa_case==1 | raab$bb_case==1 | raab$cc_case==1)+0
 
-
-# erec_qual_gap_eq <- 
-# ignore this 'quality gap' between REC and eREC concept for now
-  
 erec_output <- c("erec","rec")
 
 newtab5<-data.frame(erec_output)
@@ -54,21 +48,21 @@ newtab5$female.pct[newtab5$rec_metric=="rec"] <- sum(raab$rec_num[raab$gender=="
 newtab5$male.pct[newtab5$rec_metric=="rec"] <- sum(raab$rec_num[raab$gender=="male"],na.rm=T)/sum(raab$erec_rec_denom[raab$gender=="male"],na.rm=T)
 newtab5$total.pct[newtab5$rec_metric=="rec"] <- sum(raab$rec_num,na.rm=T)/sum(raab$erec_rec_denom,na.rm=T)
 
-newtab5$female.pct.lci[newtab5$rec_metric=="erec"] <- bennett.lci(newtab5$female.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-newtab5$male.pct.lci[newtab5$rec_metric=="erec"] <- bennett.lci(newtab5$male.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-newtab5$total.pct.lci[newtab5$rec_metric=="erec"] <- bennett.lci(newtab5$total.pct[newtab5$rec_metric=="erec"],raab$erec_num,raab$erec_rec_denom,raab$clusterNumber)
+newtab5$female.pct.lci[newtab5$rec_metric=="erec"] <- bennett.lci(newtab5$female.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+newtab5$male.pct.lci[newtab5$rec_metric=="erec"] <- bennett.lci(newtab5$male.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+newtab5$total.pct.lci[newtab5$rec_metric=="erec"] <- bennett.lci(newtab5$total.pct[newtab5$rec_metric=="erec"],raab$erec_num,raab$erec_rec_denom,raab$clusterId)
 
-newtab5$female.pct.uci[newtab5$rec_metric=="erec"] <- bennett.uci(newtab5$female.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-newtab5$male.pct.uci[newtab5$rec_metric=="erec"] <- bennett.uci(newtab5$male.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-newtab5$total.pct.uci[newtab5$rec_metric=="erec"] <- bennett.uci(newtab5$total.pct[newtab5$rec_metric=="erec"],raab$erec_num,raab$erec_rec_denom,raab$clusterNumber)
+newtab5$female.pct.uci[newtab5$rec_metric=="erec"] <- bennett.uci(newtab5$female.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+newtab5$male.pct.uci[newtab5$rec_metric=="erec"] <- bennett.uci(newtab5$male.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+newtab5$total.pct.uci[newtab5$rec_metric=="erec"] <- bennett.uci(newtab5$total.pct[newtab5$rec_metric=="erec"],raab$erec_num,raab$erec_rec_denom,raab$clusterId)
 
-newtab5$female.pct.lci[newtab5$rec_metric=="rec"] <- bennett.lci(newtab5$female.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-newtab5$male.pct.lci[newtab5$rec_metric=="rec"] <- bennett.lci(newtab5$male.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-newtab5$total.pct.lci[newtab5$rec_metric=="rec"] <- bennett.lci(newtab5$total.pct[newtab5$rec_metric=="rec"],raab$rec_num,raab$erec_rec_denom,raab$clusterNumber)
+newtab5$female.pct.lci[newtab5$rec_metric=="rec"] <- bennett.lci(newtab5$female.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+newtab5$male.pct.lci[newtab5$rec_metric=="rec"] <- bennett.lci(newtab5$male.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+newtab5$total.pct.lci[newtab5$rec_metric=="rec"] <- bennett.lci(newtab5$total.pct[newtab5$rec_metric=="rec"],raab$rec_num,raab$erec_rec_denom,raab$clusterId)
 
-newtab5$female.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$female.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-newtab5$male.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$male.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-newtab5$total.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$total.pct[newtab5$rec_metric=="rec"],raab$rec_num,raab$erec_rec_denom,raab$clusterNumber)
+newtab5$female.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$female.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+newtab5$male.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$male.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+newtab5$total.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$total.pct[newtab5$rec_metric=="rec"],raab$rec_num,raab$erec_rec_denom,raab$clusterId)
 
 #eREC and REC adjusted proportion estimates
 
@@ -80,21 +74,21 @@ newtab5$female.adj.pct[newtab5$rec_metric=="rec"] <- prop.age.adjust(female.subp
 newtab5$male.adj.pct[newtab5$rec_metric=="rec"] <- prop.age.adjust(male.subpop,raab[raab$gender=="male",], raab$rec_num[raab$gender=="male"], raab$erec_rec_denom[raab$gender=="male"])
 newtab5$total.adj.pct[newtab5$rec_metric=="rec"] <- prop.age.sex.adjust(popfives, raab, raab$rec_num, raab$erec_rec_denom)
 
-newtab5$female.adj.pct.lci[newtab5$rec_metric=="erec"] <- bennett.lci(newtab5$female.adj.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-newtab5$male.adj.pct.lci[newtab5$rec_metric=="erec"] <- bennett.lci(newtab5$male.adj.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-newtab5$total.adj.pct.lci[newtab5$rec_metric=="erec"] <- bennett.lci(newtab5$total.adj.pct[newtab5$rec_metric=="erec"],raab$erec_num,raab$erec_rec_denom,raab$clusterNumber)
+newtab5$female.adj.pct.lci[newtab5$rec_metric=="erec"] <- bennett.lci(newtab5$female.adj.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+newtab5$male.adj.pct.lci[newtab5$rec_metric=="erec"] <- bennett.lci(newtab5$male.adj.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+newtab5$total.adj.pct.lci[newtab5$rec_metric=="erec"] <- bennett.lci(newtab5$total.adj.pct[newtab5$rec_metric=="erec"],raab$erec_num,raab$erec_rec_denom,raab$clusterId)
 
-newtab5$female.adj.pct.uci[newtab5$rec_metric=="erec"] <- bennett.uci(newtab5$female.adj.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-newtab5$male.adj.pct.uci[newtab5$rec_metric=="erec"] <- bennett.uci(newtab5$male.adj.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-newtab5$total.adj.pct.uci[newtab5$rec_metric=="erec"] <- bennett.uci(newtab5$total.adj.pct[newtab5$rec_metric=="erec"],raab$erec_num,raab$erec_rec_denom,raab$clusterNumber)
+newtab5$female.adj.pct.uci[newtab5$rec_metric=="erec"] <- bennett.uci(newtab5$female.adj.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+newtab5$male.adj.pct.uci[newtab5$rec_metric=="erec"] <- bennett.uci(newtab5$male.adj.pct[newtab5$rec_metric=="erec"],raab$erec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+newtab5$total.adj.pct.uci[newtab5$rec_metric=="erec"] <- bennett.uci(newtab5$total.adj.pct[newtab5$rec_metric=="erec"],raab$erec_num,raab$erec_rec_denom,raab$clusterId)
 
-newtab5$female.adj.pct.lci[newtab5$rec_metric=="rec"] <- bennett.lci(newtab5$female.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-newtab5$male.adj.pct.lci[newtab5$rec_metric=="rec"] <- bennett.lci(newtab5$male.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-newtab5$total.adj.pct.lci[newtab5$rec_metric=="rec"] <- bennett.lci(newtab5$total.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num,raab$erec_rec_denom,raab$clusterNumber)
+newtab5$female.adj.pct.lci[newtab5$rec_metric=="rec"] <- bennett.lci(newtab5$female.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+newtab5$male.adj.pct.lci[newtab5$rec_metric=="rec"] <- bennett.lci(newtab5$male.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+newtab5$total.adj.pct.lci[newtab5$rec_metric=="rec"] <- bennett.lci(newtab5$total.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num,raab$erec_rec_denom,raab$clusterId)
 
-newtab5$female.adj.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$female.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-newtab5$male.adj.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$male.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-newtab5$total.adj.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$total.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num,raab$erec_rec_denom,raab$clusterNumber)
+newtab5$female.adj.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$female.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="female"],raab$erec_rec_denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+newtab5$male.adj.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$male.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num[raab$gender=="male"],raab$erec_rec_denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+newtab5$total.adj.pct.uci[newtab5$rec_metric=="rec"] <- bennett.uci(newtab5$total.adj.pct[newtab5$rec_metric=="rec"],raab$rec_num,raab$erec_rec_denom,raab$clusterId)
 
 lcis<-grep("lci",names(newtab5))
 ucis<-grep("uci",names(newtab5))

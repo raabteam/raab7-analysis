@@ -28,14 +28,14 @@ for (i in 1:length(vi.levels))
   dm.vi.table$diabetic.n[i]<-sum(raab[raab$diabetes.known.susp==1,vi.levels[i]],na.rm=T)
   dm.vi.table$diabetic.pct[i]<-sum(raab[raab$diabetes.known.susp==1,vi.levels[i]])/sum(raab$diabetes.known.susp==1,na.rm=T)
   
-  dm.vi.table$diabetic.pct.lci[i]<-bennett.lci(dm.vi.table$diabetic.pct[i],raab[raab$diabetes.known.susp==1,vi.levels[i]],raab$diabetes.denom[raab$diabetes.known.susp==1],raab$clusterNumber[raab$diabetes.known.susp==1])
-  dm.vi.table$diabetic.pct.uci[i]<-bennett.uci(dm.vi.table$diabetic.pct[i],raab[raab$diabetes.known.susp==1,vi.levels[i]],raab$diabetes.denom[raab$diabetes.known.susp==1],raab$clusterNumber[raab$diabetes.known.susp==1])
+  dm.vi.table$diabetic.pct.lci[i]<-bennett.lci(dm.vi.table$diabetic.pct[i],raab[raab$diabetes.known.susp==1,vi.levels[i]],raab$diabetes.denom[raab$diabetes.known.susp==1],raab$clusterId[raab$diabetes.known.susp==1])
+  dm.vi.table$diabetic.pct.uci[i]<-bennett.uci(dm.vi.table$diabetic.pct[i],raab[raab$diabetes.known.susp==1,vi.levels[i]],raab$diabetes.denom[raab$diabetes.known.susp==1],raab$clusterId[raab$diabetes.known.susp==1])
   
   dm.vi.table$non.diabetic.n[i]<-sum(raab[raab$diabetes.no==1,vi.levels[i]],na.rm=T)
   dm.vi.table$non.diabetic.pct[i]<-sum(raab[raab$diabetes.no==1,vi.levels[i]])/sum(raab$diabetes.no==1,na.rm=T)
   
-  dm.vi.table$non.diabetic.pct.lci[i]<-bennett.lci(dm.vi.table$non.diabetic.pct[i],raab[raab$diabetes.no==1,vi.levels[i]],raab$vi.denom[raab$diabetes.no==1],raab$clusterNumber[raab$diabetes.no==1])
-  dm.vi.table$non.diabetic.pct.uci[i]<-bennett.uci(dm.vi.table$non.diabetic.pct[i],raab[raab$diabetes.no==1,vi.levels[i]],raab$vi.denom[raab$diabetes.no==1],raab$clusterNumber[raab$diabetes.no==1])
+  dm.vi.table$non.diabetic.pct.lci[i]<-bennett.lci(dm.vi.table$non.diabetic.pct[i],raab[raab$diabetes.no==1,vi.levels[i]],raab$vi.denom[raab$diabetes.no==1],raab$clusterId[raab$diabetes.no==1])
+  dm.vi.table$non.diabetic.pct.uci[i]<-bennett.uci(dm.vi.table$non.diabetic.pct[i],raab[raab$diabetes.no==1,vi.levels[i]],raab$vi.denom[raab$diabetes.no==1],raab$clusterId[raab$diabetes.no==1])
 
   # No ASA included here
 }  

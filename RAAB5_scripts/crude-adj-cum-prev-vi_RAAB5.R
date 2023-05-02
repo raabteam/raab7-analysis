@@ -26,25 +26,25 @@ for (i in 1:length(cumulative.vi[1:3]))
   asa6$male.pct[i]<-sum(raab[raab$gender=="male",cumulative.vi[i]],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
   asa6$total.pct[i]<-sum(raab[,cumulative.vi[i]],na.rm=T)/sum(raab$vi.denom,na.rm=T)
   
-  asa6$female.pct.lci[i]<-bennett.lci(asa6$female.pct[i],raab[raab$gender=="female",cumulative.vi[i]],raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-  asa6$male.pct.lci[i]<-bennett.lci(asa6$male.pct[i],raab[raab$gender=="male",cumulative.vi[i]],raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-  asa6$total.pct.lci[i]<-bennett.lci(asa6$total.pct[i],raab[,cumulative.vi[i]],raab$vi.denom,raab$clusterNumber)
+  asa6$female.pct.lci[i]<-bennett.lci(asa6$female.pct[i],raab[raab$gender=="female",cumulative.vi[i]],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+  asa6$male.pct.lci[i]<-bennett.lci(asa6$male.pct[i],raab[raab$gender=="male",cumulative.vi[i]],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+  asa6$total.pct.lci[i]<-bennett.lci(asa6$total.pct[i],raab[,cumulative.vi[i]],raab$vi.denom,raab$clusterId)
   
-  asa6$female.pct.uci[i]<-bennett.uci(asa6$female.pct[i],raab[raab$gender=="female",cumulative.vi[i]],raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-  asa6$male.pct.uci[i]<-bennett.uci(asa6$male.pct[i],raab[raab$gender=="male",cumulative.vi[i]],raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-  asa6$total.pct.uci[i]<-bennett.uci(asa6$total.pct[i],raab[,cumulative.vi[i]],raab$vi.denom,raab$clusterNumber)
+  asa6$female.pct.uci[i]<-bennett.uci(asa6$female.pct[i],raab[raab$gender=="female",cumulative.vi[i]],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+  asa6$male.pct.uci[i]<-bennett.uci(asa6$male.pct[i],raab[raab$gender=="male",cumulative.vi[i]],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+  asa6$total.pct.uci[i]<-bennett.uci(asa6$total.pct[i],raab[,cumulative.vi[i]],raab$vi.denom,raab$clusterId)
   
   asa6$female.adj.pct[i]<-prop.age.adjust(female.subpop, raab[raab$gender=="female",], raab[raab$gender=="female",cumulative.vi[i]], raab$vi.denom[raab$gender=="female"])
   asa6$male.adj.pct[i]<-prop.age.adjust(male.subpop, raab[raab$gender=="male",], raab[raab$gender=="male",cumulative.vi[i]], raab$vi.denom[raab$gender=="male"])
   asa6$total.adj.pct[i]<-prop.age.sex.adjust(popfives, raab, raab[,cumulative.vi[i]], raab$vi.denom)
   
-  asa6$female.adj.pct.lci[i]<-bennett.lci(asa6$female.adj.pct[i],raab[raab$gender=="female",cumulative.vi[i]],raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-  asa6$male.adj.pct.lci[i]<-bennett.lci(asa6$male.adj.pct[i],raab[raab$gender=="male",cumulative.vi[i]],raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-  asa6$total.adj.pct.lci[i]<-bennett.lci(asa6$total.adj.pct[i],raab[,cumulative.vi[i]],raab$vi.denom,raab$clusterNumber)
+  asa6$female.adj.pct.lci[i]<-bennett.lci(asa6$female.adj.pct[i],raab[raab$gender=="female",cumulative.vi[i]],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+  asa6$male.adj.pct.lci[i]<-bennett.lci(asa6$male.adj.pct[i],raab[raab$gender=="male",cumulative.vi[i]],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+  asa6$total.adj.pct.lci[i]<-bennett.lci(asa6$total.adj.pct[i],raab[,cumulative.vi[i]],raab$vi.denom,raab$clusterId)
   
-  asa6$female.adj.pct.uci[i]<-bennett.uci(asa6$female.adj.pct[i],raab[raab$gender=="female",cumulative.vi[i]],raab$vi.denom[raab$gender=="female"],raab$clusterNumber[raab$gender=="female"])
-  asa6$male.adj.pct.uci[i]<-bennett.uci(asa6$male.adj.pct[i],raab[raab$gender=="male",cumulative.vi[i]],raab$vi.denom[raab$gender=="male"],raab$clusterNumber[raab$gender=="male"])
-  asa6$total.adj.pct.uci[i]<-bennett.uci(asa6$total.adj.pct[i],raab[,cumulative.vi[i]],raab$vi.denom,raab$clusterNumber)
+  asa6$female.adj.pct.uci[i]<-bennett.uci(asa6$female.adj.pct[i],raab[raab$gender=="female",cumulative.vi[i]],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+  asa6$male.adj.pct.uci[i]<-bennett.uci(asa6$male.adj.pct[i],raab[raab$gender=="male",cumulative.vi[i]],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+  asa6$total.adj.pct.uci[i]<-bennett.uci(asa6$total.adj.pct[i],raab[,cumulative.vi[i]],raab$vi.denom,raab$clusterId)
 
 }  
 
