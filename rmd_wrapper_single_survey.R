@@ -28,7 +28,7 @@ render(here("RAAB5_scripts","RAAB5_reporter.Rmd"), output_file = here("outputs",
 unlink(here("outputs", "summary", "*_files"),recursive=T)
 unlink(here("RAAB5_scripts", "*.log"))
 
-#RAAB6 report
+#RAAB6 & RAAB7 without UCVA report
 
 checker6<-read.csv(here("data", "raabs_612.csv"))
 DR_check<-checker6[checker6$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
@@ -40,20 +40,20 @@ render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = here("outputs",
 unlink(here("outputs", "summary", "*_files"),recursive=T)
 unlink(here("RAAB6_scripts", "*.log"))
 
-#RAAB7 without UCVA/CVA
+# #RAAB7 without UCVA/CVA
+# 
+# checker_early_r7<-read.csv(here("data", "surveys.csv"))
+# DR_check_early_r7<-checker_early_r7[checker_early_r7$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
+# WQ_check<-checker_early_r7[checker_early_r7$raab_id==ID,c('raab_id',"wg_difficulty_seeing","wg_difficulty_hearing","wg_difficulty_memory","wg_difficulty_mobility","wg_difficulty_selfcare","wg_difficulty_communication")]
+# remove(checker_early_r7)
+# 
+# render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
+# 
+# unlink(here("outputs", "summary", "*_files"),recursive=T)
+# unlink(here("RAAB6_scripts", "*.log"))
 
-checker_early_r7<-read.csv(here("data", "surveys.csv"))
-DR_check_early_r7<-checker_early_r7[checker_early_r7$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
-WQ_check<-checker_early_r7[checker_early_r7$raab_id==ID,c('raab_id',"wg_difficulty_seeing","wg_difficulty_hearing","wg_difficulty_memory","wg_difficulty_mobility","wg_difficulty_selfcare","wg_difficulty_communication")]
-remove(checker_early_r7)
 
-render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
-
-unlink(here("outputs", "summary", "*_files"),recursive=T)
-unlink(here("RAAB6_scripts", "*.log"))
-
-
-#RAAB7 report
+#RAAB7 with UCVA report
 
 checker7<-read.csv(here("data", "surveys.csv"))
 DR_check<-checker7[checker7$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
