@@ -726,7 +726,7 @@ knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted C
 
 ```
 
-Effective cataract surgical coverage (eCSC) measures the number of people in a population who have been operated on for cataract, and had a good outcome (at least 6/12 post-operative presenting VA), as a proportion of all people operated on or still requiring surgery. Therefore, eCSC describes service access (ie, cataract surgical coverage, [CSC]) adjusted for quality. eCSC and CSC are reported at four cataract surgical thresholds. The gap between CSC and eCSC values can be considered a quality gap; the relative quality gap is calculated as (total CSC–total eCSC)/ total CSC, with lower values reflecting better quality of cataract surgical services. See notes section for more details.
+Effective cataract surgical coverage (eCSC) measures the number of people in a population who have been operated on for cataract, and had a good outcome (for RAAB5, at least 6/18 post-operative presenting VA), as a proportion of all people operated on or still requiring surgery. Therefore, eCSC describes service access (ie, cataract surgical coverage, [CSC]) adjusted for quality. eCSC and CSC are reported at four cataract surgical thresholds. The gap between CSC and eCSC values can be considered a quality gap; the relative quality gap is calculated as (total CSC–total eCSC)/ total CSC, with lower values reflecting better quality of cataract surgical services. See notes section for more details.
 
 ## Table 20
 
@@ -980,7 +980,9 @@ For more information see: McCormick I, Butcher R, Evans JR et al. Effective cata
 
 Operated eyes: Aphakia or pseudophakia (with or without posterior capsule opacification [PCO]) or no view of lens but cataract surgical complications as cause of vision impairment
 
-Note that couched eyes are excluded from tables reporting on CSC/eCSC (Tables 14-19) but are included in the 'Surgical outcomes' tables (Tables 21-25) 
+Note that couched eyes are excluded from tables reporting on CSC/eCSC (Tables 14-19) but are included in the 'Surgical outcomes' tables (Tables 21-25)
+
+As 6/18 is the lowest level of VA screened, this is used to define a good post-operative visual acuity outcome
 
 ## 95% Confidence Interval
 

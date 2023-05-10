@@ -1308,7 +1308,7 @@ Any participant reporting “a lot” or greater difficulty in any domain is con
 
 ```{r wgq-dis-prev,echo=FALSE, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
 
-source(here("RAAB7_scripts","wgq-dis-prev.R"))
+source(here("RAAB6_scripts","wgq-dis-prev.R"))
 
 wgq.domains.table.nice.names<-wgq.domains.table
 
@@ -1373,7 +1373,7 @@ asis_output("Disability prevalence commonly increases with age on account of man
 
 ```{r wgq-vi-crude-prev,echo=FALSE, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
 
-source(here("RAAB7_scripts","wgq-vi-prev.R"))
+source(here("RAAB6_scripts","wgq-vi-prev.R"))
 
 wgq.vi.table.a<-wgq.vi.table[,c("vi.level","any.dis.n","any.dis.pct","any.dis.pct.lci","any.dis.pct.uci","any.non.vi.dis.n","any.non.vi.dis.pct","any.non.vi.dis.pct.lci","any.non.vi.dis.pct.uci","no.dis.n","no.dis.pct","no.dis.pct.lci","no.dis.pct.uci")]
 
@@ -1409,7 +1409,7 @@ asis_output("## Table WGQ3")
 
 ```{r wgq-vi-adj-prev,echo=FALSE, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
 
-source(here("RAAB7_scripts","wgq-vi-prev.R"))
+source(here("RAAB6_scripts","wgq-vi-prev.R"))
 
 wgq.vi.table.b<-wgq.vi.table[,c("vi.level","any.dis.adj.pct","any.dis.adj.pct.lci","any.dis.adj.pct.uci","any.non.vi.dis.adj.pct","any.non.vi.dis.adj.pct.lci","any.non.vi.dis.adj.pct.uci","no.dis.adj.pct","no.dis.adj.pct.lci","no.dis.adj.pct.uci")]
 
@@ -1445,7 +1445,7 @@ asis_output("## Table WGQ4")
 
 ```{r wgq-ecsc-adj, echo=FALSE, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
 
-source(here("RAAB7_scripts","wgq-ecsc.R"))
+source(here("RAAB6_scripts","wgq-ecsc.R"))
 
 wgq.ecsc.nice.names<-wgq.ecsc[wgq.ecsc$num.thresh=="ecsc_612",]
 
