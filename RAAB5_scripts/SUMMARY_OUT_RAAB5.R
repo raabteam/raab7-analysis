@@ -27,7 +27,9 @@ prebigboi7<-dcast(melt(top_causes,id.var="principal.cause"),1~variable+principal
 
 loc_vars<-data.frame(iso_2=raab_meta$iso_2,year_end=raab_meta$year_end,gbd_reg=raab_meta$gbd_reg,gbd_superreg=raab_meta$gbd_superreg)
 
-bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi5,prebigboi6,prebigboi7,loc_vars))
+# bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi5,prebigboi6,prebigboi7,loc_vars))
+bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi6,prebigboi7,loc_vars))
+
 
 bigboi[bigboi=="*"]<-NA
 
