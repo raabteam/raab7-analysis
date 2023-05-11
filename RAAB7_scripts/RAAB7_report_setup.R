@@ -171,7 +171,7 @@ raab <- raab %>%
     z_case_360 = case_when((raab$right_distance_acuity_pinhole>1.3 & raab$left_distance_acuity_pinhole>1.3) & (raab$right_operated!=1 & raab$left_operated!=1) & (raab$right_operable_360==1 | raab$left_operable_360==1) ~ 1, TRUE ~ 0),
     old_z_case_360 = case_when((raab$right_operable_360==1 & raab$left_operable_360==1) ~ 1, TRUE ~ 0),
 
-#eCSC numerator definition 2: any cause of VI in non-operated eye
+#eCSC numerator definition: any cause of VI in non-operated eye
 
 #NB syntax is a_case_[postopva]_[operablethresh]
     a_case_612_612 = case_when(((raab$right_operated==1 & raab$right_distance_acuity_presenting<=0.3) & raab$left_operated!=1 & raab$left_distance_acuity_pinhole>=0.47) | ((raab$left_operated==1 & raab$left_distance_acuity_presenting<=0.3) & raab$right_operated!=1 & raab$right_distance_acuity_pinhole>=0.47)  ~ 1, TRUE ~ 0),
