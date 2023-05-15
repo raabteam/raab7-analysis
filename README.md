@@ -8,7 +8,7 @@ Please contact raab_team@lshtm.ac.uk with feedback, comments or questions.
 
 ## Survey analysis pipeline
 
-Because of minor differences between versions, separate scripts have been written to analyse data from the fifth (RAAB5), sixth (RAAB6) and seventh (RAAB7) version of the RAAB protocol. 
+To accommodate differences between RAAB versions, separate scripts have been written to analyse data from the fifth (RAAB5), sixth (RAAB6) and seventh (RAAB7) version of the RAAB protocol. 
 
 These pages contain a suite of scripts for analysing raw RAAB data and exporting key summary data to a report. 
 
