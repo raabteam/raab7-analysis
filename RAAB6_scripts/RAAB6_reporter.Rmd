@@ -1009,7 +1009,7 @@ knitr::kable(newtab6.nice.names, booktabs=T, linesep = "", caption = "Distance a
 
 ```
 
-This table reports the sample (crude) prevalence of distance and near spectacle use by gender. The categories of distance and near use are not mutually exclusive, i.e., some participants will use both. Near visual acuity is not currently measured in RAAB6; however, near vision spectacle use (for presbyopia) can be used as a proxy for refractive error coverage at near if it is assumed that 100% of the population 50 years and older will require near vision (presbyopic) correction.
+This table reports the sample (crude) prevalence of distance and near spectacle use by gender. The categories of distance and near use are not mutually exclusive, i.e., some participants will use both. Near visual acuity is not measured in RAAB6; however, near vision spectacle use (for presbyopia) can be used as a proxy for refractive error coverage at near if it is assumed that 100% of the population 50 years and older will require near vision (presbyopic) correction.
 
 \newpage
 
