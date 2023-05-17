@@ -389,6 +389,13 @@ raab <- raab %>% mutate(
 
 )
 
+# Variable for prevalence of refractive error, regardless of whether corrected or uncorrected
+raab <- raab %>% mutate(
+  ref.error = case_when(
+    better.eye.ucva>0.3 & (better.eye.cva==0.3 | better.eye.pinva==0.3) ~1, TRUE ~ 0)
+  )
+
+
 #eREC/REC variables
 
 if(!is.logical(raab$spectacles_used_distance)){
