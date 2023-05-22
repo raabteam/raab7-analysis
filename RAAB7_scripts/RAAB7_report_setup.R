@@ -141,7 +141,6 @@ raab <- raab %>% mutate(
   left_operated = case_when(((raab$lens_status_left=="lens_status_absent" & raab$surgery_type_left!="surgery_type_couching") | raab$lens_status_left=="lens_status_pseudophakia_no_pco" | raab$lens_status_left=="lens_status_pseudophakia_with_pco" | (raab$lens_status_left=="lens_status_no_view" & raab$poor_vision_cause_left=="poor_vision_cause_cataract_surgical_complications")) ~ 1, TRUE ~ 0)
 )
 
-
 # CSC and eCSC variables - new eCSC definition entered 16.06.22
 
 raab <- raab %>% 

@@ -68,7 +68,7 @@ raab.cause <- c("poor_vision_cause_uncorrected_refractive_error",
                 "poor_vision_cause_other_posterior_segment_disease",
                 "poor_vision_cause_other_globe_or_cns_abnormalities")
 				
-#Define cumulative visual accuity counts
+#Define cumulative visual acuity counts
 		
 raab <- raab %>% mutate(
   
@@ -88,7 +88,7 @@ raab <- raab %>% mutate(
 cumulative.vi<-c("blind.cumulative","severe.cumulative","moderate.cumulative","mild.cumulative")
 
 
-#Unilateral visual impairment
+#Unilateral vision impairment
 
 raab <- raab %>% mutate(
   
@@ -112,7 +112,6 @@ raab <- raab %>% mutate(
   unilat.vi = case_when(mild.unilat==1 ~ "mild.unilat", moderate.unilat==1 ~ "moderate.unilat", severe.unilat==1 ~ "severe.unilat", blind.unilat==1 ~ "blind.unilat")
   
 )
-
 
 unilat.vi<-c("mild.unilat","moderate.unilat","severe.unilat","blind.unilat")
 
