@@ -13,13 +13,13 @@ library(rmarkdown)
 library(here)
 
 #Sample raab5 ID
-ID<-"insert sample ID here"
+ID<-"2009_Ecuador"
 #Sample raab6 ID
-ID<-"insert sample ID here"
+ID<-"2014_Mexico_Nuevo-Leon"
 #Sample early raab7 ID
-ID<-"insert sample ID here"
+ID<-"2018_Palestine"
 #Sample recent raab7 ID
-ID<-"insert sample ID here"
+ID<-"b871319b-08ee-4508-bd41-413733c51075"
 
 #RAAB5 report
 
@@ -39,19 +39,6 @@ render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = here("outputs",
 
 unlink(here("outputs", "summary", "*_files"),recursive=T)
 unlink(here("RAAB6_scripts", "*.log"))
-
-# #RAAB7 without UCVA/CVA
-# 
-# checker_early_r7<-read.csv(here("data", "surveys.csv"))
-# DR_check_early_r7<-checker_early_r7[checker_early_r7$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
-# WQ_check<-checker_early_r7[checker_early_r7$raab_id==ID,c('raab_id',"wg_difficulty_seeing","wg_difficulty_hearing","wg_difficulty_memory","wg_difficulty_mobility","wg_difficulty_selfcare","wg_difficulty_communication")]
-# remove(checker_early_r7)
-# 
-# render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
-# 
-# unlink(here("outputs", "summary", "*_files"),recursive=T)
-# unlink(here("RAAB6_scripts", "*.log"))
-
 
 #RAAB7 with UCVA report
 

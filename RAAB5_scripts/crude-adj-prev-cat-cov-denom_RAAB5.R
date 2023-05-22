@@ -131,4 +131,4 @@ catcovdenom[,pcts] <- format( catcovdenom[,pcts], nsmall=1 )
 
 catcovdenom[catcovdenom$vi.level=="PinVA <6/12",2:25]<-"*"
 
-catcovdenom$out.names<-paste0("bilateral_cataract_",catcovdenom$vi.level)
+catcovdenom$out.names<-paste0("unmet_need_cataract_",catcovdenom$vi.level)

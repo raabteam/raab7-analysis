@@ -20,7 +20,7 @@ names(dm.prev) <- c("age.groups.tens",
                     "total.pct.lci",
                     "total.pct.uci")
 
-#for (i in 1:length(age.groups.tens)) {
+for (i in 1:length(age.groups.tens)) {
   
   dm.prev$female.n[i] <- sum(raab$diabetes.known.susp[raab$gender=="female" & raab$age.groups.tens==age.groups.tens[i]],na.rm=T) 
   dm.prev$female.pct[i] <- sum(raab$diabetes.known.susp[raab$gender=="female" & raab$age.groups.tens==age.groups.tens[i]],na.rm=T) / sum(raab$diabetes.denom[raab$gender=="female" & raab$age.groups.tens==age.groups.tens[i]],na.rm=T) 
@@ -37,7 +37,7 @@ names(dm.prev) <- c("age.groups.tens",
   dm.prev$total.pct.lci[i] <- bennett.lci(dm.prev$total.pct[i], raab$diabetes.known.susp[raab$age.groups.tens==age.groups.tens[i]], raab$diabetes.denom[raab$age.groups.tens==age.groups.tens[i]], raab$clusterId[raab$age.groups.tens==age.groups.tens[i]])
   dm.prev$total.pct.uci[i] <- bennett.uci(dm.prev$total.pct[i], raab$diabetes.known.susp[raab$age.groups.tens==age.groups.tens[i]], raab$diabetes.denom[raab$age.groups.tens==age.groups.tens[i]], raab$clusterId[raab$age.groups.tens==age.groups.tens[i]])  
     
-#}
+}
 
 # Create a separate row for the overall prevalence of diabetes
 dm.prev.total <- data.frame('Total')

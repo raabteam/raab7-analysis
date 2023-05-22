@@ -11,9 +11,7 @@ library(readxl)
 library(knitr)
 library(tinytex)
 library(kableExtra)
-library(float)
 library(RColorBrewer)
-#tinytex::install_tinytex()
 
 library(tidyverse)
 library(stringr)
@@ -41,6 +39,7 @@ popfives<-pop_merged[pop_merged$raab_id==ID,]
 meta<-read.csv(here("data","historic_meta.csv"),check.names=F)
 							 									 
 raab_meta<-meta[meta$raab_id==ID,]
+
 PI<-raab_meta$pi_name
 TITLE<-raab_meta$survey_title
 
@@ -66,7 +65,6 @@ header-includes:
 - \usepackage{float}
 - \usepackage{tabu}
 - \usepackage{graphicx}
-
 ---
 
 ```{r raab_report_setup, include=FALSE}
@@ -97,7 +95,7 @@ source(here("RAAB5_scripts","response-rate.R"))
 
 sum1.nice.names<-sum1
 
-write.table(sum1.nice.names,file=here("outputs",ID,"/summary/data/t1.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum1.nice.names, here("outputs", ID, "/summary/data/t1.csv"),row.names=F,col.names=T,sep=",")
 
 names(sum1.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -117,7 +115,6 @@ If the response rate is lower than 80-90%, there is a concern that the condition
 If the response rate is over 95%, this might be an indication that eligible participants who were absent or refused to participate were not enumerated but rather replaced by eligible participants in the next household, which would introduce selection bias and mean that results are not representative of the population. For example, people with impaired vision may be more likely to be at home and people with good vision may be more likely to be away and unavailable. In certain settings (e.g., rural or remote) a response rate over 95% is not uncommon – participants may be more compliant with requests to stay home on the day of data collection, or more likely to work in the environment close to their home.
 
 It is important to review this information in relation to the tables on representativeness of the sample below to identify whether a high response rate is valid.
-
 
 ## Table 2, table 3
 
@@ -139,7 +136,6 @@ knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and sex d
 
 
 ```
-
 
 ```{r asa2, echo=FALSE}
 
@@ -262,7 +258,6 @@ knitr::kable(sum3a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
 
 ```
 
-
 ```{r sum4, echo=FALSE}
 
 sum3b.nice.names<-sum3.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
@@ -303,7 +298,6 @@ asa6.nice.names$female.ci<-paste0(asa6.nice.names$female.pct.lci," - ",asa6.nice
 asa6.nice.names$male.ci<-paste0(asa6.nice.names$male.pct.lci," - ",asa6.nice.names$male.pct.uci)
 asa6.nice.names$total.ci<-paste0(asa6.nice.names$total.pct.lci," - ",asa6.nice.names$total.pct.uci)
 
-
 asa6a.nice.names<-asa6.nice.names[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
 write.table(asa6a.nice.names,here("outputs", ID, "summary", "data", "t6.csv"),row.names=F,col.names=T,sep=",")
@@ -317,8 +311,6 @@ knitr::kable(asa6a.nice.names, booktabs=T, linesep = "", caption = "Crude cumula
   add_footnote("Participants not tested at 6/12",notation="symbol")
 
 ```
-
-
 
 ```{r asa6b,echo=FALSE}
 
@@ -336,7 +328,6 @@ knitr::kable(asa6b.nice.names, booktabs=T, linesep = "", caption = "Adjusted cum
   add_footnote("Participants not tested at 6/12",notation="symbol")
 
 ```
-
 
 ## Table 8, table 9
 
@@ -376,7 +367,6 @@ knitr::kable(sum6.nice.names, booktabs=T, linesep = "", caption = " Principal ca
 
 ```
 
-
 ```{r sum6_agg, echo=FALSE}
 
 sum6intag<-aggregate(sum6.numeric[,2:9],by=list(sum6.numeric$cause_group_1), FUN=sum,na.rm=T)
@@ -403,7 +393,6 @@ knitr::kable(sum6ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), capt
 
 Table 8 compares the main cause of blindness, severe vision impairment and moderate vision impairment in the person. Table 9 shows what proportion of vision impairment is attributable to treatable, preventable and posterior segment disease. From these tables the priorities for intervention can be determined. The distribution of cases of blindness in the sample are visualised below.
 
-
 ## Plot 3
 
 ```{r treemap_1, echop=FALSE, fig.fullwidth=T}
@@ -427,7 +416,6 @@ core_fig_cols<-brewer.pal(8,"Spectral")
 treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="index",palette = core_fig_cols, title="Principal causes of bilateral blindness",position.legend="right",fontsize.title=12)
 
 ```
-
 
 ## Table 10, table 11
 
@@ -483,7 +471,6 @@ knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), cap
 
 ```
 
-
 ## Table 12, table 13
 
 ```{r newtab1a, echo=FALSE}
@@ -519,8 +506,6 @@ knitr::kable(unta.nice.names,booktabs=T, linesep = "",caption="Crude prevalence 
   add_footnote(c("Participants not tested at 6/12","Unilateral refers to cases where the other eye has PVA of 6/18"),notation="symbol")
 
 ```
-
-
 
 ```{r newtab1b, echo=FALSE}
 
@@ -658,15 +643,12 @@ knitr::kable(asa7a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
   add_header_above(c("Cataract surgical threshold" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) %>%
   add_footnote(c("Participants not tested at 6/12","Unilateral cases can have any level of VA in the eye without operable cataract"),notation="symbol") 
 
-
 ```
-
 
 ```{r asa7b, echo=FALSE}
 
 source(here("RAAB5_scripts","adj-csc-ecsc_RAAB5.R"))
 source(here("RAAB5_scripts","crude-adj-cat-vi-prev_RAAB5.R"))
-
 
 asa7b.int<-asa7[,c("vi.level","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.female.n","extrapolated.male.n","extrapolated.total.n")]
 
@@ -808,7 +790,6 @@ knitr::kable(newtab3a.nice.names, booktabs=T, linesep = "", caption = "Post-oper
 
 ```
 
-
 ```{r newtab3b, echo=FALSE}
 
 newtab3b.nice.names<-newtab3b
@@ -858,7 +839,6 @@ knitr::kable(outc6a.nice.names, booktabs=T, linesep = "", caption = "Post-operat
   add_header_above(c("Post-surgical VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T)
 
 ```
-
 
 ```{r outc6b, echo=FALSE}
 

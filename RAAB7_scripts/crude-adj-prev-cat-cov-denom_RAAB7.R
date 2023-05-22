@@ -151,3 +151,6 @@ catcovdenom[,ucis][catcovdenom[,ucis]>1]<-1
 pcts<-grep("pct",names(catcovdenom))
 catcovdenom[,pcts] <- round( catcovdenom[,pcts] * 100, 1)
 catcovdenom[,pcts] <- format( catcovdenom[,pcts], nsmall=1 )
+
+catcovdenom$out.names<-paste0("unmet_need_cataract_",catcovdenom$vi.level)
+

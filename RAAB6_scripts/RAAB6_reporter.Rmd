@@ -12,7 +12,6 @@ library(knitr)
 library(tinytex)
 library(kableExtra)
 library(RColorBrewer)
-#install_tinytex()
 
 library(tidyverse)
 library(stringr)
@@ -40,6 +39,7 @@ popfives<-pop_merged[pop_merged$raab_id==ID,]
 meta<-read.csv(here("data","historic_meta.csv"),check.names=F)
 
 raab_meta<-meta[meta$raab_id==ID,]
+
 PI<-raab_meta$pi_name
 TITLE<-raab_meta$survey_title
 
@@ -82,7 +82,6 @@ Report generated: `r format(Sys.time(), '%d %B %Y')`
 ```{=latex}
 \tableofcontents
 ```
-
 
 \newpage
 
@@ -137,7 +136,6 @@ knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and sex d
 
 
 ```
-
 
 ```{r asa2, echo=FALSE}
 
@@ -259,8 +257,6 @@ knitr::kable(sum3a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
 
 ```
 
-
-
 ```{r sum4, echo=FALSE}
 
 sum3b.nice.names<-sum3.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
@@ -313,8 +309,6 @@ knitr::kable(asa6a.nice.names, booktabs=T, linesep = "", caption = "Crude cumula
 
 ```
 
-
-
 ```{r asa6b,echo=FALSE}
 
 asa6b.nice.names<-asa6.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
@@ -330,7 +324,6 @@ knitr::kable(asa6b.nice.names, booktabs=T, linesep = "", caption = "Adjusted cum
   add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold = T)
 
 ```
-
 
 ## Table 8, table 9
 
@@ -392,7 +385,6 @@ knitr::kable(sum6ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), capt
 
 ```
 
-
 Table 8 compares the main cause of blindness, severe vision impairment, moderate vision impairment and mild visual impairment in the person. Table 9 shows what proportion of vision impairment is attributable to treatable, preventable and posterior segment disease. From these tables the priorities for intervention can be determined. The distribution of cases of blindness in the sample are visualised below.
 
 ## Plot 3
@@ -414,8 +406,6 @@ sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_myopic_degeneration" ]<-"Myopic degeneration"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"Other globe or CNS abnomalities"
 
-
-																																																 
 core_fig_cols<-brewer.pal(8,"Spectral")
 
 treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="index",palette = core_fig_cols, title="Principal causes of bilateral blindness",position.legend="right",fontsize.title=12)
@@ -476,7 +466,6 @@ knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), cap
 
 ```
 
-
 ## Table 12, table 13
 
 ```{r newtab1a, echo=FALSE}
@@ -500,7 +489,6 @@ unt.nice.names$vi.level[unt.nice.names$vi.level=="blind.unilat"]<-"Blind in one 
 
 unta.nice.names<-unt.nice.names[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-
 write.table(unta.nice.names,here("outputs", ID, "summary", "data", "t12.csv"),row.names=F,col.names=T,sep=",")
 
 names(unta.nice.names) <- c(' ', 'n', '%', '95% CI', 'n', '%', '95% CI', 'n', '%', '95% CI')
@@ -513,8 +501,6 @@ knitr::kable(unta.nice.names,booktabs=T, linesep = "",caption="Crude prevalence 
   add_footnote("Unilateral refers to cases where the other eye has PVA of 6/12",notation="symbol")
 
 ```
-
-
 
 ```{r newtab1b, echo=FALSE}
 
@@ -652,7 +638,6 @@ knitr::kable(asa7a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
   add_footnote("Unilateral cases can have any level of VA in the eye without operable cataract",notation="symbol")
 
 ```
-
 
 ```{r asa7b, echo=FALSE}
 
@@ -799,7 +784,6 @@ knitr::kable(newtab3a.nice.names, booktabs=T, linesep = "", caption = "Post-oper
 
 ```
 
-
 ```{r newtab3b, echo=FALSE}
 
 newtab3b.nice.names<-newtab3b
@@ -809,7 +793,6 @@ newtab3b.nice.names<-newtab3b.nice.names %>% arrange(match(newtab3b.nice.names$o
 newtab3b.nice.names$oc.levels[newtab3b.nice.names$oc.levels=="good.oc"]<-"Good (6/12)"
 newtab3b.nice.names$oc.levels[newtab3b.nice.names$oc.levels=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
 newtab3b.nice.names$oc.levels[newtab3b.nice.names$oc.levels=="poor.oc"]<-"Poor (<6/60)"
-
 
 write.table(newtab3b.nice.names,here("outputs", ID, "summary", "data", "t23.csv"),row.names=F,col.names=T,sep=",")
 
@@ -823,7 +806,6 @@ knitr::kable(newtab3b.nice.names, booktabs=T, linesep = "", caption = "Post-oper
   add_header_above(c("Outcome (PinVA)" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
 
 ```
-
 
 ## Table 24, table 25
 
@@ -850,7 +832,6 @@ knitr::kable(outc6a.nice.names, booktabs=T, linesep = "", caption = "Post-operat
   add_header_above(c("Post-surgical VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T)
 
 ```
-
 
 ```{r outc6b, echo=FALSE}
 
@@ -926,7 +907,6 @@ knitr::kable(newtab4a.nice.names, booktabs=T, linesep = "", caption = "Crude pre
 
 ```
 
-
 ```{r new_tab_4b, echo=FALSE}
 
 newtab4b.nice.names<-newtab4.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
@@ -943,11 +923,6 @@ knitr::kable(newtab4b.nice.names, booktabs=T, linesep = "", caption = "Adjusted 
 
 ```
 
-
-
-		   
-
-																					 
 ## Table 28
 
 Effective refractive error coverage (eREC) measures the number of people in a population in need of optical correction who have received correction and had a good outcome (ie, can see at least 6/12 corrected) as a proportion of all people in need of optical correction who have accessed correction or still require it. Therefore, eREC describes service access (ie, refractive error coverage, [REC]) adjusted for quality. See notes section for more details.
@@ -1506,8 +1481,6 @@ VI = Vision impairment
 
 Historic RAAB survey data variables have been updated to align with RAAB7 variable names and levels. RAAB7 records visual acuity in logMAR notation (or a code number representing light perception)
 
-
-					  
 0.3 = Can see 6/12
 
 0.47 = Cannot see 6/12 but can see 6/18
@@ -1597,7 +1570,6 @@ Note: This is an ‘alternative’ definition of eREC, used where uncorrected VA
 The 95% confidence intervals are based on standard errors calculated for the clustering of the sample and the variability between clusters, specifically using the formula provided by:
 
 Bennett S, Woods T, Liyanage WM, Smith DL. A simplified general method for cluster-sample surveys of health in developing countries. World Health Stat Q. 1991;44(3):98-106.
-
 
 ```{r big_boi_maker, include=FALSE}
 
