@@ -695,7 +695,7 @@ write.table(prev14a.nice.names,here("outputs", ID, "summary", "data", "t19.csv")
 
 names(prev14a.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI","")
 
-knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted Cataract Surgical Coverage and effective cataract surgical coverage at the person level",row.names=F) %>% 
+knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted cataract surgical coverage and effective cataract surgical coverage at the person level",row.names=F) %>% 
   kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='4cm') %>%
