@@ -40,9 +40,7 @@ unlink(here("outputs",ID),recursive = T)
 dir.create(here("outputs",ID))
 outdir<-ID
 dir.create(here("outputs",ID,"/summary"))
-dir.create(here("outputs",ID,"/summary/data"))
 dir.create(here("outputs",ID,"/raw"))
-dir.create(here("outputs",ID,"/raw/data"))
 empty_meta<-empties[empties$raab_id==ID,]
 write.table(empty_meta,file=here("outputs",ID,"/raw/meta.csv"),row.names=F,col.names=T,sep=",",na="")
 }

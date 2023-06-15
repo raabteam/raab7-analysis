@@ -13,13 +13,13 @@ library(rmarkdown)
 library(here)
 
 #Sample raab5 ID
-ID<-"2009_Ecuador"
+ID<-"Sample raab5 ID"
 #Sample raab6 ID
-ID<-"2014_Mexico_Nuevo-Leon"
+ID<-"Sample raab6 ID"
 #Sample early raab7 ID
-ID<-"2018_Palestine"
+ID<-"Sample early raab7 ID"
 #Sample recent raab7 ID
-ID<-"b871319b-08ee-4508-bd41-413733c51075"
+ID<-"Sample recent raab7 ID"
 
 #RAAB5 report
 
