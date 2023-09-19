@@ -2,8 +2,9 @@
 
 #v1 24/08/21 - IM
 #v2 01/09/21 - RB
+#v3 18/09/23 - IM - adds no view of lens to the type of surgery options
 
-surgery.type <- c('surgery_type_iol', 'surgery_type_non_iol', 'surgery_type_couching') 
+surgery.type <- c('surgery_type_iol', 'surgery_type_non_iol', 'surgery_type_couching', 'surgery_type_no_view') 
 
 newtab2<-data.frame(surgery.type)
 newtab2[,2:7] <- NA
@@ -35,7 +36,7 @@ for (i in 1:length(surgery.type))
 }
 
 newtab2[nrow(newtab2)+1,2:7]<-colSums(newtab2[,2:7])
-newtab2$surgery.type[4]<-"Total"
+newtab2$surgery.type[5]<-"Total"
 nt2.pcts<-grep("pct",names(newtab2))
 newtab2[,nt2.pcts]<-format(newtab2[,nt2.pcts],nsmall=1)
 
