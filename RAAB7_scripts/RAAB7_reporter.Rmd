@@ -758,6 +758,7 @@ newtab2.nice.names<-newtab2
 newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_iol"]<-"IOL"
 newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_non_iol"]<-"Non-IOL"
 newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_couching"]<-"Couching"
+newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_no_view"]<-"No view"
 
 write.table(newtab2.nice.names,here("outputs", ID, "summary", "data", "t18.csv"),row.names=F,col.names=T,sep=",")
 
@@ -766,7 +767,7 @@ names(newtab2.nice.names)<-c("","n","%","n","%","n","%")
 knitr::kable(newtab2.nice.names, booktabs=T, linesep = "", caption = "Type of cataract surgery performed, count by eyes",align='lcccccc') %>%
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
-  row_spec(3,hline_after=T) %>%
+  row_spec(4,hline_after=T) %>%
   add_header_above(c("Surgery type" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
 
 ```
