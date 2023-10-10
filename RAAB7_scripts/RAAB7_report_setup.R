@@ -333,8 +333,8 @@ surgery_places <- c("surgery_place_camp_improvised","surgery_place_gov_hospital"
 
 raab <- raab %>% mutate(
   
-  right.operated.eyes.denom = case_when((lens_status_right=="lens_status_absent" | lens_status_right=="lens_status_absent_with_surgery" | lens_status_right=="lens_status_pseudophakia_no_pco" | lens_status_right=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~0),
-  left.operated.eyes.denom = case_when((lens_status_left=="lens_status_absent" | lens_status_left=="lens_status_absent_with_surgery" | lens_status_left=="lens_status_pseudophakia_no_pco" | lens_status_left=="lens_status_pseudophakia_with_pco") ~ 1, TRUE ~0)
+  right.operated.eyes.denom = case_when((lens_status_right=="lens_status_absent" | lens_status_right=="lens_status_absent_with_surgery" | lens_status_right=="lens_status_pseudophakia_no_pco" | lens_status_right=="lens_status_pseudophakia_with_pco" | (raab$lens_status_right=="lens_status_no_view" & raab$poor_vision_cause_right=="poor_vision_cause_cataract_surgical_complications")) ~ 1, TRUE ~0),
+  left.operated.eyes.denom = case_when((lens_status_left=="lens_status_absent" | lens_status_left=="lens_status_absent_with_surgery" | lens_status_left=="lens_status_pseudophakia_no_pco" | lens_status_left=="lens_status_pseudophakia_with_pco" | (raab$lens_status_left=="lens_status_no_view" & raab$poor_vision_cause_left=="poor_vision_cause_cataract_surgical_complications")) ~ 1, TRUE ~0)
   
 )
 
