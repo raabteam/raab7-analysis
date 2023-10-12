@@ -750,7 +750,7 @@ newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_i
 newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_non_iol"]<-"Non-IOL"
 newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_couching"]<-"Couching"
 
-write.table(newtab2.nice.names,here("outputs", ID, "summary", "data", "t18.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab2.nice.names,here("outputs", ID, "summary", "data", "t21.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab2.nice.names)<-c("","n","%","n","%","n","%")
 
