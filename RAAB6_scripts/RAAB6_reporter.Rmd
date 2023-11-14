@@ -1103,7 +1103,7 @@ source(here("RAAB6_scripts","dr-last-eye-exam.R"))
 
 dr.last.exam.table.nice.names<-dr.last.exam.table
 
-write.table(dr.last.exam.table.nice.names,here("outputs", ID, "summary", "data", "t33.csv"),row.names=F,col.names=T,sep=",")
+write.table(dr.last.exam.table.nice.names,here("outputs", ID, "summary", "data", "dr4.csv"),row.names=F,col.names=T,sep=",")
 
 dr.last.exam.table.nice.names$last.dr.exam[dr.last.exam.table.nice.names$last.dr.exam=="dr_diabetic_last_exam_none"]<-"Never"
 dr.last.exam.table.nice.names$last.dr.exam[dr.last.exam.table.nice.names$last.dr.exam=="dr_diabetic_last_exam_0_12_months"]<-"Within 1 year"
@@ -1143,7 +1143,7 @@ any.dr.mac.laser.prev.nice.names$total.ci<-paste0(any.dr.mac.laser.prev.nice.nam
 
 any.dr.mac.laser.prev.nice.names<-any.dr.mac.laser.prev.nice.names[,c("condition","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(any.dr.mac.laser.prev.nice.names,here("outputs", ID, "summary", "data", "t34.csv"),row.names=F,col.names=T,sep=",")
+write.table(any.dr.mac.laser.prev.nice.names,here("outputs", ID, "summary", "data", "dr5.csv"),row.names=F,col.names=T,sep=",")
 
 any.dr.mac.laser.prev.nice.names$condition[any.dr.mac.laser.prev.nice.names$condition=="retinopathy.grade"]<-"Any retinopathy"
 any.dr.mac.laser.prev.nice.names$condition[any.dr.mac.laser.prev.nice.names$condition=="maculopathy.grade"]<-"Any maculopathy"
@@ -1177,7 +1177,7 @@ ret.mac.prev.nice.names<-ret.mac.prev
 
 ret.mac.prev.nice.names<-ret.mac.prev.nice.names[,c("grade","female.n","female.pct","male.n","male.pct","total.n","total.pct")]
 
-write.table(ret.mac.prev.nice.names,here("outputs", ID, "summary", "data", "t35.csv"),row.names=F,col.names=T,sep=",")
+write.table(ret.mac.prev.nice.names,here("outputs", ID, "summary", "data", "dr6.csv"),row.names=F,col.names=T,sep=",")
 
 ret.mac.prev.nice.names$grade[ret.mac.prev.nice.names$grade=="dr_retinopathy_grade_none"]<-"None (R0)"
 ret.mac.prev.nice.names$grade[ret.mac.prev.nice.names$grade=="dr_retinopathy_grade_mild"]<-"Mild (R1)"
@@ -1222,7 +1222,7 @@ source(here("RAAB6_scripts","dr-diabetes-vi.R"))
 
 dm.vi.table.nice.names<-dm.vi.table
 
-write.table(dm.vi.table.nice.names,here("outputs", ID, "summary", "data", "t36.csv"),row.names=F,col.names=T,sep=",")
+write.table(dm.vi.table.nice.names,here("outputs", ID, "summary", "data", "dr7.csv"),row.names=F,col.names=T,sep=",")
 
 dm.vi.table.nice.names$vi.level[dm.vi.table.nice.names$vi.level=="blind"]<-"Blind"
 dm.vi.table.nice.names$vi.level[dm.vi.table.nice.names$vi.level=="severe.vi"]<-"Severe VI"
