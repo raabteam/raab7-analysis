@@ -7,7 +7,6 @@ output:
 ```{r setup, include=FALSE}
 
 library(rmarkdown)
-library(readxl)
 library(knitr)
 library(tinytex)
 library(kableExtra)
@@ -30,22 +29,106 @@ dir.create(here("outputs",ID,"/summary/data"))
 dir.create(here("outputs",ID,"/raw"))
 dir.create(here("outputs",ID,"/raw/data"))
 
-raab_merged<-read.csv(here("data", "surveys.csv"),check.names=F)
+raab_merged<-read.csv(here("data","surveys.csv"),check.names=F,na.strings=c("","NA"))
 
 raab<-raab_merged[raab_merged$raab_id==ID,]
 raab$date<-as.Date(raab$date)
 
-pop_merged<-read.csv(here("data", "population.csv"),check.names=F)
+pop_merged<-read.csv(here("data","population.csv"),check.names=F,na.strings=c("","NA"))
 popfives<-pop_merged[pop_merged$raab_id==ID,]
 
-meta<-read.csv(here("data","meta.csv"),check.names=F)
+meta<-read.csv(here("data","meta.csv"),check.names=F,na.strings=c("","NA"))
 
-raab_meta<-meta[meta$raab_id==ID,]
+vars_to_drop<-c("map_complete","exclude_repo","repo_meta","repo_data","ecsc_consent","x4_data_access","data_lost","hl_permission_doc","hl_permission_localreport","hl_permission_raabreport","hl_permission_raabdata","hl_findingspublishedjournal","hl_findingslocalreport","hl_ethicscommitteeapproval","hl_permission_detail","hl_on_behalf_of","permission_ref","lshtm_dta","lshtm_dta-Ref","pi_email","pi_email1 active","pi_email NOTES","pi_int_auth_grp","trainer_email2")
+
+raab_meta<-meta[meta$raab_id==ID,!(names(meta) %in% vars_to_drop)]
+
+meta_report<-data.frame(
+  title=NA,
+  creator="International Centre for Eye Health",
+  subject="Eye Diseases; Vision Disorders; Cataract; Cataract Extraction; Refractive errors; Health Services Research; Health Surveys",
+  subjectVocab="mesh",
+  description="A report including output of standardised analysis of vision and eye health survey data including tables of vision impairment prevalence and service coverage estimates",
+  publisher="London School of Hygiene & Tropical Medicine RAAB repository",
+  contributor="",
+  date=format(Sys.time(), '%Y-%m-%d'),
+  type="Text",
+  format="pdf",
+  identifier=NA,
+  doi=NA,
+  source=NA,
+  language="eng",
+  relation=NA,
+  coverage=NA,
+  rights="This work is licensed under CC BY-NC-SA 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/",
+  bibiographicCitation=NA)
+
+meta_dataset<-data.frame(
+  title=NA,
+  creator=NA,
+  subject="Eye Diseases; Vision Disorders; Cataract; Cataract Extraction; Refractive errors; Health Services Research; Health Surveys",
+  subjectVocab="mesh",
+  description="Anonymous participant level dataset including variables for visual acuity, spectacle use, lens status, cause of vision impairment, cataract surgical history, barriers to cataract surgery",
+  publisher="London School of Hygiene & Tropical Medicine RAAB repository",
+  contributor=NA,
+  date=format(Sys.time(), '%Y-%m-%d'),
+  type="Dataset",
+  format="csv",
+  identifier=NA,
+  doi=NA,
+  source=NA,
+  language="eng",
+  relation=NA,
+  coverage=NA,
+  rights="This work is licensed under CC BY-NC-ND 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/",
+  bibliographicCitation=NA)
+
+meta_report$title<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
+meta_dataset$title<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
+
+meta_dataset$creator<-raab_meta$pi_name
+meta_dataset$date<-raab_meta$year_end
+
+url_string<-gsub("[[:punct:]]", "", raab_meta$survey_title)
+url_string<-gsub(" ", "-", tolower(url_string))
+
+meta_report$identifier<-paste0("https://www.raab.world/survey/",url_string,"/report")
+meta_dataset$identifier<-paste0("https://www.raab.world/survey/",url_string,"/data")
+
+meta_report$doi<-paste0("10.17037/RAABREPORT.",formatC(as.numeric(row.names(raab_meta)),width=8,format = "d",flag="0"))
+meta_dataset$doi<-paste0("10.17037/RAABREPORT.",formatC(as.numeric(row.names(raab_meta)),width=8,format = "d",flag="0"))
+
+meta_report$source<-paste0("Rapid Assessment of Avoidable Blindness Dataset: ",raab_meta$survey_title)
+meta_dataset$relation<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
+
+meta_report$bibiographicCitation<-paste0(
+  meta_report$creator,
+  ". (",
+  format(Sys.time(), '%Y'),
+  "). ",
+  meta_report$title,
+  ". ",
+  meta_report$publisher,
+  ". DOI: ",
+  meta_report$doi)
+
+meta_dataset$bibiographicCitation<-paste0(
+  meta_dataset$creator,
+  ". (",
+  format(Sys.time(), '%Y'),
+  "). ",
+  meta_dataset$title,
+  ". ",
+  meta_dataset$publisher,
+  ". DOI: ",
+  meta_dataset$doi)
 
 PI<-raab_meta$pi_name
 TITLE<-raab_meta$survey_title
 
 write.table(raab_meta, here("outputs", ID, "raw", "meta.csv"),row.names=F,col.names=T,sep=",",na="")
+write.table(meta_report, here("outputs", ID, "raw", "meta_report.csv"),row.names=F,col.names=T,sep=",",na="")
+write.table(meta_dataset, here("outputs", ID, "raw", "meta_dataset.csv"),row.names=F,col.names=T,sep=",",na="")
 write.table(raab, here("outputs", ID, "raw", "data", "survey_data.csv"),row.names=F,col.names=T,sep=",")
 write.table(popfives, here("outputs", ID, "raw", "data","population.csv"),row.names=F,col.names=T,sep=",")
 
@@ -66,11 +149,9 @@ tables:
 header-includes:
 - \usepackage{float}
 - \usepackage{tabu}
-- \usepackage{graphicx}
 - \usepackage{fancyhdr}
 - \fancypagestyle{plain}{\pagestyle{fancy}}
 - \fancyhead[R]{\includegraphics[width=5cm]{logo.png}}
-
 ---
 
 ```{r raab_report_setup, include=FALSE}
@@ -95,7 +176,7 @@ Report generated: `r format(Sys.time(), '%d %B %Y')`
 
 # Sample representation
 
-## Table 1
+## Response rate
 
 ```{r sum1, echo=FALSE}
 
@@ -103,7 +184,7 @@ source(here("RAAB7_scripts","response-rate.R"))
 
 sum1.nice.names<-sum1
 
-write.table(sum1.nice.names, here("outputs", ID, "summary", "data", "t1.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum1.nice.names, here("outputs", ID, "summary", "data", "eligible_persons_coverage_absentees_and_refusals.csv"),row.names=F,col.names=T,sep=",")
 
 names(sum1.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -124,7 +205,7 @@ If the response rate is over 95%, this might be an indication that eligible part
 
 It is important to review this information in relation to the tables on representativeness of the sample below to identify whether a high response rate is valid.
 
-## Table 2, table 3
+## Sample representativeness
 
 ```{r asa1, echo=FALSE}
 
@@ -132,7 +213,7 @@ source(here("RAAB7_scripts","sample-age-gender.R"))
 
 asa1.nice.names<-asa1[,c("age.groups.tens","female.examined.n","female.examined.pct","male.examined.n","male.examined.pct","total.examined.n","total.examined.pct")]
 
-write.table(asa1.nice.names,here("outputs", ID, "summary", "data", "t2.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa1.nice.names,here("outputs", ID, "summary", "data", "age_and_sex_distribution_of_people_examined_in_the_sample.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa1.nice.names)<-c("Years","n","%","n","%","n","%")
 
@@ -142,8 +223,8 @@ knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and sex d
   row_spec(4,hline_after=T) %>%
   add_header_above(c("Age group" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
 
-
 ```
+
 
 ```{r asa2, echo=FALSE}
 
@@ -151,7 +232,7 @@ source(here("RAAB7_scripts","pop-age-gender.R"))
 
 asa2.nice.names<-asa2
 
-write.table(asa2.nice.names,here("outputs", ID, "summary", "data", "t3.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa2.nice.names,here("outputs", ID, "summary", "data", "total_number_of_people_aged_50plus_in_survey_area.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa2.nice.names)<-c("Years","n","%","n","%","n","%")
 
@@ -163,7 +244,6 @@ knitr::kable(asa2.nice.names, booktabs=T, linesep = "", caption = "Total number 
 
 ```
 
-## Plot 1, plot 2
 
 ```{r asa1_2_plots, echo=FALSE, fig.height=3.25, fig.fullwidth=T}
 
@@ -185,6 +265,7 @@ text(x=par("usr")[3]-6, y=c(2,5,8,11), labels=c("50-59","60-69","70-79","80+"), 
 legend("top",col=c("gold","grey"),pch=15,c("Survey sample","Census population"),bty='n',cex=0.6,title=expression(bold("Males")),horiz=T,title.adj=0)
 
 ```
+
 
 ```{r asa1_extra_plot, echo=FALSE, fig.height=3.25, fig.fullwidth=T}
 
@@ -217,7 +298,7 @@ Important: if your sample differs from the population because one group was more
 
 \newpage
 
-# Prevalence and causes of distance vision impairment
+# Prevalence of vision impairment
 
 We report the prevalence of distance vision impairment (VI) in the population 50 years and older using presenting visual acuity (PVA) in the better eye. PVA is visual acuity measured with correction, if available.
 
@@ -231,7 +312,7 @@ Moderate VI: PVA less than 6/18 to 6/60 in the better eye
 
 Mild VI: PVA less than 6/12 to 6/18 in the better eye
 
-## Table 4, table 5
+## Prevalence by severity
 
 ```{r sum3, echo=FALSE}
 
@@ -254,7 +335,7 @@ sum3.nice.names$total.ci<-paste0(sum3.nice.names$total.pct.lci," - ",sum3.nice.n
 
 sum3a.nice.names<-sum3.nice.names[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(sum3a.nice.names,here("outputs", ID, "summary", "data", "t4.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum3a.nice.names,here("outputs", ID, "summary", "data", "crude_prevalence_of_blindness_severe_moderate_and_mild_vision_impairment.csv"),row.names=F,col.names=T,sep=",")
 
 names(sum3a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
@@ -266,11 +347,12 @@ knitr::kable(sum3a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
 
 ```
 
+
 ```{r sum4, echo=FALSE}
 
 sum3b.nice.names<-sum3.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
 
-write.table(sum3b.nice.names,here("outputs", ID, "summary", "data", "t5.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum3b.nice.names,here("outputs", ID, "summary", "data", "adjusted_prevalence_and_extrapolated_magnitude_of_blindness_severe_moderate_and_mild_vision_impairment.csv"),row.names=F,col.names=T,sep=",")
 
 names(sum3b.nice.names)<-c("","%","95% CI","Extraplotated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude")
 
@@ -282,9 +364,9 @@ knitr::kable(sum3b.nice.names, booktabs=T, linesep = "", caption = "Adjusted pre
 
 ```
 
-These tables show the crude and adjusted prevalence of vision impairment by impairment level and gender. The sample size for RAAB is calculated to provide an acceptable level of precision for the total prevalence of blindness. The accuracy of prevalence estimates for population subgroups is lower and caution should be taken in the interpretation of these data. Table 5 shows the estimated magnitude of vision impairment in the study area by gender, calculated by multiplying the crude prevalence by the population count (e.g., census data). Throughout, the 95% confidence intervals are calculated to account for RAAB's cluster sampling design.
+These tables show the crude and adjusted prevalence of vision impairment by impairment level and gender. The sample size for RAAB is calculated to provide an acceptable level of precision for the total prevalence of blindness. The accuracy of prevalence estimates for population subgroups is lower and caution should be taken in the interpretation of these data. Table P2 shows the estimated magnitude of vision impairment in the study area by gender, calculated by multiplying the crude prevalence by the population count (e.g., census data). Throughout, the 95% confidence intervals are calculated to account for RAAB's cluster sampling design.
 
-## Table 6, table 7
+## Cumulative prevalence
 
 ```{r asa6, echo=FALSE}
 
@@ -307,7 +389,7 @@ asa6.nice.names$total.ci<-paste0(asa6.nice.names$total.pct.lci," - ",asa6.nice.n
 
 asa6a.nice.names<-asa6.nice.names[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(asa6a.nice.names,here("outputs", ID, "summary", "data", "t6.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa6a.nice.names,here("outputs", ID, "summary", "data", "crude_cumulative_prevalence_of_blindness_severe_moderate_and_mild_vision_impairment.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa6a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
@@ -320,11 +402,12 @@ knitr::kable(asa6a.nice.names, booktabs=T, linesep = "", caption = "Crude cumula
 
 ```
 
+
 ```{r asa6b,echo=FALSE}
 
 asa6b.nice.names<-asa6.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
 
-write.table(asa6b.nice.names,here("outputs", ID, "summary", "data", "t7.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa6b.nice.names,here("outputs", ID, "summary", "data", "adjusted_cumulative_prevalence_of_blindness_severe_moderate_and_mild_vision_impairment.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa6b.nice.names)<-c("","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude")
 
@@ -336,149 +419,7 @@ knitr::kable(asa6b.nice.names, booktabs=T, linesep = "", caption = "Adjusted cum
 
 ```
 
-## Table 8, table 9
-
-```{r sum6, echo=FALSE}
-
-source(here("RAAB7_scripts","cause-vi_RAAB7.R"))
-
-sum6.nice.names<-sum6[,1:9]
-
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_uncorrected_refractive_error"]<-"1. Uncorrected refractive error"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_aphakia_uncorrected"]<-"2. Uncorrected aphakia"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_cataract_untreated"]<-"3. Untreated cataract"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_cataract_surgical_complications"]<-"4. Cataract surgical complications"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_trachomatous_corneal_opacity" ]<-"5. Trachomatous corneal opacity"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_corneal_opacity"]<-"6. Other corneal opacity"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_phthisis" ]<-"7. Phthisis"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_onchocerciasis"]<-"8. Onchocerciasis"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_glaucoma" ]<-"9. Glaucoma"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"10. Diabetic retinopathy"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"11. Age-related macular degeneration"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"12. Other posterior segment disease"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_myopic_degeneration" ]<-"13. Myopic degeneration"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"14. Other globe or CNS abnomalities"
-
-write.table(sum6.nice.names,here("outputs", ID, "summary", "data", "t8.csv"),row.names=F,col.names=T,sep=",")
-
-sum6.for.tree<-sum6.numeric
-
-names(sum6.nice.names) <- c(' ', 'n', '%', 'n', '%','n', '%','n', '%')
-
-knitr::kable(sum6.nice.names, booktabs=T, linesep = "", caption = " Principal cause of blindness, severe, moderate and mild vision impairment",align='lcccccccc') %>%
-  kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
-  row_spec(0,italic=TRUE) %>%
-  row_spec(14,hline_after=T) %>%
-  column_spec(1,width='6cm') %>%
-  add_header_above(c("Principal cause" = 1, "Blind" = 2, "Severe" = 2, "Moderate" = 2, "Mild" = 2),bold = T)
-
-```
-
-```{r sum6_agg, echo=FALSE}
-
-sum6intag<-aggregate(sum6.numeric[,2:9],by=list(sum6.numeric$cause_group_1), FUN=sum,na.rm=T)
-sum6intag[nrow(sum6intag)+1,2:9]<-colSums(sum6intag[1:3,2:9])
-sum6intag$Group.1[4]<-"D. Avoidable\n(A + B + C)"
-s6tag<-aggregate(sum6.numeric[,2:9],by=list(sum6.numeric$cause_group_2), FUN=sum,na.rm=T)
-
-sum6ag<-rbind(sum6intag,s6tag)
-
-write.table(sum6ag,here("outputs", ID, "summary", "data", "t9.csv"),row.names=F,col.names=T,sep=",")
-
-names(sum6ag)<-c("","n", "%", "n", "%", "n","%","n","%")
-
-knitr::kable(sum6ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = " Principal cause of blindness, severe, moderate and mild vision impairment, by intervention category",align='lcccccccc') %>%
-  kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
-  row_spec(0,italic=TRUE) %>%
-  column_spec(1,width='5cm') %>%
-  add_header_above(c("Category" = 1, "Blind" = 2, "Severe" = 2, "Moderate" = 2, "Mild" = 2),bold = T) %>%
-  add_footnote("PHC: Primary Health Care; PEC: Primary Eye Care",notation="symbol")
-
-```
-
-Table 8 compares the main cause of blindness, severe vision impairment, moderate vision impairment and mild visual impairment in the person. Table 9 shows what proportion of vision impairment is attributable to treatable, preventable and posterior segment disease. From these tables the priorities for intervention can be determined. The distribution of cases of blindness in the sample are visualised below.
-
-## Plot 3
-
-```{r treemap_1, echop=FALSE, fig.fullwidth=T}
-
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_uncorrected_refractive_error"]<-"Uncorrected refractive error"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_aphakia_uncorrected"]<-"Uncorrected aphakia"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_cataract_untreated"]<-"Untreated cataract"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_cataract_surgical_complications"]<-"Cataract surgical complications"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_trachomatous_corneal_opacity" ]<-"Trachomatous corneal opacity"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_corneal_opacity"]<-"Other corneal opacity"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_phthisis" ]<-"Phthisis"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_onchocerciasis"]<-"Onchocerciasis"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_glaucoma" ]<-"Glaucoma"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"Diabetic retinopathy"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"Age-related macular degeneration"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"Other posterior segment disease"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_myopic_degeneration" ]<-"Myopic degeneration"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"Other globe or CNS abnomalities"
-
-
-core_fig_cols<-brewer.pal(8,"Spectral")
-
-treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="index",palette = core_fig_cols, title="Principal causes of bilateral blindness",position.legend="right",fontsize.title=12)
-
-```
-
-## Table 10, table 11
-
-```{r prev4, echo=FALSE}
-
-source(here("RAAB7_scripts","cause-blind-gender.R"))
-
-prev4.nice.names<-prev4[,1:7]
-
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_uncorrected_refractive_error"]<-"1. Uncorrected refractive error"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_aphakia_uncorrected"]<-"2. Uncorrected aphakia"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_cataract_untreated"]<-"3. Untreated cataract"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_cataract_surgical_complications"]<-"4. Cataract surgical complications"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_trachomatous_corneal_opacity" ]<-"5. Trachomatous corneal opacity"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_corneal_opacity"]<-"6. Other corneal opacity"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_phthisis" ]<-"7. Phthisis"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_onchocerciasis"]<-"8. Onchocerciasis"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_glaucoma" ]<-"9. Glaucoma"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"10. Diabetic retinopathy"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"11. Age-related macular degeneration"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease"]<-"12. Other posterior segment disease"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_myopic_degeneration"]<-"13. Myopic degeneration"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"14. Other globe or CNS abnomalities"
-
-write.table(prev4.nice.names,here("outputs", ID, "summary", "data", "t10.csv"),row.names=F,col.names=T,sep=",")
-
-names(prev4.nice.names)<-c("","n","%","n","%","n","%")
-
-knitr::kable(prev4.nice.names, booktabs=T, linesep = "", caption = "Principal cause of blindness in males and females",align='lcccccc') %>%
-  kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
-  row_spec(0,italic=TRUE) %>%
-  row_spec(14,hline_after=T) %>%
-  column_spec(1,width='6cm') %>%
-  add_header_above(c("Principal cause" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold = T)
-
-```
-
-This table shows the principal cause of blindness, disaggregated by gender.
-
-```{r prev4_agg, echo=FALSE}
-
-prev4ag<-rbind(prev4intag,p4tag)
-
-write.table(prev4ag,here("outputs", ID, "summary", "data", "t11.csv"),row.names=F,col.names=T,sep=",")
-
-names(prev4ag)<-c("","n", "%", "n", "%", "n","%")
-
-knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = " Principal cause of blindness (PVA <3/60), by gender and intervention category",align='lcccccc') %>%
-  kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
-  row_spec(0,italic=TRUE) %>%
-  column_spec(1,width='5cm') %>%
-  add_header_above(c("Category" = 1, "Male" = 2, "Female" = 2, "Total" = 2),bold = T)
-
-```
-
-## Table 12, table 13
+## Unilateral vision impairment
 
 ```{r newtab1a, echo=FALSE}
 
@@ -501,8 +442,7 @@ unt.nice.names$vi.level[unt.nice.names$vi.level=="blind.unilat"]<-"Blind in one 
 
 unta.nice.names<-unt.nice.names[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-
-write.table(unta.nice.names,here("outputs", ID, "summary", "data", "t12.csv"),row.names=F,col.names=T,sep=",")
+write.table(unta.nice.names,here("outputs", ID, "summary", "data", "crude_prevalence_of_blind_severe_moderate_and_mild_unilateral_vision_impairment.csv"),row.names=F,col.names=T,sep=",")
 
 names(unta.nice.names) <- c(' ', 'n', '%', '95% CI', 'n', '%', '95% CI', 'n', '%', '95% CI')
 
@@ -516,17 +456,16 @@ knitr::kable(unta.nice.names,booktabs=T, linesep = "",caption="Crude prevalence 
 
 ```
 
-```{r newtab1b, echo=FALSE}
 
+```{r newtab1b, echo=FALSE}
 
 unt.nice.names$male.adj.ci<-paste0(unt.nice.names$male.adj.pct.lci," - ",unt.nice.names$male.adj.pct.uci)
 unt.nice.names$female.adj.ci<-paste0(unt.nice.names$female.adj.pct.lci," - ",unt.nice.names$female.adj.pct.uci)
 unt.nice.names$total.adj.ci<-paste0(unt.nice.names$total.adj.pct.lci," - ",unt.nice.names$total.adj.pct.uci)
 
-
 untb.nice.names<-unt.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
 
-write.table(untb.nice.names,here("outputs", ID, "summary", "data", "t13.csv"),row.names=F,col.names=T,sep=",")
+write.table(untb.nice.names,here("outputs", ID, "summary", "data", "adjusted_prevalence_and_extrapolated_magnitude_of_blind_severe_moderate_and_mild_unilateral_vision_impairment.csv"),row.names=F,col.names=T,sep=",")
 
 names(untb.nice.names) <- c("", "%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude")
 
@@ -541,11 +480,218 @@ knitr::kable(untb.nice.names, booktabs=T, linesep = "", caption="Adjusted preval
 
 Cases of unilateral vision impairment acknowledge an additional sight loss burden in the population, not captured in the standard definition of bilateral vision impairment, but with the potential to impact on visual functioning.
 
+```{r, eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
+
+asis_output("## Near vision impairment
+
+Crude and adjusted prevalence of near vision impairment.")
+
+```
+
+
+```{r crude-nv-prev,echo=FALSE,eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
+
+source(here("RAAB7_scripts","crude-adj-prev-near-re.R"))
+
+crude.near.re.prev.nice.names<-near.re.prev.total
+
+crude.near.re.prev.nice.names$male.ci<-paste0(crude.near.re.prev.nice.names$male.pct.lci," - ",crude.near.re.prev.nice.names$male.pct.uci)
+crude.near.re.prev.nice.names$female.ci<-paste0(crude.near.re.prev.nice.names$female.pct.lci," - ",crude.near.re.prev.nice.names$female.pct.uci)
+crude.near.re.prev.nice.names$total.ci<-paste0(crude.near.re.prev.nice.names$total.pct.lci," - ",crude.near.re.prev.nice.names$total.pct.uci)
+
+crude.near.re.prev.nice.names[1,1]<-"Near VI"
+crude.near.re.prev.nice.names<-crude.near.re.prev.nice.names[,c("age.groups.tens","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
+
+write.table(crude.near.re.prev.nice.names,here("outputs", ID, "summary", "data", "crude_prevalence_of_near_vision_impairment.csv"),row.names=F,col.names=T,sep=",")
+
+names(crude.near.re.prev.nice.names) <- c(' ', 'n', '%', '95% CI', 'n', '%', '95% CI', 'n', '%', '95% CI')
+
+knitr::kable(crude.near.re.prev.nice.names,booktabs=T, linesep = "",caption="Crude prevalence of near vision impairment",align='lccccccccc') %>%
+  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  column_spec(1,width='3.5cm') %>%
+  column_spec(c(4,7,10),width='1.5cm') %>%
+  add_header_above(c(" " = 1, "Male" = 3, "Female" = 3, "Total" = 3),bold=T) 
+
+```
+
+
+```{r adj-nv-prev,echo=FALSE,eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
+
+source(here("RAAB7_scripts","crude-adj-prev-near-re.R"))
+
+adj.near.re.prev.nice.names<-near.re.prev.total
+
+adj.near.re.prev.nice.names$male.adj.ci<-paste0(adj.near.re.prev.nice.names$male.adj.pct.lci," - ",adj.near.re.prev.nice.names$male.adj.pct.uci)
+adj.near.re.prev.nice.names$female.adj.ci<-paste0(adj.near.re.prev.nice.names$female.adj.pct.lci," - ",adj.near.re.prev.nice.names$female.adj.pct.uci)
+adj.near.re.prev.nice.names$total.adj.ci<-paste0(adj.near.re.prev.nice.names$total.adj.pct.lci," - ",adj.near.re.prev.nice.names$total.adj.pct.uci)
+
+adj.near.re.prev.nice.names[1,1]<-"Near VI"
+adj.near.re.prev.nice.names<-adj.near.re.prev.nice.names[,c("age.groups.tens","female.adj.pct","female.adj.ci","female.extrapolated.n","male.adj.pct","male.adj.ci","male.extrapolated.n","total.adj.pct","total.adj.ci","total.extrapolated.n")]
+
+write.table(adj.near.re.prev.nice.names,here("outputs", ID, "summary", "data", "adjusted_prevalence_of_near_vision_impairment.csv"),row.names=F,col.names=T,sep=",")
+
+names(adj.near.re.prev.nice.names) <- c(' ', 'Adj. %', '95% CI', 'Extrapolated magnitude', 'Adj. %', '95% CI', 'Extrapolated magnitude', 'Adj. %', '95% CI', 'Extrapolated magnitude')
+
+knitr::kable(adj.near.re.prev.nice.names,booktabs=T, linesep = "",caption="Adjusted prevalence of near vision impairment",align='lccccccccc') %>%
+  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  column_spec(1,width='1.5cm') %>%
+  column_spec(c(4,7,10),width='1.5cm') %>%
+  add_header_above(c(" " = 1, "Male" = 3, "Female" = 3, "Total" = 3),bold=T) 
+
+```
+
+
+\newpage
+
+# Causes of vision impairment
+
+## Principle causes
+
+```{r sum6, echo=FALSE}
+
+source(here("RAAB7_scripts","cause-vi_RAAB7.R"))
+
+sum6.nice.names<-sum6[,1:9]
+
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_uncorrected_refractive_error"]<-"1. Uncorrected refractive error"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_aphakia_uncorrected"]<-"2. Uncorrected aphakia"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_cataract_untreated"]<-"3. Untreated cataract"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_cataract_surgical_complications"]<-"4. Cataract surgical complications"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_trachomatous_corneal_opacity" ]<-"5. Trachomatous corneal opacity"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_corneal_opacity"]<-"6. Other corneal opacity"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_phthisis" ]<-"7. Phthisis"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_onchocerciasis"]<-"8. Onchocerciasis"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_glaucoma" ]<-"9. Glaucoma"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"10. Diabetic retinopathy"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"11. Age-related macular degeneration"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"12. Other posterior segment disease"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_myopic_degeneration" ]<-"13. Myopic degeneration"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"14. Other globe or CNS abnomalities"
+
+write.table(sum6.nice.names,here("outputs", ID, "summary", "data", "principal_cause_of_blindness_severe_moderate_and_mild_vision_impairment.csv"),row.names=F,col.names=T,sep=",")
+
+sum6.for.tree<-sum6.numeric
+
+names(sum6.nice.names) <- c(' ', 'n', '%', 'n', '%','n', '%','n', '%')
+
+knitr::kable(sum6.nice.names, booktabs=T, linesep = "", caption = "Principal cause of blindness, severe, moderate and mild vision impairment",align='lcccccccc') %>%
+  kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  row_spec(14,hline_after=T) %>%
+  column_spec(1,width='6cm') %>%
+  add_header_above(c("Principal cause" = 1, "Blind" = 2, "Severe" = 2, "Moderate" = 2, "Mild" = 2),bold = T)
+
+```
+
+
+```{r sum6_agg, echo=FALSE}
+
+sum6intag<-aggregate(sum6.numeric[,2:9],by=list(sum6.numeric$cause_group_1), FUN=sum,na.rm=T)
+sum6intag[nrow(sum6intag)+1,2:9]<-colSums(sum6intag[1:3,2:9])
+sum6intag$Group.1[4]<-"D. Avoidable\n(A + B + C)"
+s6tag<-aggregate(sum6.numeric[,2:9],by=list(sum6.numeric$cause_group_2), FUN=sum,na.rm=T)
+
+sum6ag<-rbind(sum6intag,s6tag)
+
+write.table(sum6ag,here("outputs", ID, "summary", "data", "principal_cause_of_blindness_severe_moderate_and_mild_vision_impairment_by_intervention_category.csv"),row.names=F,col.names=T,sep=",")
+
+names(sum6ag)<-c("","n", "%", "n", "%", "n","%","n","%")
+
+knitr::kable(sum6ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = "Principal cause of blindness, severe, moderate and mild vision impairment, by intervention category",align='lcccccccc') %>%
+  kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  column_spec(1,width='5cm') %>%
+  add_header_above(c("Category" = 1, "Blind" = 2, "Severe" = 2, "Moderate" = 2, "Mild" = 2),bold = T) %>%
+  add_footnote("PHC: Primary Health Care; PEC: Primary Eye Care",notation="symbol")
+
+```
+
+This table compares the main cause of blindness, severe vision impairment, moderate vision impairment and mild visual impairment in the person. The following table shows what proportion of vision impairment is attributable to treatable, preventable and posterior segment disease. From these tables the priorities for intervention can be determined. The distribution of cases of blindness in the sample are visualised below.
+
+```{r treemap_1, echop=FALSE, fig.fullwidth=T}
+
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_uncorrected_refractive_error"]<-"Uncorrected refractive error"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_aphakia_uncorrected"]<-"Uncorrected aphakia"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_cataract_untreated"]<-"Untreated cataract"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_cataract_surgical_complications"]<-"Cataract surgical complications"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_trachomatous_corneal_opacity" ]<-"Trachomatous corneal opacity"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_corneal_opacity"]<-"Other corneal opacity"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_phthisis" ]<-"Phthisis"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_onchocerciasis"]<-"Onchocerciasis"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_glaucoma" ]<-"Glaucoma"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"Diabetic retinopathy"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"Age-related macular degeneration"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"Other posterior segment disease"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_myopic_degeneration" ]<-"Myopic degeneration"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"Other globe or CNS abnomalities"
+
+core_fig_cols<-brewer.pal(8,"Spectral")
+
+treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="index",palette = core_fig_cols, title="Principal causes of bilateral blindness",position.legend="right",fontsize.title=12)
+
+```
+
+## Cause by gender
+
+```{r prev4, echo=FALSE}
+
+source(here("RAAB7_scripts","cause-blind-gender.R"))
+
+prev4.nice.names<-prev4[,1:7]
+
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_uncorrected_refractive_error"]<-"1. Uncorrected refractive error"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_aphakia_uncorrected"]<-"2. Uncorrected aphakia"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_cataract_untreated"]<-"3. Untreated cataract"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_cataract_surgical_complications"]<-"4. Cataract surgical complications"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_trachomatous_corneal_opacity" ]<-"5. Trachomatous corneal opacity"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_corneal_opacity"]<-"6. Other corneal opacity"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_phthisis" ]<-"7. Phthisis"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_onchocerciasis"]<-"8. Onchocerciasis"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_glaucoma" ]<-"9. Glaucoma"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"10. Diabetic retinopathy"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"11. Age-related macular degeneration"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease"]<-"12. Other posterior segment disease"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_myopic_degeneration"]<-"13. Myopic degeneration"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"14. Other globe or CNS abnomalities"
+
+write.table(prev4.nice.names,here("outputs", ID, "summary", "data", "principal_cause_of_blindness_in_males_and_females.csv"),row.names=F,col.names=T,sep=",")
+
+names(prev4.nice.names)<-c("","n","%","n","%","n","%")
+
+knitr::kable(prev4.nice.names, booktabs=T, linesep = "", caption = "Principal cause of blindness in males and females",align='lcccccc') %>%
+  kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  row_spec(14,hline_after=T) %>%
+  column_spec(1,width='6cm') %>%
+  add_header_above(c("Principal cause" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold = T)
+
+```
+
+This table shows the principal cause of blindness, disaggregated by gender.
+
+```{r prev4_agg, echo=FALSE}
+
+prev4ag<-rbind(prev4intag,p4tag)
+
+write.table(prev4ag,here("outputs", ID, "summary", "data", "principal_cause_of_blindness_by_gender_and_intervention_category.csv"),row.names=F,col.names=T,sep=",")
+
+names(prev4ag)<-c("","n", "%", "n", "%", "n","%")
+
+knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = "Principal cause of blindness (PVA <3/60), by gender and intervention category",align='lcccccc') %>%
+  kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  column_spec(1,width='5cm') %>%
+  add_header_above(c("Category" = 1, "Male" = 2, "Female" = 2, "Total" = 2),bold = T)
+
+```
+
 \newpage
 
 # Cataract
 
-## Table 14
+## Cataract operations
 
 ```{r catops, echo=FALSE}
 
@@ -553,7 +699,7 @@ source(here("RAAB7_scripts","crude_cat_ops_RAAB7.R"))
 
 catops.nice.names<-catops
 
-write.table(catops.nice.names,here("outputs", ID, "summary", "data", "t14.csv"),row.names=F,col.names=T,sep=",")
+write.table(catops.nice.names,here("outputs", ID, "summary", "data", "crude_prevalence_of_people_bilaterally_and_unilaterally_cataract_operated.csv"),row.names=F,col.names=T,sep=",")
 
 catops.nice.names$cat.ops[catops.nice.names$cat.ops=="bilateral.operated"]<-"Bilateral operated"
 catops.nice.names$cat.ops[catops.nice.names$cat.ops=="unilateral.operated"]<-"Unilateral operated"
@@ -571,7 +717,7 @@ knitr::kable(catops.nice.names, booktabs=T, linesep = "", caption = "Crude preva
 
 This table reports the prevalence of people in the sample with one or both eyes operated, irrespective of post-operative visual acuity or pinhole acuity in the unoperated eye.
 
-## Table 15, table 16
+## Prevalence of cataract
 
 ```{r catcovdenom.a, echo=FALSE}
 
@@ -585,7 +731,7 @@ catcovdenom.a$total.ci<-paste0(catcovdenom.a$total.pct.lci," - ", catcovdenom.a$
 
 catcovdenom.a.nice.names<-catcovdenom.a[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(catcovdenom.a.nice.names,here("outputs", ID, "summary", "data", "t15.csv"),row.names=F,col.names=T,sep=",")
+write.table(catcovdenom.a.nice.names,here("outputs", ID, "summary", "data", "crude_unmet_need_for_cataract_surgery_at_different_pinhole_VA_thresholds.csv"),row.names=F,col.names=T,sep=",")
 
 names(catcovdenom.a.nice.names)<-c(" ","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
@@ -595,6 +741,7 @@ knitr::kable(catcovdenom.a.nice.names, booktabs=T, linesep = "", caption = "Crud
   add_header_above(c("Unmet need threshold" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
 
 ```
+
 
 ```{r catcovdenom.b, echo=FALSE}
 
@@ -608,7 +755,7 @@ catcovdenom.b$total.adj.ci<-paste0(catcovdenom.b$total.adj.pct.lci," - ",catcovd
 
 catcovdenom.b.nice.names<-catcovdenom.b[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
 
-write.table(catcovdenom.b.nice.names,here("outputs", ID, "summary", "data", "t16.csv"),row.names=F,col.names=T,sep=",")
+write.table(catcovdenom.b.nice.names,here("outputs", ID, "summary", "data", "extrapolated_magnitude_of_unmet_need_for_cataract_surgery_at_different_pinhole_VA_thresholds.csv"),row.names=F,col.names=T,sep=",")
 
 names(catcovdenom.b.nice.names)<-c(" ","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude")
 
@@ -622,9 +769,9 @@ knitr::kable(catcovdenom.b.nice.names, booktabs=T, linesep = "", caption = "Extr
 
 The number of people at each PinVA threshold in these tables correspond to the unmet need for cataract surgery in the calculation for effective cataract surgical coverage (see notes). People with unmet need for surgery may have cataract in one or both eyes. Those with cataract in one eye and different cause of VI in the other eye would potentially benefit from cataract surgery. Note, this group with unilateral cataract excludes people with previous cataract surgery, refractive error or uncorrected aphakia in the non-cataract eye.
 
-## Table 17, table 18
+## Severity of cataract-related vision impairment
 
-In tables 17 & 18, the unmet need for cataract surgery is broken down by bilateral and unilateral cataract cases at each of the cataract surgical thresholds.
+In these tables, the unmet need for cataract surgery is broken down by bilateral and unilateral cataract cases at each of the cataract surgical thresholds.
 
 ```{r asa7a, echo=FALSE}
 
@@ -639,7 +786,7 @@ asa7a.int$total.ci<-paste0(asa7a.int$total.pct.lci," - ", asa7a.int$total.pct.uc
 
 asa7a.nice.names<-asa7a.int[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(asa7a.nice.names,here("outputs", ID, "summary", "data", "t17.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa7a.nice.names,here("outputs", ID, "summary", "data", "crude_prevalence_of_cataract_at_different_surgical_thresholds.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa7a.nice.names)<-c(" ","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
@@ -652,6 +799,7 @@ knitr::kable(asa7a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
   add_footnote("Unilateral cases can have any level of VA in the eye without operable cataract",notation="symbol")
 
 ```
+
 
 ```{r asa7b, echo=FALSE}
 
@@ -666,7 +814,7 @@ asa7b.int$total.adj.ci<-paste0(asa7b.int$total.adj.pct.lci," - ",asa7b.int$total
 
 asa7b.nice.names<-asa7b.int[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
 
-write.table(asa7b.nice.names,here("outputs", ID, "summary", "data", "t18.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa7b.nice.names,here("outputs", ID, "summary", "data", "adjusted_prevalence_and_extrapolated_magnitude_of_cataract_at_different_surgical_thresholds.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa7b.nice.names)<-c(" ","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude")
 
@@ -683,7 +831,7 @@ knitr::kable(asa7b.nice.names, booktabs=T, linesep = "", caption = "Adjusted pre
 
 These tables enable planning the number of surgeries required to eliminate vision impairment from cataract at a particular PinVA threshold. Assuming services will aim to operate on all eyes of people with vision impairing cataract, two surgeries are required for ‘bilateral cases’ and one surgery is required for ‘unilateral cases’.
 
-## Table 19
+## Cataract surgical coverage
 
 ```{r prev14, echo=FALSE}
 
@@ -699,7 +847,7 @@ prev14.nice.names$num.thresh<-recode_factor(prev14.nice.names$num.thresh,'csc' =
 
 prev14a.nice.names<-prev14.nice.names[,c("num.thresh","female.adjusted","female.adjusted.ci","male.adjusted","male.adjusted.ci","total.adjusted","total.adjusted.ci","quality_gap")]
 
-write.table(prev14a.nice.names,here("outputs", ID, "summary", "data", "t19.csv"),row.names=F,col.names=T,sep=",")
+write.table(prev14a.nice.names,here("outputs", ID, "summary", "data", "adjusted_cataract_surgical_coverage_and_effective_cataract_surgical_coverage_at_the_person_level.csv"),row.names=F,col.names=T,sep=",")
 
 names(prev14a.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI","%")
 
@@ -714,12 +862,11 @@ knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted c
   add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2,"Relative Quality Gap" = 1),bold=T) %>%
   add_footnote("CSC: Cataract Surgical Coverage; eCSC: Effective Cataract Surgical Coverage",notation="symbol")
 
-
 ```
 
 Effective cataract surgical coverage (eCSC) measures the number of people in a population who have been operated on for cataract, and had a good outcome (at least 6/12 post-operative presenting VA), as a proportion of all people operated on or still requiring surgery. Therefore, eCSC describes service access (ie, cataract surgical coverage, [CSC]) adjusted for quality. eCSC and CSC are reported at four cataract surgical thresholds. The gap between CSC and eCSC values can be considered a quality gap; the relative quality gap is calculated as (total CSC–total eCSC)/ total CSC, with lower values reflecting better quality of cataract surgical services. See notes section for more details.
 
-## Table 20
+## Barriers to cataract surgery
 
 ```{r sum11, echo=FALSE}
 
@@ -727,7 +874,7 @@ source(here("RAAB7_scripts","cat-barriers.R"))
 
 sum11.nice.names<-surgery.bars[, c("Barrier","female_count","female_percent","male_count","male_percent","total_count","total_percent")]
 
-write.table(sum11.nice.names,here("outputs", ID, "summary", "data", "t20.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum11.nice.names,here("outputs", ID, "summary", "data", "barriers_to_cataract_surgery_among_participants_with_bilateral_cataract_and_pinva_lessthan660.csv"),row.names=F,col.names=T,sep=",")
 
 names(sum11.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -747,7 +894,7 @@ The standard RAAB survey protocol does not allow for in-depth interviews to dete
 
 Surgical outcomes are reported for all operated eyes in the sample, not at the person level. RAAB gives population based data on post-operative visual outcomes, not specific to one surgeon or one hospital and with follow-up periods ranging from months to decades.
 
-## Table 21
+## Type of surgery
 
 ```{r newtab2, echo=FALSE}
 
@@ -760,7 +907,7 @@ newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_n
 newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_couching"]<-"Couching"
 newtab2.nice.names$surgery.type[newtab2.nice.names$surgery.type=="surgery_type_no_view"]<-"No view"
 
-write.table(newtab2.nice.names,here("outputs", ID, "summary", "data", "t21.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab2.nice.names,here("outputs", ID, "summary", "data", "type_of_cataract_surgery_performed_count_by_eyes.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab2.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -772,7 +919,7 @@ knitr::kable(newtab2.nice.names, booktabs=T, linesep = "", caption = "Type of ca
 
 ```
 
-## Table 22, table 23
+## Outcomes
 
 ```{r newtab3a, echo=FALSE}
 
@@ -786,7 +933,7 @@ newtab3a.nice.names$oc.levels[newtab3a.nice.names$oc.levels=="good.oc"]<-"Good (
 newtab3a.nice.names$oc.levels[newtab3a.nice.names$oc.levels=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
 newtab3a.nice.names$oc.levels[newtab3a.nice.names$oc.levels=="poor.oc"]<-"Poor (<6/60)"
 
-write.table(newtab3a.nice.names,here("outputs", ID, "summary", "data", "t22.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab3a.nice.names,here("outputs", ID, "summary", "data", "post-operative_visual_outcome_presenting_va_count_by_eyes.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab3a.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -799,6 +946,7 @@ knitr::kable(newtab3a.nice.names, booktabs=T, linesep = "", caption = "Post-oper
 
 ```
 
+
 ```{r newtab3b, echo=FALSE}
 
 newtab3b.nice.names<-newtab3b
@@ -810,7 +958,7 @@ newtab3b.nice.names$oc.levels[newtab3b.nice.names$oc.levels=="borderline.oc"]<-"
 newtab3b.nice.names$oc.levels[newtab3b.nice.names$oc.levels=="poor.oc"]<-"Poor (<6/60)"
 
 
-write.table(newtab3b.nice.names,here("outputs", ID, "summary", "data", "t23.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab3b.nice.names,here("outputs", ID, "summary", "data", "post-operative_visual_outcome_pinhole_va_count_by_eyes.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab3b.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -823,7 +971,7 @@ knitr::kable(newtab3b.nice.names, booktabs=T, linesep = "", caption = "Post-oper
 
 ```
 
-## Table 24, table 25
+## Place of surgery
 
 ```{r outc6, echo=FALSE}
 
@@ -837,7 +985,7 @@ outc6a.nice.names$oc[outc6a.nice.names$oc=="good.oc"]<-"Good (6/12)"
 outc6a.nice.names$oc[outc6a.nice.names$oc=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
 outc6a.nice.names$oc[outc6a.nice.names$oc=="poor.oc"]<-"Poor (<6/60)"
 
-write.table(outc6a.nice.names,here("outputs", ID, "summary", "data", "t24.csv"),row.names=F,col.names=T,sep=",")
+write.table(outc6a.nice.names,here("outputs", ID, "summary", "data", "post-operative_visual_outcomes_presenting_va_in_eyes_by_place_of_surgery_male.csv"),row.names=F,col.names=T,sep=",")
 
 names(outc6a.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
 
@@ -859,7 +1007,7 @@ outc6b.nice.names$oc[outc6b.nice.names$oc=="good.oc"]<-"Good (6/12)"
 outc6b.nice.names$oc[outc6b.nice.names$oc=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
 outc6b.nice.names$oc[outc6b.nice.names$oc=="poor.oc"]<-"Poor (<6/60)"
 
-write.table(outc6b.nice.names,here("outputs", ID, "summary", "data", "t25.csv"),row.names=F,col.names=T,sep=",")
+write.table(outc6b.nice.names,here("outputs", ID, "summary", "data", "post-operative_visual_outcomes_presenting_va_in_eyes_by_place_of_surgery_female.csv"),row.names=F,col.names=T,sep=",")
 
 names(outc6b.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
 
@@ -887,72 +1035,80 @@ Trad. = Traditional setting
 
 # Refractive error
 
-Refractive error as a cause of vision impairment is defined as better eye PVA worse than 6/12 improving to 6/12 with pinhole. Note: As these estimates are based on presenting VA, i.e., with correction if available, participants with corrected refractive error are not included, only those with under- or uncorrected refractive error.
+In population-based surveys, refractive error is often defined by an improvement in visual acuity with correction to a specific VA threshold (rather than e.g., in dioptres of myopia). The definition of refractive error used in RAAB7 is UCVA worse than 6/12 improving to 6/12 with spectacle correction or pinhole. The prevalence of refractive error by age group and gender is shown in Tables RE1 and RE2.
 
-## Table 26, table 27
+## Prevalence of refractive error
 
-```{r new_tab_4a,echo=FALSE}
+```{r dist.re.prev,echo=FALSE}
 
-source(here("RAAB7_scripts","crude-adj-re-vi-prev_RAAB7.R"))
+source(here("RAAB7_scripts","crude-prev-dist-re.R"))
 
-newtab4.nice.names<-newtab4
+dist.re.prev.nice.names<-dist.re.prev.final
 
-newtab4.nice.names$vi.level<-as.character(newtab4.nice.names$vi.level)
-newtab4.nice.names$vi.level[newtab4.nice.names$vi.level=="re.blind"]<-"Blind"
-newtab4.nice.names$vi.level[newtab4.nice.names$vi.level=="re.severe.vi"]<-"Severe"
-newtab4.nice.names$vi.level[newtab4.nice.names$vi.level=="re.moderate.vi"]<-"Moderate"
-newtab4.nice.names$vi.level[newtab4.nice.names$vi.level=="re.mild.vi"]<-"Mild"
+dist.re.prev.nice.names$female.ci<-paste0(dist.re.prev.nice.names$female.pct.lci," - ",dist.re.prev.nice.names$female.pct.uci)
+dist.re.prev.nice.names$male.ci<-paste0(dist.re.prev.nice.names$male.pct.lci," - ",dist.re.prev.nice.names$male.pct.uci)
+dist.re.prev.nice.names$total.ci<-paste0(dist.re.prev.nice.names$total.pct.lci," - ",dist.re.prev.nice.names$total.pct.uci)
 
-newtab4.nice.names$female.adj.ci<-paste0(newtab4.nice.names$female.adj.pct.lci," - ",newtab4.nice.names$female.adj.pct.uci)
-newtab4.nice.names$male.adj.ci<-paste0(newtab4.nice.names$male.adj.pct.lci," - ",newtab4.nice.names$male.adj.pct.uci)
-newtab4.nice.names$total.adj.ci<-paste0(newtab4.nice.names$total.adj.pct.lci," - ",newtab4.nice.names$total.adj.pct.uci)
-newtab4.nice.names$female.ci<-paste0(newtab4.nice.names$female.pct.lci," - ",newtab4.nice.names$female.pct.uci)
-newtab4.nice.names$male.ci<-paste0(newtab4.nice.names$male.pct.lci," - ",newtab4.nice.names$male.pct.uci)
-newtab4.nice.names$total.ci<-paste0(newtab4.nice.names$total.pct.lci," - ",newtab4.nice.names$total.pct.uci)
+dist.re.prev.nice.names<-dist.re.prev.nice.names[,c("age.groups.tens","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-newtab4a.nice.names<-newtab4.nice.names[,c("vi.level","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
+write.table(dist.re.prev.nice.names,here("outputs", ID, "summary", "data", "crude_prevalence_of_distance_refractive_error_by_age_group_and_gender.csv"),row.names=F,col.names=T,sep=",")
 
-write.table(newtab4a.nice.names,here("outputs", ID, "summary", "data", "t26.csv"),row.names=F,col.names=T,sep=",")
+names(dist.re.prev.nice.names)<-c("Years","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-names(newtab4a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
-
-knitr::kable(newtab4a.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of blindness (PVA <3/60), severe (PVA <6/60), moderate (PVA <6/18) and mild (PVA <6/12) vision impairment due to refractive error",align='lccccccccc') %>%
-  kable_styling(full_width=T,latex_options="HOLD_position",font_size=8) %>%
+knitr::kable(dist.re.prev.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of distance refractive error by age group and gender",align='lccccccccc') %>%
+  kable_styling(full_width=T,latex_options=c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
-  add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
+  row_spec(4,hline_after=T) %>%
+  column_spec(c(2,3,5,6,8,9),width='1cm') %>%
+  add_header_above(c("Age group" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
 
 ```
 
-```{r new_tab_4b, echo=FALSE}
+This definition of refractive error prevalence includes people with corrected refractive error–who will have an ongoing need for refractive error services–as well as people without correction who are yet to access services. 
 
-newtab4b.nice.names<-newtab4.nice.names[,c("vi.level","female.adj.pct","female.adj.ci","extrapolated.female.n","male.adj.pct","male.adj.ci","extrapolated.male.n","total.adj.pct","total.adj.ci","extrapolated.total.n")]
+Note: In contrast to cataract, which predominantly affects the population 50 years and older, refractive error presents across the life course. RAAB does not provide any information on the prevalence of refractive error in the population under 50 years of age.
 
-write.table(newtab4b.nice.names,here("outputs", ID, "summary", "data", "t27.csv"),row.names=F,col.names=T,sep=",")
+## Spectacle use
 
-names(newtab4b.nice.names)<-c("","%","95% CI","Extraplotated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magintude")
+```{r new_tab_6,echo=FALSE}
 
-knitr::kable(newtab4b.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence and extrapolated magnitude of blindness (PVA <3/60), severe (PVA <6/60), moderate (PVA <6/18) and mild (PVA <6/12) vision impairment due to refractive error",align='lccccccccc') %>%
-  kable_styling(latex_options=c("scale_down","HOLD_position"),font_size=8) %>%
+source(here("RAAB7_scripts","spec-use_RAAB7.R"))
+
+newtab6.nice.names<-newtab6
+
+newtab6.nice.names$specs[newtab6.nice.names$specs=="near"]<-"Near vision spectacles"
+newtab6.nice.names$specs[newtab6.nice.names$specs=="distance.total"]<-"Distance vision spectacles"
+newtab6.nice.names$specs[newtab6.nice.names$specs=="distance.under.2"]<-"<2 years"
+newtab6.nice.names$specs[newtab6.nice.names$specs=="distance.2.to.5"]<-"2-5 years"
+newtab6.nice.names$specs[newtab6.nice.names$specs=="distance.over.5"]<-">5 years"
+
+write.table(newtab6.nice.names,here("outputs", ID, "summary", "data", "distance_and_near_vision_spectacle_use_among_study_participants.csv"),row.names=F,col.names=T,sep=",")
+
+names(newtab6.nice.names)<-c("","n","%","n","%","n","%")
+
+knitr::kable(newtab6.nice.names, booktabs=T, linesep = "", caption = "Distance and near vision spectacle use among study participants",align='lcccccc') %>%
+  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
-  column_spec(c(4,7,10),width='2cm') %>%
-  add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
+  add_indent(c(2,3,4),level_of_indent = 1) %>%
+  column_spec(1,width='4cm') %>%
+  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
 
 ```
 
-## Table 28
+This table reports the sample (crude) prevalence of distance and near spectacle use by gender. The categories of distance and near use are not mutually exclusive, i.e., some participants will use both. Distance spectacle ownership is disaggregated by length of time (in years) since the current spectacles were acquired. 
 
-Effective refractive error coverage (eREC) measures the number of people in a population in need of optical correction who have received correction and had a good outcome (ie, can see at least 6/12 corrected) as a proportion of all people in need of optical correction who have accessed correction or still require it. Therefore, eREC describes service access (ie, refractive error coverage, [REC]) adjusted for quality. See notes section for more details.
+Note: Not all participants with spectacles will have a need for correction according to the standard definition in the effective refractive error correction calculation, i.e., some will have 6/12 uncorrected VA.
 
-Note: Both indicators refer to distance refractive error
+## Distance refractive error coverage
 
 ```{r new_tab_5,echo=FALSE}
 
-source(here("RAAB7_scripts","adj-rec-erec_RAAB7.R"))
+source(here("RAAB7_scripts","adj-rec-erec-dist_RAAB7.R"))
 
 newtab5.nice.names<-newtab5
 
-newtab5.nice.names$rec_metric[newtab5.nice.names$rec_metric=="rec"]<-"REC"
-newtab5.nice.names$rec_metric[newtab5.nice.names$rec_metric=="erec"]<-"eREC"
+newtab5.nice.names$rec_metric[newtab5.nice.names$rec_metric=="rec"]<-"Distance REC"
+newtab5.nice.names$rec_metric[newtab5.nice.names$rec_metric=="erec"]<-"Distance eREC"
 
 newtab5.nice.names$female.pct.ci<-paste0(newtab5.nice.names$female.pct.lci," - ",newtab5.nice.names$female.pct.uci)
 newtab5.nice.names$female.adj.pct.ci<-paste0(newtab5.nice.names$female.adj.pct.lci," - ",newtab5.nice.names$female.adj.pct.uci)
@@ -961,55 +1117,185 @@ newtab5.nice.names$male.adj.pct.ci<-paste0(newtab5.nice.names$male.adj.pct.lci,"
 newtab5.nice.names$total.pct.ci<-paste0(newtab5.nice.names$total.pct.lci," - ",newtab5.nice.names$total.pct.uci)
 newtab5.nice.names$total.adj.pct.ci<-paste0(newtab5.nice.names$total.adj.pct.lci," - ",newtab5.nice.names$total.adj.pct.uci)
 
-newtab5.nice.names<-newtab5.nice.names[,c("rec_metric","female.adj.pct","female.adj.pct.ci","male.adj.pct","male.adj.pct.ci","total.adj.pct","total.adj.pct.ci")]
+newtab5.nice.names<-newtab5.nice.names[,c("rec_metric","female.adj.pct","female.adj.pct.ci","male.adj.pct","male.adj.pct.ci","total.adj.pct","total.adj.pct.ci","quality_gap")]
 
-write.table(newtab5.nice.names,here("outputs", ID, "summary", "data", "t28.csv"),row.names=F,col.names=T,sep=",")
+newtab5.nice.names$quality_gap[is.na(newtab5.nice.names$quality_gap)]<-""
 
-names(newtab5.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %", "95% CI")
+write.table(newtab5.nice.names,here("outputs", ID, "summary", "data", "adjusted_distance_refractive_error_coverage_and_effective_refractive_error_coverage.csv"),row.names=F,col.names=T,sep=",")
 
-knitr::kable(newtab5.nice.names, booktabs=T, linesep = "", caption = "Adjusted distance refractive error coverage and effective refractive error coverage", row.names=F,align = 'lcccccc') %>%
+names(newtab5.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %", "95% CI", "%")
+
+knitr::kable(newtab5.nice.names, booktabs=T, linesep = "", caption = "Adjusted distance refractive error coverage and effective refractive error coverage", row.names=F,align = 'lccccccc') %>%
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
-  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T) %>%
+  column_spec(1,'3cm') %>%
+  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2,"Quality gap" = 1),bold=T) %>%
   add_footnote("eREC: Effective Refractive Error Coverage; REC: Refractive Error Coverage",notation="symbol")
-
 
 ```
 
-## Table 29
+Effective refractive error coverage (eREC) for distance vision measures the number of people in a population in need of distance optical correction who have received correction and had a good outcome (ie, can see at least 6/12 corrected) as a proportion of all people in need of distance optical correction who have accessed correction or still require it. Therefore, eREC describes service access (ie, refractive error coverage, [REC]) adjusted for quality. See notes section for more details.
 
-```{r new_tab_6,echo=FALSE}
+## Need for distance refractive error correction
 
-source(here("RAAB7_scripts","spec-use_RAAB7.R"))
+```{r dist_re_need,echo=FALSE}
 
-newtab6.nice.names<-newtab6[1:2,]
+source(here("RAAB7_scripts","adj-rec-erec-dist_RAAB7.R"))
 
-newtab6.nice.names$specs[newtab6.nice.names$specs=="near"]<-"Near vision spectacles"
-newtab6.nice.names$specs[newtab6.nice.names$specs=="distance"]<-"Distance vision
-spectacles"
+dist.re.need.nice.names<-dist.re.need
 
-write.table(newtab6.nice.names,here("outputs", ID, "summary", "data", "t29.csv"),row.names=F,col.names=T,sep=",")
+dist.re.need.nice.names$need[dist.re.need.nice.names$need=="met"]<-"Met need"
+dist.re.need.nice.names$need[dist.re.need.nice.names$need=="undermet"]<-"Undermet need"
+dist.re.need.nice.names$need[dist.re.need.nice.names$need=="unmet"]<-"Unmet need"
+dist.re.need.nice.names$need[dist.re.need.nice.names$need=="none"]<-"No need"
 
-names(newtab6.nice.names)<-c("","n","%","n","%","n","%")
+dist.re.need.nice.names$male.adj.pct.ci<-paste0(dist.re.need.nice.names$male.adj.pct.lci," - ",dist.re.need.nice.names$male.adj.pct.uci)
+dist.re.need.nice.names$female.adj.pct.ci<-paste0(dist.re.need.nice.names$female.adj.pct.lci," - ",dist.re.need.nice.names$female.adj.pct.uci)
+dist.re.need.nice.names$total.adj.pct.ci<-paste0(dist.re.need.nice.names$total.adj.pct.lci," - ",dist.re.need.nice.names$total.adj.pct.uci)
 
-knitr::kable(newtab6.nice.names, booktabs=T, linesep = "", caption = "Distance and near vision spectacle use among study participants",align='lcccccc') %>%
+dist.re.need.nice.names<-dist.re.need.nice.names[,c("need","female.adj.pct","female.adj.pct.ci","male.adj.pct","male.adj.pct.ci","total.adj.pct","total.adj.pct.ci")]
+
+write.table(dist.re.need.nice.names,here("outputs", ID, "summary", "data", "adjusted_prevalence_of_need_for_distance_refractive_error_correction_by_gender.csv"),row.names=F,col.names=T,sep=",")
+
+names(dist.re.need.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %", "95% CI")
+
+knitr::kable(dist.re.need.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence of met need, undermet need, unmet need and no need for distance refractive error correction by gender", row.names=F,align = 'lcccccc') %>%
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
-  column_spec(1,width='5cm') %>%
+  column_spec(1,'3cm') %>%
   add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
 
 ```
 
-This table reports the sample (crude) prevalence of distance and near spectacle use by gender. The categories of distance and near use are not mutually exclusive, i.e., some participants will use both. Near visual acuity is not currently measured in RAAB7; however, near vision spectacle use (for presbyopia) can be used as a proxy for refractive error coverage at near if it is assumed that 100% of the population 50 years and older will require near vision (presbyopic) correction.
+
+```{r treemap_2, echop=FALSE, fig.fullwidth=T}
+
+dist.re.need$need[dist.re.need$need=="met"]<-"Met need"
+dist.re.need$need[dist.re.need$need=="undermet"]<-"Undermet need"
+dist.re.need$need[dist.re.need$need=="unmet"]<-"Unmet need"
+dist.re.need$need[dist.re.need$need=="none"]<-"No need"
+
+need_fig_cols<-brewer.pal(4,"Spectral")
+
+par(mar=c(1,10,1,1))
+
+treemap(dist.re.need,index="need",vSize="total.extrapolated.n",type="index",palette = need_fig_cols,position.legend="right",fontsize.title = 12,title="Adjusted distance refractive error correction need")
+
+```
+
+Note: The need for distance refractive error correction in the population under 50 years of age is not addressed here. Estimates for this group should be derived from elsewhere to support service planning.
+
+```{r, eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
+
+asis_output("## Near refractive error coverage")
+
+```
+
+
+```{r new_tab_7,echo=FALSE, eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
+
+source(here("RAAB7_scripts","adj-rec-erec-near_RAAB7.R"))
+
+newtab7.nice.names<-newtab7
+
+newtab7.nice.names$rec_metric[newtab7.nice.names$rec_metric=="rec"]<-"Near REC"
+newtab7.nice.names$rec_metric[newtab7.nice.names$rec_metric=="erec"]<-"Near eREC"
+
+newtab7.nice.names$female.pct.ci<-paste0(newtab7.nice.names$female.pct.lci," - ",newtab7.nice.names$female.pct.uci)
+newtab7.nice.names$female.adj.pct.ci<-paste0(newtab7.nice.names$female.adj.pct.lci," - ",newtab7.nice.names$female.adj.pct.uci)
+newtab7.nice.names$male.pct.ci<-paste0(newtab7.nice.names$male.pct.lci," - ",newtab7.nice.names$male.pct.uci)
+newtab7.nice.names$male.adj.pct.ci<-paste0(newtab7.nice.names$male.adj.pct.lci," - ",newtab7.nice.names$male.adj.pct.uci)
+newtab7.nice.names$total.pct.ci<-paste0(newtab7.nice.names$total.pct.lci," - ",newtab7.nice.names$total.pct.uci)
+newtab7.nice.names$total.adj.pct.ci<-paste0(newtab7.nice.names$total.adj.pct.lci," - ",newtab7.nice.names$total.adj.pct.uci)
+
+newtab7.nice.names<-newtab7.nice.names[,c("rec_metric","female.adj.pct","female.adj.pct.ci","male.adj.pct","male.adj.pct.ci","total.adj.pct","total.adj.pct.ci","quality_gap")]
+
+newtab7.nice.names$quality_gap[is.na(newtab7.nice.names$quality_gap)]<-""
+
+write.table(newtab7.nice.names,here("outputs", ID, "summary", "data", "adjusted_near_refractive_error_coverage_and_effective_refractive_error_coverage.csv"),row.names=F,col.names=T,sep=",")
+
+names(newtab7.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %", "95% CI", "%")
+
+knitr::kable(newtab7.nice.names, booktabs=T, linesep = "", caption = "Adjusted near refractive error coverage and effective refractive error coverage", row.names=F,align = 'lccccccc') %>%
+  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  column_spec(1,'3cm') %>%
+  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2,"Quality gap" = 1),bold=T) %>%
+  add_footnote("eREC: Effective Refractive Error Coverage; REC: Refractive Error Coverage",notation="symbol")
+
+```
+
+
+```{r, eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
+
+asis_output("eREC for near vision measures the number of people in a population in need of near optical correction who have received correction and had a good outcome (ie, can see at least N6 at 40cm corrected) as a proportion of all people in need of near optical correction who have accessed correction or still require it. 
+
+Note: Undermet need and unmet need for near vision correction is calculated only among people with presenting or pinhole VA of 6/12 to exclude those with reduced near vision due to other non-refractive error causes, eg, cataract or glaucoma.
+
+## Need for near refractive error correction")
+
+```
+
+
+```{r near_re_need,echo=FALSE, eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
+
+source(here("RAAB7_scripts","adj-rec-erec-near_RAAB7.R"))
+
+near.re.need.nice.names<-near.re.need
+
+near.re.need.nice.names$need[near.re.need.nice.names$need=="met"]<-"Met need"
+near.re.need.nice.names$need[near.re.need.nice.names$need=="undermet"]<-"Undermet need"
+near.re.need.nice.names$need[near.re.need.nice.names$need=="unmet"]<-"Unmet need"
+near.re.need.nice.names$need[near.re.need.nice.names$need=="none"]<-"No need"
+
+near.re.need.nice.names$male.adj.pct.ci<-paste0(near.re.need.nice.names$male.adj.pct.lci," - ",near.re.need.nice.names$male.adj.pct.uci)
+near.re.need.nice.names$female.adj.pct.ci<-paste0(near.re.need.nice.names$female.adj.pct.lci," - ",near.re.need.nice.names$female.adj.pct.uci)
+near.re.need.nice.names$total.adj.pct.ci<-paste0(near.re.need.nice.names$total.adj.pct.lci," - ",near.re.need.nice.names$total.adj.pct.uci)
+
+near.re.need.nice.names<-near.re.need.nice.names[,c("need","female.adj.pct","female.adj.pct.ci","male.adj.pct","male.adj.pct.ci","total.adj.pct","total.adj.pct.ci")]
+
+write.table(near.re.need.nice.names,here("outputs", ID, "summary", "data", "adjusted_prevalence_of_need_for_near_refractive_error_correction_by_gender.csv"),row.names=F,col.names=T,sep=",")
+
+names(near.re.need.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %", "95% CI")
+
+knitr::kable(near.re.need.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence of met need, undermet need, unmet need and no need for near refractive error correction by gender", row.names=F,align = 'lcccccc') %>%
+  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  column_spec(1,'3cm') %>%
+  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
+
+```
+
+
+```{r treemap_3, echop=FALSE, fig.fullwidth=T, eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
+
+near.re.need$need[near.re.need$need=="met"]<-"Met need"
+near.re.need$need[near.re.need$need=="undermet"]<-"Undermet need"
+near.re.need$need[near.re.need$need=="unmet"]<-"Unmet need"
+near.re.need$need[near.re.need$need=="none"]<-"No need"
+
+need_fig_cols<-brewer.pal(4,"Spectral")
+
+par(mar=c(1,10,1,1))
+
+treemap(near.re.need,index="need",vSize="total.extrapolated.n",type="index",palette = need_fig_cols, position.legend="right", fontsize.title = 12, title="Adjusted near refractive error correction need")
+
+```
+
+
+```{r, eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
+
+asis_output("Note: The majority of the population need for near refractive error correction will be represented by the RAAB population 50 years and older. Some additional need in the age group 40-49 will not be accounted for in these estimates.")
+
+```
 
 \newpage
-
 
 ```{r, eval=sum(!is.na(DR_check$dr_diabetes_blood_consent)==TRUE)>0}
 
 asis_output("# Diabetic retinopathy
 
-## Table DR1
+## Diabetic retinopathy module response rate
 
 The response rate for the diabetic retinopathy (DR) module can be lower than the standard RAAB survey if participants do not consent to a random blood sugar test (see Table 2) or to a dilated eye examination (see Table 3). Those who do not consent to dilated examination may differ from those who do. For example, they may be younger (e.g., working age rather than retired) or drivers, with the appropriate level of vision required to hold a driving licence.")
 
@@ -1022,7 +1308,7 @@ source(here("RAAB7_scripts","dr-response-rate.R"))
 
 dr.response.a.nice.names<-dr.response.a
 
-write.table(dr.response.a.nice.names,here("outputs", ID, "summary", "data", "dr1.csv"),row.names=F,col.names=T,sep=",")
+write.table(dr.response.a.nice.names,here("outputs", ID, "summary", "data", "raab_survey_and_dr_module_response_rate.csv"),row.names=F,col.names=T,sep=",")
 
 dr.response.a.nice.names$Exam.Status[dr.response.a.nice.names$Exam.Status=="Diabetes status assessed"]<-"Diabetes status assessed*"
 
@@ -1040,7 +1326,7 @@ knitr::kable(dr.response.a.nice.names, booktabs=T, linesep = "", caption = "RAAB
 
 ```{r, eval=sum(!is.na(DR_check$dr_diabetes_blood_consent)==TRUE)>0}
 
-asis_output("## Table DR2")
+asis_output("## Diabetes status")
 
 ```
 
@@ -1051,7 +1337,7 @@ source(here("RAAB7_scripts","dr-response-rate.R"))
 
 dr.response.b.nice.names<-dr.response.b
 
-write.table(dr.response.b.nice.names,here("outputs", ID, "summary", "data", "dr2.csv"),row.names=F,col.names=T,sep=",")
+write.table(dr.response.b.nice.names,here("outputs", ID, "summary", "data", "known_or_suspected_diabetes_among_participants_assessed_for_diabetes_status.csv"),row.names=F,col.names=T,sep=",")
 
 dr.response.b.nice.names$Exam.Status[dr.response.b.nice.names$Exam.Status=="Suspected"]<-"Suspected*"
 
@@ -1072,9 +1358,7 @@ knitr::kable(dr.response.b.nice.names, booktabs=T, linesep = "", caption = "Know
 
 asis_output("The proportions of diabetes that is diagnosed and undiagnosed in a population varies by region. The 2021 International Diabetes Federation Atlas (https://diabetesatlas.org/) estimates that more than half of people with diabetes are undiagnosed in Africa (53.6%), Western Pacific (52.8%) and South-East Asia (51.3%).
 
-Note: The use of random blood glucose testing without fasting may result in over-estimates of suspected diabetes in RAAB surveys.
-
-## Table DR3")
+Note: The use of random blood glucose testing without fasting may result in over-estimates of suspected diabetes in RAAB surveys.")
 
 ```
 
@@ -1091,11 +1375,11 @@ dm.prev.final.nice.names$total.ci<-paste0(dm.prev.final.nice.names$total.pct.lci
 
 dm.prev.final.nice.names<-dm.prev.final.nice.names[,c("age.groups.tens","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(dm.prev.final.nice.names,here("outputs", ID, "summary", "data", "dr3.csv"),row.names=F,col.names=T,sep=",")
+write.table(dm.prev.final.nice.names,here("outputs", ID, "summary", "data", "prevalence_of_known_or_suspected_diabetes_among_participants_assessed_for_diabetes_status_by_age_and_gender.csv"),row.names=F,col.names=T,sep=",")
 
 names(dm.prev.final.nice.names)<-c("Years","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(dm.prev.final.nice.names, booktabs=T, linesep = "", caption = "The prevalence of known or suspected diabetes among participants assessed for diabetes status, by age group and gender",align='lccccccccc') %>% 
+knitr::kable(dm.prev.final.nice.names, booktabs=T, linesep = "", caption = "Prevalence of known or suspected diabetes among participants assessed for diabetes status, by age group and gender",align='lccccccccc') %>% 
   kable_styling(full_width=T, latex_options = "HOLD_position", font_size = 8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(4,hline_after=T) %>%
@@ -1108,7 +1392,7 @@ knitr::kable(dm.prev.final.nice.names, booktabs=T, linesep = "", caption = "The 
 
 asis_output("The crude prevalence of diabetes among DR module participants by 10-year age group and gender is shown in Table DR2. A diagnosis of diabetes is based on either a self-reported history of diabetes (“known diabetes”), or, where diabetes is not self-reported, on a random blood sugar of 200 mg/dl or higher (“suspected diabetes”).
 
-## Table DR4")
+## Most recent diabetic retinopathy exam")
 
 ```
 
@@ -1119,7 +1403,7 @@ source(here("RAAB7_scripts","dr-last-eye-exam.R"))
 
 dr.last.exam.table.nice.names<-dr.last.exam.table
 
-write.table(dr.last.exam.table.nice.names,here("outputs", ID, "summary", "data", "dr4.csv"),row.names=F,col.names=T,sep=",")
+write.table(dr.last.exam.table.nice.names,here("outputs", ID, "summary", "data", "self-reported_time_since_last_eye_examination_for_diabetic_retinopathy_among_known_diabetics.csv"),row.names=F,col.names=T,sep=",")
 
 dr.last.exam.table.nice.names$last.dr.exam[dr.last.exam.table.nice.names$last.dr.exam=="dr_diabetic_last_exam_none"]<-"Never"
 dr.last.exam.table.nice.names$last.dr.exam[dr.last.exam.table.nice.names$last.dr.exam=="dr_diabetic_last_exam_0_12_months"]<-"Within 1 year"
@@ -1142,7 +1426,7 @@ knitr::kable(dr.last.exam.table.nice.names, booktabs=T, linesep = "", caption = 
 
 asis_output("Self-reported time since last eye examination for DR among known diabetics can be considered as a proxy for the coverage of DR (screening) services. Recall bias may affect the reliability of the findings and results should be reviewed alongside facility-based DR screening records where available.
 
-## Table DR5")
+## Prevalence of diabetic retinopathy")
 
 ```
 
@@ -1159,7 +1443,7 @@ any.dr.mac.laser.prev.nice.names$total.ci<-paste0(any.dr.mac.laser.prev.nice.nam
 
 any.dr.mac.laser.prev.nice.names<-any.dr.mac.laser.prev.nice.names[,c("condition","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
-write.table(any.dr.mac.laser.prev.nice.names,here("outputs", ID, "summary", "data", "dr5.csv"),row.names=F,col.names=T,sep=",")
+write.table(any.dr.mac.laser.prev.nice.names,here("outputs", ID, "summary", "data", "prevalence_of_retinopathy_and_maculopathy_among_known_and_suspect_diabetics_in_the_sample.csv"),row.names=F,col.names=T,sep=",")
 
 any.dr.mac.laser.prev.nice.names$condition[any.dr.mac.laser.prev.nice.names$condition=="retinopathy.grade"]<-"Any retinopathy"
 any.dr.mac.laser.prev.nice.names$condition[any.dr.mac.laser.prev.nice.names$condition=="maculopathy.grade"]<-"Any maculopathy"
@@ -1169,7 +1453,7 @@ any.dr.mac.laser.prev.nice.names$condition[any.dr.mac.laser.prev.nice.names$cond
 
 names(any.dr.mac.laser.prev.nice.names)<-c(" ","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(any.dr.mac.laser.prev.nice.names, booktabs=T, linesep = "", caption = "The prevalence of retinopathy and maculopathy among (known and suspect) diabetics in the sample",align='lccccccccc') %>% 
+knitr::kable(any.dr.mac.laser.prev.nice.names, booktabs=T, linesep = "", caption = "Prevalence of retinopathy and maculopathy among (known and suspect) diabetics in the sample",align='lccccccccc') %>% 
   kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   add_header_above(c(" " = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) 
@@ -1180,7 +1464,7 @@ knitr::kable(any.dr.mac.laser.prev.nice.names, booktabs=T, linesep = "", caption
 
 ```{r, eval=sum(!is.na(DR_check$dr_diabetes_blood_consent)==TRUE)>0}
 
-asis_output("## Table DR6")
+asis_output("## Grade of diabetic retinopathy")
 
 ```
 
@@ -1193,7 +1477,7 @@ ret.mac.prev.nice.names<-ret.mac.prev
 
 ret.mac.prev.nice.names<-ret.mac.prev.nice.names[,c("grade","female.n","female.pct","male.n","male.pct","total.n","total.pct")]
 
-write.table(ret.mac.prev.nice.names,here("outputs", ID, "summary", "data", "dr6.csv"),row.names=F,col.names=T,sep=",")
+write.table(ret.mac.prev.nice.names,here("outputs", ID, "summary", "data", "grade_of_retinopathy_and_maculopathy_among_known_and_suspect_diabetics_in_the_sample.csv"),row.names=F,col.names=T,sep=",")
 
 ret.mac.prev.nice.names$grade[ret.mac.prev.nice.names$grade=="dr_retinopathy_grade_none"]<-"None (R0)"
 ret.mac.prev.nice.names$grade[ret.mac.prev.nice.names$grade=="dr_retinopathy_grade_mild"]<-"Mild (R1)"
@@ -1227,7 +1511,7 @@ asis_output("Crude prevalence is reported among known or suspect diabetics who c
 A ‘rule of thirds’ has previously been applied to planning for diabetic retinopathy services. This estimates that approximately one third of people with diabetes have some level of retinopathy and, of those with retinopathy, approximately one third will have sight-threatening retinopathy (STDR) requiring laser or anti-VEGF treatment. A 2021 paper by To et al. emphasises there are regional differences in DR and STDR prevalence (https://doi.org/10.1016/j.ophtha.2021.04.027). 
 
 
-## Table DR7")
+## Diabetes and vision impairment")
 
 ```
 
@@ -1238,7 +1522,7 @@ source(here("RAAB7_scripts","dr-diabetes-vi.R"))
 
 dm.vi.table.nice.names<-dm.vi.table
 
-write.table(dm.vi.table.nice.names,here("outputs", ID, "summary", "data", "dr7.csv"),row.names=F,col.names=T,sep=",")
+write.table(dm.vi.table.nice.names,here("outputs", ID, "summary", "data", "prevalence_of_vision_impairment_among_known_and_suspected_diabetics_and_non-diabetics.csv"),row.names=F,col.names=T,sep=",")
 
 dm.vi.table.nice.names$vi.level[dm.vi.table.nice.names$vi.level=="blind"]<-"Blind"
 dm.vi.table.nice.names$vi.level[dm.vi.table.nice.names$vi.level=="severe.vi"]<-"Severe VI"
@@ -1252,7 +1536,7 @@ dm.vi.table.nice.names<-dm.vi.table.nice.names[,c("vi.level","diabetic.n","diabe
 
 names(dm.vi.table.nice.names)<-c(" ","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(dm.vi.table.nice.names, booktabs=T, linesep = "", caption = "The prevalence of vision impairment among known and suspected diabetics and non-diabetics",align='lcccccc') %>% 
+knitr::kable(dm.vi.table.nice.names, booktabs=T, linesep = "", caption = "Prevalence of vision impairment among known and suspected diabetics and non-diabetics",align='lcccccc') %>% 
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='4cm') %>%
@@ -1268,7 +1552,6 @@ asis_output("The crude prevalence of vision impairment (due to any cause) by WHO
 ```
 
 \newpage
-
 
 ```{r, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
 
@@ -1292,7 +1575,7 @@ Response options: no difficulty, some difficulty, a lot of difficulty, cannot do
 Any participant reporting “a lot” or greater difficulty in any domain is considered to have a disability. The seeing domain will capture many people with vision impairment identified through VA screening, but also people with other types of vision loss such as contrast sensitivity, stereoacuity or visual fields . It can also provide information on how people with reduced VA perceive their vision loss.
 
 
-## Table WGQ1")
+## Disability prevalence")
 
 ```
 
@@ -1303,7 +1586,7 @@ source(here("RAAB7_scripts","wgq-dis-prev.R"))
 
 wgq.domains.table.nice.names<-wgq.domains.table
 
-write.table(wgq.domains.table.nice.names,here("outputs", ID, "summary", "data", "wgq1.csv"),row.names=F,col.names=T,sep=",")
+write.table(wgq.domains.table.nice.names,here("outputs", ID, "summary", "data", "crude_prevalence_of_self-reported_disability_by_functional_domain.csv"),row.names=F,col.names=T,sep=",")
 
 names(wgq.domains.table.nice.names)<-c("","n","%","n","%","n","%")
 
@@ -1312,13 +1595,6 @@ knitr::kable(wgq.domains.table.nice.names, booktabs=T, linesep = "", caption = "
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='5cm') %>%
   add_header_above(c("Domain" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
-
-```
-
-
-```{r, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
-
-asis_output("## Figure WGQ1")
 
 ```
 
@@ -1357,7 +1633,7 @@ legend("topleft",c("Vision","Hearing","Mobility","Memory","Communication","Self-
 
 asis_output("Disability prevalence commonly increases with age on account of many age-related conditions that can affect functioning (e.g. cataract, ARMD, presbycusis, arthritis, dementia). Global population ageing means that without healthcare service intervention, prevalence estimates are likely to increase over time.
 
-## Table WGQ2")
+## Disability and vision impairment")
 
 ```
 
@@ -1368,7 +1644,7 @@ source(here("RAAB7_scripts","wgq-vi-prev.R"))
 
 wgq.vi.table.a<-wgq.vi.table[,c("vi.level","any.dis.n","any.dis.pct","any.dis.pct.lci","any.dis.pct.uci","any.non.vi.dis.n","any.non.vi.dis.pct","any.non.vi.dis.pct.lci","any.non.vi.dis.pct.uci","no.dis.n","no.dis.pct","no.dis.pct.lci","no.dis.pct.uci")]
 
-write.table(wgq.vi.table.a,here("outputs", ID, "summary", "data", "wgq2.csv"),row.names=F,col.names=T,sep=",")
+write.table(wgq.vi.table.a,here("outputs", ID, "summary", "data", "crude_prevalence_of_vision_impairment_by_disability_status.csv"),row.names=F,col.names=T,sep=",")
 
 wgq.vi.table.a$any.dis.ci<-paste0(wgq.vi.table.a$any.dis.pct.lci," - ",wgq.vi.table.a$any.dis.pct.uci)
 wgq.vi.table.a$any.non.vi.dis.ci<-paste0(wgq.vi.table.a$any.non.vi.dis.pct.lci," - ",wgq.vi.table.a$any.non.vi.dis.pct.uci)
@@ -1391,20 +1667,13 @@ knitr::kable(wgq.vi.table.a, booktabs=T, linesep = "", caption = "Crude prevalen
 ```
 
 
-```{r, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
-
-asis_output("## Table WGQ3")
-
-```
-
-
 ```{r wgq-vi-adj-prev,echo=FALSE, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
 
 source(here("RAAB7_scripts","wgq-vi-prev.R"))
 
 wgq.vi.table.b<-wgq.vi.table[,c("vi.level","any.dis.adj.pct","any.dis.adj.pct.lci","any.dis.adj.pct.uci","any.non.vi.dis.adj.pct","any.non.vi.dis.adj.pct.lci","any.non.vi.dis.adj.pct.uci","no.dis.adj.pct","no.dis.adj.pct.lci","no.dis.adj.pct.uci")]
 
-write.table(wgq.vi.table.b,here("outputs", ID, "summary", "data", "wgq3.csv"),row.names=F,col.names=T,sep=",")
+write.table(wgq.vi.table.b,here("outputs", ID, "summary", "data", "adjusted_prevalence_of_vision_impairment_by_disability_status.csv"),row.names=F,col.names=T,sep=",")
 
 wgq.vi.table.b$any.dis.adj.ci<-paste0(wgq.vi.table.b$any.dis.adj.pct.lci," - ",wgq.vi.table.b$any.dis.adj.pct.uci)
 wgq.vi.table.b$any.non.vi.dis.adj.ci<-paste0(wgq.vi.table.b$any.non.vi.dis.adj.pct.lci," - ",wgq.vi.table.b$any.non.vi.dis.adj.pct.uci)
@@ -1429,7 +1698,7 @@ knitr::kable(wgq.vi.table.b, booktabs=T, linesep = "", caption = "Adjusted preva
 
 ```{r, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
 
-asis_output("## Table WGQ4")
+asis_output("## Disability and cataract surgery")
 
 ```
 
@@ -1448,7 +1717,7 @@ wgq.ecsc.nice.names$num.thresh<-"eCSC"
 
 wgq.ecsc.nice.names<-wgq.ecsc.nice.names[,c("num.thresh","any.dis.adjusted","any.dis.adjusted.ci","any.non.vi.dis.adjusted","any.non.vi.dis.adjusted.ci","no.dis.adjusted","no.dis.adjusted.ci")]
 
-write.table(wgq.ecsc.nice.names,here("outputs", ID, "summary", "data", "wgq4.csv"),row.names=F,col.names=T,sep=",")
+write.table(wgq.ecsc.nice.names,here("outputs", ID, "summary", "data", "adjusted_effective_cataract_surgical_coverage_by_disability_status.csv"),row.names=F,col.names=T,sep=",")
 
 names(wgq.ecsc.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
 
@@ -1462,8 +1731,6 @@ knitr::kable(wgq.ecsc.nice.names, booktabs=T, linesep = "", caption = "Adjusted 
   pack_rows("Cataract surgical threshold <3/60",4,4) %>%
   add_header_above(c(" " = 1, "Any disability" = 2, "Any non-seeing disability" = 2, "No disbaility" = 2),bold=T) %>%
   add_footnote("eCSC: Effective Cataract Surgical Coverage",notation="symbol")
-
-
 
 ```
 
