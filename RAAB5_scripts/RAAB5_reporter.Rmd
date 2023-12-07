@@ -48,7 +48,7 @@ meta_report<-data.frame(
   subject="Eye Diseases; Vision Disorders; Cataract; Cataract Extraction; Refractive errors; Health Services Research; Health Surveys",
   subjectVocab="mesh",
   description="A report including output of standardised analysis of vision and eye health survey data including tables of vision impairment prevalence and service coverage estimates",
-  publisher="London School of Hygiene & Tropical Medicine RAAB repository",
+  publisher="London School of Hygiene & Tropical Medicine RAAB Repository",
   contributor="",
   date=format(Sys.time(), '%Y-%m-%d'),
   type="Text",
@@ -60,7 +60,7 @@ meta_report<-data.frame(
   relation=NA,
   coverage=NA,
   rights="This work is licensed under CC BY-NC-SA 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/",
-  bibiographicCitation=NA)
+  bibliographicCitation=NA)
 
 meta_dataset<-data.frame(
   title=NA,
@@ -68,7 +68,7 @@ meta_dataset<-data.frame(
   subject="Eye Diseases; Vision Disorders; Cataract; Cataract Extraction; Refractive errors; Health Services Research; Health Surveys",
   subjectVocab="mesh",
   description="Anonymous participant level dataset including variables for visual acuity, spectacle use, lens status, cause of vision impairment, cataract surgical history, barriers to cataract surgery",
-  publisher="London School of Hygiene & Tropical Medicine RAAB repository",
+  publisher="London School of Hygiene & Tropical Medicine RAAB Repository",
   contributor=NA,
   date=format(Sys.time(), '%Y-%m-%d'),
   type="Dataset",
@@ -83,7 +83,7 @@ meta_dataset<-data.frame(
   bibliographicCitation=NA)
 
 meta_report$title<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
-meta_dataset$title<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
+meta_dataset$title<-paste0("Rapid Assessment of Avoidable Blindness Dataset: ",raab_meta$survey_title)
 
 meta_dataset$creator<-raab_meta$pi_name
 meta_dataset$date<-raab_meta$year_end
@@ -95,12 +95,12 @@ meta_report$identifier<-paste0("https://www.raab.world/survey/",url_string,"/rep
 meta_dataset$identifier<-paste0("https://www.raab.world/survey/",url_string,"/data")
 
 meta_report$doi<-paste0("10.17037/RAABREPORT.",formatC(as.numeric(row.names(raab_meta)),width=8,format = "d",flag="0"))
-meta_dataset$doi<-paste0("10.17037/RAABREPORT.",formatC(as.numeric(row.names(raab_meta)),width=8,format = "d",flag="0"))
+meta_dataset$doi<-paste0("10.17037/RAABDATASET.",formatC(as.numeric(row.names(raab_meta)),width=8,format = "d",flag="0"))
 
 meta_report$source<-paste0("Rapid Assessment of Avoidable Blindness Dataset: ",raab_meta$survey_title)
 meta_dataset$relation<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
 
-meta_report$bibiographicCitation<-paste0(
+meta_report$bibliographicCitation<-paste0(
   meta_report$creator,
   ". (",
   format(Sys.time(), '%Y'),
@@ -108,18 +108,18 @@ meta_report$bibiographicCitation<-paste0(
   meta_report$title,
   ". ",
   meta_report$publisher,
-  ". DOI: ",
+  ". DOI: https://www.doi.org/",
   meta_report$doi)
 
-meta_dataset$bibiographicCitation<-paste0(
+meta_dataset$bibliographicCitation<-paste0(
   meta_dataset$creator,
   ". (",
-  format(Sys.time(), '%Y'),
+  meta_dataset$date,
   "). ",
   meta_dataset$title,
   ". ",
   meta_dataset$publisher,
-  ". DOI: ",
+  ". DOI: https://www.doi.org/",
   meta_dataset$doi)
 
 PI<-raab_meta$pi_name
