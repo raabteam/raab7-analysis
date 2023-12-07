@@ -25,11 +25,26 @@ causes<-causes[order(causes$blind.pct,decreasing=T),]
 top_causes<-causes[1:3,c("principal.cause","blind.n","blind.pct")]
 prebigboi7<-dcast(melt(top_causes,id.var="principal.cause"),1~variable+principal.cause)
 
-prebigboi8<-dcast(melt(newtab4[,c("vi.level","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.male.n","extrapolated.female.n","extrapolated.total.n")], id.var="vi.level"), 1~variable+vi.level)
+prebigboi8<-dist.re.prev.final[,-1]
+names(prebigboi8)<-paste0(names(prebigboi8),"_dist_re")
 
 prebigboi9<-dcast(melt(newtab5,id.vars="rec_metric"), 1~variable+rec_metric)
+prebigboi9<-dcast(melt(newtab5,id.vars="rec_metric"), 1~variable+rec_metric)
 
-bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi5,prebigboi6,prebigboi7,prebigboi8,prebigboi9))
+if(sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0){
+  
+  prebigboi10<-near.re.prev.final[,-1]
+  names(prebigboi10)<-paste0(names(prebigboi10),"_near_re")
+  
+  prebigboi11<-dcast(melt(newtab7,id.vars="rec_metric"), 1~variable+rec_metric)
+  prebigboi11<-dcast(melt(newtab7,id.vars="rec_metric"), 1~variable+rec_metric)
+  
+  bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi5,prebigboi6,prebigboi7,prebigboi8,prebigboi9,prebigboi10,prebigboi11))
+  
+  }else{
+  
+  bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi5,prebigboi6,prebigboi7,prebigboi8,prebigboi9))}
+
 bigboi[bigboi=="*"]<-NA
 
 bigboi[1,1]<-ID

@@ -38,12 +38,96 @@ popfives<-pop_merged[pop_merged$raab_id==ID,]
 
 meta<-read.csv(here("data","historic_meta.csv"),check.names=F)
 
-raab_meta<-meta[meta$raab_id==ID,]
+vars_to_drop<-c("map_complete","exclude_repo","repo_meta","repo_data","ecsc_consent","x4_data_access","data_lost","hl_permission_doc","hl_permission_localreport","hl_permission_raabreport","hl_permission_raabdata","hl_findingspublishedjournal","hl_findingslocalreport","hl_ethicscommitteeapproval","hl_permission_detail","hl_on_behalf_of","permission_ref","lshtm_dta","lshtm_dta-Ref","pi_email","pi_email1 active","pi_email NOTES","pi_int_auth_grp","trainer_email2")
+
+raab_meta<-meta[meta$raab_id==ID,!(names(meta) %in% vars_to_drop)]
+
+meta_report<-data.frame(
+  title=NA,
+  creator="International Centre for Eye Health",
+  subject="Eye Diseases; Vision Disorders; Cataract; Cataract Extraction; Refractive errors; Health Services Research; Health Surveys",
+  subjectVocab="mesh",
+  description="A report including output of standardised analysis of vision and eye health survey data including tables of vision impairment prevalence and service coverage estimates",
+  publisher="London School of Hygiene & Tropical Medicine RAAB repository",
+  contributor="",
+  date=format(Sys.time(), '%Y-%m-%d'),
+  type="Text",
+  format="pdf",
+  identifier=NA,
+  doi=NA,
+  source=NA,
+  language="eng",
+  relation=NA,
+  coverage=NA,
+  rights="This work is licensed under CC BY-NC-SA 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/",
+  bibiographicCitation=NA)
+
+meta_dataset<-data.frame(
+  title=NA,
+  creator=NA,
+  subject="Eye Diseases; Vision Disorders; Cataract; Cataract Extraction; Refractive errors; Health Services Research; Health Surveys",
+  subjectVocab="mesh",
+  description="Anonymous participant level dataset including variables for visual acuity, spectacle use, lens status, cause of vision impairment, cataract surgical history, barriers to cataract surgery",
+  publisher="London School of Hygiene & Tropical Medicine RAAB repository",
+  contributor=NA,
+  date=format(Sys.time(), '%Y-%m-%d'),
+  type="Dataset",
+  format="csv",
+  identifier=NA,
+  doi=NA,
+  source=NA,
+  language="eng",
+  relation=NA,
+  coverage=NA,
+  rights="This work is licensed under CC BY-NC-ND 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/",
+  bibliographicCitation=NA)
+
+meta_report$title<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
+meta_dataset$title<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
+
+meta_dataset$creator<-raab_meta$pi_name
+meta_dataset$date<-raab_meta$year_end
+
+url_string<-gsub("[[:punct:]]", "", raab_meta$survey_title)
+url_string<-gsub(" ", "-", tolower(url_string))
+
+meta_report$identifier<-paste0("https://www.raab.world/survey/",url_string,"/report")
+meta_dataset$identifier<-paste0("https://www.raab.world/survey/",url_string,"/data")
+
+meta_report$doi<-paste0("10.17037/RAABREPORT.",formatC(as.numeric(row.names(raab_meta)),width=8,format = "d",flag="0"))
+meta_dataset$doi<-paste0("10.17037/RAABREPORT.",formatC(as.numeric(row.names(raab_meta)),width=8,format = "d",flag="0"))
+
+meta_report$source<-paste0("Rapid Assessment of Avoidable Blindness Dataset: ",raab_meta$survey_title)
+meta_dataset$relation<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
+
+meta_report$bibiographicCitation<-paste0(
+  meta_report$creator,
+  ". (",
+  format(Sys.time(), '%Y'),
+  "). ",
+  meta_report$title,
+  ". ",
+  meta_report$publisher,
+  ". DOI: ",
+  meta_report$doi)
+
+meta_dataset$bibiographicCitation<-paste0(
+  meta_dataset$creator,
+  ". (",
+  format(Sys.time(), '%Y'),
+  "). ",
+  meta_dataset$title,
+  ". ",
+  meta_dataset$publisher,
+  ". DOI: ",
+  meta_dataset$doi)
 
 PI<-raab_meta$pi_name
 TITLE<-raab_meta$survey_title
 
 write.table(raab_meta, here("outputs", ID, "raw", "meta.csv"),row.names=F,col.names=T,sep=",",na="")
+write.table(meta_report, here("outputs", ID, "raw", "meta_report.csv"),row.names=F,col.names=T,sep=",",na="")
+write.table(meta_dataset, here("outputs", ID, "raw", "meta_dataset.csv"),row.names=F,col.names=T,sep=",",na="")
 write.table(raab, here("outputs", ID, "raw", "data", "survey_data.csv"),row.names=F,col.names=T,sep=",")
 write.table(popfives, here("outputs", ID, "raw", "data","population.csv"),row.names=F,col.names=T,sep=",")
 

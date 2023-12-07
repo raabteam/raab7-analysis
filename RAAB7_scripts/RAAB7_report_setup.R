@@ -432,6 +432,68 @@ raab <- raab %>% mutate(
 
   )
 
+raab <- raab %>% mutate(
+  
+  dd_case = case_when(raab$exam_status=="exam_status_examined" & (raab$aa_case!=1 & raab$bb_case!=1 & raab$cc_case!=1) ~ 1, TRUE ~ 0)
+
+  )
+
+# Near vision screening analysis for RAAB7
+# 27 Oct 2023 - v1
+# 14 Nov 2023 - v2: new Peek var names and output values
+
+if(exists('binocular_near_corrected_result',where=raab)){
+
+# Generate a "presenting" test outcome (assuming Peek aren't making one, delete if they are)
+raab <- raab %>% mutate(
+    
+  binocular_near_presenting_result = case_when(
+    spectacles_used_near==TRUE ~ binocular_near_corrected_result,
+    spectacles_used_near==FALSE ~ binocular_near_uncorrected_result)
+    
+)
+
+# Define near VI based on presenting near VA (only one level, binary screening test at N6 threshold)
+  
+raab <- raab %>% mutate(
+  
+  near.vi = case_when(raab$binocular_near_presenting_result=="acuity_evaluation_result_fail" ~ 1, TRUE ~ 0)
+  
+)
+
+# Define near eREC terms (for "spectacle coverage for near vision impairment due to presbyopia")
+
+# a=individuals with UCVA <N6 at 40 cm in the better eye who present with spectacles for near vision and whose PVA
+# is ≥N6 in the better eye (met need) [NB the WHO paper box does not include "distance BCVA ≥6/12* in at least one eye" but the supp material flow chart does]
+# 
+# b=individuals with distance BCVA ≥6/12* in at least one eye who present with spectacles for near vision and whose
+# PVA is <N6 in the better eye (undermet need)
+# 
+# c=individuals with distance BCVA ≥6/12 in at least one eye who do not have correction for near vision and whose
+# UCVA is <N6 in the better eye (unmet need)
+
+# Only individuals with distance BCVA ≥6/12 will be considered in order to exclude those with reduced near vision not due to other causes.
+
+# ee_case = met need
+# ff_case = undermet need
+# gg_case = unmet need
+# hh_case = no need
+
+raab <- raab %>% mutate(
+  
+  ee_case = case_when(raab$better.eye.pinva==0.3 & raab$spectacles_used_near==TRUE & raab$binocular_near_uncorrected_result=="acuity_evaluation_result_fail" & raab$binocular_near_corrected_result=="acuity_evaluation_result_pass" ~ 1, TRUE ~ 0)
+  
+)
+
+raab <- raab %>% mutate(
+  
+  ff_case = case_when(raab$ee_case==0 & raab$better.eye.pinva==0.3 & raab$spectacles_used_near==TRUE & raab$binocular_near_uncorrected_result=="acuity_evaluation_result_fail" & raab$binocular_near_corrected_result=="acuity_evaluation_result_fail" ~ 1, TRUE ~ 0),
+  gg_case = case_when(raab$better.eye.pinva==0.3 & raab$spectacles_used_near==FALSE & raab$binocular_near_uncorrected_result=="acuity_evaluation_result_fail" ~ 1, TRUE ~ 0),
+  
+  hh_case = case_when(raab$binocular_near_uncorrected_result=="acuity_evaluation_result_pass" ~ 1, TRUE ~ 0)
+)
+}else{raab$near.vi<-NA}
+
 #Washington Group Questions (Disability module) variables
 
 #Domain-specific disability
@@ -468,14 +530,25 @@ raab <- raab %>% mutate(
 dr.response.cascade <-c("Enrolled","Examined","Diabetes status assessed")
 dr.response.cascade.b <- (c("Known or suspected diabetes", "Known", "Suspected", "Consented dilated examination"))
 
-raab <- raab %>% mutate(
+if(is.logical(raab$dr_diabetes_known)){
+    raab <- raab %>% mutate(
+    
+      diabetes.denom = case_when(dr_diabetes_known==TRUE | dr_diabetes_blood_consent==TRUE ~1, TRUE~0),
+      diabetes.new = case_when((dr_diabetes_known==FALSE & dr_diabetes_blood_consent==TRUE & dr_diabetes_blood_sugar>=200) ~1, TRUE~0),
+      diabetes.known = case_when(dr_diabetes_known==TRUE ~1, TRUE~0),
+      diabetes.known.susp = case_when((dr_diabetes_known==TRUE | diabetes.new==1) ~1, TRUE~0),
+      dr.exam.denom = case_when(diabetes.known.susp==1 & (dr_retinopathy_method_right=="dr_retinopathy_method_dilatation_fundoscopy" | dr_retinopathy_method_right=="dr_retinopathy_method_fundus_camera")  ~1, TRUE~0)
+    )}else{
   
-  diabetes.denom = case_when(dr_diabetes_known=="true" | dr_diabetes_blood_consent=="true" ~1, TRUE~0),
-  diabetes.new = case_when((dr_diabetes_known=="false" & dr_diabetes_blood_consent=="true" & dr_diabetes_blood_sugar>=200) ~1, TRUE~0),
-  diabetes.known = case_when(dr_diabetes_known=="true" ~1, TRUE~0),
-  diabetes.known.susp = case_when((dr_diabetes_known=="true" | diabetes.new==1) ~1, TRUE~0),
-  dr.exam.denom = case_when(diabetes.known.susp==1 & (dr_retinopathy_method_right=="dr_retinopathy_method_dilatation_fundoscopy" | dr_retinopathy_method_right=="dr_retinopathy_method_fundus_camera")  ~1, TRUE~0)
-)
+    raab <- raab %>% mutate(
+    
+      diabetes.denom = case_when(dr_diabetes_known=="true" | dr_diabetes_blood_consent=="true" ~1, TRUE~0),
+      diabetes.new = case_when((dr_diabetes_known=="false" & dr_diabetes_blood_consent=="true" & dr_diabetes_blood_sugar>=200) ~1, TRUE~0),
+      diabetes.known = case_when(dr_diabetes_known=="true" ~1, TRUE~0),
+      diabetes.known.susp = case_when((dr_diabetes_known=="true" | diabetes.new==1) ~1, TRUE~0),
+      dr.exam.denom = case_when(diabetes.known.susp==1 & (dr_retinopathy_method_right=="dr_retinopathy_method_dilatation_fundoscopy" | dr_retinopathy_method_right=="dr_retinopathy_method_fundus_camera")  ~1, TRUE~0)
+    )}
+
 raab <- raab %>% mutate(
 diabetes.no = case_when((diabetes.denom==1 & diabetes.known.susp==0) ~1, TRUE~0))
 
