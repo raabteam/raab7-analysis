@@ -213,11 +213,11 @@ source(here("RAAB7_scripts","sample-age-gender.R"))
 
 asa1.nice.names<-asa1[,c("age.groups.tens","female.examined.n","female.examined.pct","male.examined.n","male.examined.pct","total.examined.n","total.examined.pct")]
 
-write.table(asa1.nice.names,here("outputs", ID, "summary", "data", "age_and_sex_distribution_of_people_examined_in_the_sample.csv"),row.names=F,col.names=T,sep=",")
+write.table(asa1.nice.names,here("outputs", ID, "summary", "data", "age_and_gender_distribution_of_people_examined_in_the_sample.csv"),row.names=F,col.names=T,sep=",")
 
 names(asa1.nice.names)<-c("Years","n","%","n","%","n","%")
 
-knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and sex distribution of people examined in the sample",align='lcccccc') %>%
+knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and gender distribution of people examined in the sample",align='lcccccc') %>%
   kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(4,hline_after=T) %>%
@@ -312,7 +312,7 @@ Moderate VI: PVA less than 6/18 to 6/60 in the better eye
 
 Mild VI: PVA less than 6/12 to 6/18 in the better eye
 
-## Prevalence by severity
+## Distance vision impairment prevalence
 
 ```{r sum3, echo=FALSE}
 
@@ -366,7 +366,7 @@ knitr::kable(sum3b.nice.names, booktabs=T, linesep = "", caption = "Adjusted pre
 
 These tables show the crude and adjusted prevalence of vision impairment by impairment level and gender. The sample size for RAAB is calculated to provide an acceptable level of precision for the total prevalence of blindness. The accuracy of prevalence estimates for population subgroups is lower and caution should be taken in the interpretation of these data. Table P2 shows the estimated magnitude of vision impairment in the study area by gender, calculated by multiplying the crude prevalence by the population count (e.g., census data). Throughout, the 95% confidence intervals are calculated to account for RAAB's cluster sampling design.
 
-## Cumulative prevalence
+## Cumulative distance vision impairment prevalence
 
 ```{r asa6, echo=FALSE}
 
@@ -419,7 +419,7 @@ knitr::kable(asa6b.nice.names, booktabs=T, linesep = "", caption = "Adjusted cum
 
 ```
 
-## Unilateral vision impairment
+## Unilateral distance vision impairment prevalence
 
 ```{r newtab1a, echo=FALSE}
 
@@ -482,7 +482,7 @@ Cases of unilateral vision impairment acknowledge an additional sight loss burde
 
 ```{r, eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
 
-asis_output("## Near vision impairment
+asis_output("## Near vision impairment prevalence
 
 Crude and adjusted prevalence of near vision impairment.")
 
@@ -545,9 +545,9 @@ knitr::kable(adj.near.re.prev.nice.names,booktabs=T, linesep = "",caption="Adjus
 
 \newpage
 
-# Causes of vision impairment
+# Causes of distance vision impairment
 
-## Principle causes
+## Principal cause by impairment level
 
 ```{r sum6, echo=FALSE}
 
@@ -633,7 +633,7 @@ treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="ind
 
 ```
 
-## Cause by gender
+## Principal cause of blindness by gender
 
 ```{r prev4, echo=FALSE}
 
@@ -691,7 +691,9 @@ knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), cap
 
 # Cataract
 
-## Cataract operations
+## Cataract coverage
+
+### Cataract operations
 
 ```{r catops, echo=FALSE}
 
@@ -717,7 +719,7 @@ knitr::kable(catops.nice.names, booktabs=T, linesep = "", caption = "Crude preva
 
 This table reports the prevalence of people in the sample with one or both eyes operated, irrespective of post-operative visual acuity or pinhole acuity in the unoperated eye.
 
-## Prevalence of cataract
+### Unmet need for cataract surgery
 
 ```{r catcovdenom.a, echo=FALSE}
 
@@ -769,7 +771,7 @@ knitr::kable(catcovdenom.b.nice.names, booktabs=T, linesep = "", caption = "Extr
 
 The number of people at each PinVA threshold in these tables correspond to the unmet need for cataract surgery in the calculation for effective cataract surgical coverage (see notes). People with unmet need for surgery may have cataract in one or both eyes. Those with cataract in one eye and different cause of VI in the other eye would potentially benefit from cataract surgery. Note, this group with unilateral cataract excludes people with previous cataract surgery, refractive error or uncorrected aphakia in the non-cataract eye.
 
-## Severity of cataract-related vision impairment
+### Unmet need for cataract surgery by bilateral and unilateral cases
 
 In these tables, the unmet need for cataract surgery is broken down by bilateral and unilateral cataract cases at each of the cataract surgical thresholds.
 
@@ -831,7 +833,7 @@ knitr::kable(asa7b.nice.names, booktabs=T, linesep = "", caption = "Adjusted pre
 
 These tables enable planning the number of surgeries required to eliminate vision impairment from cataract at a particular PinVA threshold. Assuming services will aim to operate on all eyes of people with vision impairing cataract, two surgeries are required for ‘bilateral cases’ and one surgery is required for ‘unilateral cases’.
 
-## Cataract surgical coverage
+### Effective cataract surgical coverage
 
 ```{r prev14, echo=FALSE}
 
@@ -866,7 +868,7 @@ knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted c
 
 Effective cataract surgical coverage (eCSC) measures the number of people in a population who have been operated on for cataract, and had a good outcome (at least 6/12 post-operative presenting VA), as a proportion of all people operated on or still requiring surgery. Therefore, eCSC describes service access (ie, cataract surgical coverage, [CSC]) adjusted for quality. eCSC and CSC are reported at four cataract surgical thresholds. The gap between CSC and eCSC values can be considered a quality gap; the relative quality gap is calculated as (total CSC–total eCSC)/ total CSC, with lower values reflecting better quality of cataract surgical services. See notes section for more details.
 
-## Barriers to cataract surgery
+### Barriers to cataract surgery
 
 ```{r sum11, echo=FALSE}
 
@@ -890,11 +892,11 @@ knitr::kable(sum11.nice.names,booktabs=T, linesep = "", caption="Barriers to cat
 
 The standard RAAB survey protocol does not allow for in-depth interviews to determine why people with cataract have not yet been operated. This preliminary data on barriers to surgery should be regarded as an indication whether more detailed qualitative studies are required.
 
-# Surgical outcomes
+## Cataract quality
 
-Surgical outcomes are reported for all operated eyes in the sample, not at the person level. RAAB gives population based data on post-operative visual outcomes, not specific to one surgeon or one hospital and with follow-up periods ranging from months to decades.
+Cataract surgical outcomes are reported for all operated eyes in the sample, not at the person level. RAAB gives population based data on post-operative visual outcomes, not specific to one surgeon or one hospital and with follow-up periods ranging from months to decades.
 
-## Type of surgery
+### Type of surgery
 
 ```{r newtab2, echo=FALSE}
 
@@ -919,7 +921,7 @@ knitr::kable(newtab2.nice.names, booktabs=T, linesep = "", caption = "Type of ca
 
 ```
 
-## Outcomes
+### Presenting acuity vs pinhole acuity outcomes
 
 ```{r newtab3a, echo=FALSE}
 
@@ -946,7 +948,6 @@ knitr::kable(newtab3a.nice.names, booktabs=T, linesep = "", caption = "Post-oper
 
 ```
 
-
 ```{r newtab3b, echo=FALSE}
 
 newtab3b.nice.names<-newtab3b
@@ -971,7 +972,9 @@ knitr::kable(newtab3b.nice.names, booktabs=T, linesep = "", caption = "Post-oper
 
 ```
 
-## Place of surgery
+Where there is a higher proportion of good outcomes with PinVA compared to PVA, consider the availability of post-operative refraction services for cataract patients. Correction of residual distance refractive error may improve post-operative outcomes in the population. 
+
+### Outcomes by place of surgery
 
 ```{r outc6, echo=FALSE}
 
@@ -1035,9 +1038,9 @@ Trad. = Traditional setting
 
 # Refractive error
 
-In population-based surveys, refractive error is often defined by an improvement in visual acuity with correction to a specific VA threshold (rather than e.g., in dioptres of myopia). The definition of refractive error used in RAAB7 is UCVA worse than 6/12 improving to 6/12 with spectacle correction or pinhole. The prevalence of refractive error by age group and gender is shown in Tables RE1 and RE2.
+In population-based surveys, refractive error is often defined by an improvement in visual acuity with correction to a specific VA threshold (rather than e.g., in dioptres of myopia). The definition of refractive error used in RAAB7 is UCVA worse than 6/12 improving to 6/12 with spectacle correction or pinhole. The prevalence of refractive error by age group and gender is shown in the table below.
 
-## Prevalence of refractive error
+## Prevalence of distance refractive error
 
 ```{r dist.re.prev,echo=FALSE}
 
@@ -1066,7 +1069,7 @@ knitr::kable(dist.re.prev.nice.names, booktabs=T, linesep = "", caption = "Crude
 
 This definition of refractive error prevalence includes people with corrected refractive error–who will have an ongoing need for refractive error services–as well as people without correction who are yet to access services. 
 
-Note: In contrast to cataract, which predominantly affects the population 50 years and older, refractive error presents across the life course. RAAB does not provide any information on the prevalence of refractive error in the population under 50 years of age.
+Note: In contrast to cataract, which predominantly affects the population 50 years and older, refractive error presents across the life course. RAAB does not provide information on the prevalence of refractive error in the population under 50 years of age.
 
 ## Spectacle use
 
@@ -1099,7 +1102,7 @@ This table reports the sample (crude) prevalence of distance and near spectacle 
 
 Note: Not all participants with spectacles will have a need for correction according to the standard definition in the effective refractive error correction calculation, i.e., some will have 6/12 uncorrected VA.
 
-## Distance refractive error coverage
+## Distance effective refractive error coverage
 
 ```{r new_tab_5,echo=FALSE}
 
@@ -1107,8 +1110,8 @@ source(here("RAAB7_scripts","adj-rec-erec-dist_RAAB7.R"))
 
 newtab5.nice.names<-newtab5
 
-newtab5.nice.names$rec_metric[newtab5.nice.names$rec_metric=="rec"]<-"Distance REC"
-newtab5.nice.names$rec_metric[newtab5.nice.names$rec_metric=="erec"]<-"Distance eREC"
+newtab5.nice.names$rec_metric[newtab5.nice.names$rec_metric=="dist_rec"]<-"Distance REC"
+newtab5.nice.names$rec_metric[newtab5.nice.names$rec_metric=="dist_erec"]<-"Distance eREC"
 
 newtab5.nice.names$female.pct.ci<-paste0(newtab5.nice.names$female.pct.lci," - ",newtab5.nice.names$female.pct.uci)
 newtab5.nice.names$female.adj.pct.ci<-paste0(newtab5.nice.names$female.adj.pct.lci," - ",newtab5.nice.names$female.adj.pct.uci)
@@ -1125,7 +1128,7 @@ write.table(newtab5.nice.names,here("outputs", ID, "summary", "data", "adjusted_
 
 names(newtab5.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %", "95% CI", "%")
 
-knitr::kable(newtab5.nice.names, booktabs=T, linesep = "", caption = "Adjusted distance refractive error coverage and effective refractive error coverage", row.names=F,align = 'lccccccc') %>%
+knitr::kable(newtab5.nice.names, booktabs=T, linesep = "", caption = "Adjusted distance effective refractive error coverage and refractive error coverage", row.names=F,align = 'lccccccc') %>%
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,'3cm') %>%
@@ -1179,7 +1182,7 @@ need_fig_cols<-brewer.pal(4,"Spectral")
 
 par(mar=c(1,10,1,1))
 
-treemap(dist.re.need,index="need",vSize="total.extrapolated.n",type="index",palette = need_fig_cols,position.legend="right",fontsize.title = 12,title="Adjusted distance refractive error correction need")
+treemap(dist.re.need,index="need",vSize="total.extrapolated.n",type="index",palette = need_fig_cols,position.legend="right",fontsize.title = 8,title="The need for distance refractive error correction in the population 50 years and older")
 
 ```
 
@@ -1187,7 +1190,7 @@ Note: The need for distance refractive error correction in the population under 
 
 ```{r, eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
 
-asis_output("## Near refractive error coverage")
+asis_output("## Near effective refractive error coverage")
 
 ```
 
@@ -1198,8 +1201,8 @@ source(here("RAAB7_scripts","adj-rec-erec-near_RAAB7.R"))
 
 newtab7.nice.names<-newtab7
 
-newtab7.nice.names$rec_metric[newtab7.nice.names$rec_metric=="rec"]<-"Near REC"
-newtab7.nice.names$rec_metric[newtab7.nice.names$rec_metric=="erec"]<-"Near eREC"
+newtab7.nice.names$rec_metric[newtab7.nice.names$rec_metric=="near_rec"]<-"Near REC"
+newtab7.nice.names$rec_metric[newtab7.nice.names$rec_metric=="near_erec"]<-"Near eREC"
 
 newtab7.nice.names$female.pct.ci<-paste0(newtab7.nice.names$female.pct.lci," - ",newtab7.nice.names$female.pct.uci)
 newtab7.nice.names$female.adj.pct.ci<-paste0(newtab7.nice.names$female.adj.pct.lci," - ",newtab7.nice.names$female.adj.pct.uci)
@@ -1278,7 +1281,7 @@ need_fig_cols<-brewer.pal(4,"Spectral")
 
 par(mar=c(1,10,1,1))
 
-treemap(near.re.need,index="need",vSize="total.extrapolated.n",type="index",palette = need_fig_cols, position.legend="right", fontsize.title = 12, title="Adjusted near refractive error correction need")
+treemap(near.re.need,index="need",vSize="total.extrapolated.n",type="index",palette = need_fig_cols, position.legend="right", fontsize.title = 8, title="The need for near refractive error correction in the population 50 years and older")
 
 ```
 
