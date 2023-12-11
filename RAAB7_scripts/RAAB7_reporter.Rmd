@@ -555,20 +555,21 @@ source(here("RAAB7_scripts","cause-vi_RAAB7.R"))
 
 sum6.nice.names<-sum6[,1:9]
 
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_uncorrected_refractive_error"]<-"1. Uncorrected refractive error"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_aphakia_uncorrected"]<-"2. Uncorrected aphakia"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_cataract_untreated"]<-"3. Untreated cataract"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_uncorrected_refractive_error"]<-"1. Refractive error"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_aphakia_uncorrected"]<-"2. Aphakia"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_cataract_untreated"]<-"3. Cataract"
 sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_cataract_surgical_complications"]<-"4. Cataract surgical complications"
 sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_trachomatous_corneal_opacity" ]<-"5. Trachomatous corneal opacity"
 sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_corneal_opacity"]<-"6. Other corneal opacity"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_phthisis" ]<-"7. Phthisis"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_onchocerciasis"]<-"8. Onchocerciasis"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_glaucoma" ]<-"9. Glaucoma"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"10. Diabetic retinopathy"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"11. Age-related macular degeneration"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"12. Other posterior segment disease"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_myopic_degeneration" ]<-"13. Myopic degeneration"
-sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"14. Other globe or CNS abnomalities"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_pterygium"]<-"7. Pterygium"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_phthisis" ]<-"8. Phthisis"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_onchocerciasis"]<-"9. Onchocerciasis"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_glaucoma" ]<-"10. Glaucoma"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"11. Diabetic retinopathy"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"12. Age-related macular degeneration"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"13. Other posterior segment disease"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_myopic_degeneration" ]<-"14. Myopic degeneration"
+sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"15. Other globe or CNS abnomalities"
 
 write.table(sum6.nice.names,here("outputs", ID, "summary", "data", "principal_cause_of_blindness_severe_moderate_and_mild_vision_impairment.csv"),row.names=F,col.names=T,sep=",")
 
@@ -579,7 +580,7 @@ names(sum6.nice.names) <- c(' ', 'n', '%', 'n', '%','n', '%','n', '%')
 knitr::kable(sum6.nice.names, booktabs=T, linesep = "", caption = "Principal cause of blindness, severe, moderate and mild vision impairment",align='lcccccccc') %>%
   kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
-  row_spec(14,hline_after=T) %>%
+  row_spec(15,hline_after=T) %>%
   column_spec(1,width='6cm') %>%
   add_header_above(c("Principal cause" = 1, "Blind" = 2, "Severe" = 2, "Moderate" = 2, "Mild" = 2),bold = T)
 
@@ -612,12 +613,13 @@ This table compares the main cause of blindness, severe vision impairment, moder
 
 ```{r treemap_1, echop=FALSE, fig.fullwidth=T}
 
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_uncorrected_refractive_error"]<-"Uncorrected refractive error"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_aphakia_uncorrected"]<-"Uncorrected aphakia"
-sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_cataract_untreated"]<-"Untreated cataract"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_uncorrected_refractive_error"]<-"Refractive error"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_aphakia_uncorrected"]<-"Aphakia"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_cataract_untreated"]<-"Cataract"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_cataract_surgical_complications"]<-"Cataract surgical complications"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_trachomatous_corneal_opacity" ]<-"Trachomatous corneal opacity"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_other_corneal_opacity"]<-"Other corneal opacity"
+sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_pterygium"]<-"Pterygium"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_phthisis" ]<-"Phthisis"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_onchocerciasis"]<-"Onchocerciasis"
 sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_glaucoma" ]<-"Glaucoma"
@@ -629,7 +631,7 @@ sum6.for.tree$principal.cause[sum6.for.tree$principal.cause=="poor_vision_cause_
 
 core_fig_cols<-brewer.pal(8,"Spectral")
 
-treemap(sum6.for.tree[1:13,],index="principal.cause",vSize="blind.pct",type="index",palette = core_fig_cols, title="Principal causes of bilateral blindness",position.legend="right",fontsize.title=12)
+treemap(sum6.for.tree[1:14,],index="principal.cause",vSize="blind.pct",type="index",palette = core_fig_cols, title="Principal causes of bilateral blindness",position.legend="right",fontsize.title=12)
 
 ```
 
@@ -641,20 +643,21 @@ source(here("RAAB7_scripts","cause-blind-gender.R"))
 
 prev4.nice.names<-prev4[,1:7]
 
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_uncorrected_refractive_error"]<-"1. Uncorrected refractive error"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_aphakia_uncorrected"]<-"2. Uncorrected aphakia"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_cataract_untreated"]<-"3. Untreated cataract"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_uncorrected_refractive_error"]<-"1. Refractive error"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_aphakia_uncorrected"]<-"2. Aphakia"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_cataract_untreated"]<-"3. Cataract"
 prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_cataract_surgical_complications"]<-"4. Cataract surgical complications"
 prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_trachomatous_corneal_opacity" ]<-"5. Trachomatous corneal opacity"
 prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_corneal_opacity"]<-"6. Other corneal opacity"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_phthisis" ]<-"7. Phthisis"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_onchocerciasis"]<-"8. Onchocerciasis"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_glaucoma" ]<-"9. Glaucoma"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"10. Diabetic retinopathy"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"11. Age-related macular degeneration"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease"]<-"12. Other posterior segment disease"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_myopic_degeneration"]<-"13. Myopic degeneration"
-prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"14. Other globe or CNS abnomalities"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_pterygium"]<-"7. Pterygium"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_phthisis" ]<-"8. Phthisis"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_onchocerciasis"]<-"9. Onchocerciasis"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_glaucoma" ]<-"10. Glaucoma"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_diabetic_retinopathy"]<-"11. Diabetic retinopathy"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_age_related_macular_degeneration"]<-"12. Age-related macular degeneration"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease"]<-"13. Other posterior segment disease"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_myopic_degeneration"]<-"14. Myopic degeneration"
+prev4.nice.names$principal.cause[prev4.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"15. Other globe or CNS abnomalities"
 
 write.table(prev4.nice.names,here("outputs", ID, "summary", "data", "principal_cause_of_blindness_in_males_and_females.csv"),row.names=F,col.names=T,sep=",")
 
@@ -663,7 +666,7 @@ names(prev4.nice.names)<-c("","n","%","n","%","n","%")
 knitr::kable(prev4.nice.names, booktabs=T, linesep = "", caption = "Principal cause of blindness in males and females",align='lcccccc') %>%
   kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
-  row_spec(14,hline_after=T) %>%
+  row_spec(15,hline_after=T) %>%
   column_spec(1,width='6cm') %>%
   add_header_above(c("Principal cause" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold = T)
 
