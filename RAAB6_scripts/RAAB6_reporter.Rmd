@@ -36,7 +36,7 @@ raab<-raab_merged[raab_merged$raab_id==ID,]
 pop_merged<-read.csv(here("data","raabs_pop_612_repo.csv"),check.names=F)
 popfives<-pop_merged[pop_merged$raab_id==ID,]
 
-meta<-read.csv(here("data","historic_meta.csv"),check.names=F)
+meta<-read.csv(here("data","historic_meta.csv"),check.names=F,na.strings=c("","NA"))
 
 vars_to_drop<-c("map_complete","exclude_repo","repo_meta","repo_data","ecsc_consent","x4_data_access","data_lost","hl_permission_doc","hl_permission_localreport","hl_permission_raabreport","hl_permission_raabdata","hl_findingspublishedjournal","hl_findingslocalreport","hl_ethicscommitteeapproval","hl_permission_detail","hl_on_behalf_of","permission_ref","lshtm_dta","lshtm_dta-Ref","pi_email","pi_email1 active","pi_email NOTES","pi_int_auth_grp","trainer_email2")
 
@@ -147,8 +147,7 @@ tables:
  yes
 header-includes:
 - \usepackage{float}
-- \usepackage{tabu}
-- \usepackage{graphicx}
+- \usepackage{tabu}										   													  
 ---
 
 ```{r raab_report_setup, include=FALSE}
@@ -183,7 +182,7 @@ write.table(sum1.nice.names, here("outputs", ID, "summary", "data", "t1.csv"),ro
 
 names(sum1.nice.names)<-c("","n","%","n","%","n","%")
 
-knitr::kable(sum1.nice.names, booktabs=T, linesep = "", caption = "Eligible persons, coverage, absentees and refusals") %>%
+knitr::kable(sum1.nice.names, booktabs=T, linesep = "", caption = "Eligible persons, coverage, absentees and refusals", align='lcccccc') %>%
   kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(4,hline_after=T) %>%
@@ -212,14 +211,14 @@ write.table(asa1.nice.names,here("outputs", ID, "summary", "data", "t2.csv"),row
 
 names(asa1.nice.names)<-c("Years","n","%","n","%","n","%")
 
-knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and sex distribution of people examined in the sample") %>%
+knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and gender distribution of people examined in the sample", align='lcccccc') %>%
   kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(4,hline_after=T) %>%
   add_header_above(c("Age group" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
 
-
 ```
+
 
 ```{r asa2, echo=FALSE}
 
@@ -231,7 +230,7 @@ write.table(asa2.nice.names,here("outputs", ID, "summary", "data", "t3.csv"),row
 
 names(asa2.nice.names)<-c("Years","n","%","n","%","n","%")
 
-knitr::kable(asa2.nice.names, booktabs=T, linesep = "", caption = "Total number of people aged 50+ in survey area") %>%
+knitr::kable(asa2.nice.names, booktabs=T, linesep = "", caption = "Total number of people aged 50+ in survey area", align='lcccccc') %>%
   kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(4,hline_after=T) %>%
@@ -261,6 +260,7 @@ text(x=par("usr")[3]-6, y=c(2,5,8,11), labels=c("50-59","60-69","70-79","80+"), 
 legend("top",col=c("gold","grey"),pch=15,c("Survey sample","Census population"),bty='n',cex=0.6,title=expression(bold("Males")),horiz=T,title.adj=0)
 
 ```
+
 
 ```{r asa1_extra_plot, echo=FALSE, fig.height=3.25, fig.fullwidth=T}
 
@@ -334,12 +334,14 @@ write.table(sum3a.nice.names,here("outputs", ID, "summary", "data", "t4.csv"),ro
 
 names(sum3a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(sum3a.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of blindness, severe, moderate and mild vision impairment") %>%
+knitr::kable(sum3a.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of blindness, severe, moderate and mild vision impairment", align='lccccccccc') %>%
   kable_styling(full_width=T,latex_options="HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
+  column_spec(c(2,3,5,6,8,9),width='1cm') %>%
   add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
 
 ```
+
 
 ```{r sum4, echo=FALSE}
 
@@ -349,8 +351,8 @@ write.table(sum3b.nice.names,here("outputs", ID, "summary", "data", "t5.csv"),ro
 
 names(sum3b.nice.names)<-c("","%","95% CI","Extraplotated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude")
 
-knitr::kable(sum3b.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence and extrapolated magnitude of blindness, severe, moderate and mild vision impairment") %>%
-  kable_styling(latex_options=c("scale_down","HOLD_position")) %>%
+knitr::kable(sum3b.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence and extrapolated magnitude of blindness, severe, moderate and mild vision impairment", align='lccccccccc') %>%
+  kable_styling(latex_options=c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(c(4,7,10),width='2cm') %>%
   add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
@@ -386,12 +388,15 @@ write.table(asa6a.nice.names,here("outputs", ID, "summary", "data", "t6.csv"),ro
 
 names(asa6a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(asa6a.nice.names, booktabs=T, linesep = "", caption = "Crude cumulative prevalence of blindness (any PVA <3/60), severe (any PVA <6/60), moderate (any PVA <6/18) and mild (any PVA <6/12) vision impairment") %>%
-  kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
+knitr::kable(asa6a.nice.names, booktabs=T, linesep = "", caption = "Crude cumulative prevalence of blindness (any PVA <3/60), severe (any PVA <6/60), moderate (any PVA <6/18) and mild (any PVA <6/12) vision impairment", align='lccccccccc') %>%
+  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
+  column_spec(c(4,7,10),width='1.5cm') %>%
+  column_spec(1,width='3cm') %>%
   add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold = T)
 
 ```
+
 
 ```{r asa6b,echo=FALSE}
 
@@ -402,7 +407,7 @@ write.table(asa6b.nice.names,here("outputs", ID, "summary", "data", "t7.csv"),ro
 names(asa6b.nice.names)<-c("","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude")
 
 knitr::kable(asa6b.nice.names, booktabs=T, linesep = "", caption = "Adjusted cumulative prevalence of blindness (any PVA <3/60), severe (any PVA <6/60), moderate (any PVA <6/18) and mild (any PVA <6/12) vision impairment") %>%
-  kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(c(4,7,10),width='2cm') %>%
   add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold = T)
@@ -447,6 +452,7 @@ knitr::kable(sum6.nice.names, booktabs=T, linesep = "", caption = " Principal ca
 
 ```
 
+
 ```{r sum6_agg, echo=FALSE}
 
 sum6intag<-aggregate(sum6.numeric[,2:9],by=list(sum6.numeric$cause_group_1), FUN=sum,na.rm=T)
@@ -460,8 +466,8 @@ write.table(sum6ag,here("outputs", ID, "summary", "data", "t9.csv"),row.names=F,
 
 names(sum6ag)<-c("","n", "%", "n", "%", "n","%","n","%")
 
-knitr::kable(sum6ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = " Principal cause of blindness, severe, moderate and mild vision impairment, by intervention category") %>%
-  kable_styling(full_width=T,latex_options = "HOLD_position") %>%
+knitr::kable(sum6ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = " Principal cause of blindness, severe, moderate and mild vision impairment, by intervention category",align='lccccccccc') %>%
+  kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='5cm') %>%
   add_header_above(c("Category" = 1, "Blind" = 2, "Severe" = 2, "Moderate" = 2, "Mild" = 2),bold = T) %>%
@@ -524,7 +530,7 @@ write.table(prev4.nice.names,here("outputs", ID, "summary", "data", "t10.csv"),r
 names(prev4.nice.names)<-c("","n","%","n","%","n","%")
 
 knitr::kable(prev4.nice.names, booktabs=T, linesep = "", caption = "Principal cause of blindness in males and females") %>%
-  kable_styling(full_width=T,latex_options = "HOLD_position") %>%
+  kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(14,hline_after=T) %>%
   column_spec(1,width='6cm') %>%
@@ -543,7 +549,7 @@ write.table(prev4ag,here("outputs", ID, "summary", "data", "t11.csv"),row.names=
 names(prev4ag)<-c("","n", "%", "n", "%", "n","%")
 
 knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = " Principal cause of blindness (PVA <3/60), by gender and intervention category") %>%
-  kable_styling(full_width=T,latex_options = "HOLD_position") %>%
+  kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='5cm') %>%
   add_header_above(c("Category" = 1, "Male" = 2, "Female" = 2, "Total" = 2),bold = T)
@@ -631,7 +637,7 @@ catops.nice.names$cat.ops[catops.nice.names$cat.ops=="total.operated"]<-"Total o
 
 names(catops.nice.names)<-c(" ","n","%","n","%","n","%")
 
-knitr::kable(catops.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of people bilaterally and unilaterally cataract operated") %>%
+knitr::kable(catops.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of people bilaterally and unilaterally cataract operated",align='lcccccc') %>%
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='3cm') %>%
@@ -659,8 +665,8 @@ write.table(catcovdenom.a.nice.names,here("outputs", ID, "summary", "data", "t15
 
 names(catcovdenom.a.nice.names)<-c(" ","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(catcovdenom.a.nice.names, booktabs=T, linesep = "", caption = "Crude unmet need for cataract surgery at pinhole VA thresholds <3/60, <6/60, <6/18 and <6/12") %>%
-  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
+knitr::kable(catcovdenom.a.nice.names, booktabs=T, linesep = "", caption = "Crude unmet need for cataract surgery at pinhole VA thresholds <3/60, <6/60, <6/18 and <6/12",align='lcccccc') %>%
+  kable_styling(latex_options = c("scale_down", "HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   add_header_above(c("Unmet need threshold" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
 
@@ -683,7 +689,7 @@ write.table(catcovdenom.b.nice.names,here("outputs", ID, "summary", "data", "t16
 names(catcovdenom.b.nice.names)<-c(" ","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude")
 
 knitr::kable(catcovdenom.b.nice.names, booktabs=T, linesep = "", caption = "Extrapolated magnitude of unmet need for cataract surgery at pinhole VA thresholds <3/60, <6/60, <6/18 and <6/12") %>%
-  kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(c(4,7,10),width='2cm') %>%
   add_header_above(c("Unmet need threshold" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
@@ -713,7 +719,7 @@ write.table(asa7a.nice.names,here("outputs", ID, "summary", "data", "t17.csv"),r
 
 names(asa7a.nice.names)<-c(" ","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(asa7a.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of cataract at surgical thresholds <3/60, <6/60, <6/18 and <6/12") %>%
+knitr::kable(asa7a.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of cataract at surgical thresholds <3/60, <6/60, <6/18 and <6/12",align='lcccccc') %>%
   kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   pack_rows("Bilateral",1,4) %>%
@@ -740,8 +746,8 @@ write.table(asa7b.nice.names,here("outputs", ID, "summary", "data", "t18.csv"),r
 
 names(asa7b.nice.names)<-c(" ","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude","Adj. %", "95% CI", "Extrapolated magnitude")
 
-knitr::kable(asa7b.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence and extrapolated magnitude of cataract at surgical thresholds <3/60, <6/60, <6/18 and <6/12") %>%
-  kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
+knitr::kable(asa7b.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence and extrapolated magnitude of cataract at surgical thresholds <3/60, <6/60, <6/18 and <6/12",align='lccccccccc') %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(c(4,7,10),width='2cm') %>%
   pack_rows("Bilateral",1,4) %>%
@@ -773,8 +779,8 @@ write.table(prev14a.nice.names,here("outputs", ID, "summary", "data", "t19.csv")
 
 names(prev14a.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI","%")
 
-knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted cataract surgical coverage and effective cataract surgical coverage at the person level",row.names=F) %>%
-  kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
+knitr::kable(prev14a.nice.names, booktabs=T, linesep = "", caption = "Adjusted cataract surgical coverage and effective cataract surgical coverage at the person level",row.names=F,align='lccccccc') %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='4cm') %>%
   pack_rows("Cataract surgical threshold <6/12",1,2) %>%
@@ -801,8 +807,8 @@ write.table(sum11.nice.names,here("outputs", ID, "summary", "data", "t20.csv"),r
 
 names(sum11.nice.names)<-c("","n","%","n","%","n","%")
 
-knitr::kable(sum11.nice.names,booktabs=T, linesep = "", caption="Barriers to cataract surgery among participants with bilateral cataract and PinVA <6/60") %>%
-  kable_styling(full_width=T,latex_options = "HOLD_position") %>%
+knitr::kable(sum11.nice.names,booktabs=T, linesep = "", caption="Barriers to cataract surgery among participants with bilateral cataract and PinVA <6/60",align='lcccccc') %>%
+  kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(nrow(sum11.nice.names)-1,hline_after=T) %>%
   column_spec(1,width='5cm') %>%
@@ -833,8 +839,8 @@ write.table(newtab2.nice.names,here("outputs", ID, "summary", "data", "t21.csv")
 
 names(newtab2.nice.names)<-c("","n","%","n","%","n","%")
 
-knitr::kable(newtab2.nice.names, booktabs=T, linesep = "", caption = "Type of cataract surgery performed, count by eyes") %>%
-  kable_styling(full_width=T, latex_options = "HOLD_position") %>%
+knitr::kable(newtab2.nice.names, booktabs=T, linesep = "", caption = "Type of cataract surgery performed, count by eyes",align='lcccccc') %>%
+  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(3,hline_after=T) %>%
   add_header_above(c("Surgery type" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
@@ -859,14 +865,15 @@ write.table(newtab3a.nice.names,here("outputs", ID, "summary", "data", "t22.csv"
 
 names(newtab3a.nice.names)<-c("","n","%","n","%","n","%")
 
-knitr::kable(newtab3a.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcome (PVA), count by eyes") %>%
-  kable_styling(full_width=T, latex_options = "HOLD_position") %>%
+knitr::kable(newtab3a.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcome (PVA), count by eyes",align='lcccccc') %>%
+  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(3,hline_after=T) %>%
   column_spec(1,width='4cm') %>%
   add_header_above(c("Outcome (PVA)" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
 
 ```
+
 
 ```{r newtab3b, echo=FALSE}
 
@@ -882,8 +889,8 @@ write.table(newtab3b.nice.names,here("outputs", ID, "summary", "data", "t23.csv"
 
 names(newtab3b.nice.names)<-c("","n","%","n","%","n","%")
 
-knitr::kable(newtab3b.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcome (PinVA), count by eyes") %>%
-  kable_styling(full_width=T, latex_options = "HOLD_position") %>%
+knitr::kable(newtab3b.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcome (PinVA), count by eyes",align='lcccccc') %>%
+  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(3,hline_after=T) %>%
   column_spec(1,width='4cm') %>%
@@ -909,8 +916,8 @@ write.table(outc6a.nice.names,here("outputs", ID, "summary", "data", "t24.csv"),
 
 names(outc6a.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
 
-knitr::kable(outc6a.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcomes (PVA) in eyes by place of surgery (male)") %>%
-  kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
+knitr::kable(outc6a.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcomes (PVA) in eyes by place of surgery (male)",align='lccccccccc') %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(3,hline_after=T) %>%
   add_header_above(c("Post-surgical VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T)
@@ -931,8 +938,8 @@ write.table(outc6b.nice.names,here("outputs", ID, "summary", "data", "t25.csv"),
 
 names(outc6b.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
 
-knitr::kable(outc6b.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcomes (PVA) in eyes by place of surgery (female)") %>%
-  kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
+knitr::kable(outc6b.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcomes (PVA) in eyes by place of surgery (female)",align='lccccccccc') %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(3,hline_after=T) %>%
   add_header_above(c("Post-surgical VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T)
@@ -984,7 +991,7 @@ write.table(newtab4a.nice.names,here("outputs", ID, "summary", "data", "t26.csv"
 
 names(newtab4a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(newtab4a.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of blindness (PVA <3/60), severe (PVA <6/60), moderate (PVA <6/18) and mild (PVA <6/12) vision impairment due to refractive error") %>%
+knitr::kable(newtab4a.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of blindness (PVA <3/60), severe (PVA <6/60), moderate (PVA <6/18) and mild (PVA <6/12) vision impairment due to refractive error",align='lccccccccc') %>%
   kable_styling(latex_options=c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
@@ -999,7 +1006,7 @@ write.table(newtab4b.nice.names,here("outputs", ID, "summary", "data", "t27.csv"
 
 names(newtab4b.nice.names)<-c("","%","95% CI","Extraplotated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magintude")
 
-knitr::kable(newtab4b.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence and extrapolated magnitude of blindness (PVA <3/60), severe (PVA <6/60), moderate (PVA <6/18) and mild (PVA <6/12) vision impairment due to refractive error") %>%
+knitr::kable(newtab4b.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence and extrapolated magnitude of blindness (PVA <3/60), severe (PVA <6/60), moderate (PVA <6/18) and mild (PVA <6/12) vision impairment due to refractive error",align='lccccccccc') %>%
   kable_styling(latex_options=c("scale_down","HOLD_position")) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(c(4,7,10),width='2cm') %>%
@@ -1035,7 +1042,7 @@ write.table(newtab5.nice.names,here("outputs", ID, "summary", "data", "t28.csv")
 
 names(newtab5.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %", "95% CI")
 
-knitr::kable(newtab5.nice.names, booktabs=T, linesep = "", caption = "Adjusted distance refractive error coverage and effective refractive error coverage", row.names=F) %>%
+knitr::kable(newtab5.nice.names, booktabs=T, linesep = "", caption = "Adjusted distance refractive error coverage and effective refractive error coverage", row.names=F,align='lcccccc') %>%
   kable_styling(full_width=T, latex_options = "HOLD_position") %>%
   row_spec(0,italic=TRUE) %>%
   add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T) %>%
@@ -1060,7 +1067,7 @@ write.table(newtab6.nice.names,here("outputs", ID, "summary", "data", "t29.csv")
 
 names(newtab6.nice.names)<-c("","n","%","n","%","n","%")
 
-knitr::kable(newtab6.nice.names, booktabs=T, linesep = "", caption = "Distance and near vision spectacle use among study participants") %>%
+knitr::kable(newtab6.nice.names, booktabs=T, linesep = "", caption = "Distance and near vision spectacle use among study participants",align='lcccccc') %>%
   kable_styling(full_width=T, latex_options = "HOLD_position") %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='5cm') %>%
@@ -1163,7 +1170,7 @@ write.table(dm.prev.final.nice.names,here("outputs", ID, "summary", "data", "dr3
 
 names(dm.prev.final.nice.names)<-c("Years","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(dm.prev.final.nice.names, booktabs=T, linesep = "", caption = "The prevalence of known or suspected diabetes among participants assessed for diabetes status, by age group and gender",align='lccccccccc') %>% 
+knitr::kable(dm.prev.final.nice.names, booktabs=T, linesep = "", caption = "Prevalence of known or suspected diabetes among participants assessed for diabetes status, by age group and gender",align='lccccccccc') %>% 
   kable_styling(full_width=T, latex_options = "HOLD_position", font_size = 8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(4,hline_after=T) %>%
@@ -1320,7 +1327,7 @@ dm.vi.table.nice.names<-dm.vi.table.nice.names[,c("vi.level","diabetic.n","diabe
 
 names(dm.vi.table.nice.names)<-c(" ","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(dm.vi.table.nice.names, booktabs=T, linesep = "", caption = "The prevalence of vision impairment among known and suspected diabetics and non-diabetics",align='lcccccc') %>% 
+knitr::kable(dm.vi.table.nice.names, booktabs=T, linesep = "", caption = "Prevalence of vision impairment among known and suspected diabetics and non-diabetics",align='lcccccc') %>% 
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='4cm') %>%
