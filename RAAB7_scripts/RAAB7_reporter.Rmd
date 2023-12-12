@@ -217,7 +217,7 @@ write.table(asa1.nice.names,here("outputs", ID, "summary", "data", "age_and_gend
 
 names(asa1.nice.names)<-c("Years","n","%","n","%","n","%")
 
-knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and gender distribution of people examined in the sample",align='lcccccc') %>%
+knitr::kable(asa1.nice.names, booktabs=T, linesep = "", caption = "Age and gender distribution of people examined in the sample", align='lcccccc') %>%
   kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(4,hline_after=T) %>%
@@ -236,7 +236,7 @@ write.table(asa2.nice.names,here("outputs", ID, "summary", "data", "total_number
 
 names(asa2.nice.names)<-c("Years","n","%","n","%","n","%")
 
-knitr::kable(asa2.nice.names, booktabs=T, linesep = "", caption = "Total number of people aged 50+ in survey area",align='lcccccc') %>%
+knitr::kable(asa2.nice.names, booktabs=T, linesep = "", caption = "Total number of people aged 50+ in survey area", align='lcccccc') %>%
   kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(4,hline_after=T) %>%
@@ -339,7 +339,7 @@ write.table(sum3a.nice.names,here("outputs", ID, "summary", "data", "crude_preva
 
 names(sum3a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(sum3a.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of blindness, severe, moderate and mild vision impairment",align='lccccccccc') %>%
+knitr::kable(sum3a.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of blindness, severe, moderate and mild vision impairment", align='lccccccccc') %>%
   kable_styling(full_width=T,latex_options="HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(c(2,3,5,6,8,9),width='1cm') %>%
@@ -356,7 +356,7 @@ write.table(sum3b.nice.names,here("outputs", ID, "summary", "data", "adjusted_pr
 
 names(sum3b.nice.names)<-c("","%","95% CI","Extraplotated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude")
 
-knitr::kable(sum3b.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence and extrapolated magnitude of blindness, severe, moderate and mild vision impairment",align='lccccccccc') %>%
+knitr::kable(sum3b.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence and extrapolated magnitude of blindness, severe, moderate and mild vision impairment", align='lccccccccc') %>%
   kable_styling(latex_options=c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(c(4,7,10),width='2cm') %>%
@@ -393,7 +393,7 @@ write.table(asa6a.nice.names,here("outputs", ID, "summary", "data", "crude_cumul
 
 names(asa6a.nice.names)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(asa6a.nice.names, booktabs=T, linesep = "", caption = "Crude cumulative prevalence of blindness (any PVA <3/60), severe (any PVA <6/60), moderate (any PVA <6/18) and mild (any PVA <6/12) vision impairment",align='lccccccccc') %>%
+knitr::kable(asa6a.nice.names, booktabs=T, linesep = "", caption = "Crude cumulative prevalence of blindness (any PVA <3/60), severe (any PVA <6/60), moderate (any PVA <6/18) and mild (any PVA <6/12) vision impairment", align='lccccccccc') %>%
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(c(4,7,10),width='1.5cm') %>%
@@ -1134,7 +1134,8 @@ names(newtab5.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %
 knitr::kable(newtab5.nice.names, booktabs=T, linesep = "", caption = "Adjusted distance effective refractive error coverage and refractive error coverage", row.names=F,align = 'lccccccc') %>%
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
-  column_spec(1,'3cm') %>%
+  column_spec(1,'2cm') %>%
+  column_spec(c(3,5,7),'1.5cm') %>%
   add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2,"Quality gap" = 1),bold=T) %>%
   add_footnote("eREC: Effective Refractive Error Coverage; REC: Refractive Error Coverage",notation="symbol")
 
@@ -1159,17 +1160,18 @@ dist.re.need.nice.names$male.adj.pct.ci<-paste0(dist.re.need.nice.names$male.adj
 dist.re.need.nice.names$female.adj.pct.ci<-paste0(dist.re.need.nice.names$female.adj.pct.lci," - ",dist.re.need.nice.names$female.adj.pct.uci)
 dist.re.need.nice.names$total.adj.pct.ci<-paste0(dist.re.need.nice.names$total.adj.pct.lci," - ",dist.re.need.nice.names$total.adj.pct.uci)
 
-dist.re.need.nice.names<-dist.re.need.nice.names[,c("need","female.adj.pct","female.adj.pct.ci","male.adj.pct","male.adj.pct.ci","total.adj.pct","total.adj.pct.ci")]
+dist.re.need.nice.names<-dist.re.need.nice.names[,c("need","female.adj.pct","female.adj.pct.ci","female.extrapolated.n", "male.adj.pct","male.adj.pct.ci","male.extrapolated.n","total.adj.pct","total.adj.pct.ci","total.extrapolated.n")]
 
 write.table(dist.re.need.nice.names,here("outputs", ID, "summary", "data", "adjusted_prevalence_of_need_for_distance_refractive_error_correction_by_gender.csv"),row.names=F,col.names=T,sep=",")
 
-names(dist.re.need.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %", "95% CI")
+names(dist.re.need.nice.names) <- c(" ","Adj. %", "95% CI","Extrap. magnitude","Adj. %", "95% CI","Extrap. magnitude","Adj. %", "95% CI","Extrap. magnitude")
 
 knitr::kable(dist.re.need.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence of met need, undermet need, unmet need and no need for distance refractive error correction by gender", row.names=F,align = 'lcccccc') %>%
-  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
+  kable_styling(full_width=T, latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
-  column_spec(1,'3cm') %>%
-  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
+  column_spec(1,'2cm') %>%
+  column_spec(c(3,6,9),'1.5cm') %>%
+  add_header_above(c(" " = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
 
 ```
 
@@ -1225,7 +1227,8 @@ names(newtab7.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %
 knitr::kable(newtab7.nice.names, booktabs=T, linesep = "", caption = "Adjusted near refractive error coverage and effective refractive error coverage", row.names=F,align = 'lccccccc') %>%
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
-  column_spec(1,'3cm') %>%
+  column_spec(1,'2cm') %>%
+  column_spec(c(3,5,7),'1.5cm') %>%
   add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2,"Quality gap" = 1),bold=T) %>%
   add_footnote("eREC: Effective Refractive Error Coverage; REC: Refractive Error Coverage",notation="symbol")
 
@@ -1258,17 +1261,18 @@ near.re.need.nice.names$male.adj.pct.ci<-paste0(near.re.need.nice.names$male.adj
 near.re.need.nice.names$female.adj.pct.ci<-paste0(near.re.need.nice.names$female.adj.pct.lci," - ",near.re.need.nice.names$female.adj.pct.uci)
 near.re.need.nice.names$total.adj.pct.ci<-paste0(near.re.need.nice.names$total.adj.pct.lci," - ",near.re.need.nice.names$total.adj.pct.uci)
 
-near.re.need.nice.names<-near.re.need.nice.names[,c("need","female.adj.pct","female.adj.pct.ci","male.adj.pct","male.adj.pct.ci","total.adj.pct","total.adj.pct.ci")]
+near.re.need.nice.names<-near.re.need.nice.names[,c("need","female.adj.pct","female.adj.pct.ci","female.extrapolated.n","male.adj.pct","male.adj.pct.ci","male.extrapolated.n","total.adj.pct","total.adj.pct.ci","total.extrapolated.n")]
 
 write.table(near.re.need.nice.names,here("outputs", ID, "summary", "data", "adjusted_prevalence_of_need_for_near_refractive_error_correction_by_gender.csv"),row.names=F,col.names=T,sep=",")
 
-names(near.re.need.nice.names) <- c(" ","Adj. %", "95% CI","Adj. %", "95% CI","Adj. %", "95% CI")
+names(near.re.need.nice.names) <- c(" ","Adj. %", "95% CI","Extrap. magnitude","Adj. %", "95% CI","Extrap. magnitude","Adj. %", "95% CI","Extrap. magnitude")
 
 knitr::kable(near.re.need.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence of met need, undermet need, unmet need and no need for near refractive error correction by gender", row.names=F,align = 'lcccccc') %>%
-  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
+  kable_styling(full_width=T, latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,'3cm') %>%
-  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T)
+  column_spec(c(3,6,9),'1.5cm') %>%
+  add_header_above(c(" " = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T)
 
 ```
 

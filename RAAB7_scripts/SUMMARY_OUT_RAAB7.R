@@ -31,27 +31,29 @@ top_causes<-causes[1:3,c("principal.cause","blind.n","blind.pct")]
 prebigboi7<-dcast(melt(top_causes,id.var="principal.cause"),1~variable+principal.cause)
 
 # Refractive error prevalence
-prebigboi8<-dist.re.prev.final[,-1]
-names(prebigboi8)<-paste0(names(prebigboi8),"_dist_re")
+prebigboi8<-dcast(melt(dist.re.prev.final,id.vars="age.groups.tens"), 1~variable+age.groups.tens)
+names(prebigboi8)<-paste0(names(prebigboi8),"_dist_re_ucva")
 
 # Distance eREC/REC
 prebigboi9<-dcast(melt(newtab5,id.vars="rec_metric"), 1~variable+rec_metric)
-prebigboi9<-dcast(melt(newtab5,id.vars="rec_metric"), 1~variable+rec_metric)
+names(prebigboi9)<-paste0(names(prebigboi9),"_ucva")
+
+loc_vars<-data.frame(iso_2=raab_meta$iso_2,year_end=raab_meta$year_end,gbd_reg=raab_meta$gbd_reg,gbd_superreg=raab_meta$gbd_superreg)
 
 # Near VI/ near eREC if used
 if(sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0){
   
-  prebigboi10<-near.re.prev.final[,-1]
-  names(prebigboi10)<-paste0(names(prebigboi10),"_near_re")
+  prebigboi10<-dcast(melt(near.re.prev.final,id_vars="age.groups.tens"), 1~variable+age.groups.tens)
+  names(prebigboi10)<-paste0(names(prebigboi10),"_near_re_ucva")
   
   prebigboi11<-dcast(melt(newtab7,id.vars="rec_metric"), 1~variable+rec_metric)
-  prebigboi11<-dcast(melt(newtab7,id.vars="rec_metric"), 1~variable+rec_metric)
+  names(prebigboi11)<-paste0(names(prebigboi11),"_ucva")
   
-  bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi5,prebigboi6,prebigboi7,prebigboi8,prebigboi9,prebigboi10,prebigboi11))
+  bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi5,prebigboi6,prebigboi7,prebigboi8,prebigboi9,prebigboi10,prebigboi11,loc_vars))  
   
   }else{
   
-  bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi5,prebigboi6,prebigboi7,prebigboi8,prebigboi9))}
+  bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi5,prebigboi6,prebigboi7,prebigboi8,prebigboi9,loc_vars))}
 
 bigboi[bigboi=="*"]<-NA
 
@@ -60,3 +62,4 @@ names(bigboi)[1]<-"raab_id"
 
 spots<-grep("^\\.",names(bigboi))
 bigboi<-bigboi[,-spots]
+
