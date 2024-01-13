@@ -1839,7 +1839,7 @@ For more information see: McCormick, I, Butcher, R, Evans, JR et al. Effective c
 
 Operated eyes: Aphakia or pseudophakia (with or without posterior capsule opacification [PCO]) or no view of lens but cataract surgical complications as cause of vision impairment
 
-Note that couched eyes are excluded from tables reporting on CSC/eCSC (Tables 14-19) but are included in the 'Surgical outcomes' tables (Tables 21-25) 
+Note that couched eyes are excluded from tables reporting on CSC/eCSC but are included in the 'Surgical outcomes' tables.
 
 ## Refractive error coverage (REC) and effective refractive error coverage (eREC)
 
