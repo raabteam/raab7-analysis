@@ -38,7 +38,11 @@ names(prebigboi8)<-paste0(names(prebigboi8),"_dist_re_ucva")
 prebigboi9<-dcast(melt(newtab5,id.vars="rec_metric"), 1~variable+rec_metric)
 names(prebigboi9)<-paste0(names(prebigboi9),"_ucva")
 
-loc_vars<-data.frame(iso_2=raab_meta$iso_2,year_end=raab_meta$year_end,gbd_reg=raab_meta$gbd_reg,gbd_superreg=raab_meta$gbd_superreg)
+if("gbd_reg" %in% names(meta) & ("gbd_superreg" %in% names(meta))){
+    loc_vars<-data.frame(iso_2=raab_meta$iso_2,year_end=raab_meta$year_end,gbd_reg=raab_meta$gbd_reg,gbd_superreg=raab_meta$gbd_superreg)
+  }else{
+    loc_vars<-data.frame(iso_2=raab_meta$iso_2,year_end=raab_meta$year_end)
+  }
 
 # Near VI/ near eREC if used
 if(sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0){

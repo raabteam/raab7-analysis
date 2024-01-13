@@ -7,19 +7,19 @@
 #This script should be run in a folder where raw RAAB data are contained in data subfolder
 
 rm(list = ls())
-setwd("path/to/folder/")
+setwd("GBR/RAAB/github_repo_sync/")
 
 library(rmarkdown)
 library(here)
 
 #Sample raab5 ID
-ID<-"Sample raab5 ID"
+ID<-"2003_Argentina_Buenos-Aires_Buenos-Aires"
 #Sample raab6 ID
-ID<-"Sample raab6 ID"
+ID<-"2015_Guatemala"
 #Sample early raab7 ID
 ID<-"Sample early raab7 ID"
 #Sample recent raab7 ID
-ID<-"Sample recent raab7 ID"
+ID<-"8320455b-39d5-441f-9806-ed1403867f7e"
 
 #RAAB5 report
 
