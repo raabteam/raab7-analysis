@@ -1,0 +1,9 @@
+"Barrier","female_count","female_percent","male_count","male_percent","total_count","total_percent"
+"Unaware treatment possible",30,33,18,30,48,31.8
+"Surgery denied by provider",0,0,0,0,0,0
+"Cannot access surgery",21,23.1,14,23.3,35,23.2
+"Cost",23,25.3,18,30,41,27.2
+"Felt not needed",9,9.9,5,8.3,14,9.3
+"Fear",4,4.4,3,5,7,4.6
+"Other",4,4.4,2,3.3,6,4
+"Total",91,100,60,100,151,100

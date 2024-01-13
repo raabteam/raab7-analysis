@@ -1,0 +1,3 @@
+"rec_metric","female.adj.pct","female.adj.pct.ci","male.adj.pct","male.adj.pct.ci","total.adj.pct","total.adj.pct.ci","quality_gap"
+"Near eREC","100.0","100.0 - 100.0","24.3"," 6.6 - 42.1","40.3","21.1 - 59.5",""
+"Near REC","100.0","100.0 - 100.0","62.2","53.3 - 71.0","70.1","60.5 - 79.7","42.6"
