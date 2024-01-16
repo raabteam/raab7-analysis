@@ -990,7 +990,7 @@ outc6a.nice.names$oc[outc6a.nice.names$oc=="good.oc"]<-"Good (6/12)"
 outc6a.nice.names$oc[outc6a.nice.names$oc=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
 outc6a.nice.names$oc[outc6a.nice.names$oc=="poor.oc"]<-"Poor (<6/60)"
 
-write.table(outc6a.nice.names,here("outputs", ID, "summary", "data", "CAT11.csv"),row.names=F,col.names=T,sep=",")
+write.table(outc6a.nice.names,here("outputs", ID, "summary", "data", "cat11.csv"),row.names=F,col.names=T,sep=",")
 
 names(outc6a.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
 
