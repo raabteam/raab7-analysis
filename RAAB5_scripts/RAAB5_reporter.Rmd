@@ -783,7 +783,7 @@ prev14.nice.names$male.adjusted.ci<-paste0(prev14.nice.names$male.adjusted.lci,"
 prev14.nice.names$female.adjusted.ci<-paste0(prev14.nice.names$female.adjusted.lci," - ",prev14.nice.names$female.adjusted.uci)
 prev14.nice.names$total.adjusted.ci<-paste0(prev14.nice.names$total.adjusted.lci," - ",prev14.nice.names$total.adjusted.uci)
 
-prev14.nice.names$num.thresh<-recode_factor(prev14.nice.names$num.thresh,'csc' = "CSC",'ecsc_618' = "eCSC (outcome <6/18)")
+prev14.nice.names$num.thresh<-recode_factor(prev14.nice.names$num.thresh,'csc' = "CSC",'ecsc_618' = "eCSC (outcome 6/18)")
 
 prev14a.nice.names<-prev14.nice.names[,c("num.thresh","female.adjusted","female.adjusted.ci","male.adjusted","male.adjusted.ci","total.adjusted","total.adjusted.ci","quality_gap")]
 
