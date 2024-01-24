@@ -36,9 +36,10 @@ raab<-raab[raab$raab_id==ID,]
 pop_merged<-read.csv(here("data","raabs_pop_618_repo.csv"))
 popfives<-pop_merged[pop_merged$raab_id==ID,]
 
-meta<-read.csv(here("data","historic_meta.csv"),check.names=F)
+# meta<-read.csv(here("data","historic_meta.csv"),check.names=F)
+meta<-read_xlsx(here("data","historic_meta_log.xlsx"), sheet=1, na=c("",NA))
 							 									 
-vars_to_drop<-c("map_complete","exclude_repo","repo_meta","repo_data","ecsc_consent","x4_data_access","data_lost","hl_permission_doc","hl_permission_localreport","hl_permission_raabreport","hl_permission_raabdata","hl_findingspublishedjournal","hl_findingslocalreport","hl_ethicscommitteeapproval","hl_permission_detail","hl_on_behalf_of","permission_ref","lshtm_dta","lshtm_dta-Ref","pi_email","pi_email1 active","pi_email NOTES","pi_int_auth_grp","trainer_email2")
+vars_to_drop<-c("map_complete","exclude_repo","repo_meta","repo_data","ecsc_consent","x4_data_access","data_lost","hl_permission_doc","hl_permission_localreport","hl_permission_raabreport","hl_permission_raabdata","hl_findingspublishedjournal","hl_findingslocalreport","hl_ethicscommitteeapproval","hl_permission_detail","hl_on_behalf_of","permission_ref","lshtm_dta","lshtm_dta-Ref","pi_email1", "pi_email2", "pi_email1 active","pi_email NOTES","pi_int_auth_grp", "trainer_email", "trainer_email2")
 
 raab_meta<-meta[meta$raab_id==ID,!(names(meta) %in% vars_to_drop)]
 
@@ -897,7 +898,7 @@ newtab3b.nice.names$oc.levels[newtab3b.nice.names$oc.levels=="good.oc"]<-"Good (
 newtab3b.nice.names$oc.levels[newtab3b.nice.names$oc.levels=="borderline.oc"]<-"Borderline (<6/18 to 6/60)"
 newtab3b.nice.names$oc.levels[newtab3b.nice.names$oc.levels=="poor.oc"]<-"Poor (<6/60)"
 
-write.table(newtab3b.nice.names,here("outputs", ID, "summary", "data", "t23.csv"),row.names=F,col.names=T,sep=",")
+write.table(newtab3b.nice.names,here("outputs", ID, "summary", "data", "cat10.csv"),row.names=F,col.names=T,sep=",")
 
 names(newtab3b.nice.names)<-c("","n","%","n","%","n","%")
 
