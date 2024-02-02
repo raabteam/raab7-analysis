@@ -7,19 +7,17 @@
 #This script should be run in a folder where raw RAAB data are contained in data subfolder
 
 rm(list = ls())
-setwd("GBR/RAAB/github_repo_sync/")
+setwd("")
 
 library(rmarkdown)
 library(here)
 
 #Sample raab5 ID
-ID<-"2003_Argentina_Buenos-Aires_Buenos-Aires"
-#Sample raab6 ID
-ID<-"2015_Guatemala"
-#Sample early raab7 ID
-ID<-"Sample early raab7 ID"
-#Sample recent raab7 ID
-ID<-"8320455b-39d5-441f-9806-ed1403867f7e"
+ID<-"Sample raab5 ID"
+#Sample raab6 or pva raab7 ID
+ID<-"Sample raab6 ID"
+#Sample ucva raab7 ID
+ID<-"alpha-numeric Peek ID"
 
 #RAAB5 report
 
@@ -30,7 +28,7 @@ unlink(here("RAAB5_scripts", "*.log"))
 
 #RAAB6 & RAAB7 without UCVA report
 
-checker6<-read.csv(here("data", "raabs_612.csv"))
+checker6<-read.csv(here("data", "raabs_612_pva.csv"))
 DR_check<-checker6[checker6$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
 WQ_check<-checker6[checker6$raab_id==ID,c('raab_id',"wg_difficulty_seeing","wg_difficulty_hearing","wg_difficulty_memory","wg_difficulty_mobility","wg_difficulty_selfcare","wg_difficulty_communication")]
 remove(checker6)

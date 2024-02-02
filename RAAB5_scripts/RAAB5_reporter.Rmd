@@ -33,7 +33,7 @@ dir.create(here("outputs",ID,"/raw/data"))
 raab<-read.csv(here("data","raabs_618.csv"))
 raab<-raab[raab$raab_id==ID,]
 
-pop_merged<-read.csv(here("data","raabs_pop_618_repo.csv"))
+pop_merged<-read.csv(here("data","raabs_pop_618.csv"))
 popfives<-pop_merged[pop_merged$raab_id==ID,]
 
 # meta<-read.csv(here("data","historic_meta.csv"),check.names=F)
