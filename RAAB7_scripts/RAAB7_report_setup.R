@@ -496,6 +496,7 @@ raab <- raab %>% mutate(
 }else{raab$near.vi<-NA}
 
 #Washington Group Questions (Disability module) variables
+#Modified to include the short set enhanced additional questions on upper body and mental health
 
 #Domain-specific disability
 
@@ -506,17 +507,21 @@ raab <- raab %>% mutate(
    wgq.dis.mob = case_when(raab$wg_difficulty_mobility=="wg_answer_alot" | raab$wg_difficulty_mobility=="wg_answer_cannot" ~ 1, TRUE ~ 0),
    wgq.dis.mem = case_when(raab$wg_difficulty_memory=="wg_answer_alot" | raab$wg_difficulty_memory=="wg_answer_cannot" ~ 1, TRUE ~ 0),
    wgq.dis.comm = case_when(raab$wg_difficulty_communication=="wg_answer_alot" | raab$wg_difficulty_communication=="wg_answer_cannot" ~ 1, TRUE ~ 0),
-   wgq.dis.self = case_when(raab$wg_difficulty_selfcare=="wg_answer_alot" | raab$wg_difficulty_selfcare=="wg_answer_cannot" ~ 1, TRUE ~ 0)
+   wgq.dis.self = case_when(raab$wg_difficulty_selfcare=="wg_answer_alot" | raab$wg_difficulty_selfcare=="wg_answer_cannot" ~ 1, TRUE ~ 0),
+   wgq.dis.upbod.str = case_when(raab$wg_difficulty_upperbody_strength=="wg_answer_alot" | raab$wg_difficulty_upperbody_strength=="wg_answer_cannot" ~ 1, TRUE ~ 0),
+   wgq.dis.upbod.dex = case_when(raab$wg_difficulty_upperbody_dexterity=="wg_answer_alot" | raab$wg_difficulty_upperbody_dexterity=="wg_answer_cannot" ~ 1, TRUE ~ 0),
+   wgq.dis.anx = case_when((raab$wg_difficulty_anxiety_frequency=="wg_answer_frequency_daily" & (wg_difficulty_anxiety_intensity=="wg_answer_intensity_medium" | wg_difficulty_anxiety_intensity=="wg_answer_intensity_lot"))  | (raab$wg_difficulty_anxiety_frequency=="wg_answer_frequency_weekly" & raab$wg_difficulty_anxiety_intensity=="wg_answer_intensity_lot") ~ 1, TRUE ~ 0),
+   wgq.dis.dep = case_when((raab$wg_difficulty_depression_frequency=="wg_answer_frequency_daily" & (wg_difficulty_depression_intensity=="wg_answer_intensity_medium" | wg_difficulty_depression_intensity=="wg_answer_intensity_lot"))  | (raab$wg_difficulty_depression_frequency=="wg_answer_frequency_weekly" & raab$wg_difficulty_depression_intensity=="wg_answer_intensity_lot") ~ 1, TRUE ~ 0)
  )
  
 #Disability in any domain and any domain excluding seeing
  raab <- raab %>% mutate(
  
-   wgq.dis.any = case_when(wgq.dis.see==1 | wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0),
-   wgq.dis.nonvi = case_when(wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0)
+   wgq.dis.any = case_when(wgq.dis.see==1 | wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 | wgq.dis.upbod.str==1 | wgq.dis.upbod.dex==1 | wgq.dis.anx==1 | wgq.dis.dep==1 ~ 1, TRUE ~ 0),
+   wgq.dis.nonvi = case_when(wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 | wgq.dis.upbod.str==1 | wgq.dis.upbod.dex==1 | wgq.dis.anx==1 | wgq.dis.dep==1 ~ 1, TRUE ~ 0)
  )
  
- dis.domains<- c("wgq.dis.see", "wgq.dis.hear", "wgq.dis.mob", "wgq.dis.mem", "wgq.dis.comm", "wgq.dis.self", "wgq.dis.any", "wgq.dis.nonvi")
+ dis.domains<- c("wgq.dis.see", "wgq.dis.hear", "wgq.dis.mob", "wgq.dis.mem", "wgq.dis.comm", "wgq.dis.self", "wgq.dis.upbod.str", "wgq.dis.upbod.dex", "wgq.dis.anx", "wgq.dis.dep", "wgq.dis.any", "wgq.dis.nonvi")
 
 # DR Module variables
 
