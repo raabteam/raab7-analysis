@@ -1568,9 +1568,9 @@ asis_output("# Washington Group Questions
 
 The United Nations Convention on the Rights of Persons with Disabilities (UN CRPD, 2006) defines disability as “long-term physical, mental, intellectual or sensory impairments which, in interaction with various barriers, may hinder [a person’s] full and effective participation in society on an equal basis with others”. Measuring disability in RAAB allows us to determine how common disability is in the population 50 years and older, whether people with disabilities have equal access to eye health services or not, and what other functional limitations (e.g. hearing, mobility) people with vision impairment may have.
 
-The Washington Group Questions (WGQs) were developed by the Washington City Group, who were set up by the United Nations Statistical Division. They are the main tool used to measure disability in national census’ and other population-based surveys. They do NOT ask people whether or not they think they have a disability. Disability is strongly stigmatised in many settings, so instead they ask about difficulties in functioning, in line with the International Classification of Functioning, Disability and Health (the ICF) and the CRPD.
+The Washington Group Questions (WGQs) were developed by the Washington City Group, who were set up by the United Nations Statistical Division. The WGQs are the main tool used to measure disability in national census and other population-based surveys. They do NOT ask people whether or not they think they have a disability. Disability is strongly stigmatised in many settings, so instead they ask about difficulties in functioning, in line with the International Classification of Functioning, Disability and Health (the ICF) and the CRPD.
 
-The most commonly used WG module is the Short Set, which is used in RAAB and outlined below. Participants are read each question, followed by four response options, in turn.
+Until 2023, RAAB7 used the 'Short Set' of WG questions (1-6 below). Since 2024, RAAB uses the 'Short Set Enhanced' WG questions (1-10 below). For questions 1-8, participants are read each question, followed by four response options, in turn.
 
 1. Do you have difficulty in seeing, even if wearing glasses?
 2. Do you have difficulty in hearing, even if using a hearing aid?
@@ -1578,11 +1578,26 @@ The most commonly used WG module is the Short Set, which is used in RAAB and out
 4. Do you have difficulty remembering or concentrating?
 5. Do you have difficulty with self-care, such as washing all over or dressing?
 6. Using your usual language, do you have difficulty communicating, for example understanding or being understood?
+7. Do you have difficulty raising a 2-litre bottle of water or soda from waist to eye level?
+8. Do you have difficulty using your hands and fingers, such as picking up small objects, for example, a button or pencil, or opening or closing containers or bottles?
 
 Response options: no difficulty, some difficulty, a lot of difficulty, cannot do at all
 
-Any participant reporting “a lot” or greater difficulty in any domain is considered to have a disability. The seeing domain will capture many people with vision impairment identified through VA screening, but also people with other types of vision loss such as contrast sensitivity, stereoacuity or visual fields . It can also provide information on how people with reduced VA perceive their vision loss.
+Any participant reporting 'a lot of difficulty' or 'cannot do at all' in any domain is considered to have a disability. The seeing domain will capture many people with vision impairment identified through VA screening, but also people with other functional loss such as reduced contrast sensitivity, stereoacuity or visual field loss. It can also provide information on how people with reduced VA perceive their vision loss.
 
+The structure of the questions on anxiety and depression are different.
+
+9. How often do you feel worried, nervous or anxious?
+10. Thinking about the last time you felt worried, nervious or anxious, how would you describe the level of these feelings?
+11. How often do you feel depressed?
+12. Thinking about the last time you felt depressed, how depressed did you feel?
+
+Response options for frequency: daily, weekly, monthly, a few times a year, never
+Response options for intensity: a little, a lot, somewhere between a little and a lot
+
+If the response to question 9 or 11 (frequency) is 'never' then the follow up question on intensity is not presented.
+
+Any participant reporting 'daily' frequency and 'somewhere between a little and a lot' or 'a lot' for intensity, or 'weekly' frequency and 'a lot' for intensity is considered to have a disability.
 
 ## Disability prevalence")
 
@@ -1612,11 +1627,11 @@ knitr::kable(wgq.domains.table.nice.names, booktabs=T, linesep = "", caption = "
 
 wgq.plot<-wgq.domains.agegroups[1:4,]
 
-wgq.range<-c(wgq.domains.agegroups$seeing.pct,wgq.domains.agegroups$hearing.pct,wgq.domains.agegroups$mobility.pct,wgq.domains.agegroups$memory.pct,wgq.domains.agegroups$communication.pct,wgq.domains.agegroups$selfcare.pct)
+wgq.range<-c(wgq.domains.agegroups$seeing.pct,wgq.domains.agegroups$hearing.pct,wgq.domains.agegroups$mobility.pct,wgq.domains.agegroups$memory.pct,wgq.domains.agegroups$communication.pct,wgq.domains.agegroups$selfcare.pct, wgq.domains.agegroups$upperbodystrength.pct, wgq.domains.agegroups$upperbodydexterity.pct, wgq.domains.agegroups$anxiety.pct, wgq.domains.agegroups$depression.pct)
 
 write.table(wgq.plot,here("outputs", ID, "summary", "data", "wgq_fig.csv"),row.names=F,col.names=T,sep=",")
 
-wgq_fig_cols<-brewer.pal(6,"Spectral")
+wgq_fig_cols<-brewer.pal(10,"Spectral")
 
 plot(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$seeing.pct,ylim=c(0,max(wgq.range)),bty='n',xaxt='n',yaxt='n',xlab="Age group (years)",ylab="%",pch=20,col=wgq_fig_cols[1])
 lines(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$seeing.pct,col=wgq_fig_cols[1])
@@ -1630,10 +1645,18 @@ points(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$communication.pc
 lines(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$communication.pct,col=wgq_fig_cols[5])
 points(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$selfcare.pct,pch=20,col=wgq_fig_cols[6])
 lines(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$selfcare.pct,col=wgq_fig_cols[6])
+points(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$upperbodystrength.pct,pch=20,col=wgq_fig_cols[6])
+lines(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$upperbodystrength.pct,col=wgq_fig_cols[6])
+points(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$upperbodydexterity.pct,pch=20,col=wgq_fig_cols[6])
+lines(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$upperbodydexterity.pct,col=wgq_fig_cols[6])
+points(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$anxiety.pct,pch=20,col=wgq_fig_cols[6])
+lines(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$anxiety.pct,col=wgq_fig_cols[6])
+points(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$depression.pct,pch=20,col=wgq_fig_cols[6])
+lines(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$depression.pct,col=wgq_fig_cols[6])
 
 axis(1,at=c(-10,1,2,3,4,10),labels=c(-10,wgq.plot$age.groups.tens[1],wgq.plot$age.groups.tens[2],wgq.plot$age.groups.tens[3],wgq.plot$age.groups.tens[4],10),cex.axis=0.8)
 axis(2,at=c(-10,0,10,20,30,40,50,60,70,80,90,100),labels=c(-10,0,10,20,30,40,50,60,70,80,90,100),cex.axis=0.8,las=2)
-legend("topleft",c("Vision","Hearing","Mobility","Memory","Communication","Self-care"),col=wgq_fig_cols[1:6],pch=20,lty=1,bty='n',cex=0.8,inset=0.05)
+legend("topleft",c("Vision","Hearing","Mobility","Memory","Communication","Self-care","Upper body strength","Upper body dexterity","Anxiety", "Depression"),col=wgq_fig_cols[1:10],pch=20,lty=1,bty='n',cex=0.8,inset=0.05)
 
 ```
 
