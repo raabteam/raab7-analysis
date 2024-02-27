@@ -37,8 +37,9 @@ for(i in seq_along(raab.cause))
   
 }
 
-sum6[nrow(sum6)+1,2:9]<-colSums(sum6[,2:9])
-sum6$principal.cause[14] <- "Total"
+sum6[nrow(sum6)+1,c(2,4,6)]<-colSums(sum6[,c(2,4,6)])
+sum6[nrow(sum6),c(3,5,7)]<-1
+sum6$principal.cause[nrow(sum6)] <- "Total"
 
 sum6$cause_group_1[sum6$principal.cause=="poor_vision_cause_uncorrected_refractive_error" | sum6$principal.cause=="poor_vision_cause_aphakia_uncorrected" | sum6$principal.cause== "poor_vision_cause_cataract_untreated"]<-"A. Treatable (1, 2, 3)"
 sum6$cause_group_1[sum6$principal.cause=="poor_vision_cause_trachomatous_corneal_opacity" | sum6$principal.cause=="poor_vision_cause_other_corneal_opacity" | sum6$principal.cause=="poor_vision_cause_phthisis" | sum6$principal.cause=="poor_vision_cause_onchocerciasis"]<-"B. Preventable (PHC/PEC services) (5, 6, 7, 8)"
@@ -51,4 +52,3 @@ sum6.numeric<-sum6
 sum6[,pcts]<-format( sum6[,pcts], nsmall=1 )
 sum6$mild.vi.n<-"*"
 sum6$mild.vi.pct<-"*"
-

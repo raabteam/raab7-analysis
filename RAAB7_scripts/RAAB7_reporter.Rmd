@@ -1,6 +1,7 @@
 ---
 output:
  pdf_document:
+  latex_engine: xelatex 
   toc: FALSE
 ---
 
@@ -149,10 +150,13 @@ tables:
 header-includes:
 - \usepackage{float}
 - \usepackage{tabu}
+- \usepackage{lipsum}
 - \usepackage{fancyhdr}
 - \fancypagestyle{plain}{\pagestyle{fancy}}
 - \fancyhead[R]{\includegraphics[width=5cm]{logo.png}}
 ---
+
+\pagenumbering{gobble}
 
 ```{r raab_report_setup, include=FALSE}
 
@@ -166,6 +170,44 @@ Survey completed: `r format(max(raab$date),'%d %B %Y')`
 
 Report generated: `r format(Sys.time(), '%d %B %Y')`
 
+‎\linebreak
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data", echo=FALSE}
+
+asis_output("Suggested citation:  ")
+
+```
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data", echo=FALSE}
+
+asis_output(meta_report$bibliographicCitation)
+
+```
+
+‎\linebreak
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data", echo=FALSE}
+
+asis_output("Available at:  ") 
+
+```
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data", echo=FALSE}
+
+asis_output(paste0("https://www.doi.org/",meta_report$doi))
+
+```
+
+‎\linebreak
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data", echo=FALSE}
+
+asis_output("This work is licensed under CC BY-NC-ND 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/")
+
+```
+
+\newpage
+\pagenumbering{arabic}
 \raggedright
 
 ```{=latex}

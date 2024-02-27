@@ -1,6 +1,7 @@
 ---
 output:
  pdf_document:
+  latex_engine: xelatex 
   toc: FALSE
 ---
 
@@ -95,8 +96,8 @@ url_string<-gsub(" ", "-", tolower(url_string))
 meta_report$identifier<-paste0("https://www.raab.world/survey/",url_string,"/report")
 meta_dataset$identifier<-paste0("https://www.raab.world/survey/",url_string,"/data")
 
-meta_report$doi<-paste0("10.17037/RAABREPORT.",formatC(as.numeric(row.names(raab_meta)),width=8,format = "d",flag="0"))
-meta_dataset$doi<-paste0("10.17037/RAABDATASET.",formatC(as.numeric(row.names(raab_meta)),width=8,format = "d",flag="0"))
+meta_report$doi<-paste0("10.17037/RAABREPORT.",formatC(raab_meta$doi_number,width=8,format = "d",flag="0"))
+meta_dataset$doi<-paste0("10.17037/RAABDATASET.",formatC(raab_meta$doi_number,width=8,format = "d",flag="0"))
 
 meta_report$source<-paste0("Rapid Assessment of Avoidable Blindness Dataset: ",raab_meta$survey_title)
 meta_dataset$relation<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
@@ -148,8 +149,11 @@ tables:
  yes
 header-includes:
 - \usepackage{float}
-- \usepackage{tabu}										   													  
+- \usepackage{tabu}	
+- \usepackage{lipsum}
 ---
+
+\pagenumbering{gobble}
 
 ```{r raab_report_setup, include=FALSE}
 
@@ -159,8 +163,46 @@ source(here("RAAB6_scripts","RAAB6_report_setup.R"))
 
 \center
 
-Report generated: `r format(Sys.time(), '%d %B %Y')`
+Report generated: `r format(Sys.time(), '%d %B %Y')` 
 
+‎\linebreak
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data" | raab_meta$data_access=="data_access_results_reports", echo=FALSE}
+
+asis_output("Suggested citation:  ")
+
+```
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data" | raab_meta$data_access=="data_access_results_reports", echo=FALSE}
+
+asis_output(meta_report$bibliographicCitation)
+
+```
+
+‎\linebreak
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data" | raab_meta$data_access=="data_access_results_reports", echo=FALSE}
+
+asis_output("Available at:  ") 
+
+```
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data" | raab_meta$data_access=="data_access_results_reports", echo=FALSE}
+
+asis_output(paste0("https://www.doi.org/",meta_report$doi))
+
+```
+
+‎\linebreak
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data" | raab_meta$data_access=="data_access_results_reports", echo=FALSE}
+
+asis_output("This work is licensed under CC BY-NC-ND 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/")
+
+```
+
+\newpage
+\pagenumbering{arabic}
 \raggedright
 
 ```{=latex}
@@ -465,7 +507,7 @@ write.table(untb.nice.names,here("outputs", ID, "summary", "data", "prev6.csv"),
 
 names(untb.nice.names) <- c("", "%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude","%","95% CI","Extrapolated magnitude")
 
-knitr::kable(untb.nice.names, booktabs=T, linesep = "", caption="Adjusted prevalence and extrapolated magnitude of blind, severe, moderate and mild unilateral vision impairment (PREV6)") %>%
+knitr::kable(untb.nice.names, booktabs=T, linesep = "", caption="Adjusted prevalence and extrapolated magnitude of blind, severe, moderate and mild unilateral vision impairment (PREV6)", align='lccccccccc') %>%
   kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(c(4,7,10),width='2cm') %>%
@@ -502,7 +544,7 @@ sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_ca
 sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_posterior_segment_disease" ]<-"12. Other posterior segment disease"
 sum6.nice.names$principal.cause[sum6.nice.names$principal.cause=="poor_vision_cause_other_globe_or_cns_abnormalities"]<-"14. Other globe or CNS abnomalities"
 
-write.table(sum6.nice.names,here("outputs", ID, "summary", "data", "cause1.csv"),row.names=F,col.names=T,sep=",")
+write.table(sum6.nice.names,here("outputs", ID, "summary", "data", ".csv"),row.names=F,col.names=T,sep=",")
 
 sum6.for.tree<-sum6.numeric
 
@@ -628,7 +670,7 @@ knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), cap
 
 ```{r catops, echo=FALSE}
 
-source(here("RAAB6_scripts","crude_cat_ops_RAAB6.R"))
+source(here("RAAB6_scripts","crude_cat_ops.R"))
 
 catops.nice.names<-catops
 
@@ -677,8 +719,6 @@ knitr::kable(catcovdenom.a.nice.names, booktabs=T, linesep = "", caption = "Crud
 
 
 ```{r catcovdenom.b, echo=FALSE}
-
-source(here("RAAB6_scripts","crude-adj-prev-cat-cov-denom_RAAB6.R"))
 
 catcovdenom.b<-catcovdenom[,c("vi.level","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.female.n","extrapolated.male.n","extrapolated.total.n")]
 
@@ -736,9 +776,6 @@ knitr::kable(asa7a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
 
 ```{r asa7b, echo=FALSE}
 
-source(here("RAAB6_scripts","adj-csc-ecsc_RAAB6.R"))
-source(here("RAAB6_scripts","crude-adj-cat-vi-prev_RAAB6.R"))
-
 asa7b.int<-asa7[,c("vi.level","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.female.n","extrapolated.male.n","extrapolated.total.n")]
 
 asa7b.int$male.adj.ci<-paste0(asa7b.int$male.adj.pct.lci," - ",asa7b.int$male.adj.pct.uci)
@@ -767,8 +804,6 @@ These tables enable planning the number of surgeries required to eliminate visio
 ### Effective cataract surgical coverage
 
 ```{r prev14, echo=FALSE}
-
-source(here("RAAB6_scripts","adj-csc-ecsc_RAAB6.R"))
 
 prev14.nice.names<-prev14[prev14$num.thresh=="csc" | prev14$num.thresh=="ecsc_612",]
 
@@ -806,7 +841,9 @@ Effective cataract surgical coverage (eCSC) measures the number of people in a p
 
 source(here("RAAB6_scripts","cat-barriers.R"))
 
-sum11.nice.names<-surgery.bars[, c("Barrier","female_count","female_percent","male_count","male_percent","total_count","total_percent")]
+sum11.nice.names<-surgery.bars[, c("Barrier","female_n","female_pct","male_n","male_pct","total_n","total_pct")]
+
+sum11.nice.names$Barrier<-recode_factor(surgery.bars$Barrier,surgery_none_reason_access = "Cannot access surgery", surgery_none_reason_cost = "Cost", surgery_none_reason_denied = "Surgery denied by provider", surgery_none_reason_fear = "Fear", surgery_none_reason_other = "Other", surgery_none_reason_unaware = "Unaware treatment possible", surgery_none_reason_unnecessary = "Felt not needed", Total = "Total")  
 
 write.table(sum11.nice.names,here("outputs", ID, "summary", "data", "cat7.csv"),row.names=F,col.names=T,sep=",")
 
@@ -855,8 +892,6 @@ knitr::kable(newtab2.nice.names, booktabs=T, linesep = "", caption = "Type of ca
 ### Presenting acuity vs pinhole acuity outcomes
 
 ```{r newtab3a, echo=FALSE}
-
-source(here("RAAB6_scripts","surg-type-outcome-gender_RAAB6.R"))
 
 newtab3a.nice.names<-newtab3a
 

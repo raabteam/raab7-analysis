@@ -1,6 +1,7 @@
 ---
 output:
  pdf_document:
+  latex_engine: xelatex 
   toc: FALSE
 ---
 
@@ -95,8 +96,8 @@ url_string<-gsub(" ", "-", tolower(url_string))
 meta_report$identifier<-paste0("https://www.raab.world/survey/",url_string,"/report")
 meta_dataset$identifier<-paste0("https://www.raab.world/survey/",url_string,"/data")
 
-meta_report$doi<-paste0("10.17037/RAABREPORT.",formatC(as.numeric(row.names(raab_meta)),width=8,format = "d",flag="0"))
-meta_dataset$doi<-paste0("10.17037/RAABDATASET.",formatC(as.numeric(row.names(raab_meta)),width=8,format = "d",flag="0"))
+meta_report$doi<-paste0("10.17037/RAABREPORT.",formatC(raab_meta$doi_number,width=8,format = "d",flag="0"))
+meta_dataset$doi<-paste0("10.17037/RAABDATASET.",formatC(raab_meta$doi_number,width=8,format = "d",flag="0"))
 
 meta_report$source<-paste0("Rapid Assessment of Avoidable Blindness Dataset: ",raab_meta$survey_title)
 meta_dataset$relation<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
@@ -149,19 +150,59 @@ tables:
 header-includes:
 - \usepackage{float}
 - \usepackage{tabu}
-- \usepackage{graphicx}
+- \usepackage{lipsum}
 ---
+
+\pagenumbering{gobble}
 
 ```{r raab_report_setup, include=FALSE}
 
-source("RAAB5_report_setup.R")
+source(here("RAAB5_scripts","RAAB5_report_setup.R"))
 
 ```
 
 \center
 
-Report generated: `r format(Sys.time(), '%d %B %Y')`
+Report generated: `r format(Sys.time(), '%d %B %Y')` 
 
+‎\linebreak
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data", echo=FALSE}
+
+asis_output("Suggested citation:  ")
+
+```
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data", echo=FALSE}
+
+asis_output(meta_report$bibliographicCitation)
+
+```
+
+‎\linebreak
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data", echo=FALSE}
+
+asis_output("Available at:  ") 
+
+```
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data", echo=FALSE}
+
+asis_output(paste0("https://www.doi.org/",meta_report$doi))
+
+```
+
+‎\linebreak
+
+```{r, eval=raab_meta$data_access=="data_access_results_reports_data", echo=FALSE}
+
+asis_output("This work is licensed under CC BY-NC-ND 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/")
+
+```
+
+\newpage
+\pagenumbering{arabic}
 \raggedright
 
 ```{=latex}
@@ -179,6 +220,8 @@ Report generated: `r format(Sys.time(), '%d %B %Y')`
 source(here("RAAB5_scripts","response-rate.R"))
 
 sum1.nice.names<-sum1
+
+sum1.nice.names$Exam.Status<-as.character(c('Examined*', 'Refused', 'Incapable', 'Unavailable','Total'))
 
 write.table(sum1.nice.names, here("outputs", ID, "summary","data","pop1.csv"),row.names=F,col.names=T,sep=",")
 
@@ -537,7 +580,7 @@ write.table(sum6ag,here("outputs", ID, "summary", "data", "cause2.csv"),row.name
 
 names(sum6ag)<-c("","n", "%", "n", "%", "n","%","n","%")
 
-knitr::kable(sum6ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = " Principal cause of blindness, severe and moderate vision impairment, by intervention category CAUSE2)", align='lcccccc') %>% 
+knitr::kable(sum6ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), caption = " Principal cause of blindness, severe and moderate vision impairment, by intervention category (CAUSE2)", align='lcccccc') %>% 
   kable_styling(full_width=T,latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='5cm') %>%
@@ -634,7 +677,7 @@ knitr::kable(prev4ag, booktabs=T, linesep = c('', '', '', '\\addlinespace'), cap
 
 ```{r catops, echo=FALSE}
 
-source(here("RAAB5_scripts","crude_cat_ops_RAAB5.R"))
+source(here("RAAB5_scripts","crude_cat_ops.R"))
 
 catops.nice.names<-catops
 
@@ -675,8 +718,9 @@ write.table(catcovdenom.a.nice.names,here("outputs", ID, "summary", "data", "cat
 names(catcovdenom.a.nice.names)<-c(" ","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
 knitr::kable(catcovdenom.a.nice.names, booktabs=T, linesep = "", caption = "Crude unmet need for cataract surgery at pinhole VA thresholds <3/60, <6/60 and <6/18 (CAT2)",align='lccccccccc') %>%
-  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
+  column_spec(1,width='3cm') %>%
   add_header_above(c("Unmet need threshold" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) %>%
   add_footnote("Participants not tested at 6/12",notation="symbol")
 
@@ -684,8 +728,6 @@ knitr::kable(catcovdenom.a.nice.names, booktabs=T, linesep = "", caption = "Crud
 
 
 ```{r catcovdenom.b, echo=FALSE}
-
-source(here("RAAB5_scripts","crude-adj-prev-cat-cov-denom_RAAB5.R"))
 
 catcovdenom.b<-catcovdenom[,c("vi.level","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.female.n","extrapolated.male.n","extrapolated.total.n")]
 
@@ -732,7 +774,7 @@ write.table(asa7a.nice.names,here("outputs", ID, "summary", "data", "cat4.csv"),
 names(asa7a.nice.names)<-c(" ","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
 knitr::kable(asa7a.nice.names, booktabs=T, linesep = "", caption = "Crude prevalence of cataract with PinVA <3/60, <6/60 and <6/18 (CAT4)", align='lccccccccc') %>% 
-  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position")) %>%
   row_spec(0,italic=TRUE) %>%
   pack_rows("Bilateral",1,4) %>%
   pack_rows("Unilateral",5,8) %>%
@@ -743,9 +785,6 @@ knitr::kable(asa7a.nice.names, booktabs=T, linesep = "", caption = "Crude preval
 
 
 ```{r asa7b, echo=FALSE}
-
-source(here("RAAB5_scripts","adj-csc-ecsc_RAAB5.R"))
-source(here("RAAB5_scripts","crude-adj-cat-vi-prev_RAAB5.R"))
 
 asa7b.int<-asa7[,c("vi.level","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.female.n","extrapolated.male.n","extrapolated.total.n")]
 
@@ -775,8 +814,6 @@ These tables enable planning the number of surgeries required to eliminate visio
 ### Effective cataract surgical coverage
 
 ```{r prev14, echo=FALSE}
-
-source(here("RAAB5_scripts","adj-csc-ecsc_RAAB5.R"))
 
 prev14.nice.names<-prev14[prev14$num.thresh=="csc" | prev14$num.thresh=="ecsc_618",]
 
@@ -813,7 +850,9 @@ Effective cataract surgical coverage (eCSC) measures the number of people in a p
 
 source(here("RAAB5_scripts","cat-barriers.R"))
 
-sum11.nice.names<-surgery.bars[, c("Barrier","female_count","female_percent","male_count","male_percent","total_count","total_percent")]
+sum11.nice.names<-surgery.bars[, c("Barrier","female_n","female_pct","male_n","male_pct","total_n","total_pct")]
+
+sum11.nice.names$Barrier<-recode_factor(surgery.bars$Barrier,surgery_none_reason_access = "Cannot access surgery", surgery_none_reason_cost = "Cost", surgery_none_reason_denied = "Surgery denied by provider", surgery_none_reason_fear = "Fear", surgery_none_reason_other = "Other", surgery_none_reason_unaware = "Unaware treatment possible", surgery_none_reason_unnecessary = "Felt not needed", Total = "Total")    
 
 write.table(sum11.nice.names,here("outputs", ID, "summary", "data", "cat7.csv"),row.names=F,col.names=T,sep=",")
 
@@ -863,8 +902,6 @@ knitr::kable(newtab2.nice.names, booktabs=T, linesep = "", caption = "Type of ca
 
 ```{r newtab3a, echo=FALSE}
 
-source(here("RAAB5_scripts","surg-type-outcome-gender_RAAB5.R"))
-
 newtab3a.nice.names<-newtab3a
 
 row.order<-c("good.oc","borderline.oc","poor.oc")
@@ -903,10 +940,10 @@ write.table(newtab3b.nice.names,here("outputs", ID, "summary", "data", "cat10.cs
 names(newtab3b.nice.names)<-c("","n","%","n","%","n","%")
 
 knitr::kable(newtab3b.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcome (PinVA), count by eyes (CAT10)", align='lcccccc') %>% 
-  kable_styling(full_width=T, latex_options = "HOLD_position", font_size=10) %>%
+  kable_styling(full_width=T, latex_options = "HOLD_position", font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(3,hline_after=T) %>%
-  column_spec(1,width='4cm') %>%
+  column_spec(1,width='5cm') %>%
   add_header_above(c("Outcome (PinVA)" = 1, "Female" = 2, "Male" = 2, "Total" = 2),bold=T) %>%
   add_footnote("Participants not tested at 6/12",notation="symbol")
 
@@ -967,7 +1004,7 @@ Variation in outcome by place of surgery allows for monitoring of quality across
 
 Gov. Hosp. = Government hospital
 
-Vol. Hosp .= NGO hospital
+Vol. Hosp. = NGO hospital
 
 Priv. Hosp. = Private hospital
 
@@ -1049,7 +1086,7 @@ Y = individuals with bilateral operated cataract (regardless of visual acuity in
 
 Z = individuals with BCVA <6/18 in both eyes with cataract as the main cause of vision impairment in one or both eyes
 
-Cataract surgical threshold (operable cataract): PinVA at \<3/60, \<6/60 and \<6/18 thresholds plus lens opacity plus untreated cataract as principal cause
+Cataract surgical threshold (operable cataract): PinVA at <3/60, <6/60 and <6/18 thresholds plus lens opacity plus untreated cataract as principal cause
 
 Operated cataract: Aphakia (excluding couched eyes) or pseudophakia (with or without posterior capsule opacification [PCO]) or no view of lens but cataract surgical complications as cause of vision impairment
 
@@ -1066,8 +1103,6 @@ Note that couched eyes are excluded from tables reporting on CSC/eCSC but are in
 As 6/18 is the lowest level of VA screened, this is used to define a good post-operative visual acuity outcome
 
 ## 95% Confidence Interval
-
-The 95% confidence intervals are based on standard errors calculated for the clustering of the sample and the variability between clusters, specifically using the formula provided by:
 
 Bennett S, Woods T, Liyanage WM, Smith DL. A simplified general method for cluster-sample surveys of health in developing countries. World Health Stat Q. 1991;44(3):98-106.
 

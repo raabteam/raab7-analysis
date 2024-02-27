@@ -103,6 +103,7 @@ newtab5[,lcis][newtab5[,lcis]<0]<-0
 newtab5[,ucis][newtab5[,ucis]>1]<-1
 
 pcts<-grep("pct",names(newtab5))
-newtab5[,pcts]<-format(round(newtab5[,pcts]*100,1),nsmall=1)
+newtab5[,pcts]<-round(newtab5[,pcts] * 100, 1)
+newtab5[,pcts]<-format(newtab5[,pcts], nsmall=1)												
 
 

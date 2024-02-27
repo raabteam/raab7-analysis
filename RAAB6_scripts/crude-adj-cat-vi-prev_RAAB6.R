@@ -51,7 +51,6 @@ asa7bil$total.n[asa7bil$vi.level=="severe.vi"]<-sum(raab$old_z_case_660,na.rm=T)
 asa7bil$total.n[asa7bil$vi.level=="moderate.vi"]<-sum(raab$old_z_case_618,na.rm=T)
 asa7bil$total.n[asa7bil$vi.level=="mild.vi"]<-sum(raab$old_z_case_612,na.rm=T)
 
-
 asa7bil$female.pct[asa7bil$vi.level=="blind"]<-sum(raab$old_z_case_360[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
 asa7bil$female.pct[asa7bil$vi.level=="severe.vi"]<-sum(raab$old_z_case_660[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
 asa7bil$female.pct[asa7bil$vi.level=="moderate.vi"]<-sum(raab$old_z_case_618[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
@@ -111,7 +110,6 @@ asa7bil$total.adj.pct[asa7bil$vi.level=="blind"]<-prop.age.sex.adjust(popfives,r
 asa7bil$total.adj.pct[asa7bil$vi.level=="severe.vi"]<-prop.age.sex.adjust(popfives,raab,raab$old_z_case_660,raab$vi.denom)
 asa7bil$total.adj.pct[asa7bil$vi.level=="moderate.vi"]<-prop.age.sex.adjust(popfives,raab,raab$old_z_case_618,raab$vi.denom)
 asa7bil$total.adj.pct[asa7bil$vi.level=="mild.vi"]<-prop.age.sex.adjust(popfives,raab,raab$old_z_case_612,raab$vi.denom)
-
 
 asa7bil$female.adj.pct.lci[asa7bil$vi.level=="blind"]<-bennett.lci(asa7bil$female.adj.pct[asa7bil$vi.level=="blind"], raab$old_z_case_360[raab$gender=="female"], raab$vi.denom[raab$gender=="female"], raab$clusterId[raab$gender=="female"])
 asa7bil$female.adj.pct.lci[asa7bil$vi.level=="severe.vi"]<-bennett.lci(asa7bil$female.adj.pct[asa7bil$vi.level=="severe.vi"], raab$old_z_case_660[raab$gender=="female"], raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
@@ -199,7 +197,6 @@ asa7uni$total.n[asa7uni$vi.level=="blind"]<-sum(raab$denom.360.unicat,na.rm=T)
 asa7uni$total.n[asa7uni$vi.level=="severe.vi"]<-sum(raab$denom.660.unicat,na.rm=T)
 asa7uni$total.n[asa7uni$vi.level=="moderate.vi"]<-sum(raab$denom.618.unicat,na.rm=T)
 asa7uni$total.n[asa7uni$vi.level=="mild.vi"]<-sum(raab$denom.612.unicat,na.rm=T)
-
 
 asa7uni$female.pct[asa7uni$vi.level=="blind"]<-sum(raab$denom.360.unicat[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
 asa7uni$female.pct[asa7uni$vi.level=="severe.vi"]<-sum(raab$denom.660.unicat[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
