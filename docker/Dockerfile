@@ -1,15 +1,15 @@
 ARG R_VERSION
-FROM rocker/r-base:$R_VERSION
+FROM rocker/r-base:4.3.1
 
 RUN apt-get update && \
     apt-get install --yes libssl-dev libsasl2-dev libcurl4-openssl-dev libxml2-dev \
                           pandoc libfontconfig1-dev openssh-server sudo libv8-dev \
                           libharfbuzz-dev libfribidi-dev libfreetype-dev libpng-dev \
-                          libtiff5-dev libjpeg-dev && \
+                          libtiff5-dev libjpeg-dev r-cran-igraph && \
     apt-get clean
 
 RUN R -e ' \
-    install.packages(c("remotes")); \
+    install.packages(c("remotes","treemap")); \
     require(remotes); \
     install_version("extrafont", version = "0.18"); \
     install_version("float", version = "0.3.0"); \
@@ -20,13 +20,12 @@ RUN R -e ' \
     install_version("RColorBrewer", version = "1.1.3"); \
     install_version("rmarkdown", version = "2.19"); \
     install_version("stringr", version = "1.5.0"); \
-    install_version("treemap", version = "2.4.3"); \
     install_version("tidyverse", version = "1.3.2"); \
     install_version("tinytex", version = "0.43");'
 
 RUN R -e ' \
     require(tinytex); \
-    deps <- c("fancyhdr","tabu","float","multirow","wrapfig","colortbl","pdflscape","threeparttable","threeparttablex","environ","ulem","makecell","caption"); \
+    deps <- c("fancyhdr","tabu","float","lipsum","multirow","wrapfig","colortbl","pdflscape","threeparttable","threeparttablex","environ","ulem","makecell","caption"); \
         install_tinytex(repository="https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2022/tlnet-final",version="2022.12",force=TRUE, extra_packages = deps); \
     library(tinytex);'
 EXPOSE 22
