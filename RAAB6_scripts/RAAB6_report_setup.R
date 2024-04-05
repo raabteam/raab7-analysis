@@ -34,6 +34,8 @@ raab <- raab %>% mutate(
 
 raab <- raab %>% mutate(vi.levels = case_when(mild.vi==1 ~ "mild.vi", moderate.vi==1 ~ "moderate.vi", severe.vi==1 ~ "severe.vi", blind==1 ~ "blind"))
 
+raab$msvi<-(raab$moderate.vi==1 | raab$severe.vi==1)+0
+
 vi.levels<-c("blind","severe.vi","moderate.vi","mild.vi")
 
 right.vi.levels<-c("right.blind","right.severe.vi","right.moderate.vi","right.mild.vi")
@@ -112,6 +114,8 @@ raab <- raab %>% mutate(
   unilat.vi = case_when(mild.unilat==1 ~ "mild.unilat", moderate.unilat==1 ~ "moderate.unilat", severe.unilat==1 ~ "severe.unilat", blind.unilat==1 ~ "blind.unilat")
   
 )
+
+raab$unilat.msvi<-(raab$moderate.unilat==1 | raab$severe.unilat==1)+0
 
 unilat.vi<-c("mild.unilat","moderate.unilat","severe.unilat","blind.unilat")
 

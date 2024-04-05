@@ -28,8 +28,9 @@ asa2$female.pct<-asa2$female.n/sum(asa2$female.n,na.rm=T)
 asa2$male.pct<-asa2$male.n/sum(asa2$male.n,na.rm=T)
 asa2$total.pct<-asa2$total.n/sum(asa2$total.n,na.rm=T)
 
-asa2[nrow(asa2)+1,2:7]<-colSums(asa2[,2:7])
-asa2[5,1]<-"Total"
+asa2[nrow(asa2)+1,c(2,4,6)]<-colSums(asa2[,c(2,4,6)])
+asa2[nrow(asa2),c(3,5,7)]<-1
+asa2$age.groups.tens[nrow(asa2)]<-"Total"
 
 pcts <- grep("pct",names(asa2))
 asa2[,pcts] <- round( asa2[,pcts]*100, 1)
