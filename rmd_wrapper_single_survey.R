@@ -8,30 +8,35 @@
 
 #For running on command line in Docker Image
 
-rm(list = ls())
+#rm(list = ls())
 
-library(rmarkdown)
-library(here)
+#library(rmarkdown)
+#library(here)
 
-arguments <- commandArgs(trailingOnly = TRUE)
-ID <- arguments[1]
+#arguments <- commandArgs(trailingOnly = TRUE)
+#ID <- arguments[1]
 
 # For running manually on Windows computer
 
 #rm(list = ls())
-#setwd("GBR/RAAB/github_repo_sync/")
+#setwd("path/to/folder")
 
 #library(rmarkdown)
 #library(here)
 
 #Sample raab5 ID
-#ID<-"sample RAAB5 ID"
+#ID<-"sample_raab_id"
 #Sample raab6 or pva raab7 ID
-#ID<-"sample RAAB6 ID"
+#ID<-"sample_raab_id"
+#ID<-"sample_raab_id"
 #Sample ucva raab7 ID
-#ID<-"alpha-numeric Peek ID"
+#ID<-"sample_raab_id"
 
 #RAAB5 report
+
+#checker5<-read.csv(here("data", "raabs_618.csv"))
+#DR_check<-checker5[checker5$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
+#remove(checker5)
 
 #render(here("RAAB5_scripts","RAAB5_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
 
@@ -40,15 +45,15 @@ ID <- arguments[1]
 
 #RAAB6 & RAAB7 without UCVA report
 
-checker6<-read.csv(here("data", "raabs_612_pva.csv"))
-DR_check<-checker6[checker6$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
-WQ_check<-checker6[checker6$raab_id==ID,c('raab_id',"wg_difficulty_seeing","wg_difficulty_hearing","wg_difficulty_memory","wg_difficulty_mobility","wg_difficulty_selfcare","wg_difficulty_communication")]
-remove(checker6)
+#checker6<-read.csv(here("data", "raabs_612_pva.csv"))
+#DR_check<-checker6[checker6$raab_id==ID,c('raab_id','dr_diabetes_blood_consent')]
+#WQ_check<-checker6[checker6$raab_id==ID,c('raab_id',"wg_difficulty_seeing","wg_difficulty_hearing","wg_difficulty_memory","wg_difficulty_mobility","wg_difficulty_selfcare","wg_difficulty_communication")]
+#remove(checker6)
 
-render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
+#render(here("RAAB6_scripts","RAAB6_reporter.Rmd"), output_file = here("outputs", paste0(ID,"_report")), output_dir = here("outputs", ID, "summary"))
 
-unlink(here("outputs", "summary", "*_files"),recursive=T)
-unlink(here("RAAB6_scripts", "*.log"))
+#unlink(here("outputs", "summary", "*_files"),recursive=T)
+#unlink(here("RAAB6_scripts", "*.log"))
 
 #RAAB7 with UCVA report
 

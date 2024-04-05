@@ -33,7 +33,7 @@ for (i in seq_along(raab.cause)) {
 }
 
 prev4[nrow(prev4)+1,c(2,4,6)]<-colSums(prev4[,c(2,4,6)])
-prev4[nrow(prev4),c(3,5,7)]<-100
+prev4[nrow(prev4),c(3,5,7)]<-1
 prev4$principal.cause[nrow(prev4)]<-"Total"
 
 prev4$cause_group_1[prev4$principal.cause=="poor_vision_cause_uncorrected_refractive_error" | prev4$principal.cause=="poor_vision_cause_aphakia_uncorrected" | prev4$principal.cause== "poor_vision_cause_cataract_untreated"]<-"A. Treatable (1, 2, 3)"

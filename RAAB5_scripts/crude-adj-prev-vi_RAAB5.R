@@ -65,9 +65,40 @@ for (i in 1:length(vi.levels[1:3]))
   
 }
 
+sum3[nrow(sum3)+1,]<-NA
+sum3$vi.level[nrow(sum3)]<-"moderate.severe.vi"
+sum3[sum3$vi.level=="moderate.severe.vi",grep("n",names(sum3))]<-sum3[sum3$vi.level=="moderate.vi",grep("n",names(sum3))]+sum3[sum3$vi.level=="severe.vi",grep("n",names(sum3))]
+
+sum3$female.pct[sum3$vi.level=="moderate.severe.vi"]<-sum(raab$msvi[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
+sum3$male.pct[sum3$vi.level=="moderate.severe.vi"]<-sum(raab$msvi[raab$gender=="male"],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
+sum3$total.pct[sum3$vi.level=="moderate.severe.vi"]<-sum(raab$msvi,na.rm=T)/sum(raab$vi.denom,na.rm=T)
+
+sum3$female.pct.lci[sum3$vi.level=="moderate.severe.vi"]<-bennett.lci(sum3$female.pct[sum3$vi.level=="moderate.severe.vi"],raab$msvi[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+sum3$male.pct.lci[sum3$vi.level=="moderate.severe.vi"]<-bennett.lci(sum3$male.pct[sum3$vi.level=="moderate.severe.vi"],raab$msvi[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+sum3$total.pct.lci[sum3$vi.level=="moderate.severe.vi"]<-bennett.lci(sum3$total.pct[sum3$vi.level=="moderate.severe.vi"],raab$msvi,raab$vi.denom,raab$clusterId)
+
+sum3$female.pct.uci[sum3$vi.level=="moderate.severe.vi"]<-bennett.uci(sum3$female.pct[sum3$vi.level=="moderate.severe.vi"],raab$msvi[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+sum3$male.pct.uci[sum3$vi.level=="moderate.severe.vi"]<-bennett.uci(sum3$male.pct[sum3$vi.level=="moderate.severe.vi"],raab$msvi[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+sum3$total.pct.uci[sum3$vi.level=="moderate.severe.vi"]<-bennett.uci(sum3$total.pct[sum3$vi.level=="moderate.severe.vi"],raab$msvi,raab$vi.denom,raab$clusterId)
+
+sum3$female.adj.pct[sum3$vi.level=="moderate.severe.vi"]<-prop.age.adjust(female.subpop, raab[raab$gender=="female",], raab$msvi[raab$gender=="female"], raab$vi.denom[raab$gender=="female"])
+sum3$male.adj.pct[sum3$vi.level=="moderate.severe.vi"]<-prop.age.adjust(male.subpop, raab[raab$gender=="male",], raab$msvi[raab$gender=="male"], raab$vi.denom[raab$gender=="male"])
+sum3$total.adj.pct[sum3$vi.level=="moderate.severe.vi"]<-prop.age.sex.adjust(popfives, raab, raab$msvi, raab$vi.denom)
+
+sum3$female.adj.pct.lci[sum3$vi.level=="moderate.severe.vi"]<-bennett.lci(sum3$female.adj.pct[sum3$vi.level=="moderate.severe.vi"],raab$msvi[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+sum3$male.adj.pct.lci[sum3$vi.level=="moderate.severe.vi"]<-bennett.lci(sum3$male.adj.pct[sum3$vi.level=="moderate.severe.vi"],raab$msvi[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+sum3$total.adj.pct.lci[sum3$vi.level=="moderate.severe.vi"]<-bennett.lci(sum3$total.adj.pct[sum3$vi.level=="moderate.severe.vi"],raab$msvi,raab$vi.denom,raab$clusterId)
+
+sum3$female.adj.pct.uci[sum3$vi.level=="moderate.severe.vi"]<-bennett.uci(sum3$female.adj.pct[sum3$vi.level=="moderate.severe.vi"],raab$msvi[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
+sum3$male.adj.pct.uci[sum3$vi.level=="moderate.severe.vi"]<-bennett.uci(sum3$male.adj.pct[sum3$vi.level=="moderate.severe.vi"],raab$msvi[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
+sum3$total.adj.pct.uci[sum3$vi.level=="moderate.severe.vi"]<-bennett.uci(sum3$total.adj.pct[sum3$vi.level=="moderate.severe.vi"],raab$msvi,raab$vi.denom,raab$clusterId)
+
 sum3$extrapolated.female.n<-format( (sum3$female.adj.pct * sum(female.subpop$population)), digits=1, scientific=F)
 sum3$extrapolated.male.n<-format( (sum3$male.adj.pct * sum(male.subpop$population)), digits=1, scientific=F)
 sum3$extrapolated.total.n<-format( (sum3$total.adj.pct * sum(popfives$population)), digits=1, scientific=F)
+
+row.order<-c("blind","severe.vi","moderate.vi","moderate.severe.vi","mild.vi")
+sum3<-sum3 %>% arrange(match(sum3$vi.level,row.order))
 
 lcis<-grep("lci",names(sum3))
 ucis<-grep("uci",names(sum3))

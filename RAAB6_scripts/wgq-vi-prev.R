@@ -65,6 +65,38 @@ for (i in 1:length(vi.levels))
   
 }  
 
+wgq.vi.table[nrow(wgq.vi.table)+1,]<-NA
+wgq.vi.table$vi.level[nrow(wgq.vi.table)]<-"moderate.severe.vi"
+
+wgq.vi.table$any.dis.n[wgq.vi.table$vi.level=="moderate.severe.vi"]<-sum(raab$msvi[raab$wgq.dis.any==1])
+wgq.vi.table$any.non.vi.dis.n[wgq.vi.table$vi.level=="moderate.severe.vi"]<-sum(raab$msvi[raab$wgq.dis.nonvi==1])
+wgq.vi.table$no.dis.n[wgq.vi.table$vi.level=="moderate.severe.vi"]<-sum(raab$msvi[raab$wgq.dis.any==0])
+
+wgq.vi.table$any.dis.pct[wgq.vi.table$vi.level=="moderate.severe.vi"]<-sum(raab$msvi[raab$wgq.dis.any==1])/sum(raab$wgq.dis.any==1)
+wgq.vi.table$any.non.vi.dis.pct[wgq.vi.table$vi.level=="moderate.severe.vi"]<-sum(raab$msvi[raab$wgq.dis.nonvi==1])/sum(raab$wgq.dis.nonvi==1)
+wgq.vi.table$no.dis.pct[wgq.vi.table$vi.level=="moderate.severe.vi"]<-sum(raab$msvi[raab$wgq.dis.any==0])/sum(raab$wgq.dis.any==0)
+
+wgq.vi.table$any.dis.pct.lci[wgq.vi.table$vi.level=="moderate.severe.vi"]<-bennett.lci(wgq.vi.table$any.dis.pct[wgq.vi.table$vi.level=="moderate.severe.vi"],raab$msvi[raab$wgq.dis.any==1],raab$vi.denom[raab$wgq.dis.any==1],raab$clusterId[raab$wgq.dis.any==1])
+wgq.vi.table$any.dis.pct.uci[wgq.vi.table$vi.level=="moderate.severe.vi"]<-bennett.uci(wgq.vi.table$any.dis.pct[wgq.vi.table$vi.level=="moderate.severe.vi"],raab$msvi[raab$wgq.dis.any==1],raab$vi.denom[raab$wgq.dis.any==1],raab$clusterId[raab$wgq.dis.any==1])
+wgq.vi.table$any.non.vi.dis.pct.lci[wgq.vi.table$vi.level=="moderate.severe.vi"]<-bennett.lci(wgq.vi.table$any.non.vi.dis.pct[wgq.vi.table$vi.level=="moderate.severe.vi"],raab$msvi[raab$wgq.dis.nonvi==1],raab$vi.denom[raab$wgq.dis.nonvi==1],raab$clusterId[raab$wgq.dis.nonvi==1])
+wgq.vi.table$any.non.vi.dis.pct.uci[wgq.vi.table$vi.level=="moderate.severe.vi"]<-bennett.uci(wgq.vi.table$any.non.vi.dis.pct[wgq.vi.table$vi.level=="moderate.severe.vi"],raab$msvi[raab$wgq.dis.nonvi==1],raab$vi.denom[raab$wgq.dis.nonvi==1],raab$clusterId[raab$wgq.dis.nonvi==1])
+wgq.vi.table$no.dis.pct.lci[wgq.vi.table$vi.level=="moderate.severe.vi"]<-bennett.lci(wgq.vi.table$no.dis.pct[wgq.vi.table$vi.level=="moderate.severe.vi"],raab$msvi[raab$wgq.dis.any==0],raab$vi.denom[raab$wgq.dis.any==0],raab$clusterId[raab$wgq.dis.any==0])
+wgq.vi.table$no.dis.pct.uci[wgq.vi.table$vi.level=="moderate.severe.vi"]<-bennett.uci(wgq.vi.table$no.dis.pct[wgq.vi.table$vi.level=="moderate.severe.vi"],raab$msvi[raab$wgq.dis.any==0],raab$vi.denom[raab$wgq.dis.any==0],raab$clusterId[raab$wgq.dis.any==0])
+
+wgq.vi.table$any.dis.adj.pct[wgq.vi.table$vi.level=="moderate.severe.vi"]<-prop.age.sex.adjust(popfives,raab,raab$msvi[raab$wgq.dis.any==1],raab$vi.denom[raab$wgq.dis.any==1])
+wgq.vi.table$any.non.vi.dis.adj.pct[wgq.vi.table$vi.level=="moderate.severe.vi"]<-prop.age.sex.adjust(popfives,raab,raab$msvi[raab$wgq.dis.nonvi==1],raab$vi.denom[raab$wgq.dis.nonvi==1])
+wgq.vi.table$no.dis.adj.pct[wgq.vi.table$vi.level=="moderate.severe.vi"]<-prop.age.sex.adjust(popfives,raab,raab$msvi[raab$wgq.dis.any==0],raab$vi.denom[raab$wgq.dis.any==0])
+
+wgq.vi.table$any.dis.adj.pct.lci[wgq.vi.table$vi.level=="moderate.severe.vi"]<-bennett.lci(wgq.vi.table$any.dis.adj.pct[wgq.vi.table$vi.level=="moderate.severe.vi"],raab$msvi[raab$wgq.dis.any==1],raab$vi.denom[raab$wgq.dis.any==1],raab$clusterId[raab$wgq.dis.any==1])
+wgq.vi.table$any.dis.adj.pct.uci[wgq.vi.table$vi.level=="moderate.severe.vi"]<-bennett.uci(wgq.vi.table$any.dis.adj.pct[wgq.vi.table$vi.level=="moderate.severe.vi"],raab$msvi[raab$wgq.dis.any==1],raab$vi.denom[raab$wgq.dis.any==1],raab$clusterId[raab$wgq.dis.any==1])
+wgq.vi.table$any.non.vi.dis.adj.pct.lci[wgq.vi.table$vi.level=="moderate.severe.vi"]<-bennett.lci(wgq.vi.table$any.non.vi.dis.adj.pct[wgq.vi.table$vi.level=="moderate.severe.vi"],raab$msvi[raab$wgq.dis.nonvi==1],raab$vi.denom[raab$wgq.dis.nonvi==1],raab$clusterId[raab$wgq.dis.nonvi==1])
+wgq.vi.table$any.non.vi.dis.adj.pct.uci[wgq.vi.table$vi.level=="moderate.severe.vi"]<-bennett.uci(wgq.vi.table$any.non.vi.dis.adj.pct[wgq.vi.table$vi.level=="moderate.severe.vi"],raab$msvi[raab$wgq.dis.nonvi==1],raab$vi.denom[raab$wgq.dis.nonvi==1],raab$clusterId[raab$wgq.dis.nonvi==1])
+wgq.vi.table$no.dis.adj.pct.lci[wgq.vi.table$vi.level=="moderate.severe.vi"]<-bennett.lci(wgq.vi.table$no.dis.adj.pct[wgq.vi.table$vi.level=="moderate.severe.vi"],raab$msvi[raab$wgq.dis.any==0],raab$vi.denom[raab$wgq.dis.any==0],raab$clusterId[raab$wgq.dis.any==0])
+wgq.vi.table$no.dis.adj.pct.uci[wgq.vi.table$vi.level=="moderate.severe.vi"]<-bennett.uci(wgq.vi.table$no.dis.adj.pct[wgq.vi.table$vi.level=="moderate.severe.vi"],raab$msvi[raab$wgq.dis.any==0],raab$vi.denom[raab$wgq.dis.any==0],raab$clusterId[raab$wgq.dis.any==0])
+
+row.order<-c("blind","severe.vi","moderate.vi","moderate.severe.vi","mild.vi")
+wgq.vi.table<-wgq.vi.table %>% arrange(match(wgq.vi.table$vi.level,row.order))
+
 pcts<-grep("pct",names(wgq.vi.table))
 wgq.vi.table[,pcts]<-round(wgq.vi.table[,pcts]*100,1)
 wgq.vi.table[,pcts]<-format(wgq.vi.table[,pcts], nsmall=1)
