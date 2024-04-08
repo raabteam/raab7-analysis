@@ -180,7 +180,7 @@ asis_output(meta_report$bibliographicCitation)
 
 ```{r, eval=raab_meta$data_access=="data_access_results_reports_data" | raab_meta$data_access=="data_access_results_reports", echo=FALSE}
 
-asis_output("This work is licensed under CC BY-NC-ND 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/")
+asis_output("This work is licensed under CC BY-NC-SA 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/")
 
 ```
 
@@ -333,6 +333,8 @@ Severe VI: PVA less than 6/60 to 3/60 in the better eye
 Moderate VI: PVA less than 6/18 to 6/60 in the better eye
 
 Mild VI: PVA less than 6/12 to 6/18 in the better eye
+
+Note: We have also included the category of moderate-to-severe VI (MSVI) which is the combined moderate and severe VA ranges: PVA less than 6/18 to 3/60 in the better eye
 
 ## Distance vision impairment prevalence
 
@@ -1635,6 +1637,8 @@ Severe VI: PVA less than 6/60 to 3/60 in the better eye
 
 Moderate VI: PVA less than 6/18 to 6/60 in the better eye
 
+Moderate-to-severe VI: PVA less than 6/18 to 3/60 in the better eye
+
 Mild VI: PVA less than 6/12 to 6/18 in the better eye
 
 ## Unilateral VI
@@ -1644,6 +1648,8 @@ Blindness: PVA less than 3/60 in one eye, PVA 6/12 in the other eye
 Severe VI: PVA less than 6/60 to 3/60 in one eye, PVA 6/12 in the other eye
 
 Moderate VI: PVA less than 6/18 to 6/60 in one eye, PVA 6/12 in the other eye
+
+Moderate-to-severe VI: PVA less than 6/18 to 3/60 in one eye, PVA 6/12 in the other eye
 
 Mild VI: PVA less than 6/12 to 6/18 in one eye, PVA 6/12 in the other eye
 
