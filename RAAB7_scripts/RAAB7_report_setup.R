@@ -536,7 +536,6 @@ raab <- raab %>% mutate(
 # diabetes.no = cases where no history of DM self-reported and normal RBG result among diabetes.denom
 # dr.exam.denom = denominator for reporting fundus examination results
 
-# dr.response.cascade <-c("Enrolled","Examined","Diabetes status assessed", "Known or suspected diabetes", "Consented dilated examination")
 dr.response.cascade <-c("Enrolled","Examined","Diabetes status assessed")
 dr.response.cascade.b <- (c("Known or suspected diabetes", "Known", "Suspected", "Consented dilated examination"))
 
