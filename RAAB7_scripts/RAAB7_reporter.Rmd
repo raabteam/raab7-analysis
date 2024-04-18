@@ -92,8 +92,8 @@ meta_dataset$title<-paste0("Rapid Assessment of Avoidable Blindness Dataset: ",r
 url_string<-gsub("[[:punct:]]", "", raab_meta$survey_title)
 url_string<-gsub(" ", "-", tolower(url_string))
 
-meta_report$identifier<-paste0("https://www.raab.world/survey/",url_string,"/report")
-meta_dataset$identifier<-paste0("https://www.raab.world/survey/",url_string,"/data")
+# meta_report$identifier<-paste0("https://www.raab.world/survey/",url_string,"/report")
+# meta_dataset$identifier<-paste0("https://www.raab.world/survey/",url_string,"/data")
 
 meta_report$doi<-paste0("10.17037/RAABREPORT.",ID)
 meta_dataset$doi<-paste0("10.17037/RAABDATASET.",ID)
