@@ -531,6 +531,9 @@ raab <- raab %>% mutate(
    wgq.dis.any = case_when(wgq.dis.see==1 | wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 | wgq.dis.upbod.str==1 | wgq.dis.upbod.dex==1 | wgq.dis.anx==1 | wgq.dis.dep==1 ~ 1, TRUE ~ 0),
    wgq.dis.nonvi = case_when(wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 | wgq.dis.upbod.str==1 | wgq.dis.upbod.dex==1 | wgq.dis.anx==1 | wgq.dis.dep==1 ~ 1, TRUE ~ 0)
  )
+
+dis.domains<- c("wgq.dis.see", "wgq.dis.hear", "wgq.dis.mob", "wgq.dis.mem", "wgq.dis.comm", "wgq.dis.self", "wgq.dis.upbod.str", "wgq.dis.upbod.dex", "wgq.dis.anx", "wgq.dis.dep", "wgq.dis.any", "wgq.dis.nonvi")
+
 } else { 
   
   raab <- raab %>% mutate(
@@ -538,9 +541,10 @@ raab <- raab %>% mutate(
     wgq.dis.any = case_when(wgq.dis.see==1 | wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0),
     wgq.dis.nonvi = case_when(wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 ~ 1, TRUE ~ 0)
   )
+  
+dis.domains<- c("wgq.dis.see", "wgq.dis.hear", "wgq.dis.mob", "wgq.dis.mem", "wgq.dis.comm", "wgq.dis.self","wgq.dis.any", "wgq.dis.nonvi")
+  
 }
- 
-dis.domains<- c("wgq.dis.see", "wgq.dis.hear", "wgq.dis.mob", "wgq.dis.mem", "wgq.dis.comm", "wgq.dis.self", "wgq.dis.upbod.str", "wgq.dis.upbod.dex", "wgq.dis.anx", "wgq.dis.dep", "wgq.dis.any", "wgq.dis.nonvi")
 
 # DR Module variables
 

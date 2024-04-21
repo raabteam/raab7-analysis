@@ -171,13 +171,13 @@ Report generated: `r format(Sys.time(), '%d %B %Y')`
 
 ‎\linebreak
 
-```{r, eval=(raab_meta$data_access=="data_access_results_reports_data" | raab_meta$data_access=="data_access_results_reports") & (raab_meta$embargo_date<Sys.time()), echo=FALSE}
+```{r, eval=(raab_meta$data_access=="data_access_results_reports_data" | raab_meta$data_access=="data_access_results_reports") & if(exists("embargo_date",raab_meta)){(raab_meta$embargo_date<Sys.time())}else{TRUE}, echo=FALSE}
 
 asis_output("Suggested citation:  ")
 
 ```
 
-```{r, eval=(raab_meta$data_access=="data_access_results_reports_data" | raab_meta$data_access=="data_access_results_reports") & (raab_meta$embargo_date<Sys.time()), echo=FALSE}
+```{r, eval=(raab_meta$data_access=="data_access_results_reports_data" | raab_meta$data_access=="data_access_results_reports") & if(exists("embargo_date",raab_meta)){(raab_meta$embargo_date<Sys.time())}else{TRUE}, echo=FALSE}
 
 asis_output(meta_report$bibliographicCitation)
 
@@ -185,7 +185,7 @@ asis_output(meta_report$bibliographicCitation)
 
 ‎\linebreak
 
-```{r, eval=(raab_meta$data_access=="data_access_results_reports_data" | raab_meta$data_access=="data_access_results_reports") & (raab_meta$embargo_date<Sys.time()), echo=FALSE}
+```{r, eval=(raab_meta$data_access=="data_access_results_reports_data" | raab_meta$data_access=="data_access_results_reports") & if(exists("embargo_date",raab_meta)){(raab_meta$embargo_date<Sys.time())}else{TRUE}, echo=FALSE}
 
 asis_output("This work is licensed under CC BY-NC-SA 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/")
 
@@ -1717,7 +1717,12 @@ lines(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$depression.pct,co
 }
 axis(1,at=c(-10,1,2,3,4,10),labels=c(-10,wgq.plot$age.groups.tens[1],wgq.plot$age.groups.tens[2],wgq.plot$age.groups.tens[3],wgq.plot$age.groups.tens[4],10),cex.axis=0.8)
 axis(2,at=c(-10,0,10,20,30,40,50,60,70,80,90,100),labels=c(-10,0,10,20,30,40,50,60,70,80,90,100),cex.axis=0.8,las=2)
+
+if(exists("wg_difficulty_upperbody_strength",raab)){
 legend("topleft",c("Vision","Hearing","Mobility","Memory","Communication","Self-care","Upper body strength","Upper body dexterity","Anxiety", "Depression"),col=wgq_fig_cols[1:10],pch=20,lty=1,bty='n',cex=0.8,inset=0.05)
+}else{
+legend("topleft",c("Vision","Hearing","Mobility","Memory","Communication","Self-care"),col=wgq_fig_cols[1:10],pch=20,lty=1,bty='n',cex=0.8,inset=0.05)
+}
 
 ```
 
