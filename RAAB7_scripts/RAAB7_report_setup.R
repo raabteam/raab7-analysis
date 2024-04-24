@@ -513,7 +513,7 @@ raab <- raab %>% mutate(
    wgq.dis.comm = case_when(raab$wg_difficulty_communication=="wg_answer_alot" | raab$wg_difficulty_communication=="wg_answer_cannot" ~ 1, TRUE ~ 0),
    wgq.dis.self = case_when(raab$wg_difficulty_selfcare=="wg_answer_alot" | raab$wg_difficulty_selfcare=="wg_answer_cannot" ~ 1, TRUE ~ 0))
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 raab <- raab %>% mutate(
   
    wgq.dis.upbod.str = case_when(raab$wg_difficulty_upperbody_strength=="wg_answer_alot" | raab$wg_difficulty_upperbody_strength=="wg_answer_cannot" ~ 1, TRUE ~ 0),
@@ -525,7 +525,7 @@ raab <- raab %>% mutate(
 
 #Disability in any domain and any domain excluding seeing
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 raab <- raab %>% mutate(
  
    wgq.dis.any = case_when(wgq.dis.see==1 | wgq.dis.hear==1 | wgq.dis.mob==1 | wgq.dis.mem==1 | wgq.dis.comm==1 | wgq.dis.self==1 | wgq.dis.upbod.str==1 | wgq.dis.upbod.dex==1 | wgq.dis.anx==1 | wgq.dis.dep==1 ~ 1, TRUE ~ 0),

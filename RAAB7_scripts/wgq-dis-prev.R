@@ -43,7 +43,7 @@ wgq.domains.table$female.n[wgq.domains.table$disability=="wgq.dis.mem"]<-sum(raa
 wgq.domains.table$female.n[wgq.domains.table$disability=="wgq.dis.comm"]<-sum(raab$wgq.dis.comm[raab$gender=="female"],na.rm=T)
 wgq.domains.table$female.n[wgq.domains.table$disability=="wgq.dis.self"]<-sum(raab$wgq.dis.self[raab$gender=="female"],na.rm=T)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$female.n[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-sum(raab$wgq.dis.upbod.str[raab$gender=="female"],na.rm=T)
 wgq.domains.table$female.n[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-sum(raab$wgq.dis.upbod.dex[raab$gender=="female"],na.rm=T)
 wgq.domains.table$female.n[wgq.domains.table$disability=="wgq.dis.anx"]<-sum(raab$wgq.dis.anx[raab$gender=="female"],na.rm=T)
@@ -60,7 +60,7 @@ wgq.domains.table$male.n[wgq.domains.table$disability=="wgq.dis.mem"]<-sum(raab$
 wgq.domains.table$male.n[wgq.domains.table$disability=="wgq.dis.comm"]<-sum(raab$wgq.dis.comm[raab$gender=="male"],na.rm=T)
 wgq.domains.table$male.n[wgq.domains.table$disability=="wgq.dis.self"]<-sum(raab$wgq.dis.self[raab$gender=="male"],na.rm=T)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$male.n[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-sum(raab$wgq.dis.upbod.str[raab$gender=="male"],na.rm=T)
 wgq.domains.table$male.n[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-sum(raab$wgq.dis.upbod.dex[raab$gender=="male"],na.rm=T)
 wgq.domains.table$male.n[wgq.domains.table$disability=="wgq.dis.anx"]<-sum(raab$wgq.dis.anx[raab$gender=="male"],na.rm=T)
@@ -77,7 +77,7 @@ wgq.domains.table$total.n[wgq.domains.table$disability=="wgq.dis.mem"]<-sum(raab
 wgq.domains.table$total.n[wgq.domains.table$disability=="wgq.dis.comm"]<-sum(raab$wgq.dis.comm,na.rm=T)
 wgq.domains.table$total.n[wgq.domains.table$disability=="wgq.dis.self"]<-sum(raab$wgq.dis.self,na.rm=T)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$total.n[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-sum(raab$wgq.dis.upbod.str,na.rm=T)
 wgq.domains.table$total.n[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-sum(raab$wgq.dis.upbod.dex,na.rm=T)
 wgq.domains.table$total.n[wgq.domains.table$disability=="wgq.dis.anx"]<-sum(raab$wgq.dis.anx,na.rm=T)
@@ -94,7 +94,7 @@ wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.mem"]<-sum(r
 wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.comm"]<-sum(raab$wgq.dis.comm[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
 wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.self"]<-sum(raab$wgq.dis.self[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-sum(raab$wgq.dis.upbod.str[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
 wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-sum(raab$wgq.dis.upbod.dex[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
 wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.anx"]<-sum(raab$wgq.dis.anx[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
@@ -111,7 +111,7 @@ wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.mem"]<-sum(raa
 wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.comm"]<-sum(raab$wgq.dis.comm[raab$gender=="male"],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
 wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.self"]<-sum(raab$wgq.dis.self[raab$gender=="male"],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-sum(raab$wgq.dis.upbod.str[raab$gender=="male"],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
 wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-sum(raab$wgq.dis.upbod.dex[raab$gender=="male"],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
 wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.anx"]<-sum(raab$wgq.dis.anx[raab$gender=="male"],na.rm=T)/sum(raab$vi.denom[raab$gender=="male"],na.rm=T)
@@ -128,7 +128,7 @@ wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.mem"]<-sum(ra
 wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.comm"]<-sum(raab$wgq.dis.comm,na.rm=T)/sum(raab$vi.denom,na.rm=T)
 wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.self"]<-sum(raab$wgq.dis.self,na.rm=T)/sum(raab$vi.denom,na.rm=T)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-sum(raab$wgq.dis.upbod.str,na.rm=T)/sum(raab$vi.denom,na.rm=T)
 wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-sum(raab$wgq.dis.upbod.dex,na.rm=T)/sum(raab$vi.denom,na.rm=T)
 wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.anx"]<-sum(raab$wgq.dis.anx,na.rm=T)/sum(raab$vi.denom,na.rm=T)
@@ -145,7 +145,7 @@ wgq.domains.table$female.pct.lci[wgq.domains.table$disability=="wgq.dis.mem"]<-b
 wgq.domains.table$female.pct.lci[wgq.domains.table$disability=="wgq.dis.comm"]<-bennett.lci(wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.comm"],raab$wgq.dis.comm[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 wgq.domains.table$female.pct.lci[wgq.domains.table$disability=="wgq.dis.self"]<-bennett.lci(wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.self"],raab$wgq.dis.self[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$female.pct.lci[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-bennett.lci(wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"],raab$wgq.dis.mob[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 wgq.domains.table$female.pct.lci[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-bennett.lci(wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"],raab$wgq.dis.mem[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 wgq.domains.table$female.pct.lci[wgq.domains.table$disability=="wgq.dis.anx"]<-bennett.lci(wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.anx"],raab$wgq.dis.comm[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
@@ -162,7 +162,7 @@ wgq.domains.table$female.pct.uci[wgq.domains.table$disability=="wgq.dis.mem"]<-b
 wgq.domains.table$female.pct.uci[wgq.domains.table$disability=="wgq.dis.comm"]<-bennett.uci(wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.comm"],raab$wgq.dis.comm[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 wgq.domains.table$female.pct.uci[wgq.domains.table$disability=="wgq.dis.self"]<-bennett.uci(wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.self"],raab$wgq.dis.self[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$female.pct.uci[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-bennett.uci(wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"],raab$wgq.dis.mob[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 wgq.domains.table$female.pct.uci[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-bennett.uci(wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"],raab$wgq.dis.mem[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 wgq.domains.table$female.pct.uci[wgq.domains.table$disability=="wgq.dis.anx"]<-bennett.uci(wgq.domains.table$female.pct[wgq.domains.table$disability=="wgq.dis.anx"],raab$wgq.dis.comm[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
@@ -179,7 +179,7 @@ wgq.domains.table$male.pct.lci[wgq.domains.table$disability=="wgq.dis.mem"]<-ben
 wgq.domains.table$male.pct.lci[wgq.domains.table$disability=="wgq.dis.comm"]<-bennett.lci(wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.comm"],raab$wgq.dis.comm[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 wgq.domains.table$male.pct.lci[wgq.domains.table$disability=="wgq.dis.self"]<-bennett.lci(wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.self"],raab$wgq.dis.self[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$male.pct.lci[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-bennett.lci(wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"],raab$wgq.dis.mob[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 wgq.domains.table$male.pct.lci[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-bennett.lci(wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"],raab$wgq.dis.mem[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 wgq.domains.table$male.pct.lci[wgq.domains.table$disability=="wgq.dis.anx"]<-bennett.lci(wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.anx"],raab$wgq.dis.comm[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
@@ -196,7 +196,7 @@ wgq.domains.table$male.pct.uci[wgq.domains.table$disability=="wgq.dis.mem"]<-ben
 wgq.domains.table$male.pct.uci[wgq.domains.table$disability=="wgq.dis.comm"]<-bennett.uci(wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.comm"],raab$wgq.dis.comm[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 wgq.domains.table$male.pct.uci[wgq.domains.table$disability=="wgq.dis.self"]<-bennett.uci(wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.self"],raab$wgq.dis.self[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$male.pct.uci[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-bennett.uci(wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"],raab$wgq.dis.mob[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 wgq.domains.table$male.pct.uci[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-bennett.uci(wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"],raab$wgq.dis.mem[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 wgq.domains.table$male.pct.uci[wgq.domains.table$disability=="wgq.dis.anx"]<-bennett.uci(wgq.domains.table$male.pct[wgq.domains.table$disability=="wgq.dis.anx"],raab$wgq.dis.comm[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
@@ -213,7 +213,7 @@ wgq.domains.table$total.pct.lci[wgq.domains.table$disability=="wgq.dis.mem"]<-be
 wgq.domains.table$total.pct.lci[wgq.domains.table$disability=="wgq.dis.comm"]<-bennett.lci(wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.comm"],raab$wgq.dis.comm,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.pct.lci[wgq.domains.table$disability=="wgq.dis.self"]<-bennett.lci(wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.self"],raab$wgq.dis.self,raab$vi.denom,raab$clusterId)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$total.pct.lci[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-bennett.lci(wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"],raab$wgq.dis.mob,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.pct.lci[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-bennett.lci(wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"],raab$wgq.dis.mem,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.pct.lci[wgq.domains.table$disability=="wgq.dis.anx"]<-bennett.lci(wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.anx"],raab$wgq.dis.comm,raab$vi.denom,raab$clusterId)
@@ -230,7 +230,7 @@ wgq.domains.table$total.pct.uci[wgq.domains.table$disability=="wgq.dis.mem"]<-be
 wgq.domains.table$total.pct.uci[wgq.domains.table$disability=="wgq.dis.comm"]<-bennett.uci(wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.comm"],raab$wgq.dis.comm,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.pct.uci[wgq.domains.table$disability=="wgq.dis.self"]<-bennett.uci(wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.self"],raab$wgq.dis.self,raab$vi.denom,raab$clusterId)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$total.pct.uci[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-bennett.uci(wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"],raab$wgq.dis.mob,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.pct.uci[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-bennett.uci(wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"],raab$wgq.dis.mem,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.pct.uci[wgq.domains.table$disability=="wgq.dis.anx"]<-bennett.uci(wgq.domains.table$total.pct[wgq.domains.table$disability=="wgq.dis.anx"],raab$wgq.dis.comm,raab$vi.denom,raab$clusterId)
@@ -247,7 +247,7 @@ wgq.domains.table$female.adj.pct[wgq.domains.table$disability=="wgq.dis.mem"]<-p
 wgq.domains.table$female.adj.pct[wgq.domains.table$disability=="wgq.dis.comm"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$wgq.dis.comm[raab$gender=="female"],raab$vi.denom[raab$gender=="female"])
 wgq.domains.table$female.adj.pct[wgq.domains.table$disability=="wgq.dis.self"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$wgq.dis.self[raab$gender=="female"],raab$vi.denom[raab$gender=="female"])
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$female.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$wgq.dis.upbod.str[raab$gender=="female"],raab$vi.denom[raab$gender=="female"])
 wgq.domains.table$female.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$wgq.dis.upbod.dex[raab$gender=="female"],raab$vi.denom[raab$gender=="female"])
 wgq.domains.table$female.adj.pct[wgq.domains.table$disability=="wgq.dis.anx"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$wgq.dis.anx[raab$gender=="female"],raab$vi.denom[raab$gender=="female"])
@@ -264,7 +264,7 @@ wgq.domains.table$male.adj.pct[wgq.domains.table$disability=="wgq.dis.mem"]<-pro
 wgq.domains.table$male.adj.pct[wgq.domains.table$disability=="wgq.dis.comm"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$wgq.dis.comm[raab$gender=="male"],raab$vi.denom[raab$gender=="male"])
 wgq.domains.table$male.adj.pct[wgq.domains.table$disability=="wgq.dis.self"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$wgq.dis.self[raab$gender=="male"],raab$vi.denom[raab$gender=="male"])
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$male.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$wgq.dis.upbod.str[raab$gender=="male"],raab$vi.denom[raab$gender=="male"])
 wgq.domains.table$male.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$wgq.dis.upbod.dex[raab$gender=="male"],raab$vi.denom[raab$gender=="male"])
 wgq.domains.table$male.adj.pct[wgq.domains.table$disability=="wgq.dis.anx"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$wgq.dis.anx[raab$gender=="male"],raab$vi.denom[raab$gender=="male"])
@@ -281,7 +281,7 @@ wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.mem"]<-pr
 wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.comm"]<-prop.age.sex.adjust(popfives,raab,raab$wgq.dis.comm,raab$vi.denom)
 wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.self"]<-prop.age.sex.adjust(popfives,raab,raab$wgq.dis.self,raab$vi.denom)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-prop.age.sex.adjust(popfives,raab,raab$wgq.dis.upbod.str,raab$vi.denom)
 wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-prop.age.sex.adjust(popfives,raab,raab$wgq.dis.upbod.dex,raab$vi.denom)
 wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.anx"]<-prop.age.sex.adjust(popfives,raab,raab$wgq.dis.anx,raab$vi.denom)
@@ -298,7 +298,7 @@ wgq.domains.table$female.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.mem"
 wgq.domains.table$female.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.comm"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.comm"],raab$wgq.dis.comm[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 wgq.domains.table$female.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.self"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.self"],raab$wgq.dis.self[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$female.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"],raab$wgq.dis.mob[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 wgq.domains.table$female.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"],raab$wgq.dis.mem[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 wgq.domains.table$female.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.anx"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.anx"],raab$wgq.dis.comm[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
@@ -315,7 +315,7 @@ wgq.domains.table$female.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.mem"
 wgq.domains.table$female.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.comm"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.comm"],raab$wgq.dis.comm[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 wgq.domains.table$female.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.self"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.self"],raab$wgq.dis.self[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$female.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"],raab$wgq.dis.mob[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 wgq.domains.table$female.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"],raab$wgq.dis.mem[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
 wgq.domains.table$female.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.anx"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.anx"],raab$wgq.dis.comm[raab$gender=="female"],raab$vi.denom[raab$gender=="female"],raab$clusterId[raab$gender=="female"])
@@ -332,7 +332,7 @@ wgq.domains.table$male.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.mem"]<
 wgq.domains.table$male.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.comm"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.comm"],raab$wgq.dis.comm[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 wgq.domains.table$male.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.self"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.self"],raab$wgq.dis.self[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$male.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"],raab$wgq.dis.mob[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 wgq.domains.table$male.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"],raab$wgq.dis.mem[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 wgq.domains.table$male.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.anx"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.anx"],raab$wgq.dis.comm[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
@@ -349,7 +349,7 @@ wgq.domains.table$male.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.mem"]<
 wgq.domains.table$male.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.comm"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.comm"],raab$wgq.dis.comm[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 wgq.domains.table$male.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.self"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.self"],raab$wgq.dis.self[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$male.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"],raab$wgq.dis.mob[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 wgq.domains.table$male.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"],raab$wgq.dis.mem[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
 wgq.domains.table$male.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.anx"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.anx"],raab$wgq.dis.comm[raab$gender=="male"],raab$vi.denom[raab$gender=="male"],raab$clusterId[raab$gender=="male"])
@@ -366,7 +366,7 @@ wgq.domains.table$total.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.mem"]
 wgq.domains.table$total.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.comm"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.comm"],raab$wgq.dis.comm,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.self"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.self"],raab$wgq.dis.self,raab$vi.denom,raab$clusterId)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$total.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"],raab$wgq.dis.mob,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"],raab$wgq.dis.mem,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.adj.pct.lci[wgq.domains.table$disability=="wgq.dis.anx"]<-bennett.lci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.anx"],raab$wgq.dis.comm,raab$vi.denom,raab$clusterId)
@@ -383,7 +383,7 @@ wgq.domains.table$total.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.mem"]
 wgq.domains.table$total.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.comm"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.comm"],raab$wgq.dis.comm,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.self"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.self"],raab$wgq.dis.self,raab$vi.denom,raab$clusterId)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$total.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.upbod.str"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.str"],raab$wgq.dis.mob,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.upbod.dex"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.upbod.dex"],raab$wgq.dis.mem,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.anx"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.anx"],raab$wgq.dis.comm,raab$vi.denom,raab$clusterId)
@@ -393,7 +393,7 @@ wgq.domains.table$total.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.dep"]
 wgq.domains.table$total.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.any"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.any"],raab$wgq.dis.any,raab$vi.denom,raab$clusterId)
 wgq.domains.table$total.adj.pct.uci[wgq.domains.table$disability=="wgq.dis.nonvi"]<-bennett.uci(wgq.domains.table$total.adj.pct[wgq.domains.table$disability=="wgq.dis.nonvi"],raab$wgq.dis.nonvi,raab$vi.denom,raab$clusterId)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.domains.table$disability<-as.character(c("Seeing", "Hearing", "Mobility", "Memory", "Communication", "Self care", "Upper body strength", "Upper body dexterity", "Anxiety", "Depression", "Any domain", "Any non-seeing domain"))
 } else {
 wgq.domains.table$disability<-as.character(c("Seeing", "Hearing", "Mobility", "Memory", "Communication", "Self care", "Any domain", "Any non-seeing domain"))
@@ -414,7 +414,7 @@ wgq.domains.table.a<-wgq.domains.table[,c("disability","female.adj.pct","female.
 wgq.domains.agegroups<-data.frame(age.groups.tens)
 wgq.domains.agegroups[,2:21] <- NA
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 names(wgq.domains.agegroups) <- c("age.groups.tens",
 
                  "seeing.n",
