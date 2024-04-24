@@ -1683,7 +1683,7 @@ knitr::kable(wgq.domains.table.a.nice.names, booktabs=T, linesep = "", caption =
 
 wgq.plot<-wgq.domains.agegroups[1:4,]
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 wgq.range<-c(wgq.domains.agegroups$seeing.pct,wgq.domains.agegroups$hearing.pct,wgq.domains.agegroups$mobility.pct,wgq.domains.agegroups$memory.pct,wgq.domains.agegroups$communication.pct,wgq.domains.agegroups$selfcare.pct, wgq.domains.agegroups$upperbodystrength.pct, wgq.domains.agegroups$upperbodydexterity.pct, wgq.domains.agegroups$anxiety.pct, wgq.domains.agegroups$depression.pct)
 } else {
 wgq.range<-c(wgq.domains.agegroups$seeing.pct,wgq.domains.agegroups$hearing.pct,wgq.domains.agegroups$mobility.pct,wgq.domains.agegroups$memory.pct,wgq.domains.agegroups$communication.pct,wgq.domains.agegroups$selfcare.pct)
@@ -1705,7 +1705,7 @@ points(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$communication.pc
 lines(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$communication.pct,col=wgq_fig_cols[5])
 points(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$selfcare.pct,pch=20,col=wgq_fig_cols[6])
 lines(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$selfcare.pct,col=wgq_fig_cols[6])
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 points(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$upperbodystrength.pct,pch=20,col=wgq_fig_cols[7])
 lines(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$upperbodystrength.pct,col=wgq_fig_cols[7])
 points(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$upperbodydexterity.pct,pch=20,col=wgq_fig_cols[8])
@@ -1718,7 +1718,7 @@ lines(as.numeric(as.factor(wgq.plot$age.groups.tens)),wgq.plot$depression.pct,co
 axis(1,at=c(-10,1,2,3,4,10),labels=c(-10,wgq.plot$age.groups.tens[1],wgq.plot$age.groups.tens[2],wgq.plot$age.groups.tens[3],wgq.plot$age.groups.tens[4],10),cex.axis=0.8)
 axis(2,at=c(-10,0,10,20,30,40,50,60,70,80,90,100),labels=c(-10,0,10,20,30,40,50,60,70,80,90,100),cex.axis=0.8,las=2)
 
-if(exists("wg_difficulty_upperbody_strength",raab)){
+if (!all(is.na(raab$wg_difficulty_upperbody_strength))){
 legend("topleft",c("Vision","Hearing","Mobility","Memory","Communication","Self-care","Upper body strength","Upper body dexterity","Anxiety", "Depression"),col=wgq_fig_cols[1:10],pch=20,lty=1,bty='n',cex=0.8,inset=0.05)
 }else{
 legend("topleft",c("Vision","Hearing","Mobility","Memory","Communication","Self-care"),col=wgq_fig_cols[1:10],pch=20,lty=1,bty='n',cex=0.8,inset=0.05)
