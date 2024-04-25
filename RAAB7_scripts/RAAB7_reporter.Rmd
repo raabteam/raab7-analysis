@@ -34,7 +34,7 @@ dir.create(here("outputs",ID,"/raw/data"))
 raab_merged<-read.csv(here("data","surveys.csv"),check.names=F,na.strings=c("","NA"))
 
 raab<-raab_merged[raab_merged$raab_id==ID,]
-raab$date<-as.Date(raab$date, format = "%d/%m/%Y")
+raab$date<-as.Date(raab$date)
 
 pop_merged<-read.csv(here("data","population.csv"),check.names=F,na.strings=c("","NA"))
 popfives<-pop_merged[pop_merged$raab_id==ID,]
