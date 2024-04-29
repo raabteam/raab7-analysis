@@ -476,7 +476,7 @@ knitr::kable(unta.nice.names,booktabs=T, linesep = "",caption="Crude prevalence 
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='2.5cm') %>%
   column_spec(c(4,7,10),width='1.5cm') %>%
-  add_header_above(c("VI level" = 1, "Male" = 3, "Female" = 3, "Total" = 3),bold=T) %>%
+  add_header_above(c("VI level" = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) %>%
   add_footnote("Unilateral refers to cases where the other eye has PVA of 6/12",notation="symbol")
 
 ```
