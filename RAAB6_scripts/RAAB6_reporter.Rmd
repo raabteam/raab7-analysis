@@ -31,10 +31,10 @@ dir.create(here("outputs",ID,"/summary/data"))
 dir.create(here("outputs",ID,"/raw"))
 dir.create(here("outputs",ID,"/raw/data"))
 
-raab_merged<-read.csv(here("data","raabs_612_pva.csv"),check.names=F,na.strings=x("","NA"))
+raab_merged<-read.csv(here("data","raabs_612_pva.csv"),check.names=F,na.strings=c("","NA"))
 raab<-raab_merged[raab_merged$raab_id==ID,]
 
-pop_merged<-read.csv(here("data","raabs_pop_612_pva.csv"),check.names=F,na.strings=x("","NA"))
+pop_merged<-read.csv(here("data","raabs_pop_612_pva.csv"),check.names=F,na.strings=c("","NA"))
 popfives<-pop_merged[pop_merged$raab_id==ID,]
 
 # meta<-read.csv(here("data","historic_meta.csv"),check.names=F,na.strings=c("","NA"))
