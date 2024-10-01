@@ -34,6 +34,8 @@ raab <- raab %>% mutate(
 
 raab <- raab %>% mutate(vi.levels = case_when(mild.vi==1 ~ "mild.vi", moderate.vi==1 ~ "moderate.vi", severe.vi==1 ~ "severe.vi", blind==1 ~ "blind"))
 
+raab$msvi<-(raab$moderate.vi==1 | raab$severe.vi==1)+0
+
 vi.levels<-c("blind","severe.vi","moderate.vi","mild.vi")
 
 right.vi.levels<-c("right.blind","right.severe.vi","right.moderate.vi","right.mild.vi")
@@ -112,6 +114,8 @@ raab <- raab %>% mutate(
   unilat.vi = case_when(mild.unilat==1 ~ "mild.unilat", moderate.unilat==1 ~ "moderate.unilat", severe.unilat==1 ~ "severe.unilat", blind.unilat==1 ~ "blind.unilat")
   
 )
+
+raab$unilat.msvi<-(raab$moderate.unilat==1 | raab$severe.unilat==1)+0
 
 unilat.vi<-c("mild.unilat","moderate.unilat","severe.unilat","blind.unilat")
 
@@ -445,38 +449,27 @@ dis.domains<- c("wgq.dis.see", "wgq.dis.hear", "wgq.dis.mob", "wgq.dis.mem", "wg
 # diabetes.no = cases where no history of DM self-reported and normal RBG result among diabetes.denom
 # dr.exam.denom = denominator for reporting fundus examination results
 
-# if(!is.logical(raab$dr_diabetes_blood_consent)){
-#   
-#     raab$dr_diabetes_blood_consent<-as.logical(raab$dr_diabetes_blood_consent)
-#   
-#   }else{
-#   
-#     raab$dr_diabetes_blood_consent<-raab$dr_diabetes_blood_consent
-#   
-#   }
-# 
-# if(!is.logical(raab$dr_diabetes_known)){
-#   
-#     raab$dr_diabetes_known<-as.logical(raab$dr_diabetes_known)
-#   
-#   }else{
-#   
-#     raab$dr_diabetes_known<-raab$dr_diabetes_known
-#   
-#   }
-
 dr.response.cascade <-c("Enrolled","Examined","Diabetes status assessed")
 dr.response.cascade.b <- (c("Known or suspected diabetes", "Known", "Suspected", "Consented dilated examination"))
 
-raab <- raab %>% mutate(
-  
-  diabetes.denom = case_when(dr_diabetes_known=="true" | dr_diabetes_blood_consent=="true" ~1, TRUE~0),
-  diabetes.new = case_when((dr_diabetes_known=="false" & dr_diabetes_blood_consent=="true" & dr_diabetes_blood_sugar>=200) ~1, TRUE~0),
-  diabetes.known = case_when(dr_diabetes_known=="true" ~1, TRUE~0),
-  diabetes.known.susp = case_when((dr_diabetes_known=="true" | diabetes.new==1) ~1, TRUE~0),
-  dr.exam.denom = case_when(diabetes.known.susp==1 & (dr_retinopathy_method_right=="dr_retinopathy_method_dilatation_fundoscopy" | dr_retinopathy_method_right=="dr_retinopathy_method_fundus_camera")  ~1, TRUE~0)
-
-)
+if(is.logical(raab$dr_diabetes_known)){
+  raab <- raab %>% mutate(
+    
+    diabetes.denom = case_when(dr_diabetes_known==TRUE | dr_diabetes_blood_consent==TRUE ~1, TRUE~0),
+    diabetes.new = case_when((dr_diabetes_known==FALSE & dr_diabetes_blood_consent==TRUE & dr_diabetes_blood_sugar>=200) ~1, TRUE~0),
+    diabetes.known = case_when(dr_diabetes_known==TRUE ~1, TRUE~0),
+    diabetes.known.susp = case_when((dr_diabetes_known==TRUE | diabetes.new==1) ~1, TRUE~0),
+    dr.exam.denom = case_when(diabetes.known.susp==1 & (dr_retinopathy_method_right=="dr_retinopathy_method_dilatation_fundoscopy" | dr_retinopathy_method_right=="dr_retinopathy_method_fundus_camera")  ~1, TRUE~0)
+  )}else{
+    
+    raab <- raab %>% mutate(
+      
+      diabetes.denom = case_when(dr_diabetes_known=="true" | dr_diabetes_blood_consent=="true" ~1, TRUE~0),
+      diabetes.new = case_when((dr_diabetes_known=="false" & dr_diabetes_blood_consent=="true" & dr_diabetes_blood_sugar>=200) ~1, TRUE~0),
+      diabetes.known = case_when(dr_diabetes_known=="true" ~1, TRUE~0),
+      diabetes.known.susp = case_when((dr_diabetes_known=="true" | diabetes.new==1) ~1, TRUE~0),
+      dr.exam.denom = case_when(diabetes.known.susp==1 & (dr_retinopathy_method_right=="dr_retinopathy_method_dilatation_fundoscopy" | dr_retinopathy_method_right=="dr_retinopathy_method_fundus_camera")  ~1, TRUE~0)
+    )}
 
 raab <- raab %>% mutate(
 diabetes.no = case_when((diabetes.denom==1 & diabetes.known.susp==0) ~1, TRUE~0)

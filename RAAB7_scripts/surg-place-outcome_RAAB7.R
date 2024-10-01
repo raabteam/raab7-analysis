@@ -104,11 +104,11 @@ male<-data.frame(cbind(male_surgery_place_camp_improvised_n,male_surgery_place_g
 male$oc<-row.names(right.male)
 male$oc<-gsub("right.","",male$oc)
 
-ifelse(sum(male$male_surgery_place_camp_improvised_n)>0,male$male_surgery_place_camp_improvised_percent<-round((male$male_surgery_place_camp_improvised_n/sum(male$male_surgery_place_camp_improvised_n))*100,1),male$male_surgery_place_camp_improvised_percent<-round(0,1))
-ifelse(sum(male$male_surgery_place_gov_hospital_n)>0,male$male_surgery_place_gov_hospital_percent<-round((male$male_surgery_place_gov_hospital_n/sum(male$male_surgery_place_gov_hospital_n))*100,1),male$male_surgery_place_gov_hospital_percent<-round(0,1))
-ifelse(sum(male$male_surgery_place_private_hospital_n)>0,male$male_surgery_place_private_hospital_percent<-round((male$male_surgery_place_private_hospital_n/sum(male$male_surgery_place_private_hospital_n))*100,1),male$male_surgery_place_private_hospital_percent<-round(0,1))
-ifelse(sum(male$male_surgery_place_traditional_n)>0,male$male_surgery_place_traditional_percent<-round((male$male_surgery_place_traditional_n/sum(male$male_surgery_place_traditional_n))*100,1),male$male_surgery_place_traditional_percent<-round(0,1))
-ifelse(sum(male$male_surgery_place_voluntary_hospital_n)>0,male$male_surgery_place_voluntary_hospital_percent<-round((male$male_surgery_place_voluntary_hospital_n/sum(male$male_surgery_place_voluntary_hospital_n))*100,1),male$male_surgery_place_voluntary_hospital_percent<-round(0,1))
+ifelse(sum(male$male_surgery_place_camp_improvised_n)>0,male$male_surgery_place_camp_improvised_percent<-(male$male_surgery_place_camp_improvised_n/sum(male$male_surgery_place_camp_improvised_n)),male$male_surgery_place_camp_improvised_percent<-0)
+ifelse(sum(male$male_surgery_place_gov_hospital_n)>0,male$male_surgery_place_gov_hospital_percent<-(male$male_surgery_place_gov_hospital_n/sum(male$male_surgery_place_gov_hospital_n)),male$male_surgery_place_gov_hospital_percent<-0)
+ifelse(sum(male$male_surgery_place_private_hospital_n)>0,male$male_surgery_place_private_hospital_percent<-(male$male_surgery_place_private_hospital_n/sum(male$male_surgery_place_private_hospital_n)),male$male_surgery_place_private_hospital_percent<-0)
+ifelse(sum(male$male_surgery_place_traditional_n)>0,male$male_surgery_place_traditional_percent<-(male$male_surgery_place_traditional_n/sum(male$male_surgery_place_traditional_n)),male$male_surgery_place_traditional_percent<-0)
+ifelse(sum(male$male_surgery_place_voluntary_hospital_n)>0,male$male_surgery_place_voluntary_hospital_percent<-(male$male_surgery_place_voluntary_hospital_n/sum(male$male_surgery_place_voluntary_hospital_n)),male$male_surgery_place_voluntary_hospital_percent<-0)
 
 female_surgery_place_camp_improvised_n<-right.female$surgery_place_camp_improvised+left.female$surgery_place_camp_improvised
 female_surgery_place_gov_hospital_n<-right.female$surgery_place_gov_hospital+left.female$surgery_place_gov_hospital
@@ -120,11 +120,11 @@ female<-data.frame(cbind(female_surgery_place_camp_improvised_n,female_surgery_p
 female$oc<-row.names(right.female)
 female$oc<-gsub("right.","",female$oc)
 
-ifelse(sum(female$female_surgery_place_camp_improvised_n)>0,female$female_surgery_place_camp_improvised_percent<-round((female$female_surgery_place_camp_improvised_n/sum(female$female_surgery_place_camp_improvised_n))*100,1),female$female_surgery_place_camp_improvised_percent<-round(0,1))
-ifelse(sum(female$female_surgery_place_gov_hospital_n)>0,female$female_surgery_place_gov_hospital_percent<-round((female$female_surgery_place_gov_hospital_n/sum(female$female_surgery_place_gov_hospital_n))*100,1),female$female_surgery_place_gov_hospital_percent<-round(0,1))
-ifelse(sum(female$female_surgery_place_private_hospital_n)>0,female$female_surgery_place_private_hospital_percent<-round((female$female_surgery_place_private_hospital_n/sum(female$female_surgery_place_private_hospital_n))*100,1),female$female_surgery_place_private_hospital_percent<-round(0,1))
-ifelse(sum(female$female_surgery_place_traditional_n)>0,female$female_surgery_place_traditional_percent<-round((female$female_surgery_place_traditional_n/sum(female$female_surgery_place_traditional_n))*100,1),female$female_surgery_place_traditional_percent<-round(0,1))
-ifelse(sum(female$female_surgery_place_voluntary_hospital_n)>0,female$female_surgery_place_voluntary_hospital_percent<-round((female$female_surgery_place_voluntary_hospital_n/sum(female$female_surgery_place_voluntary_hospital_n))*100,1),female$female_surgery_place_voluntary_hospital_percent<-round(0,1))
+ifelse(sum(female$female_surgery_place_camp_improvised_n)>0,female$female_surgery_place_camp_improvised_percent<-(female$female_surgery_place_camp_improvised_n/sum(female$female_surgery_place_camp_improvised_n)),female$female_surgery_place_camp_improvised_percent<-0)
+ifelse(sum(female$female_surgery_place_gov_hospital_n)>0,female$female_surgery_place_gov_hospital_percent<-(female$female_surgery_place_gov_hospital_n/sum(female$female_surgery_place_gov_hospital_n)),female$female_surgery_place_gov_hospital_percent<-0)
+ifelse(sum(female$female_surgery_place_private_hospital_n)>0,female$female_surgery_place_private_hospital_percent<-(female$female_surgery_place_private_hospital_n/sum(female$female_surgery_place_private_hospital_n)),female$female_surgery_place_private_hospital_percent<-0)
+ifelse(sum(female$female_surgery_place_traditional_n)>0,female$female_surgery_place_traditional_percent<-(female$female_surgery_place_traditional_n/sum(female$female_surgery_place_traditional_n)),female$female_surgery_place_traditional_percent<-0)
+ifelse(sum(female$female_surgery_place_voluntary_hospital_n)>0,female$female_surgery_place_voluntary_hospital_percent<-(female$female_surgery_place_voluntary_hospital_n/sum(female$female_surgery_place_voluntary_hospital_n)),female$female_surgery_place_voluntary_hospital_percent<-0)
 
 total_surgery_place_camp_improvised_n<-right.total$surgery_place_camp_improvised+left.total$surgery_place_camp_improvised
 total_surgery_place_gov_hospital_n<-right.total$surgery_place_gov_hospital+left.total$surgery_place_gov_hospital
@@ -136,28 +136,37 @@ total<-data.frame(cbind(total_surgery_place_camp_improvised_n,total_surgery_plac
 total$oc<-row.names(right.total)
 total$oc<-gsub("right.","",total$oc)
 
-ifelse(sum(total$total_surgery_place_camp_improvised_n)>0,total$total_surgery_place_camp_improvised_percent<-round((total$total_surgery_place_camp_improvised_n/sum(total$total_surgery_place_camp_improvised_n))*100,1),total$total_surgery_place_camp_improvised_percent<-round(0,1))
-ifelse(sum(total$total_surgery_place_gov_hospital_n)>0,total$total_surgery_place_gov_hospital_percent<-round((total$total_surgery_place_gov_hospital_n/sum(total$total_surgery_place_gov_hospital_n))*100,1),total$total_surgery_place_gov_hospital_percent<-round(0,1))
-ifelse(sum(total$total_surgery_place_private_hospital_n)>0,total$total_surgery_place_private_hospital_percent<-round((total$total_surgery_place_private_hospital_n/sum(total$total_surgery_place_private_hospital_n))*100,1),total$total_surgery_place_private_hospital_percent<-round(0,1))
-ifelse(sum(total$total_surgery_place_traditional_n)>0,total$total_surgery_place_traditional_percent<-round((total$total_surgery_place_traditional_n/sum(total$total_surgery_place_traditional_n))*100,1),total$total_surgery_place_traditional_percent<-round(0,1))
-ifelse(sum(total$total_surgery_place_voluntary_hospital_n)>0,total$total_surgery_place_voluntary_hospital_percent<-round((total$total_surgery_place_voluntary_hospital_n/sum(total$total_surgery_place_voluntary_hospital_n))*100,1),total$total_surgery_place_voluntary_hospital_percent<-round(0,1))
+ifelse(sum(total$total_surgery_place_camp_improvised_n)>0,total$total_surgery_place_camp_improvised_percent<-(total$total_surgery_place_camp_improvised_n/sum(total$total_surgery_place_camp_improvised_n)),total$total_surgery_place_camp_improvised_percent<-0)
+ifelse(sum(total$total_surgery_place_gov_hospital_n)>0,total$total_surgery_place_gov_hospital_percent<-(total$total_surgery_place_gov_hospital_n/sum(total$total_surgery_place_gov_hospital_n)),total$total_surgery_place_gov_hospital_percent<-0)
+ifelse(sum(total$total_surgery_place_private_hospital_n)>0,total$total_surgery_place_private_hospital_percent<-(total$total_surgery_place_private_hospital_n/sum(total$total_surgery_place_private_hospital_n)),total$total_surgery_place_private_hospital_percent<-0)
+ifelse(sum(total$total_surgery_place_traditional_n)>0,total$total_surgery_place_traditional_percent<-(total$total_surgery_place_traditional_n/sum(total$total_surgery_place_traditional_n)),total$total_surgery_place_traditional_percent<-0)
+ifelse(sum(total$total_surgery_place_voluntary_hospital_n)>0,total$total_surgery_place_voluntary_hospital_percent<-(total$total_surgery_place_voluntary_hospital_n/sum(total$total_surgery_place_voluntary_hospital_n)),total$total_surgery_place_voluntary_hospital_percent<-0)
 
 total<-total[,c(6,1:5,7:11)]
-total[nrow(total)+1,2:11]<-colSums(total[,2:11])
-total[nrow(total),1]<-"Total"
-t.pcts<-grep("percent",names(total))
-total[,t.pcts]<-format(total[,t.pcts],nsmall=1)
+total[nrow(total)+1,c(2:6)]<-colSums(total[,c(2:6)])
+for (i in 7:11){total[nrow(total),i]<-ifelse(sum(total[,i],na.rm=T)>0,1,0)}
+total$oc[nrow(total)]<-"Total"
+											   
 
+t.pcts<-grep("percent",names(total))
+total[,t.pcts]<-round( total[,t.pcts] * 100, 1)
+total[,t.pcts]<-format( total[,t.pcts], nsmall=1)
 
 male<-male[,c(6,1:5,7:11)]
-male[nrow(male)+1,2:11]<-colSums(male[,2:11])
-male[nrow(male),1]<-"Total"
-m.pcts<-grep("percent",names(male))
-male[,m.pcts]<-format(male[,m.pcts],nsmall=1)
+male[nrow(male)+1,c(2:6)]<-colSums(male[,c(2:6)])
+for (i in 7:11){male[nrow(male),i]<-ifelse(sum(male[,i],na.rm=T)>0,1,0)}
+male$oc[nrow(male)]<-"Total"
+											 
 
+m.pcts<-grep("percent",names(male))
+male[,m.pcts]<-round( male[,m.pcts] * 100, 1)
+male[,m.pcts]<-format( male[,m.pcts], nsmall=1)
 
 female<-female[,c(6,1:5,7:11)]
-female[nrow(female)+1,2:11]<-colSums(female[,2:11])
-female[nrow(female),1]<-"Total"
+female[nrow(female)+1,c(2:6)]<-colSums(female[,c(2:6)])
+for (i in 7:11){female[nrow(female),i]<-ifelse(sum(female[,i],na.rm=T)>0,1,0)}
+female$oc[nrow(female)]<-"Total"
+
 f.pcts<-grep("percent",names(female))
-female[,f.pcts]<-format(female[,f.pcts],nsmall=1)
+female[,f.pcts]<-round( female[,f.pcts] * 100, 1)
+female[,f.pcts]<-format( female[,f.pcts], nsmall=1)

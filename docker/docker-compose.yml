@@ -1,0 +1,17 @@
+version: '3'
+services:
+  raab7:
+    build:
+      context: .
+      args:
+        R_VERSION: "4.3.1"
+    networks:
+      - internal
+    volumes:
+      - ../:/raab7
+    working_dir: /raab7
+
+networks:
+  internal:
+    internal: true
+

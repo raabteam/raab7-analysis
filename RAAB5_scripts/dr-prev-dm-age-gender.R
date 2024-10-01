@@ -1,6 +1,5 @@
 # DR module: Prevalence of known and newly suspected diabetes by age group and by gender
 # 04.07.22 IM
-# 29.03.24 RB Added adjusted prevalence tables for DR and WGA
 
 dm.prev<-data.frame(age.groups.tens)
 dm.prev[,2:13] <- NA
@@ -37,7 +36,7 @@ for (i in 1:length(age.groups.tens)) {
   dm.prev$total.pct[i] <- sum(raab$diabetes.known.susp[raab$age.groups.tens==age.groups.tens[i]]==1,na.rm=T) / sum(raab$diabetes.denom[raab$age.groups.tens==age.groups.tens[i]]==1,na.rm=T)
   dm.prev$total.pct.lci[i] <- bennett.lci(dm.prev$total.pct[i], raab$diabetes.known.susp[raab$age.groups.tens==age.groups.tens[i]], raab$diabetes.denom[raab$age.groups.tens==age.groups.tens[i]], raab$clusterId[raab$age.groups.tens==age.groups.tens[i]])
   dm.prev$total.pct.uci[i] <- bennett.uci(dm.prev$total.pct[i], raab$diabetes.known.susp[raab$age.groups.tens==age.groups.tens[i]], raab$diabetes.denom[raab$age.groups.tens==age.groups.tens[i]], raab$clusterId[raab$age.groups.tens==age.groups.tens[i]])  
-  
+    
 }
 
 # Create a separate row for the overall prevalence of diabetes
