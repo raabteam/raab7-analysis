@@ -51,7 +51,6 @@ prev14$total.denom[prev14$denom.thresh=="360"]<-sum(raab$denom.360.persons,na.rm
 prev14$male.num[prev14$num.thresh=="csc" & prev14$denom.thresh=="618"]<-sum(raab$csc.618.num.persons[raab$gender=="male"],na.rm=T)
 prev14$male.num[prev14$num.thresh=="csc" & prev14$denom.thresh=="660"]<-sum(raab$csc.660.num.persons[raab$gender=="male"],na.rm=T)
 prev14$male.num[prev14$num.thresh=="csc" & prev14$denom.thresh=="360"]<-sum(raab$csc.360.num.persons[raab$gender=="male"],na.rm=T)
-
 prev14$male.num[prev14$num.thresh=="ecsc_618" & prev14$denom.thresh=="618"]<-sum(raab$ecsc.618.618.num.persons[raab$gender=="male"],na.rm=T)
 prev14$male.num[prev14$num.thresh=="ecsc_618" & prev14$denom.thresh=="660"]<-sum(raab$ecsc.618.660.num.persons[raab$gender=="male"],na.rm=T)
 prev14$male.num[prev14$num.thresh=="ecsc_618" & prev14$denom.thresh=="360"]<-sum(raab$ecsc.618.360.num.persons[raab$gender=="male"],na.rm=T)
@@ -90,9 +89,9 @@ prev14$total.num[prev14$num.thresh=="ecsc_618" & prev14$denom.thresh=="360"]<-su
 
 #calculate csc
 
-prev14$male.crude<- prev14$male.num / prev14$male.denom
-prev14$female.crude<- prev14$female.num / prev14$female.denom
-prev14$total.crude<- prev14$total.num / prev14$total.denom
+prev14$male.crude<-prev14$male.num/prev14$male.denom
+prev14$female.crude<-prev14$female.num/prev14$female.denom
+prev14$total.crude<-prev14$total.num/prev14$total.denom
 
 prev14$male.adjusted[prev14$num.thresh=="csc" & prev14$denom.thresh=="618"]<- prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$csc.618.num.persons[raab$gender=="male"],raab$denom.618.persons[raab$gender=="male"])
 prev14$male.adjusted[prev14$num.thresh=="csc" & prev14$denom.thresh=="660"]<- prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$csc.660.num.persons[raab$gender=="male"],raab$denom.660.persons[raab$gender=="male"])
@@ -224,11 +223,11 @@ prev14[,ucis][prev14[,ucis]>1]<-1
 
 apcts<-grep("adjusted",names(prev14))
 prev14[,apcts] <- round( prev14[,apcts] * 100, 1)
-prev14[,apcts] <- format( prev14[,apcts] , nsmall=1)
+prev14[,apcts] <- format( prev14[,apcts], nsmall=1)
 
 cpcts<-grep("crude",names(prev14))
 prev14[,cpcts] <- round( prev14[,cpcts] * 100, 1)
-prev14[,cpcts] <- format( prev14[,cpcts] , nsmall=1)
+prev14[,cpcts] <- format( prev14[,cpcts], nsmall=1)
 
 prev14$quality_gap <- round( prev14$quality_gap * 100, 1)
 prev14$quality_gap[is.na(prev14$quality_gap)]<-""

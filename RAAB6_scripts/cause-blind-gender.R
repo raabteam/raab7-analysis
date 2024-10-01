@@ -31,8 +31,9 @@ for (i in seq_along(raab.cause)) {
   
 }
 
-prev4[nrow(prev4)+1,2:7]<-colSums(prev4[,2:7])
-prev4$principal.cause[14]<-"Total"
+prev4[nrow(prev4)+1,c(2,4,6)]<-colSums(prev4[,c(2,4,6)])
+prev4[nrow(prev4),c(3,5,7)]<-1
+prev4$principal.cause[nrow(prev4)]<-"Total"
 
 prev4$cause_group_1[prev4$principal.cause=="poor_vision_cause_uncorrected_refractive_error" | prev4$principal.cause=="poor_vision_cause_aphakia_uncorrected" | prev4$principal.cause== "poor_vision_cause_cataract_untreated"]<-"A. Treatable (1, 2, 3)"
 prev4$cause_group_1[prev4$principal.cause=="poor_vision_cause_trachomatous_corneal_opacity" | prev4$principal.cause=="poor_vision_cause_other_corneal_opacity" | prev4$principal.cause=="poor_vision_cause_phthisis" | prev4$principal.cause=="poor_vision_cause_onchocerciasis"]<-"B. Preventable (PHC/PEC services) (5, 6, 7, 8)"
@@ -40,8 +41,8 @@ prev4$cause_group_1[prev4$principal.cause=="poor_vision_cause_cataract_surgical_
 prev4$cause_group_2[prev4$principal.cause=="poor_vision_cause_onchocerciasis" | prev4$principal.cause=="poor_vision_cause_glaucoma" | prev4$principal.cause=="poor_vision_cause_diabetic_retinopathy" | prev4$principal.cause=="poor_vision_cause_age_related_macular_degeneration" | prev4$principal.cause=="poor_vision_cause_other_posterior_segment_disease"]<-"E. Posterior segment disease (8, 9, 10, 11, 12)"
 
 prev4intag<-aggregate(prev4[,2:7],by=list(prev4$cause_group_1), FUN=sum,na.rm=T)
-prev4intag[nrow(prev4intag)+1,2:7]<-colSums(prev4intag[1:3,2:7])
-prev4intag$Group.1[4]<-"D. Avoidable (A + B + C)"
+prev4intag[nrow(prev4intag)+1,2:7]<-colSums(prev4intag[,2:7])
+prev4intag$Group.1[nrow(prev4intag)]<-"D. Avoidable (A + B + C)"
 
 pcts<-grep("pct",names(prev4intag))
 prev4intag[,pcts]<-round( prev4intag[,pcts] * 100, 1 )

@@ -1,4 +1,4 @@
-#RAAB7
+#RAAB6
 
 #v1 16/10/22 - RB
 
@@ -47,7 +47,6 @@ catcovdenom$total.n[catcovdenom$vi.level=="blind"]<-sum(raab$z_case_360,na.rm=T)
 catcovdenom$total.n[catcovdenom$vi.level=="severe.vi"]<-sum(raab$z_case_660,na.rm=T)
 catcovdenom$total.n[catcovdenom$vi.level=="moderate.vi"]<-sum(raab$z_case_618,na.rm=T)
 catcovdenom$total.n[catcovdenom$vi.level=="mild.vi"]<-sum(raab$z_case_612,na.rm=T)
-
 
 catcovdenom$female.pct[catcovdenom$vi.level=="blind"]<-sum(raab$z_case_360[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)
 catcovdenom$female.pct[catcovdenom$vi.level=="severe.vi"]<-sum(raab$z_case_660[raab$gender=="female"],na.rm=T)/sum(raab$vi.denom[raab$gender=="female"],na.rm=T)

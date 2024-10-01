@@ -28,6 +28,7 @@ prebigboi7<-dcast(melt(top_causes,id.var="principal.cause"),1~variable+principal
 prebigboi8<-dcast(melt(newtab4[,c("vi.level","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.male.n","extrapolated.female.n","extrapolated.total.n")], id.var="vi.level"), 1~variable+vi.level)
 
 prebigboi9<-dcast(melt(newtab5,id.vars="rec_metric"), 1~variable+rec_metric)
+names(prebigboi9)<-paste0(names(prebigboi9),"_pva")
 
 loc_vars<-data.frame(iso_2=raab_meta$iso_2,year_end=raab_meta$year_end,gbd_reg=raab_meta$gbd_reg,gbd_superreg=raab_meta$gbd_superreg)
 

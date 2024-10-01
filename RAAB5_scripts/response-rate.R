@@ -40,8 +40,9 @@ for (i in 1:length(Exam.Status)) {
 
 #Add totals row to bottom of table (for total count of female, male, all)
 
-sum1[nrow(sum1)+1,2:7]<-colSums(sum1[,2:7])
-sum1$Exam.Status<-as.character(c('Examined*', 'Refused', 'Incapable', 'Unavailable','Total'))
+sum1[nrow(sum1)+1,c(2,4,6)]<-colSums(sum1[,c(2,4,6)])
+sum1[nrow(sum1),c(3,5,7)]<-1
+sum1$Exam.Status[nrow(sum1)]<-"Total"
 
 pcts<-grep("pct",names(sum1))
 sum1[,pcts]<-round( sum1[,pcts] * 100, 1 )

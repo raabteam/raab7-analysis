@@ -43,11 +43,12 @@ for (i in 1:length(age.groups.tens)) {
 
 #Add totals row to bottom of table (for total count of female, male, all)
 
-asa1[nrow(asa1)+1,2:13]<-colSums(asa1[,2:13])
-asa1[5,1]<-"Total"
+asa1[nrow(asa1)+1,c(2,4:6,8:10,12:13)]<-colSums(asa1[,c(2,4:6,8:10,12:13)])
+asa1[nrow(asa1),c(3,7,11)]<-1
+asa1$age.groups.tens[nrow(asa1)]<-"Total"
 
 pcts <- grep("pct",names(asa1))
 asa1[,pcts] <- round( asa1[,pcts]*100, 1)
 
 cnts<-grep("\\.n",names(asa1))
-asa1[,cnts]<-format( asa1[,cnts], digits=1, big.interval = 3L, big.mark = " ", scientific=F )
+asa1[,cnts]<-format( asa1[,cnts], digits=1, scientific=F )

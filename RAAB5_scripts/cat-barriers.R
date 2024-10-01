@@ -20,21 +20,21 @@ barcalc$surgery_none_reason<-paste0("first_",barcalc$surgery_none_reason_1," sec
 names(surgery.bars)<-"Barrier"
 for (i in 1:nrow(surgery.bars))
 {
-  surgery.bars$total_count[i]<-sum(table(grep(surgery.bars$Barrier[i],barcalc$surgery_none_reason[barcalc$bilateral_operable_cataract==1])))
-  surgery.bars$male_count[i]<-sum(table(grep(surgery.bars$Barrier[i],barcalc$surgery_none_reason[barcalc$gender=="male" & barcalc$bilateral_operable_cataract==1])))
-  surgery.bars$female_count[i]<-sum(table(grep(surgery.bars$Barrier[i],barcalc$surgery_none_reason[barcalc$gender=="female" & barcalc$bilateral_operable_cataract==1])))
+  surgery.bars$total_n[i]<-sum(table(grep(surgery.bars$Barrier[i],barcalc$surgery_none_reason[barcalc$bilateral_operable_cataract==1])))
+  surgery.bars$male_n[i]<-sum(table(grep(surgery.bars$Barrier[i],barcalc$surgery_none_reason[barcalc$gender=="male" & barcalc$bilateral_operable_cataract==1])))
+  surgery.bars$female_n[i]<-sum(table(grep(surgery.bars$Barrier[i],barcalc$surgery_none_reason[barcalc$gender=="female" & barcalc$bilateral_operable_cataract==1])))
 }
 
-surgery.bars$total_percent<-round((surgery.bars$total_count/sum(surgery.bars$total_count,na.rm=T)*100),1)
-surgery.bars$male_percent<-round((surgery.bars$male_count/sum(surgery.bars$male_count,na.rm=T)*100),1)
-surgery.bars$female_percent<-round((surgery.bars$female_count/sum(surgery.bars$female_count,na.rm=T)*100),1)
+surgery.bars$total_pct<-surgery.bars$total_n/sum(surgery.bars$total_n,na.rm=T)
+surgery.bars$male_pct<-surgery.bars$male_n/sum(surgery.bars$male_n,na.rm=T)
+surgery.bars$female_pct<-surgery.bars$female_n/sum(surgery.bars$female_n,na.rm=T)
 
-surgery.bars[nrow(surgery.bars)+1,]<-NA
-surgery.bars[nrow(surgery.bars),1]<-"Total"
+surgery.bars[nrow(surgery.bars)+1,c(2:4)]<-colSums(surgery.bars[,c(2:4)])
+surgery.bars[nrow(surgery.bars),c(5:7)]<-1
+surgery.bars$Barrier[nrow(surgery.bars)]<-"Total"
 
-surgery.bars$Barrier<-recode_factor(surgery.bars$Barrier,surgery_none_reason_access = "Cannot access surgery", surgery_none_reason_cost = "Cost", surgery_none_reason_denied = "Surgery denied by provider", surgery_none_reason_fear = "Fear", surgery_none_reason_other = "Other", surgery_none_reason_unaware = "Unaware treatment possible", surgery_none_reason_unnecessary = "Felt not needed", Total = "Total")    
+pcts <- grep("pct",names(surgery.bars))
+surgery.bars[,pcts]<-round( surgery.bars[,pcts] * 100, 1 )
+surgery.bars[,pcts]<-format( surgery.bars[,pcts], nsmall=1 )
 
-sbcnts<-grep("count",names(surgery.bars))
-sbpcts<-grep("percent",names(surgery.bars))
-surgery.bars[nrow(surgery.bars),sbcnts]<-colSums(surgery.bars[,sbcnts],na.rm=T)
-surgery.bars[nrow(surgery.bars),sbpcts]<-100.0
+

@@ -31,7 +31,7 @@ for (i in 1:length(age.groups.tens)) {
   asa1$total.examined.pct[i] <- sum(raab$exam_status[raab$age.groups.tens==age.groups.tens[i]]=="exam_status_examined",na.rm=T) / sum(raab$exam_status=="exam_status_examined",na.rm=T)
 
   asa1$female.nonresponse.n[i] <- sum(raab$exam_status[raab$gender=="female" & raab$age.groups.tens==age.groups.tens[i]]!="exam_status_examined",na.rm=T) 
-  asa1$female.nonresponse.pct[i] <- sum(raab$exam_status[raab$gender=="female" & raab$age.groups.tens==age.groups.tens[i]]!="exam_status_examined") / length(raab$exam_status[raab$gender=="female"])
+  asa1$female.nonresponse.pct[i] <- sum(raab$exam_status[raab$gender=="female" & raab$age.groups.tens==age.groups.tens[i]]!="exam_status_examined",na.rm=T) / length(raab$exam_status[raab$gender=="female"])
   
   asa1$male.nonresponse.n[i] <- sum(raab$exam_status[raab$gender=="male" & raab$age.groups.tens==age.groups.tens[i]]!="exam_status_examined",na.rm=T) 
   asa1$male.nonresponse.pct[i] <- sum(raab$exam_status[raab$gender=="male" & raab$age.groups.tens==age.groups.tens[i]]!="exam_status_examined",na.rm=T) / length(raab$exam_status[raab$gender=="male"])
@@ -43,8 +43,9 @@ for (i in 1:length(age.groups.tens)) {
 
 #Add totals row to bottom of table (for total count of female, male, all)
 
-asa1[nrow(asa1)+1,2:13]<-colSums(asa1[,2:13])
-asa1[5,1]<-"Total"
+asa1[nrow(asa1)+1,c(2,4:6,8:10,12:13)]<-colSums(asa1[,c(2,4:6,8:10,12:13)])
+asa1[nrow(asa1),c(3,7,11)]<-1
+asa1$age.groups.tens[nrow(asa1)]<-"Total"
 
 pcts <- grep("pct",names(asa1))
 asa1[,pcts] <- round( asa1[,pcts] * 100, 1)
