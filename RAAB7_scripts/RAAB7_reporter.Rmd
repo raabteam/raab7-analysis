@@ -39,8 +39,8 @@ raab$date<-as.Date(raab$date)
 pop_merged<-read.csv(here("data","population.csv"),check.names=F,na.strings=c("","NA"))
 popfives<-pop_merged[pop_merged$raab_id==ID,]
 
-meta<-read.csv(here("data","meta.csv"),check.names=F,na.strings=c("","NA"))
-# meta<-read_xlsx(here("data","meta.xlsx"), sheet=1, na=c("",NA))
+# meta<-read.csv(here("data","meta.csv"),check.names=F,na.strings=c("","NA"))
+meta<-read_xlsx(here("data","meta.xlsx"), sheet=1, na=c("",NA))
 
 vars_to_drop<-c("map_complete","exclude_repo","repo_meta","repo_data","ecsc_consent","pi_email1","pi_email2","pi_email1 active","pi_int_auth_grp","trainer_email1","trainer_email2")
 
@@ -1023,11 +1023,11 @@ write.table(outc6a.nice.names,here("outputs", ID, "summary", "data", "cat11.csv"
 
 names(outc6a.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
 
-knitr::kable(outc6a.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcomes (PVA) in male eyes by place of surgery (CAT11)",align='lcccccccccc') %>%
+knitr::kable(outc6a.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcome (PVA) in male eyes by place of surgery (CAT11)",align='lcccccccccc') %>%
   kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(3,hline_after=T) %>%
-  add_header_above(c("Post-surgical VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T)
+  add_header_above(c("Post-operative VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T)
 
 ```
 
@@ -1045,11 +1045,11 @@ write.table(outc6b.nice.names,here("outputs", ID, "summary", "data", "cat12.csv"
 
 names(outc6b.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
 
-knitr::kable(outc6b.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcomes (PVA) in female eyes by place of surgery (CAT12)",align='lcccccccccc') %>%
+knitr::kable(outc6b.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcome (PVA) in female eyes by place of surgery (CAT12)",align='lcccccccccc') %>%
   kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   row_spec(3,hline_after=T) %>%
-  add_header_above(c("Post-surgical VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T)
+  add_header_above(c("Post-operative VA" = 1, "Gov. Hosp." = 2, "Vol. Hosp." = 2, "Priv. Hosp." = 2, "Camp Improv." = 2, "Trad." = 2),bold=T)
 
 ```
 
@@ -1064,6 +1064,34 @@ Priv. Hosp. = Private hospital
 Camp Improv. = Improvised surgical camp
 
 Trad. = Traditional setting
+
+### Outcomes by time since surgery
+
+```{r cat.oc.time, echo=FALSE}
+
+source(here("RAAB7_scripts","surg-time-outcome_RAAB7.R"))
+
+cat.oc.time.nice.names<-male[,c("oc","less2.n.eyes","less2.pct.eyes","more2.n.eyes","more2.pct.eyes","more4.n.eyes","more4.pct.eyes","more6.n.eyes","more6.pct.eyes","more8.n.eyes","more8.pct.eyes")]
+
+row.order<-c("good.oc","borderline.oc","poor.oc")
+cat.oc.time.nice.names<-cat.oc.time.nice.names %>% arrange(match(cat.oc.time.nice.names$oc,row.order))
+cat.oc.time.nice.names$oc[cat.oc.time.nice.names$oc=="good.oc"]<-"Good (6/12)"
+cat.oc.time.nice.names$oc[cat.oc.time.nice.names$oc=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
+cat.oc.time.nice.names$oc[cat.oc.time.nice.names$oc=="poor.oc"]<-"Poor (<6/60)"
+
+write.table(cat.oc.time.nice.names,here("outputs", ID, "summary", "data", "cat13.csv"),row.names=F,col.names=T,sep=",")
+
+names(cat.oc.time.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
+
+knitr::kable(cat.oc.time.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcome (PVA) in all eyes by time since surgery in years (CAT13)",align='lcccccccccc') %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  row_spec(3,hline_after=T) %>%
+  add_header_above(c("Post-operative VA" = 1, "<2 yrs" = 2, "≥2 but <4 yrs" = 2, "≥4 but <6 yrs" = 2, "≥6 but <8 yrs" = 2, "≥8 yrs" = 2),bold=T)
+
+```
+
+Post-operative VA is expected to be better for eyes operated on more recently. Participants who received surgery many years prior to the survey may have developed post-operative sequelae, or co-morbidities after surgery unrelated to their treatment. They may also have been operated on with techniques that do not reflect current practice.
 
 \newpage
 
