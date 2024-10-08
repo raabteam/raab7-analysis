@@ -4,7 +4,7 @@
 #v2 01/09/21 - RB
 #v3 17/01/22 - IM
 
-# eREC: Crude calculation using the gold standard definition
+# eREC for distance: Crude calculation using the gold standard definition
 
 # aa = Individuals who present with spectacles or contact lenses for distance and whose UCVA is <6/12 in the better eye and CVA is 6/12 in the better eye (Met Need);
 # bb = Individuals who present with spectacles or contact lenses for distance and whose UCVA is <6/12 in the better eye and whose CVA is <6/12 in the better eye, but who improve to 6/12 on PinVA (Undermet Need);
