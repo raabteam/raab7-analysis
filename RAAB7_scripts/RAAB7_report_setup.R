@@ -518,7 +518,7 @@ raab <- raab %>% mutate(
   ff_case = case_when(raab$ee_case==0 & raab$better.eye.pinva==0.3 & raab$spectacles_used_near==TRUE & raab$binocular_near_uncorrected_result=="acuity_evaluation_result_fail" & raab$binocular_near_corrected_result=="acuity_evaluation_result_fail" ~ 1, TRUE ~ 0),
   gg_case = case_when(raab$better.eye.pinva==0.3 & raab$spectacles_used_near==FALSE & raab$binocular_near_uncorrected_result=="acuity_evaluation_result_fail" ~ 1, TRUE ~ 0),
   
-  hh_case = case_when(raab$binocular_near_uncorrected_result=="acuity_evaluation_result_pass" ~ 1, TRUE ~ 0)
+  hh_case = case_when(raab$better.eye.pinva==0.3 & raab$binocular_near_uncorrected_result=="acuity_evaluation_result_pass" ~ 1, TRUE ~ 0)
 )
 }else{raab$near.vi<-NA}
 
