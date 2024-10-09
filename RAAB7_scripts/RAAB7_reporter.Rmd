@@ -1344,7 +1344,7 @@ need_fig_cols<-brewer.pal(4,"Spectral")
 
 par(mar=c(1,10,1,1))
 
-treemap(near.re.need,index="need",vSize="total.extrapolated.n",type="index",palette = need_fig_cols, position.legend="right", fontsize.title = 8, title="The need for near refractive error correction in the population 50 years and older")
+treemap(near.re.need,index="need",vSize="total.extrapolated.n",type="index",palette = need_fig_cols, position.legend="right", fontsize.title = 8, title="The need for near refractive error correction in the population 50 years and older with distance pinhole VA ≥6/12")
 
 ```
 
