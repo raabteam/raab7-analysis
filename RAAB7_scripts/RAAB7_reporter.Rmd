@@ -14,6 +14,9 @@ library(tinytex)
 library(kableExtra)
 library(RColorBrewer)
 
+library(RCurl)
+library(jsonlite) 
+
 library(tidyverse)
 library(stringr)
 library(treemap)
@@ -94,6 +97,35 @@ url_string<-gsub(" ", "-", tolower(url_string))
 
 # meta_report$identifier<-paste0("https://www.raab.world/survey/",url_string,"/report")
 # meta_dataset$identifier<-paste0("https://www.raab.world/survey/",url_string,"/data")
+
+#############################################
+#######API request code 15.10.24 AH #########
+#############################################
+
+try({
+  
+embargo_date<-as.Date(str_sub(raab_meta$embargo_date, 1,10))
+
+if (Sys.Date() > embargo_date){
+
+##############################################
+
+source(here("RAAB7_scripts","raab_functions.R"))
+API_username_password<-read.csv(here("data","API_username_password.csv"),check.names=F,na.strings=c("","NA"))
+username<-API_username_password$username
+password<-API_username_password$password
+basic_auth<-API_username_password$basic_auth
+raabID<-ID
+
+auth_token <- generateAuthToken(username, password, basic_auth)
+response <- performApiRequest(auth_token, raabID) 
+
+meta_report$identifier<-paste0(response,"/report")
+meta_dataset$identifier<-paste0(response, "/data")
+
+}
+  
+})
 
 meta_report$doi<-paste0("10.17037/RAABREPORT.",ID)
 meta_dataset$doi<-paste0("10.17037/RAABDATASET.",ID)
@@ -1092,6 +1124,34 @@ knitr::kable(cat.oc.time.nice.names, booktabs=T, linesep = "", caption = "Post-o
 ```
 
 Post-operative VA is expected to be better for eyes operated on more recently. Participants who received surgery many years prior to the survey may have developed post-operative sequelae, or co-morbidities after surgery unrelated to their treatment. They may also have been operated on with techniques that do not reflect current practice.
+
+### Causes of borderline and poor post-operative visual acuity outcomes
+
+```{r causes.PO.VA, echo=FALSE}
+
+source(here("RAAB7_scripts","cause_post_operative_VA_RAAB7.R"))
+
+causes.PO.VA.nice.names<-causes.PO.VA
+
+row.order<-c("borderline.oc","poor.oc")
+causes.PO.VA.nice.names<-causes.PO.VA.nice.names %>% arrange(match(causes.PO.VA.nice.names$oc.levels,row.order))
+causes.PO.VA.nice.names$oc.levels[causes.PO.VA.nice.names$oc.levels=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
+causes.PO.VA.nice.names$oc.levels[causes.PO.VA.nice.names$oc.levels=="poor.oc"]<-"Poor (<6/60)"
+
+write.table(causes.PO.VA.nice.names,here("outputs", ID, "summary", "data", "cat14.csv"),row.names=F,col.names=T,sep=",")
+
+names(causes.PO.VA.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
+
+knitr::kable(causes.PO.VA.nice.names, booktabs=T, linesep = "", caption = "Causes of post-operative presenting VA <6/12 in cataract operated eyes with borderline and poor outcomes (CAT14)",align='lcccccccccc') %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  row_spec(3,hline_after=T) %>%
+  add_header_above(c("" = 1, "Case selection" = 2, "Intraoperative complications" = 2, "PCO" = 2, "Other sequelae" = 2, "Refractive error" = 2),bold=T)
+
+```
+
+
+Case selection implies pre-existing co-morbidity and no improvement in VA with surgery. Refractive error accounts for residual refractive error defined by improvement to 6/12 with pinhole.  
 
 \newpage
 
