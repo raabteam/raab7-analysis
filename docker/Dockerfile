@@ -21,7 +21,10 @@ RUN R -e ' \
     install_version("rmarkdown", version = "2.19"); \
     install_version("stringr", version = "1.5.0"); \
     install_version("tidyverse", version = "1.3.2"); \
-    install_version("tinytex", version = "0.43");'
+    install_version("tinytex", version = "0.43"); \
+    install_version("jsonlite", version = "1.8.8"); \
+    install_version("RCurl", version = "1.98-1.16"); '
+'
 
 RUN R -e ' \
     require(tinytex); \
