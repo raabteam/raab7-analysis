@@ -141,3 +141,57 @@ prop.age.adjust<-function(pop.subtab,raab.subtab,numerator.subpop,denominator.su
 
 lci_0<-function(x){if(!is.na(x) & x < 0){x <- 0} else {x <- x}}
 hci_100<-function(x){if(!is.na(x) & x > 100){x <- 100} else {x <- x}}
+
+# Function to generate the auth token
+generateAuthToken <- function(username, password, basic_auth) {
+  # Headers for the authentication request
+  headers <- c(
+    "Authorization" = paste("Basic", basic_auth),
+    "Content-Type" = "application/json"
+  )
+  
+  # Parameters for the authentication request
+  params <- toJSON(list(
+    grant_type = "password",
+    username = username,
+    password = password
+  ), auto_unbox = TRUE)
+  
+  # Perform the authentication request
+  res <- postForm("https://www.raab.world/api/access_token", 
+                  .opts=list(postfields = params, httpheader = headers, followlocation = TRUE), 
+                  style = "httppost")
+  
+  # Parse the response and extract the token
+  res_parsed <- fromJSON(res)
+  auth_token <- res_parsed$access_token
+  
+  return(auth_token)
+}
+
+# Function to perform the API request using the generated auth token
+performApiRequest <- function(auth_token, raabID) {
+  # Dynamic headers
+  headers <- c(
+    "Authorization" = paste("Bearer", auth_token),
+    "Content-Type" = "application/json"
+  )
+  
+  # Dynamic parameters
+  params <- sprintf(
+    '{"query":"query readSurveyByRaabID($raabID: String!) {\\n    readSurveyByRaabID(raab_id: $raabID) {\\n        title\\n        page_url\\n    }   \\n}","variables":{"raabID":"%s"}}', 
+    raabID
+  )
+  
+  # Perform the API request
+  res <- getURL(
+    "https://www.raab.world/api/graphql", 
+    .opts=list(httpheader = headers, postfields = params, followlocation = TRUE)
+  )
+  
+  # Parse the JSON response
+  res_parsed <- fromJSON(res) # Extract the page_url
+  page_url <- res_parsed$data$readSurveyByRaabID$page_url
+  # Return the page_url
+  return(page_url)
+}
