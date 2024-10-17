@@ -1151,7 +1151,11 @@ knitr::kable(causes.PO.VA.nice.names, booktabs=T, linesep = "", caption = "Cause
 ```
 
 
-Case selection implies pre-existing co-morbidity and no improvement in VA with surgery. Refractive error accounts for residual refractive error defined by improvement to 6/12 with pinhole.  
+Case selection describes pre-existing co-morbidity (e.g. glaucoma or macular disease) and no improvement in VA with cataract surgery. Posterior capsular opacification (PCO) is a common complication (sequelae) that develops in the years after cataract surgery. ‘Other sequelae’ are any other post-operative complications (excluding PCO) that developed after surgery, such as retinal detachment. Refractive error accounts for residual refractive error and is defined by an improvement in UCVA <6/12 or CVA <6/12 to 6/12 with pinhole.  
+
+PCO is reported separately to other longer-term sequelae as both it and residual refractive error are amenable to relatively simple treatment with spectacles and YAG laser capsulotomy respectively. Strategies to address these two causes of post-operative vision loss will improve cataract surgery outcomes in the population. 
+
+Note: In the absence of clinical records, determining the cause of borderline or poor outcomes via participant-reported history will be subject to recall bias, especially in surgeries that took place a long time ago.   
 
 \newpage
 
