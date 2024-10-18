@@ -1103,7 +1103,7 @@ Trad. = Traditional setting
 
 source(here("RAAB7_scripts","surg-time-outcome_RAAB7.R"))
 
-cat.oc.time.nice.names<-male[,c("oc","less2.n.eyes","less2.pct.eyes","more2.n.eyes","more2.pct.eyes","more4.n.eyes","more4.pct.eyes","more6.n.eyes","more6.pct.eyes","more8.n.eyes","more8.pct.eyes")]
+cat.oc.time.nice.names<-cat.oc.time[,c("oc.levels","less2.n.eyes","less2.pct.eyes","more2.n.eyes","more2.pct.eyes","more4.n.eyes","more4.pct.eyes","more6.n.eyes","more6.pct.eyes","more8.n.eyes","more8.pct.eyes")]
 
 row.order<-c("good.oc","borderline.oc","poor.oc")
 cat.oc.time.nice.names<-cat.oc.time.nice.names %>% arrange(match(cat.oc.time.nice.names$oc,row.order))
