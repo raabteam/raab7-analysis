@@ -576,7 +576,7 @@ knitr::kable(crude.near.re.prev.nice.names,booktabs=T, linesep = "",caption="Cru
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='3.5cm') %>%
   column_spec(c(4,7,10),width='1.5cm') %>%
-  add_header_above(c(" " = 1, "Male" = 3, "Female" = 3, "Total" = 3),bold=T) 
+  add_header_above(c(" " = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) 
 
 ```
 
@@ -603,7 +603,7 @@ knitr::kable(adj.near.re.prev.nice.names,booktabs=T, linesep = "",caption="Adjus
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='1.5cm') %>%
   column_spec(c(4,7,10),width='1.5cm') %>%
-  add_header_above(c(" " = 1, "Male" = 3, "Female" = 3, "Total" = 3),bold=T) 
+  add_header_above(c(" " = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) 
 
 ```
 
