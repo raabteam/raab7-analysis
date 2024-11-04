@@ -53,11 +53,18 @@ if(sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0){
   prebigboi11<-dcast(melt(newtab7,id.vars="rec_metric"), 1~variable+rec_metric)
   names(prebigboi11)<-paste0(names(prebigboi11),"_ucva")
   
-  bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi5,prebigboi6,prebigboi7,prebigboi8,prebigboi9,prebigboi10,prebigboi11,loc_vars))  
+}
+
+#DR if used
+if(sum(!is.na(DR_check$dr_diabetes_blood_consent)==TRUE)>0){
   
-  }else{
+  dr.last.exam.table_12<-dr.last.exam.table[dr.last.exam.table$last.dr.exam=="dr_diabetic_last_exam_0_12_months",]
+  prebigboi12<-dcast(melt(dr.last.exam.table_12, id.vars="last.dr.exam"), 1~variable+last.dr.exam)
   
-  bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi5,prebigboi6,prebigboi7,prebigboi8,prebigboi9,loc_vars))}
+}
+
+bigboiTMP<-as.data.frame(Reduce("cbind", mget(ls(pattern = "prebigboi*"))))
+bigboi<-as.data.frame(cbind(bigboiTMP,loc_vars))
 
 bigboi[bigboi=="*"]<-NA
 
