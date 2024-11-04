@@ -74,5 +74,4 @@ names(bigboi)[1]<-"raab_id"
 spots<-grep("^\\.",names(bigboi))
 bigboi<-bigboi[,-spots]
 
-#test
 
