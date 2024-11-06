@@ -111,11 +111,10 @@ if (Sys.Date() > embargo_date){
 ##############################################
 
 source(here("RAAB7_scripts","raab_functions.R"))
-API_username_password<-read.csv(here("data","API_username_password.csv"),check.names=F,na.strings=c("","NA"))
-username<-API_username_password$username
-password<-API_username_password$password
-basic_auth<-API_username_password$basic_auth
 raabID<-ID
+username <- Sys.getenv("USERNAME")
+password <- Sys.getenv("PASSWORD")
+basic_auth <- Sys.getenv("BASIC_AUTH")
 
 auth_token <- generateAuthToken(username, password, basic_auth)
 response <- performApiRequest(auth_token, raabID) 
