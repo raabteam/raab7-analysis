@@ -34,8 +34,8 @@ for (i in 1:length(causes.po.va$oc.levels)) {
   causes.po.va$intraoperative.complications.n[i] <- sum(raab$postop.eyes.right.denom[raab$right.oc.levels == oc.tab$right.oc.levels[i] & raab$surgery_op_comp.re == 1], na.rm = TRUE) +
     sum(raab$postop.eyes.left.denom[raab$left.oc.levels == oc.tab$left.oc.levels[i] & raab$surgery_op_comp.le == 1], na.rm = TRUE)
   
-  causes.po.va$pco.n[i] <- sum(raab$postop.eyes.right.denom[raab$right.oc.levels == oc.tab$right.oc.levels[i] & raab$surgery_PCO.re == 1], na.rm = TRUE) +
-    sum(raab$postop.eyes.left.denom[raab$left.oc.levels == oc.tab$left.oc.levels[i] & raab$surgery_PCO.le == 1], na.rm = TRUE)
+  causes.po.va$pco.n[i] <- sum(raab$postop.eyes.right.denom[raab$right.oc.levels == oc.tab$right.oc.levels[i] & raab$surgery_pco.re == 1], na.rm = TRUE) +
+    sum(raab$postop.eyes.left.denom[raab$left.oc.levels == oc.tab$left.oc.levels[i] & raab$surgery_pco.le == 1], na.rm = TRUE)
   
   causes.po.va$other.sequelae.n[i] <- sum(raab$postop.eyes.right.denom[raab$right.oc.levels == oc.tab$right.oc.levels[i] & raab$surgery_other_seq.re == 1], na.rm = TRUE) +
     sum(raab$postop.eyes.left.denom[raab$left.oc.levels == oc.tab$left.oc.levels[i] & raab$surgery_other_seq.le == 1], na.rm = TRUE)
