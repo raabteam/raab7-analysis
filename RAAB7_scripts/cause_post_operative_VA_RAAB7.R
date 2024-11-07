@@ -1,52 +1,62 @@
 #Causes of post-operative presenting VA <6/12 in cataract operated eyes with borderline and poor outcomes 
 #AH 15.10.24
+#IM 07.11.24 modified to give row pct instead of col pct 
 
-causes.PO.VA<-data.frame(oc.tab$oc.levels[c(1,2)])
-causes.PO.VA[,2:11] <- NA
+causes.po.va <- data.frame(oc.tab$oc.levels[c(1,2)])
+causes.po.va[,2:13] <- NA
 
-names(causes.PO.VA) <- c("oc.levels",
-                        
-                        "Case.selection.n",
-                        "Case.selection.pct",
-                        
-                        "Intraoperative.complications.n",
-                        "Intraoperative.complications.pct",
-                        
-                        "PCO.n",
-                        "PCO.pct",
-                        
-                        "Other.sequelae.n",
-                        "Other.sequelae.pct",
-                        
-                        "Refractive.error.n",
-                        "Refractive.error.pct")
+names(causes.po.va) <- c("oc.levels",
+                         
+                         "case.selection.n",
+                         "case.selection.pct",
+                         
+                         "intraoperative.complications.n",
+                         "intraoperative.complications.pct",
+                         
+                         "pco.n",
+                         "pco.pct",
+                         
+                         "other.sequelae.n",
+                         "other.sequelae.pct",
+                         
+                         "refractive.error.n",
+                         "refractive.error.pct",
+                         
+                         "total.n",
+                         "total.pct")
 
 
-for (i in 1:length(causes.PO.VA$oc.levels)) 
+for (i in 1:length(causes.po.va$oc.levels)) {
   
-{
+  causes.po.va$case.selection.n[i] <- sum(raab$postop.eyes.right.denom[raab$right.oc.levels == oc.tab$right.oc.levels[i] & raab$surgery_ocular_comorbidity.re == 1], na.rm = TRUE) +
+    sum(raab$postop.eyes.left.denom[raab$left.oc.levels == oc.tab$left.oc.levels[i] & raab$surgery_ocular_comorbidity.le == 1], na.rm = TRUE)
   
-  causes.PO.VA$Case.selection.n[i]<-sum(raab$postop.eyes.right.denom[raab$right.oc.levels==oc.tab$right.oc.levels[i] & raab$surgery_ocular_comorbidity.re==1],na.rm=T) +sum(raab$postop.eyes.left.denom[raab$left.oc.levels==oc.tab$left.oc.levels[i] & raab$surgery_ocular_comorbidity.le==1],na.rm=T)
-  causes.PO.VA$Case.selection.pct[i]<-(causes.PO.VA$Case.selection.n[i] / (sum(raab$postop.eyes.right.denom[raab$surgery_ocular_comorbidity.re==1], na.rm=T)+sum(raab$postop.eyes.left.denom[raab$surgery_ocular_comorbidity.le==1], na.rm=T)))
+  causes.po.va$intraoperative.complications.n[i] <- sum(raab$postop.eyes.right.denom[raab$right.oc.levels == oc.tab$right.oc.levels[i] & raab$surgery_op_comp.re == 1], na.rm = TRUE) +
+    sum(raab$postop.eyes.left.denom[raab$left.oc.levels == oc.tab$left.oc.levels[i] & raab$surgery_op_comp.le == 1], na.rm = TRUE)
   
-  causes.PO.VA$Intraoperative.complications.n[i]<-sum(raab$postop.eyes.right.denom[raab$right.oc.levels==oc.tab$right.oc.levels[i] & raab$surgery_op_comp.re==1],na.rm=T) +sum(raab$postop.eyes.left.denom[raab$left.oc.levels==oc.tab$left.oc.levels[i] & raab$surgery_op_comp.le==1],na.rm=T)
-  causes.PO.VA$Intraoperative.complications.pct[i]<-(causes.PO.VA$Intraoperative.complications.n[i] / (sum(raab$postop.eyes.right.denom[raab$surgery_op_comp.re==1], na.rm=T)+sum(raab$postop.eyes.left.denom[raab$surgery_op_comp.le==1], na.rm=T)))
+  causes.po.va$pco.n[i] <- sum(raab$postop.eyes.right.denom[raab$right.oc.levels == oc.tab$right.oc.levels[i] & raab$surgery_PCO.re == 1], na.rm = TRUE) +
+    sum(raab$postop.eyes.left.denom[raab$left.oc.levels == oc.tab$left.oc.levels[i] & raab$surgery_PCO.le == 1], na.rm = TRUE)
   
-  causes.PO.VA$PCO.n[i]<-sum(raab$postop.eyes.right.denom[raab$right.oc.levels==oc.tab$right.oc.levels[i] & raab$surgery_PCO.re==1],na.rm=T) +sum(raab$postop.eyes.left.denom[raab$left.oc.levels==oc.tab$left.oc.levels[i] & raab$surgery_PCO.le==1],na.rm=T)
-  causes.PO.VA$PCO.pct[i]<-(causes.PO.VA$PCO.n[i] / (sum(raab$postop.eyes.right.denom[raab$surgery_PCO.re==1], na.rm=T)+sum(raab$postop.eyes.left.denom[raab$surgery_PCO.le==1], na.rm=T)))
+  causes.po.va$other.sequelae.n[i] <- sum(raab$postop.eyes.right.denom[raab$right.oc.levels == oc.tab$right.oc.levels[i] & raab$surgery_other_seq.re == 1], na.rm = TRUE) +
+    sum(raab$postop.eyes.left.denom[raab$left.oc.levels == oc.tab$left.oc.levels[i] & raab$surgery_other_seq.le == 1], na.rm = TRUE)
   
-  causes.PO.VA$Other.sequelae.n[i]<-sum(raab$postop.eyes.right.denom[raab$right.oc.levels==oc.tab$right.oc.levels[i] & raab$surgery_other_seq.re==1],na.rm=T) +sum(raab$postop.eyes.left.denom[raab$left.oc.levels==oc.tab$left.oc.levels[i] & raab$surgery_other_seq.le==1],na.rm=T)
-  causes.PO.VA$Other.sequelae.pct[i]<-(causes.PO.VA$Other.sequelae.n[i] / (sum(raab$postop.eyes.right.denom[raab$surgery_other_seq.re==1], na.rm=T)+sum(raab$postop.eyes.left.denom[raab$surgery_other_seq.le==1], na.rm=T)))
+  causes.po.va$refractive.error.n[i] <- sum(raab$postop.eyes.right.denom[raab$right.oc.levels == oc.tab$right.oc.levels[i] & raab$surgery_ref_err.re == 1], na.rm = TRUE) +
+    sum(raab$postop.eyes.left.denom[raab$left.oc.levels == oc.tab$left.oc.levels[i] & raab$surgery_ref_err.le == 1], na.rm = TRUE)
   
-  causes.PO.VA$Refractive.error.n[i]<-sum(raab$postop.eyes.right.denom[raab$right.oc.levels==oc.tab$right.oc.levels[i] & raab$surgery_ref_err.re==1],na.rm=T) +sum(raab$postop.eyes.left.denom[raab$left.oc.levels==oc.tab$left.oc.levels[i] & raab$surgery_ref_err.le==1],na.rm=T)
-  causes.PO.VA$Refractive.error.pct[i]<-(causes.PO.VA$Refractive.error.n[i] / (sum(raab$postop.eyes.right.denom[raab$surgery_ref_err.re==1], na.rm=T)+sum(raab$postop.eyes.left.denom[raab$surgery_ref_err.le==1], na.rm=T)))
+
+  row_total <- sum(causes.po.va[i, c("case.selection.n", "intraoperative.complications.n", "pco.n", "other.sequelae.n", "refractive.error.n")], na.rm = TRUE)
+  causes.po.va$total.n[i] <- row_total 
+  
+  causes.po.va$case.selection.pct[i] <- (causes.po.va$case.selection.n[i] / row_total) * 100
+  causes.po.va$intraoperative.complications.pct[i] <- (causes.po.va$intraoperative.complications.n[i] / row_total) * 100
+  causes.po.va$pco.pct[i] <- (causes.po.va$pco.n[i] / row_total) * 100
+  causes.po.va$other.sequelae.pct[i] <- (causes.po.va$other.sequelae.n[i] / row_total) * 100
+  causes.po.va$refractive.error.pct[i] <- (causes.po.va$refractive.error.n[i] / row_total) * 100
+  causes.po.va$total.pct[i] <- 100
 }
 
+causes.po.va.pcts <- grep("pct", names(causes.po.va))
+causes.po.va[, causes.po.va.pcts] <- round(causes.po.va[, causes.po.va.pcts], 1)
+causes.po.va[, causes.po.va.pcts] <- format(causes.po.va[, causes.po.va.pcts], nsmall = 1)
 
-causes.PO.VA[nrow(causes.PO.VA)+1,c(2,4,6,8,10)]<-colSums(causes.PO.VA[,c(2,4,6,8,10)])
-causes.PO.VA[nrow(causes.PO.VA),c(3,5,7,9,11)]<-1
-causes.PO.VA$oc.levels[nrow(causes.PO.VA)]<-"Total"
 
-nt4.pcts<-grep("pct",names(causes.PO.VA))
-causes.PO.VA[,nt4.pcts]<-round(causes.PO.VA[,nt4.pcts] * 100,1)
-causes.PO.VA[,nt4.pcts]<-format(causes.PO.VA[,nt4.pcts], nsmall=1)
