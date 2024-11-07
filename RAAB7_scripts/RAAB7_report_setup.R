@@ -672,9 +672,11 @@ raab <- raab %>% mutate(
   surgery_op_comp.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_operative_complications" ~ 1, TRUE ~ 0),
   surgery_ref_err.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_uncorrected_refractive_error" ~ 1, TRUE ~ 0),
   surgery_ref_err.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_uncorrected_refractive_error" ~ 1, TRUE ~ 0),
-  surgery_PCO.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_right=="lens_status_pseudophakia_with_pco" ~ 1, TRUE ~ 0),
-  surgery_PCO.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_left=="lens_status_pseudophakia_with_pco" ~ 1, TRUE ~ 0),
+  surgery_pco.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_right=="lens_status_pseudophakia_with_pco" ~ 1, TRUE ~ 0),
+  surgery_pco.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_left=="lens_status_pseudophakia_with_pco" ~ 1, TRUE ~ 0),
   surgery_other_seq.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_right!="lens_status_pseudophakia_with_pco"  ~ 1, TRUE ~ 0),
-  surgery_other_seq.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_left!="lens_status_pseudophakia_with_pco" ~ 1, TRUE ~ 0))
+  surgery_other_seq.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_left!="lens_status_pseudophakia_with_pco" ~ 1, TRUE ~ 0)
+  
+  )
 
 
