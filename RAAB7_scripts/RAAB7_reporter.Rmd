@@ -49,9 +49,7 @@ vars_to_drop<-c("map_complete","exclude_repo","repo_meta","repo_data","ecsc_cons
 
 raab_meta<-meta[meta$raab_id==ID,!(names(meta) %in% vars_to_drop)]
 # Check if row of NAs included, remove if there
-if (all(is.na(raab_meta[nrow(raab_meta), ]))) {
-  raab_meta <- raab_meta[-nrow(raab_meta), ]
-}
+raab_meta <- raab_meta[rowSums(is.na(raab_meta)) != ncol(raab_meta), ]
 
 meta_report<-data.frame(
   title=NA,
