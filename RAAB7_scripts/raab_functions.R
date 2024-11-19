@@ -143,6 +143,7 @@ lci_0<-function(x){if(!is.na(x) & x < 0){x <- 0} else {x <- x}}
 hci_100<-function(x){if(!is.na(x) & x > 100){x <- 100} else {x <- x}}
 
 # Function to generate the auth token
+
 generateAuthToken <- function(username, password, basic_auth) {
   # Headers for the authentication request
   headers <- c(
@@ -157,41 +158,89 @@ generateAuthToken <- function(username, password, basic_auth) {
     password = password
   ), auto_unbox = TRUE)
   
-  # Perform the authentication request
-  res <- postForm("https://www.raab.world/api/access_token", 
-                  .opts=list(postfields = params, httpheader = headers, followlocation = TRUE), 
-                  style = "httppost")
+  # Debugging: Print the params and headers for visibility
+  print("Headers for authentication:")
+  print(headers)
+  print("Parameters for authentication:")
+  print(params)
   
-  # Parse the response and extract the token
-  res_parsed <- fromJSON(res)
-  auth_token <- res_parsed$access_token
-  
-  return(auth_token)
+  # Perform the authentication request with error handling
+  tryCatch({
+    # Perform the POST request to obtain the authentication token
+    res <- postForm("https://www.raab.world/api/access_token", 
+                    .opts = list(postfields = params, 
+                                 httpheader = headers, 
+                                 followlocation = TRUE), 
+                    style = "httppost")
+    
+    # Debugging: Check the response
+    print("Response from authentication request:")
+    print(res)
+    
+    # Parse the response (assuming it's JSON)
+    res_parsed <- fromJSON(res)
+    
+    # Check if the access_token exists in the response
+    if (!is.null(res_parsed$access_token)) {
+      return(res_parsed$access_token)
+    } else {
+      stop("Authentication failed: No access token returned. Please check your credentials.", call. = FALSE)
+    }
+    
+  }, error = function(e) {
+    # Check if it's a 401 error (unauthorized)
+    if (grepl("401", e$message)) {
+      stop("Authentication failed: Invalid credentials. Please check your username, password, or basic authentication token.", call. = FALSE)
+    } else if (grepl("403", e$message)) {
+      # Handle Forbidden error (e.g., insufficient permissions)
+      stop("Authentication failed: You do not have permission to access this resource. Please check your credentials or permissions.", call. = FALSE)
+    } else {
+      # Handle other errors
+      stop(paste("An unexpected error occurred during authentication. Please check your credentials."), call. = FALSE)
+    }
+  })
 }
 
 # Function to perform the API request using the generated auth token
 performApiRequest <- function(auth_token, raabID) {
-  # Dynamic headers
+  # Headers for the API request
   headers <- c(
     "Authorization" = paste("Bearer", auth_token),
     "Content-Type" = "application/json"
   )
   
-  # Dynamic parameters
+  # Parameters for the API request (GraphQL query)
   params <- sprintf(
     '{"query":"query readSurveyByRaabID($raabID: String!) {\\n    readSurveyByRaabID(raab_id: $raabID) {\\n        title\\n        page_url\\n    }   \\n}","variables":{"raabID":"%s"}}', 
     raabID
   )
   
+  # Debugging: Print the params and headers for visibility
+  print("Headers for API request:")
+  print(headers)
+  print("Parameters for API request:")
+  print(params)
+  
   # Perform the API request
   res <- getURL(
     "https://www.raab.world/api/graphql", 
-    .opts=list(httpheader = headers, postfields = params, followlocation = TRUE)
+    .opts = list(httpheader = headers, postfields = params, followlocation = TRUE)
   )
   
+  # Debugging: Check the response
+  print("Response from API request:")
+  print(res)
+  
   # Parse the JSON response
-  res_parsed <- fromJSON(res) # Extract the page_url
-  page_url <- res_parsed$data$readSurveyByRaabID$page_url
+  res_parsed <- fromJSON(res)  # This assumes the response is in JSON format
+  
+  # Extract the page_url from the response
+  if (!is.null(res_parsed$data$readSurveyByRaabID$page_url)) {
+    page_url <- res_parsed$data$readSurveyByRaabID$page_url
+  } else {
+    stop("Error: The expected 'page_url' was not found in the response.", call. = FALSE)
+  }
+  
   # Return the page_url
   return(page_url)
 }

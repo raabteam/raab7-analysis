@@ -102,13 +102,16 @@ url_string<-gsub(" ", "-", tolower(url_string))
 
 #############################################
 #######API request code 15.10.24 AH #########
+#######Updated code 18.11.24 AH     #########
 #############################################
 
-try({
-  
+env_check <- function(var_name) {
+  return(Sys.getenv(var_name, unset = "") != "")
+}
+
 embargo_date<-as.Date(str_sub(raab_meta$embargo_date, 1,10))
 
-if (Sys.Date() > embargo_date){
+if (env_check("USERNAME") & env_check("PASSWORD") & env_check("BASIC_AUTH") & Sys.Date() > embargo_date) {
 
 ##############################################
 
@@ -126,7 +129,6 @@ meta_dataset$identifier<-paste0(response, "/data")
 
 }
   
-})
 
 meta_report$doi<-paste0("10.17037/RAABREPORT.",ID)
 meta_dataset$doi<-paste0("10.17037/RAABDATASET.",ID)
