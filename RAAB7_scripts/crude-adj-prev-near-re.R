@@ -107,7 +107,7 @@ near.re.prev.total$total.extrapolated.n <- round( near.re.prev.total$total.adj.p
 
 # Combine age group prev table with overall prev table
 near.re.prev.final <- rbind(near.re.prev, near.re.prev.total[,c(1:13)])
-near.re.prev.final[5,1] <- "Total"
+near.re.prev.final[5,1] <- "total"
 
 lcis<-grep("lci",names(near.re.prev.final))
 ucis<-grep("uci",names(near.re.prev.final))
