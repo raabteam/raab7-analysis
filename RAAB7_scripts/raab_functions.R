@@ -149,6 +149,7 @@ generateAuthToken <- function(username, password, basic_auth) {
   headers <- c(
     "Authorization" = paste("Basic", basic_auth),
     "Content-Type" = "application/json"
+    "X-Origin" = "MRM-Peek"
   )
   
   # Parameters for the authentication request
@@ -207,6 +208,7 @@ performApiRequest <- function(auth_token, raabID) {
   headers <- c(
     "Authorization" = paste("Bearer", auth_token),
     "Content-Type" = "application/json"
+    "X-Origin" = "MRM-Peek"
   )
   
   # Parameters for the API request (GraphQL query)
