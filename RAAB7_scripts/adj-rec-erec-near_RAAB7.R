@@ -2,12 +2,13 @@
 
 #v1 231123 IM
 
-# eREC: Crude calculation using the gold standard definition
+# eREC for near: Crude calculation using the gold standard definition
 
-# ee = Individuals who present with spectacles or contact lenses for near vision and whose UCVA is <6/12 in the better eye and CVA is 6/12 in the better eye (Met Need);
-# ff = Individuals who present with spectacles or contact lenses for near vision and whose UCVA is <6/12 in the better eye and whose CVA is <6/12 in the better eye, but who improve to 6/12 on PinVA (Undermet Need);
-# gg = Individuals who present without spectacles and whose UCVA is <6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
-# hh = Individuals who are not ee, ff or gg cases (no need)
+# ee=individuals with UCVA <N6 at 40 cm in the better eye who present with spectacles for near vision and whose PVA is ≥N6 in the better eye (met need) [NB the WHO paper box does not include "distance BCVA ≥6/12* in at least one eye" but the supp material flow chart does]
+# ff=individuals with distance BCVA ≥6/12* in at least one eye who present with spectacles for near vision and whose PVA is <N6 in the better eye (undermet need)
+# gg=individuals with distance BCVA ≥6/12 in at least one eye who do not have correction for near vision and whose UCVA is <N6 in the better eye (unmet need)
+
+# Only individuals with distance BCVA ≥6/12 will be considered in order to exclude those with reduced near vision not due to other causes.
 
 raab$erec_near_num <-(raab$ee_case==1)+0
 raab$rec_near_num <-(raab$ee_case==1 | raab$ff_case==1)+0
@@ -105,6 +106,8 @@ newtab7[,ucis][newtab7[,ucis]>1]<-1
 pcts<-grep("pct",names(newtab7))
 newtab7[,pcts]<-format(round(newtab7[,pcts]*100,1),nsmall=1)
 
+raab$near_need_denom <-(raab$ee_case==1 | raab$ff_case==1 | raab$gg_case==1 | raab$hh_case==1)+0
+
 need=c("met","undermet","unmet","none")
 
 near.re.need<-data.frame(need)
@@ -141,117 +144,117 @@ names(near.re.need)<-c(
   
 )
 
-near.re.need$male.n[near.re.need$need=="met"]<-sum(raab$aa_case[raab$gender=="male"],na.rm=T)
-near.re.need$female.n[near.re.need$need=="met"]<-sum(raab$aa_case[raab$gender=="female"],na.rm=T)
-near.re.need$total.n[near.re.need$need=="met"]<-sum(raab$aa_case,na.rm=T)
+near.re.need$male.n[near.re.need$need=="met"]<-sum(raab$ee_case[raab$gender=="male"],na.rm=T)
+near.re.need$female.n[near.re.need$need=="met"]<-sum(raab$ee_case[raab$gender=="female"],na.rm=T)
+near.re.need$total.n[near.re.need$need=="met"]<-sum(raab$ee_case,na.rm=T)
 
-near.re.need$male.n[near.re.need$need=="unmet"]<-sum(raab$bb_case[raab$gender=="male"],na.rm=T)
-near.re.need$female.n[near.re.need$need=="unmet"]<-sum(raab$bb_case[raab$gender=="female"],na.rm=T)
-near.re.need$total.n[near.re.need$need=="unmet"]<-sum(raab$bb_case,na.rm=T)
+near.re.need$male.n[near.re.need$need=="undermet"]<-sum(raab$ff_case[raab$gender=="male"],na.rm=T)
+near.re.need$female.n[near.re.need$need=="undermet"]<-sum(raab$ff_case[raab$gender=="female"],na.rm=T)
+near.re.need$total.n[near.re.need$need=="undermet"]<-sum(raab$ff_case,na.rm=T)
 
-near.re.need$male.n[near.re.need$need=="undermet"]<-sum(raab$cc_case[raab$gender=="male"],na.rm=T)
-near.re.need$female.n[near.re.need$need=="undermet"]<-sum(raab$cc_case[raab$gender=="female"],na.rm=T)
-near.re.need$total.n[near.re.need$need=="undermet"]<-sum(raab$cc_case,na.rm=T)
+near.re.need$male.n[near.re.need$need=="unmet"]<-sum(raab$gg_case[raab$gender=="male"],na.rm=T)
+near.re.need$female.n[near.re.need$need=="unmet"]<-sum(raab$gg_case[raab$gender=="female"],na.rm=T)
+near.re.need$total.n[near.re.need$need=="unmet"]<-sum(raab$gg_case,na.rm=T)
 
-near.re.need$male.n[near.re.need$need=="none"]<-sum(raab$dd_case[raab$gender=="male"],na.rm=T)
-near.re.need$female.n[near.re.need$need=="none"]<-sum(raab$dd_case[raab$gender=="female"],na.rm=T)
-near.re.need$total.n[near.re.need$need=="none"]<-sum(raab$dd_case,na.rm=T)
+near.re.need$male.n[near.re.need$need=="none"]<-sum(raab$hh_case[raab$gender=="male"],na.rm=T)
+near.re.need$female.n[near.re.need$need=="none"]<-sum(raab$hh_case[raab$gender=="female"],na.rm=T)
+near.re.need$total.n[near.re.need$need=="none"]<-sum(raab$hh_case,na.rm=T)
 
-near.re.need$male.pct[near.re.need$need=="met"]<-sum(raab$aa_case[raab$gender=="male"],na.rm=T)/sum(raab$exam_status[raab$gender=="male"]=="exam_status_examined",na.rm=T)
-near.re.need$female.pct[near.re.need$need=="met"]<-sum(raab$aa_case[raab$gender=="female"],na.rm=T)/sum(raab$exam_status[raab$gender=="female"]=="exam_status_examined",na.rm=T)
-near.re.need$total.pct[near.re.need$need=="met"]<-sum(raab$aa_case,na.rm=T)/sum(raab$exam_status=="exam_status_examined",na.rm=T)
+near.re.need$male.pct[near.re.need$need=="met"]<-sum(raab$ee_case[raab$gender=="male"],na.rm=T)/sum(raab$near_need_denom[raab$gender=="male"]==1,na.rm=T)
+near.re.need$female.pct[near.re.need$need=="met"]<-sum(raab$ee_case[raab$gender=="female"],na.rm=T)/sum(raab$near_need_denom[raab$gender=="female"]==1,na.rm=T)
+near.re.need$total.pct[near.re.need$need=="met"]<-sum(raab$ee_case,na.rm=T)/sum(raab$near_need_denom==1,na.rm=T)
 
-near.re.need$male.pct[near.re.need$need=="unmet"]<-sum(raab$bb_case[raab$gender=="male"],na.rm=T)/sum(raab$exam_status[raab$gender=="male"]=="exam_status_examined",na.rm=T)
-near.re.need$female.pct[near.re.need$need=="unmet"]<-sum(raab$bb_case[raab$gender=="female"],na.rm=T)/sum(raab$exam_status[raab$gender=="female"]=="exam_status_examined",na.rm=T)
-near.re.need$total.pct[near.re.need$need=="unmet"]<-sum(raab$bb_case,na.rm=T)/sum(raab$exam_status=="exam_status_examined",na.rm=T)
+near.re.need$male.pct[near.re.need$need=="undermet"]<-sum(raab$ff_case[raab$gender=="male"],na.rm=T)/sum(raab$near_need_denom[raab$gender=="male"]==1,na.rm=T)
+near.re.need$female.pct[near.re.need$need=="undermet"]<-sum(raab$ff_case[raab$gender=="female"],na.rm=T)/sum(raab$near_need_denom[raab$gender=="female"]==1,na.rm=T)
+near.re.need$total.pct[near.re.need$need=="undermet"]<-sum(raab$ff_case,na.rm=T)/sum(raab$near_need_denom==1,na.rm=T)
 
-near.re.need$male.pct[near.re.need$need=="undermet"]<-sum(raab$cc_case[raab$gender=="male"],na.rm=T)/sum(raab$exam_status[raab$gender=="male"]=="exam_status_examined",na.rm=T)
-near.re.need$female.pct[near.re.need$need=="undermet"]<-sum(raab$cc_case[raab$gender=="female"],na.rm=T)/sum(raab$exam_status[raab$gender=="female"]=="exam_status_examined",na.rm=T)
-near.re.need$total.pct[near.re.need$need=="undermet"]<-sum(raab$cc_case,na.rm=T)/sum(raab$exam_status=="exam_status_examined",na.rm=T)
+near.re.need$male.pct[near.re.need$need=="unmet"]<-sum(raab$gg_case[raab$gender=="male"],na.rm=T)/sum(raab$near_need_denom[raab$gender=="male"]==1,na.rm=T)
+near.re.need$female.pct[near.re.need$need=="unmet"]<-sum(raab$gg_case[raab$gender=="female"],na.rm=T)/sum(raab$near_need_denom[raab$gender=="female"]==1,na.rm=T)
+near.re.need$total.pct[near.re.need$need=="unmet"]<-sum(raab$gg_case,na.rm=T)/sum(raab$near_need_denom==1,na.rm=T)
 
-near.re.need$male.pct[near.re.need$need=="none"]<-sum(raab$dd_case[raab$gender=="male"],na.rm=T)/sum(raab$exam_status[raab$gender=="male"]=="exam_status_examined",na.rm=T)
-near.re.need$female.pct[near.re.need$need=="none"]<-sum(raab$dd_case[raab$gender=="female"],na.rm=T)/sum(raab$exam_status[raab$gender=="female"]=="exam_status_examined",na.rm=T)
-near.re.need$total.pct[near.re.need$need=="none"]<-sum(raab$dd_case,na.rm=T)/sum(raab$exam_status=="exam_status_examined",na.rm=T)
+near.re.need$male.pct[near.re.need$need=="none"]<-sum(raab$hh_case[raab$gender=="male"],na.rm=T)/sum(raab$near_need_denom[raab$gender=="male"]==1,na.rm=T)
+near.re.need$female.pct[near.re.need$need=="none"]<-sum(raab$hh_case[raab$gender=="female"],na.rm=T)/sum(raab$near_need_denom[raab$gender=="female"]==1,na.rm=T)
+near.re.need$total.pct[near.re.need$need=="none"]<-sum(raab$hh_case,na.rm=T)/sum(raab$near_need_denom==1,na.rm=T)
 
-near.re.need$male.pct.lci[near.re.need$need=="met"]<-bennett.lci(near.re.need$male.pct[near.re.need$need=="met"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.pct.lci[near.re.need$need=="met"]<-bennett.lci(near.re.need$female.pct[near.re.need$need=="met"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.pct.lci[near.re.need$need=="met"]<-bennett.lci(near.re.need$total.pct[near.re.need$need=="met"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.pct.lci[near.re.need$need=="met"]<-bennett.lci(near.re.need$male.pct[near.re.need$need=="met"],raab$ee_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.pct.lci[near.re.need$need=="met"]<-bennett.lci(near.re.need$female.pct[near.re.need$need=="met"],raab$ee_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.pct.lci[near.re.need$need=="met"]<-bennett.lci(near.re.need$total.pct[near.re.need$need=="met"],raab$ee_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.pct.uci[near.re.need$need=="met"]<-bennett.uci(near.re.need$male.pct[near.re.need$need=="met"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.pct.uci[near.re.need$need=="met"]<-bennett.uci(near.re.need$female.pct[near.re.need$need=="met"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.pct.uci[near.re.need$need=="met"]<-bennett.uci(near.re.need$total.pct[near.re.need$need=="met"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.pct.uci[near.re.need$need=="met"]<-bennett.uci(near.re.need$male.pct[near.re.need$need=="met"],raab$ee_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.pct.uci[near.re.need$need=="met"]<-bennett.uci(near.re.need$female.pct[near.re.need$need=="met"],raab$ee_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.pct.uci[near.re.need$need=="met"]<-bennett.uci(near.re.need$total.pct[near.re.need$need=="met"],raab$ee_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.pct.lci[near.re.need$need=="undermet"]<-bennett.lci(near.re.need$male.pct[near.re.need$need=="undermet"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.pct.lci[near.re.need$need=="undermet"]<-bennett.lci(near.re.need$female.pct[near.re.need$need=="undermet"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.pct.lci[near.re.need$need=="undermet"]<-bennett.lci(near.re.need$total.pct[near.re.need$need=="undermet"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.pct.lci[near.re.need$need=="undermet"]<-bennett.lci(near.re.need$male.pct[near.re.need$need=="undermet"],raab$ff_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.pct.lci[near.re.need$need=="undermet"]<-bennett.lci(near.re.need$female.pct[near.re.need$need=="undermet"],raab$ff_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.pct.lci[near.re.need$need=="undermet"]<-bennett.lci(near.re.need$total.pct[near.re.need$need=="undermet"],raab$ff_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.pct.uci[near.re.need$need=="undermet"]<-bennett.uci(near.re.need$male.pct[near.re.need$need=="undermet"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.pct.uci[near.re.need$need=="undermet"]<-bennett.uci(near.re.need$female.pct[near.re.need$need=="undermet"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.pct.uci[near.re.need$need=="undermet"]<-bennett.uci(near.re.need$total.pct[near.re.need$need=="undermet"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.pct.uci[near.re.need$need=="undermet"]<-bennett.uci(near.re.need$male.pct[near.re.need$need=="undermet"],raab$ff_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.pct.uci[near.re.need$need=="undermet"]<-bennett.uci(near.re.need$female.pct[near.re.need$need=="undermet"],raab$ff_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.pct.uci[near.re.need$need=="undermet"]<-bennett.uci(near.re.need$total.pct[near.re.need$need=="undermet"],raab$ff_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.pct.lci[near.re.need$need=="unmet"]<-bennett.lci(near.re.need$male.pct[near.re.need$need=="unmet"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.pct.lci[near.re.need$need=="unmet"]<-bennett.lci(near.re.need$female.pct[near.re.need$need=="unmet"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.pct.lci[near.re.need$need=="unmet"]<-bennett.lci(near.re.need$total.pct[near.re.need$need=="unmet"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.pct.lci[near.re.need$need=="unmet"]<-bennett.lci(near.re.need$male.pct[near.re.need$need=="unmet"],raab$gg_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.pct.lci[near.re.need$need=="unmet"]<-bennett.lci(near.re.need$female.pct[near.re.need$need=="unmet"],raab$gg_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.pct.lci[near.re.need$need=="unmet"]<-bennett.lci(near.re.need$total.pct[near.re.need$need=="unmet"],raab$gg_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.pct.uci[near.re.need$need=="unmet"]<-bennett.uci(near.re.need$male.pct[near.re.need$need=="unmet"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.pct.uci[near.re.need$need=="unmet"]<-bennett.uci(near.re.need$female.pct[near.re.need$need=="unmet"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.pct.uci[near.re.need$need=="unmet"]<-bennett.uci(near.re.need$total.pct[near.re.need$need=="unmet"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.pct.uci[near.re.need$need=="unmet"]<-bennett.uci(near.re.need$male.pct[near.re.need$need=="unmet"],raab$gg_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.pct.uci[near.re.need$need=="unmet"]<-bennett.uci(near.re.need$female.pct[near.re.need$need=="unmet"],raab$gg_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.pct.uci[near.re.need$need=="unmet"]<-bennett.uci(near.re.need$total.pct[near.re.need$need=="unmet"],raab$gg_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.pct.lci[near.re.need$need=="none"]<-bennett.lci(near.re.need$male.pct[near.re.need$need=="none"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.pct.lci[near.re.need$need=="none"]<-bennett.lci(near.re.need$female.pct[near.re.need$need=="none"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.pct.lci[near.re.need$need=="none"]<-bennett.lci(near.re.need$total.pct[near.re.need$need=="none"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.pct.lci[near.re.need$need=="none"]<-bennett.lci(near.re.need$male.pct[near.re.need$need=="none"],raab$hh_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.pct.lci[near.re.need$need=="none"]<-bennett.lci(near.re.need$female.pct[near.re.need$need=="none"],raab$hh_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.pct.lci[near.re.need$need=="none"]<-bennett.lci(near.re.need$total.pct[near.re.need$need=="none"],raab$hh_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$male.pct[near.re.need$need=="none"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$female.pct[near.re.need$need=="none"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$total.pct[near.re.need$need=="none"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$male.pct[near.re.need$need=="none"],raab$hh_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$female.pct[near.re.need$need=="none"],raab$hh_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$total.pct[near.re.need$need=="none"],raab$hh_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.adj.pct[near.re.need$need=="met"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined")
-near.re.need$female.adj.pct[near.re.need$need=="met"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined")
-near.re.need$total.adj.pct[near.re.need$need=="met"]<-prop.age.sex.adjust(popfives,raab,raab$aa_case,raab$exam_status=="exam_status_examined")
+near.re.need$male.adj.pct[near.re.need$need=="met"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$ee_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1)
+near.re.need$female.adj.pct[near.re.need$need=="met"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$ee_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1)
+near.re.need$total.adj.pct[near.re.need$need=="met"]<-prop.age.sex.adjust(popfives,raab,raab$ee_case,raab$near_need_denom==1)
 
-near.re.need$male.adj.pct[near.re.need$need=="undermet"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$bb_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined")
-near.re.need$female.adj.pct[near.re.need$need=="undermet"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$bb_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined")
-near.re.need$total.adj.pct[near.re.need$need=="undermet"]<-prop.age.sex.adjust(popfives,raab,raab$bb_case,raab$exam_status=="exam_status_examined")
+near.re.need$male.adj.pct[near.re.need$need=="undermet"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$ff_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1)
+near.re.need$female.adj.pct[near.re.need$need=="undermet"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$ff_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1)
+near.re.need$total.adj.pct[near.re.need$need=="undermet"]<-prop.age.sex.adjust(popfives,raab,raab$ff_case,raab$near_need_denom==1)
 
-near.re.need$male.adj.pct[near.re.need$need=="unmet"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$cc_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined")
-near.re.need$female.adj.pct[near.re.need$need=="unmet"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$cc_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined")
-near.re.need$total.adj.pct[near.re.need$need=="unmet"]<-prop.age.sex.adjust(popfives,raab,raab$cc_case,raab$exam_status=="exam_status_examined")
+near.re.need$male.adj.pct[near.re.need$need=="unmet"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$gg_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1)
+near.re.need$female.adj.pct[near.re.need$need=="unmet"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$gg_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1)
+near.re.need$total.adj.pct[near.re.need$need=="unmet"]<-prop.age.sex.adjust(popfives,raab,raab$gg_case,raab$near_need_denom==1)
 
-near.re.need$male.adj.pct[near.re.need$need=="none"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$dd_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined")
-near.re.need$female.adj.pct[near.re.need$need=="none"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$dd_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined")
-near.re.need$total.adj.pct[near.re.need$need=="none"]<-prop.age.sex.adjust(popfives,raab,raab$dd_case,raab$exam_status=="exam_status_examined")
+near.re.need$male.adj.pct[near.re.need$need=="none"]<-prop.age.adjust(male.subpop,raab[raab$gender=="male",],raab$hh_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1)
+near.re.need$female.adj.pct[near.re.need$need=="none"]<-prop.age.adjust(female.subpop,raab[raab$gender=="female",],raab$hh_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1)
+near.re.need$total.adj.pct[near.re.need$need=="none"]<-prop.age.sex.adjust(popfives,raab,raab$hh_case,raab$near_need_denom==1)
 
-near.re.need$male.adj.pct.lci[near.re.need$need=="met"]<-bennett.lci(near.re.need$male.adj.pct[near.re.need$need=="met"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.adj.pct.lci[near.re.need$need=="met"]<-bennett.lci(near.re.need$female.adj.pct[near.re.need$need=="met"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.adj.pct.lci[near.re.need$need=="met"]<-bennett.lci(near.re.need$total.adj.pct[near.re.need$need=="met"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.adj.pct.lci[near.re.need$need=="met"]<-bennett.lci(near.re.need$male.adj.pct[near.re.need$need=="met"],raab$ee_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.adj.pct.lci[near.re.need$need=="met"]<-bennett.lci(near.re.need$female.adj.pct[near.re.need$need=="met"],raab$ee_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.adj.pct.lci[near.re.need$need=="met"]<-bennett.lci(near.re.need$total.adj.pct[near.re.need$need=="met"],raab$ee_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.adj.pct.uci[near.re.need$need=="met"]<-bennett.uci(near.re.need$male.adj.pct[near.re.need$need=="met"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.adj.pct.uci[near.re.need$need=="met"]<-bennett.uci(near.re.need$female.adj.pct[near.re.need$need=="met"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.adj.pct.uci[near.re.need$need=="met"]<-bennett.uci(near.re.need$total.adj.pct[near.re.need$need=="met"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.adj.pct.uci[near.re.need$need=="met"]<-bennett.uci(near.re.need$male.adj.pct[near.re.need$need=="met"],raab$ee_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.adj.pct.uci[near.re.need$need=="met"]<-bennett.uci(near.re.need$female.adj.pct[near.re.need$need=="met"],raab$ee_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.adj.pct.uci[near.re.need$need=="met"]<-bennett.uci(near.re.need$total.adj.pct[near.re.need$need=="met"],raab$ee_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.adj.pct.lci[near.re.need$need=="undermet"]<-bennett.lci(near.re.need$male.adj.pct[near.re.need$need=="undermet"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.adj.pct.lci[near.re.need$need=="undermet"]<-bennett.lci(near.re.need$female.adj.pct[near.re.need$need=="undermet"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.adj.pct.lci[near.re.need$need=="undermet"]<-bennett.lci(near.re.need$total.adj.pct[near.re.need$need=="undermet"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.adj.pct.lci[near.re.need$need=="undermet"]<-bennett.lci(near.re.need$male.adj.pct[near.re.need$need=="undermet"],raab$ff_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.adj.pct.lci[near.re.need$need=="undermet"]<-bennett.lci(near.re.need$female.adj.pct[near.re.need$need=="undermet"],raab$ff_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.adj.pct.lci[near.re.need$need=="undermet"]<-bennett.lci(near.re.need$total.adj.pct[near.re.need$need=="undermet"],raab$ff_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.adj.pct.uci[near.re.need$need=="undermet"]<-bennett.uci(near.re.need$male.adj.pct[near.re.need$need=="undermet"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.adj.pct.uci[near.re.need$need=="undermet"]<-bennett.uci(near.re.need$female.adj.pct[near.re.need$need=="undermet"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.adj.pct.uci[near.re.need$need=="undermet"]<-bennett.uci(near.re.need$total.adj.pct[near.re.need$need=="undermet"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.adj.pct.uci[near.re.need$need=="undermet"]<-bennett.uci(near.re.need$male.adj.pct[near.re.need$need=="undermet"],raab$ff_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.adj.pct.uci[near.re.need$need=="undermet"]<-bennett.uci(near.re.need$female.adj.pct[near.re.need$need=="undermet"],raab$ff_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.adj.pct.uci[near.re.need$need=="undermet"]<-bennett.uci(near.re.need$total.adj.pct[near.re.need$need=="undermet"],raab$ff_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.adj.pct.lci[near.re.need$need=="unmet"]<-bennett.lci(near.re.need$male.adj.pct[near.re.need$need=="unmet"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.adj.pct.lci[near.re.need$need=="unmet"]<-bennett.lci(near.re.need$female.adj.pct[near.re.need$need=="unmet"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.adj.pct.lci[near.re.need$need=="unmet"]<-bennett.lci(near.re.need$total.adj.pct[near.re.need$need=="unmet"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.adj.pct.lci[near.re.need$need=="unmet"]<-bennett.lci(near.re.need$male.adj.pct[near.re.need$need=="unmet"],raab$gg_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.adj.pct.lci[near.re.need$need=="unmet"]<-bennett.lci(near.re.need$female.adj.pct[near.re.need$need=="unmet"],raab$gg_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.adj.pct.lci[near.re.need$need=="unmet"]<-bennett.lci(near.re.need$total.adj.pct[near.re.need$need=="unmet"],raab$gg_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.adj.pct.uci[near.re.need$need=="unmet"]<-bennett.uci(near.re.need$male.adj.pct[near.re.need$need=="unmet"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.adj.pct.uci[near.re.need$need=="unmet"]<-bennett.uci(near.re.need$female.adj.pct[near.re.need$need=="unmet"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.adj.pct.uci[near.re.need$need=="unmet"]<-bennett.uci(near.re.need$total.adj.pct[near.re.need$need=="unmet"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.adj.pct.uci[near.re.need$need=="unmet"]<-bennett.uci(near.re.need$male.adj.pct[near.re.need$need=="unmet"],raab$gg_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.adj.pct.uci[near.re.need$need=="unmet"]<-bennett.uci(near.re.need$female.adj.pct[near.re.need$need=="unmet"],raab$gg_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.adj.pct.uci[near.re.need$need=="unmet"]<-bennett.uci(near.re.need$total.adj.pct[near.re.need$need=="unmet"],raab$gg_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.adj.pct.lci[near.re.need$need=="none"]<-bennett.lci(near.re.need$male.adj.pct[near.re.need$need=="none"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.adj.pct.lci[near.re.need$need=="none"]<-bennett.lci(near.re.need$female.adj.pct[near.re.need$need=="none"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.adj.pct.lci[near.re.need$need=="none"]<-bennett.lci(near.re.need$total.adj.pct[near.re.need$need=="none"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.adj.pct.lci[near.re.need$need=="none"]<-bennett.lci(near.re.need$male.adj.pct[near.re.need$need=="none"],raab$hh_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.adj.pct.lci[near.re.need$need=="none"]<-bennett.lci(near.re.need$female.adj.pct[near.re.need$need=="none"],raab$hh_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.adj.pct.lci[near.re.need$need=="none"]<-bennett.lci(near.re.need$total.adj.pct[near.re.need$need=="none"],raab$hh_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.adj.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$male.adj.pct[near.re.need$need=="none"],raab$aa_case[raab$gender=="male"],raab$exam_status[raab$gender=="male"]=="exam_status_examined",raab$clusterId[raab$gender=="male"])
-near.re.need$female.adj.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$female.adj.pct[near.re.need$need=="none"],raab$aa_case[raab$gender=="female"],raab$exam_status[raab$gender=="female"]=="exam_status_examined",raab$clusterId[raab$gender=="female"])
-near.re.need$total.adj.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$total.adj.pct[near.re.need$need=="none"],raab$aa_case,raab$exam_status=="exam_status_examined",raab$clusterId)
+near.re.need$male.adj.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$male.adj.pct[near.re.need$need=="none"],raab$hh_case[raab$gender=="male"],raab$near_need_denom[raab$gender=="male"]==1,raab$clusterId[raab$gender=="male"])
+near.re.need$female.adj.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$female.adj.pct[near.re.need$need=="none"],raab$hh_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
+near.re.need$total.adj.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$total.adj.pct[near.re.need$need=="none"],raab$hh_case,raab$near_need_denom==1,raab$clusterId)
 
 near.re.need$male.extrapolated.n<-round( near.re.need$male.adj.pct*sum(male.subpop$population,na.rm=T),0)
 near.re.need$female.extrapolated.n<-round( near.re.need$female.adj.pct*sum(female.subpop$population,na.rm=T),0)
