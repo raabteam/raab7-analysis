@@ -989,6 +989,65 @@ Camp Improv. = Improvised surgical camp
 
 Trad. = Traditional setting
 
+### Outcomes by time since surgery
+
+```{r cat.oc.time, echo=FALSE}
+
+source(here("RAAB6_scripts","surg-time-outcome_RAAB6.R"))
+
+cat.oc.time.nice.names<-cat.oc.time[,c("oc.levels","less2.n.eyes","less2.pct.eyes","more2.n.eyes","more2.pct.eyes","more4.n.eyes","more4.pct.eyes","more6.n.eyes","more6.pct.eyes","more8.n.eyes","more8.pct.eyes")]
+
+row.order<-c("good.oc","borderline.oc","poor.oc")
+cat.oc.time.nice.names<-cat.oc.time.nice.names %>% arrange(match(cat.oc.time.nice.names$oc.levels,row.order))
+cat.oc.time.nice.names$oc.levels[cat.oc.time.nice.names$oc.levels=="good.oc"]<-"Good (6/12)"
+cat.oc.time.nice.names$oc.levels[cat.oc.time.nice.names$oc.levels=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
+cat.oc.time.nice.names$oc.levels[cat.oc.time.nice.names$oc.levels=="poor.oc"]<-"Poor (<6/60)"
+
+write.table(cat.oc.time.nice.names,here("outputs", ID, "summary", "data", "cat13.csv"),row.names=F,col.names=T,sep=",")
+
+names(cat.oc.time.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%")
+
+knitr::kable(cat.oc.time.nice.names, booktabs=T, linesep = "", caption = "Post-operative visual outcome (PVA) in all eyes by time since surgery in years (CAT13)",align='lcccccccccc') %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  row_spec(3,hline_after=T) %>%
+  add_header_above(c("Post-operative VA" = 1, "<2 yrs" = 2, "2+ but <4 yrs" = 2, "4+ but <6 yrs" = 2, "6+ but <8 yrs" = 2, "8+ yrs" = 2),bold=T)
+
+```
+
+Post-operative VA is expected to be better for eyes operated on more recently. Participants who received surgery many years prior to the survey may have developed post-operative sequelae, or co-morbidities after surgery unrelated to their treatment. They may also have been operated on with techniques that do not reflect current practice.
+
+### Causes of borderline and poor post-operative visual acuity outcomes
+
+```{r causes.po.va, echo=FALSE}
+
+source(here("RAAB6_scripts","cause_post_operative_VA_RAAB6.R"))
+
+causes.po.va.nice.names<-causes.po.va
+
+row.order<-c("borderline.oc","poor.oc", "total")
+causes.po.va.nice.names<-causes.po.va.nice.names %>% arrange(match(causes.po.va.nice.names$oc.levels,row.order))
+causes.po.va.nice.names$oc.levels[causes.po.va.nice.names$oc.levels=="borderline.oc"]<-"Borderline (<6/12 to 6/60)"
+causes.po.va.nice.names$oc.levels[causes.po.va.nice.names$oc.levels=="poor.oc"]<-"Poor (<6/60)"
+causes.po.va.nice.names$oc.levels[causes.po.va.nice.names$oc.levels=="total"]<-"All non-good outcomes (<6/12)"
+
+write.table(causes.po.va.nice.names,here("outputs", ID, "summary", "data", "cat14.csv"),row.names=F,col.names=T,sep=",")
+
+names(causes.po.va.nice.names)<-c("","n","%","n","%","n","%","n","%","n","%","n","%")
+
+knitr::kable(causes.po.va.nice.names, booktabs=T, linesep = "", caption = "Causes of post-operative presenting VA <6/12 in cataract operated eyes with borderline and poor outcomes (CAT14)",align='lcccccccccccc') %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  row_spec(2,hline_after=T) %>%
+  add_header_above(c("Post-operative VA outcome" = 1, "Case selection" = 2, "Op complications" = 2, "PCO" = 2, "Other sequelae" = 2, "Refractive error" = 2, "Total" = 2),bold=T) %>% 
+  add_footnote("Op complications = intraoperative complications; PCO = posterior capsular opacification", notation="symbol")
+
+```
+
+Case selection describes pre-existing co-morbidity (e.g. macular disease) as the reason for not achieving 6/12, although there may have been considerable improvement in some of these cases and the surgery still considered successful. Posterior capsular opacification (PCO) is a common complication (sequelae) that develops in the years after cataract surgery. ‘Other sequelae’ are any other post-operative complications (excluding PCO) that developed after surgery, e.g. retinal detachment. Refractive error accounts for residual refractive error and is defined by an improvement in UCVA <6/12 or CVA <6/12 to 6/12 with pinhole.  
+
+PCO and residual refractive error are amenable to relatively simple treatment with spectacles and YAG laser capsulotomy respectively. Strategies to address these will improve post-operative vision in the population.
+
 \newpage
 
 # Refractive error
