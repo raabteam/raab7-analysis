@@ -335,6 +335,28 @@ raab <- raab %>% mutate(
   
 )
 
+#Time since cataract surgery
+time_since_catop_cats <- c("less than 2 years", "2 or more but less than 4 years", "4 or more but less than 6 years", "6 or more but less than 8 years", "8 or more years")
+
+raab <- raab %>% mutate(
+  time_since_catop_re = (age - surgery_age_right),
+  time_since_catop_le = (age - surgery_age_left)
+)
+
+raab <- raab %>% mutate(
+  time.cat.op.re.0 = case_when(raab$time_since_catop_re<2 ~ 1, TRUE ~ 0),
+  time.cat.op.re.2 = case_when(raab$time_since_catop_re>=2 & raab$time_since_catop_re<4 ~ 1, TRUE ~ 0),
+  time.cat.op.re.4 = case_when(raab$time_since_catop_re>=4 & raab$time_since_catop_re<6 ~ 1, TRUE ~ 0),
+  time.cat.op.re.6 = case_when(raab$time_since_catop_re>=6 & raab$time_since_catop_re<8 ~ 1, TRUE ~ 0),
+  time.cat.op.re.8 = case_when(raab$time_since_catop_re>=8 ~ 1, TRUE ~ 0),
+  
+  time.cat.op.le.0 = case_when(raab$time_since_catop_le<2 ~ 1, TRUE ~ 0),
+  time.cat.op.le.2 = case_when(raab$time_since_catop_le>=2 & raab$time_since_catop_le<4 ~ 1, TRUE ~ 0),
+  time.cat.op.le.4 = case_when(raab$time_since_catop_le>=4 & raab$time_since_catop_le<6 ~ 1, TRUE ~ 0),
+  time.cat.op.le.6 = case_when(raab$time_since_catop_le>=6 & raab$time_since_catop_le<8 ~ 1, TRUE ~ 0),
+  time.cat.op.le.8 = case_when(raab$time_since_catop_le>=8 ~ 1, TRUE ~ 0)
+)
+
 #Refractive error 
 
 raab <- raab %>% mutate(
@@ -517,3 +539,24 @@ raab <- raab %>% mutate(
 )
 
 dr.last.exam <- c("dr_diabetic_last_exam_none", "dr_diabetic_last_exam_0_12_months", "dr_diabetic_last_exam_13_24_months", "dr_diabetic_last_exam_over_24_months")
+
+#Causes of post-operative presenting VA <6/12 in cataract operated eyes with borderline and poor outcomes [CAT14]
+
+raab <- raab %>% mutate(
+  postop.eyes.right.denom = case_when(!is.na(raab$surgery_poor_vision_reason_right) ~ 1, TRUE ~ 0),
+  postop.eyes.left.denom  = case_when(!is.na(raab$surgery_poor_vision_reason_left) ~ 1, TRUE ~ 0))
+
+raab <- raab %>% mutate(
+  
+  surgery_ocular_comorbidity.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_ocular_comorbidity" ~ 1, TRUE ~ 0),
+  surgery_ocular_comorbidity.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_ocular_comorbidity" ~ 1, TRUE ~ 0),
+  surgery_op_comp.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_operative_complications" ~ 1, TRUE ~ 0),
+  surgery_op_comp.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_operative_complications" ~ 1, TRUE ~ 0),
+  surgery_ref_err.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_uncorrected_refractive_error" ~ 1, TRUE ~ 0),
+  surgery_ref_err.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_uncorrected_refractive_error" ~ 1, TRUE ~ 0),
+  surgery_pco.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_right=="lens_status_pseudophakia_with_pco" ~ 1, TRUE ~ 0),
+  surgery_pco.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_left=="lens_status_pseudophakia_with_pco" ~ 1, TRUE ~ 0),
+  surgery_other_seq.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_right!="lens_status_pseudophakia_with_pco"  ~ 1, TRUE ~ 0),
+  surgery_other_seq.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_left!="lens_status_pseudophakia_with_pco" ~ 1, TRUE ~ 0)
+  
+)
