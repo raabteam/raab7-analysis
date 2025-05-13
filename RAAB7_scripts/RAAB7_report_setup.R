@@ -412,9 +412,7 @@ raab <- raab %>% mutate(
 )
 
 raab <- raab %>% mutate(
-  
   re.vi.levels = case_when(re.mild.vi==1 ~ "re.mild.vi", re.moderate.vi==1 ~ "re.moderate.vi", re.severe.vi==1 ~ "re.severe.vi", re.blind==1 ~ "re.blind")
-
 )
 
 # Variable for prevalence of refractive error, regardless of whether corrected or uncorrected
@@ -423,47 +421,32 @@ raab <- raab %>% mutate(
     better.eye.ucva>0.3 & (better.eye.cva==0.3 | better.eye.pinva==0.3) ~1, TRUE ~ 0)
   )
 
-
 #eREC/REC variables
 
 if(!is.logical(raab$spectacles_used_distance)){
-  
    raab$spectacles_used_distance<-as.logical(raab$spectacles_used_distance)
-    
   }else{
-  
     raab$spectacles_used_distance<-raab$spectacles_used_distance
-  
   }
   
 if(!is.logical(raab$spectacles_used_near)){
-  
   raab$spectacles_used_near<-as.logical(raab$spectacles_used_near)
-  
 }else{
-  
   raab$spectacles_used_near<-raab$spectacles_used_near
-  
 }
 
 
 raab <- raab %>% mutate(
-  
   aa_case = case_when(raab$spectacles_used_distance==TRUE & raab$better.eye.ucva>0.3 & raab$better.eye.cva==0.3 ~ 1, TRUE ~ 0)
-
   )
 
 raab <- raab %>% mutate(
-  
   bb_case = case_when(raab$aa_case==0 & raab$spectacles_used_distance==TRUE & raab$better.eye.ucva>0.3 & raab$better.eye.cva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0),
   cc_case = case_when(raab$spectacles_used_distance==FALSE & raab$better.eye.ucva>0.3 & raab$better.eye.pinva==0.3 ~ 1, TRUE ~ 0)
-
   )
 
 raab <- raab %>% mutate(
-  
   dd_case = case_when(raab$exam_status=="exam_status_examined" & (raab$aa_case!=1 & raab$bb_case!=1 & raab$cc_case!=1) ~ 1, TRUE ~ 0)
-
   )
 
 # Near vision screening analysis for RAAB7
@@ -472,21 +455,17 @@ raab <- raab %>% mutate(
 
 if(exists('binocular_near_corrected_result',where=raab)){
 
-# Generate a "presenting" test outcome (assuming Peek aren't making one, delete if they are)
+# Generate a "presenting" test outcome
 raab <- raab %>% mutate(
-    
   binocular_near_presenting_result = case_when(
     spectacles_used_near==TRUE ~ binocular_near_corrected_result,
     spectacles_used_near==FALSE ~ binocular_near_uncorrected_result)
-    
 )
 
 # Define near VI based on presenting near VA (only one level, binary screening test at N6 threshold)
   
 raab <- raab %>% mutate(
-  
   near.vi = case_when(raab$binocular_near_presenting_result=="acuity_evaluation_result_fail" ~ 1, TRUE ~ 0)
-  
 )
 
 # Define near eREC terms (for "spectacle coverage for near vision impairment due to presbyopia")
@@ -508,19 +487,59 @@ raab <- raab %>% mutate(
 # hh_case = no need
 
 raab <- raab %>% mutate(
-  
   ee_case = case_when(raab$better.eye.pinva==0.3 & raab$spectacles_used_near==TRUE & raab$binocular_near_uncorrected_result=="acuity_evaluation_result_fail" & raab$binocular_near_corrected_result=="acuity_evaluation_result_pass" ~ 1, TRUE ~ 0)
-  
 )
 
 raab <- raab %>% mutate(
-  
   ff_case = case_when(raab$ee_case==0 & raab$better.eye.pinva==0.3 & raab$spectacles_used_near==TRUE & raab$binocular_near_uncorrected_result=="acuity_evaluation_result_fail" & raab$binocular_near_corrected_result=="acuity_evaluation_result_fail" ~ 1, TRUE ~ 0),
+  
   gg_case = case_when(raab$better.eye.pinva==0.3 & raab$spectacles_used_near==FALSE & raab$binocular_near_uncorrected_result=="acuity_evaluation_result_fail" ~ 1, TRUE ~ 0),
   
   hh_case = case_when(raab$better.eye.pinva==0.3 & raab$binocular_near_uncorrected_result=="acuity_evaluation_result_pass" ~ 1, TRUE ~ 0)
 )
-}else{raab$near.vi<-NA}
+
+}else{
+  raab$near.vi<-NA
+  }
+
+# Near questions ensure logical not strings for true/false options
+
+if(!is.logical(raab$spectacles_first_pair_near)){
+  raab$spectacles_first_pair_near<-as.logical(raab$spectacles_first_pair_near)
+}else{
+  raab$spectacles_first_pair_near<-raab$spectacles_first_pair_near
+}
+
+if(!is.logical(raab$spectacles_free_near)){
+  raab$spectacles_free_near<-as.logical(raab$spectacles_free_near)
+}else{
+  raab$spectacles_free_near<-raab$spectacles_free_near
+}
+
+if(!is.logical(raab$spectacles_purchase_replacement_near)){
+  raab$spectacles_purchase_replacement_near<-as.logical(raab$spectacles_purchase_replacement_near)
+}else{
+  raab$spectacles_purchase_replacement_near<-raab$spectacles_purchase_replacement_near
+}
+
+if(!is.logical(raab$spectacles_used_ever_near)){
+  raab$spectacles_used_ever_near<-as.logical(raab$spectacles_used_ever_near)
+}else{
+  raab$spectacles_used_ever_near<-raab$spectacles_used_ever_near
+}
+
+#denoms for near specs question to subsets of unmet need 
+raab <- raab %>% mutate(
+  specs.ever.used.true.denom = case_when(
+    gg_case==1 & spectacles_used_ever_near==TRUE ~1, TRUE ~ 0
+  ),
+  specs.not.replaced.near.denom = case_when(
+    gg_case==1 & spectacles_used_ever_near==TRUE & spectacles_not_using_near!="spectacles_not_using_no_need" ~1, TRUE ~ 0
+  ),
+  specs.ever.used.false.denom = case_when(
+    gg_case==1 & spectacles_used_ever_near==FALSE ~1, TRUE ~ 0
+  )
+)
 
 #Washington Group Questions (Disability module) variables
 #Modified to include the short set enhanced additional questions on upper body and mental health
