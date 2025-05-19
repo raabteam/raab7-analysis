@@ -1359,9 +1359,9 @@ knitr::kable(newtab7.nice.names, booktabs=T, linesep = "", caption = "Adjusted n
 
 ```{r, eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
 
-asis_output("eREC for near vision measures the number of people in a population in need of near optical correction who have received correction and had a good outcome (ie, can see at least N6 at 40cm corrected) as a proportion of all people in need of near optical correction who have accessed correction or still require it. 
+asis_output("eREC for near vision measures the number of people in a population in need of near optical (presbyopic) correction who have received correction and had a good outcome (ie, can see at least N6 at 40cm corrected) as a proportion of all people in need of near optical (presbyopic) correction who have accessed correction or still require it. 
 
-Note: Undermet need and unmet need for near vision correction is calculated only among people with presenting or pinhole VA of 6/12 to exclude those with reduced near vision due to other non-refractive error causes, eg, cataract or glaucoma.
+Note: Met need, undermet need and unmet need for near vision (presbyopic) correction are calculated only among people with presenting or pinhole VA of 6/12 to exclude those with reduced near vision due to other non-refractive error causes, eg, cataract or glaucoma.
 
 ## Need for near refractive error correction")
 
@@ -1418,8 +1418,8 @@ treemap(near.re.need,index="need",vSize="total.extrapolated.n",type="index",pale
 ```{r, eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
 
 asis_output("Note: The majority of the population need for near refractive error correction will be represented by the RAAB population 50 years and older. Some additional need in the age group 40-49 will not be accounted for in these estimates.
-            
-## History of near spectacle ownership and barriers to near spectacles")
+
+## Characteristics of near spectacles ownership and barriers to near spectacles ownership")
 
 ```
 
@@ -1431,13 +1431,14 @@ write.table(specs.near.owns.table,here("outputs", ID, "summary", "data", "re9.cs
 
 names(specs.near.owns.table) <- c("", "n", "%", "n", "%", "n", "%")
 
-knitr::kable(specs.near.owns.table, booktabs=TRUE, caption="Near spectacle history among all study participants who own near spectacles (RE9)") %>%
-  kable_styling(latex_options="HOLD_position", font_size=8) %>%
+specs.near.owns.table[is.na(specs.near.owns.table)] <- ""
+
+knitr::kable(specs.near.owns.table, booktabs=TRUE, caption="Near spectacle history among study participants with met or undermet need for near refractive error correction (RE9)") %>%
+  kable_styling(full_width=T,latex_options="HOLD_position", font_size=8) %>%
   row_spec(0, italic=TRUE) %>%
   add_indent(c(2,3, 5:7, 9:10, 12:14, 16:17, 19:20)) %>% 
-  column_spec(1, width="5cm") %>%
-  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2), bold=TRUE) %>%
-  add_footnote("Near spectacle owners may have met need, undermet need, or no need but own near spectacles",notation = "symbol")
+  column_spec(1, width="6cm") %>%
+  add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2), bold=TRUE)
 
 ```
 
@@ -1447,11 +1448,13 @@ write.table(specs.near.none.table,here("outputs", ID, "summary", "data", "re10.c
 
 names(specs.near.none.table) <- c("", "n", "%", "n", "%", "n", "%")
 
-knitr::kable(specs.near.none.table, booktabs=TRUE, caption="Barriers to near spectacle history among study participants with unmet need for near spectacles (RE10)") %>%
-  kable_styling(latex_options="HOLD_position", font_size=8) %>%
+specs.near.none.table[is.na(specs.near.none.table)] <- ""
+
+knitr::kable(specs.near.none.table, booktabs=TRUE, caption="Barriers to near spectacles among study participants with unmet need for near refractive error correction (RE10)") %>%
+  kable_styling(full_width=T,latex_options="HOLD_position", font_size=8) %>%
   row_spec(0, italic=TRUE) %>%
   add_indent(c(2,3, 5:8, 10:12, 14:17)) %>% 
-  column_spec(1, width="5cm") %>%
+  column_spec(1, width="6cm") %>%
   add_header_above(c(" " = 1, "Female" = 2, "Male" = 2, "Total" = 2), bold=TRUE) %>%
   add_footnote("Only participants who previously owned near spectacles and reported a reason other than need not felt were asked why they did not replace them"  ,notation = "symbol")
 
@@ -2012,27 +2015,31 @@ Historic RAAB survey data variables have been updated to align with RAAB7 variab
 
 ## Bilateral VI
 
-Blindness: PVA less than 3/60 in the better eye
+Blindness: PVA worse than 3/60 in the better eye
 
-Severe VI: PVA less than 6/60 to 3/60 in the better eye
+Severe VI: PVA worse than 6/60 to 3/60 in the better eye
 
-Moderate VI: PVA less than 6/18 to 6/60 in the better eye
+Moderate VI: PVA worse than 6/18 to 6/60 in the better eye
 
-Moderate-to-severe VI: PVA less than 6/18 to 3/60 in the better eye
+Moderate-to-severe VI: PVA worse than 6/18 to 3/60 in the better eye
 
-Mild VI: PVA less than 6/12 to 6/18 in the better eye
+Mild VI: PVA worse than 6/12 to 6/18 in the better eye
 
 ## Unilateral VI
 
-Blindness: PVA less than 3/60 in one eye, PVA 6/12 in the other eye
+Blindness: PVA worse than 3/60 in one eye, PVA 6/12 in the other eye
 
-Severe VI: PVA less than 6/60 to 3/60 in one eye, PVA 6/12 in the other eye
+Severe VI: PVA worse than 6/60 to 3/60 in one eye, PVA 6/12 in the other eye
 
-Moderate VI: PVA less than 6/18 to 6/60 in one eye, PVA 6/12 in the other eye
+Moderate VI: PVA worse than 6/18 to 6/60 in one eye, PVA 6/12 in the other eye
 
-Moderate-to-severe VI: PVA less than 6/18 to 3/60 in one eye, PVA 6/12 in the other eye
+Moderate-to-severe VI: PVA worse than 6/18 to 3/60 in one eye, PVA 6/12 in the other eye
 
-Mild VI: PVA less than 6/12 to 6/18 in one eye, PVA 6/12 in the other eye
+Mild VI: PVA worse than 6/12 to 6/18 in one eye, PVA 6/12 in the other eye
+
+## Near VI
+
+Near VI: Near PVA worse than N6 at 40cm
 
 ## Cataract surgical coverage (CSC) and effective cataract surgical coverage (eCSC)
 
@@ -2068,11 +2075,11 @@ Operated eyes: Aphakia or pseudophakia (with or without posterior capsule opacif
 
 Note that couched eyes are excluded from tables reporting on CSC/eCSC but are included in the 'Surgical outcomes' tables.
 
-## Refractive error coverage (REC) and effective refractive error coverage (eREC)
+## Distance refractive error coverage (REC) and effective refractive error coverage (eREC)
 
-REC is defined as (A + B) / (A + B + C)
+Distance REC is defined as (A + B) / (A + B + C)
 
-eREC is defined as (A) / (A + B + C)
+Distance eREC is defined as (A) / (A + B + C)
 
 where:
 
@@ -2082,7 +2089,26 @@ B = Individuals who present with spectacles or contact lenses for distance and w
 
 C = Individuals who present without spectacles and whose UCVA is \<6/12 in the better eye and whose PinVA is 6/12 in the better eye (Unmet Need)
 
-Note: This is the 'gold-standard' eREC calculation described here: McCormick I, Mactaggart I, Bastawrous A, Burton MJ, Ramke J. Effective refractive error coverage: an eye health indicator to measure progress towards universal health coverage. Ophthalmic Physiol Opt. 2020;40(1):1-5. https://doi:10.1111/opo.12662
+Note: This is the 'gold-standard' distance eREC calculation described here: McCormick I, Mactaggart I, Bastawrous A, Burton MJ, Ramke J. Effective refractive error coverage: an eye health indicator to measure progress towards universal health coverage. Ophthalmic Physiol Opt. 2020;40(1):1-5. https://doi.org/10.1111/opo.12662
+
+## Near refractive error coverage (REC) and effective refractive error coverage (eREC)
+
+These indicators are estimated among a subset of the population that have distance PinVA 6/12 or better.
+
+Near REC is defined as (A + B) / (A + B + C)
+
+Near eREC is defined as (A) / (A + B + C)
+
+where:
+
+A = Individuals with distance PinVA ≥6/12 in at least one eye and with near UCVA <N6 at 40 cm in the better eye who present with spectacles for near vision and whose near corrected VA is ≥N6 at 40 cm in the better eye (Met need)
+
+B = Individuals with distance PinVA ≥6/12 in at least one eye who present with spectacles for near vision and with near UCVA <N6 at 40cm and whose near corrected VA is <N6 at 40 cm in the better eye (Undermet need)
+
+C = Individuals with distance PinVA ≥6/12 in at least one eye who do not have correction for near vision and whose near UCVA is <N6 at 40 cm in the better eye (Unmet need)
+
+Note: Near eREC terms used here are based on definitions set out in the appendix of the following publication: Keel S, Muller A, Block S et al. Keeping an eye on eye care: monitoring progress towards effective coverage. Lancet Global Health. 2021. https://doi.org/10.1016/S2214-109X(21)00212-6.
+
 
 ## 95% Confidence Interval
 
