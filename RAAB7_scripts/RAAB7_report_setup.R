@@ -528,7 +528,16 @@ if(!is.logical(raab$spectacles_used_ever_near)){
   raab$spectacles_used_ever_near<-raab$spectacles_used_ever_near
 }
 
-#denoms for near specs question to subsets of unmet need 
+#denoms for near specs question
+
+#met and undermet need
+raab <- raab %>% mutate(
+  specs.near.met.undermet.need.denom = case_when(
+    (ee_case==1 | ff_case==1) ~TRUE, TRUE ~ FALSE
+  )
+)
+
+#subsets of unmet need 
 raab <- raab %>% mutate(
   specs.ever.used.true.denom = case_when(
     gg_case==1 & spectacles_used_ever_near==TRUE ~1, TRUE ~ 0

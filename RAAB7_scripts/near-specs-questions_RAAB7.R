@@ -20,14 +20,14 @@ names(specs.first.pair.near.table) <- c("first.pair.near",
 
 for (i in 1:length(specs.first.pair.near)) {
   
-  specs.first.pair.near.table$female.n[i] <- sum(raab$spectacles_first_pair_near[raab$gender=="female"]==specs.first.pair.near[i],na.rm=T) 
-  specs.first.pair.near.table$female.pct[i] <- sum(raab$spectacles_first_pair_near[raab$gender=="female"]==specs.first.pair.near[i],na.rm=T) / sum(raab$spectacles_used_near[raab$gender=="female"]==TRUE,na.rm=T) 
+  specs.first.pair.near.table$female.n[i] <- sum(raab$spectacles_first_pair_near[raab$gender=="female" & raab$specs.near.met.undermet.need.denom==TRUE]==specs.first.pair.near[i],na.rm=T) 
+  specs.first.pair.near.table$female.pct[i] <- specs.first.pair.near.table$female.n[i] / sum(raab$specs.near.met.undermet.need.denom[raab$gender=="female"]==TRUE,na.rm=T) 
   
-  specs.first.pair.near.table$male.n[i] <- sum(raab$spectacles_first_pair_near[raab$gender=="male"]==specs.first.pair.near[i],na.rm=T)  
-  specs.first.pair.near.table$male.pct[i] <- sum(raab$spectacles_first_pair_near[raab$gender=="male"]==specs.first.pair.near[i],na.rm=T) / sum(raab$spectacles_used_near[raab$gender=="male"]==TRUE,na.rm=T)
+  specs.first.pair.near.table$male.n[i] <- sum(raab$spectacles_first_pair_near[raab$gender=="male" & raab$specs.near.met.undermet.need.denom==TRUE]==specs.first.pair.near[i],na.rm=T)  
+  specs.first.pair.near.table$male.pct[i] <- specs.first.pair.near.table$male.n[i] / sum(raab$specs.near.met.undermet.need.denom[raab$gender=="male"]==TRUE,na.rm=T)
   
-  specs.first.pair.near.table$total.n[i] <- sum(raab$spectacles_first_pair_near==specs.first.pair.near[i],na.rm=T) 
-  specs.first.pair.near.table$total.pct[i] <- sum(raab$spectacles_first_pair_near==specs.first.pair.near[i],na.rm=T) / sum(raab$spectacles_used_near==TRUE,na.rm=T)
+  specs.first.pair.near.table$total.n[i] <- sum(raab$spectacles_first_pair_near[raab$specs.near.met.undermet.need.denom==TRUE]==specs.first.pair.near[i],na.rm=T) 
+  specs.first.pair.near.table$total.pct[i] <- specs.first.pair.near.table$total.n[i] / sum(raab$specs.near.met.undermet.need.denom==TRUE,na.rm=T)
   
 }
 
@@ -49,19 +49,16 @@ names(specs.age.near.table) <- c("specs.age.near",
                     "total.n",
                     "total.pct")
 
-for (i in 1:length(specs.age.near)) 
+for (i in 1:length(specs.age.near)) {
   
-{
+  specs.age.near.table$female.n[i] <- sum(raab$spectacles_age_near[raab$gender=='female' & raab$specs.near.met.undermet.need.denom==TRUE] == specs.age.near[i], na.rm = TRUE)
+  specs.age.near.table$female.pct[i] <- specs.age.near.table$female.n[i] / sum(raab$specs.near.met.undermet.need.denom[raab$gender=='female'] == TRUE, na.rm = TRUE)
   
-  specs.age.near.table$female.n[i] <- sum(raab$spectacles_age_near[raab$gender=='female']==specs.age.near[i])
-  specs.age.near.table$female.pct[i] <- (sum(raab$spectacles_age_near[raab$gender=='female']==specs.age.near[i]) / sum(raab$spectacles_used_near[raab$gender=='female']==TRUE))
+  specs.age.near.table$male.n[i] <- sum(raab$spectacles_age_near[raab$gender=='male' & raab$specs.near.met.undermet.need.denom==TRUE] == specs.age.near[i], na.rm = TRUE)
+  specs.age.near.table$male.pct[i] <- specs.age.near.table$male.n[i] / sum(raab$specs.near.met.undermet.need.denom[raab$gender=='male'] == TRUE, na.rm = TRUE)
   
-  specs.age.near.table$male.n[i] <- sum(raab$spectacles_age_near[raab$gender=='male']==specs.age.near[i])
-  specs.age.near.table$male.pct[i] <- (sum(raab$spectacles_age_near[raab$gender=='male']==specs.age.near[i]) / sum(raab$spectacles_used_near[raab$gender=='male']==TRUE))
-  
-  specs.age.near.table$total.n[i] <- sum(raab$spectacles_age_near==specs.age.near[i])
-  specs.age.near.table$total.pct[i] <- (sum(raab$spectacles_age_near==specs.age.near[i]) / sum(raab$spectacles_used_near==TRUE))
-  
+  specs.age.near.table$total.n[i] <- sum(raab$spectacles_age_near[raab$specs.near.met.undermet.need.denom==TRUE] == specs.age.near[i], na.rm = TRUE)
+  specs.age.near.table$total.pct[i] <- specs.age.near.table$total.n[i] / sum(raab$specs.near.met.undermet.need.denom == TRUE, na.rm = TRUE)
 }
 
 pcts <- grep("pct",names(specs.age.near.table))
@@ -82,20 +79,18 @@ names(specs.type.near.table) <- c("specs.type.near",
                                  "total.n",
                                  "total.pct")
 
-for (i in 1:length(specs.type.near)) 
+for (i in 1:length(specs.type.near)) {
   
-{
+  specs.type.near.table$female.n[i] <- sum(raab$spectacles_type_near[raab$gender == 'female' & raab$specs.near.met.undermet.need.denom==TRUE] == specs.type.near[i], na.rm = TRUE)
+  specs.type.near.table$female.pct[i] <- specs.type.near.table$female.n[i] / sum(raab$specs.near.met.undermet.need.denom[raab$gender == 'female'] == TRUE, na.rm = TRUE)
   
-  specs.type.near.table$female.n[i] <- sum(raab$spectacles_type_near[raab$gender=='female']==specs.type.near[i])
-  specs.type.near.table$female.pct[i] <- (sum(raab$spectacles_type_near[raab$gender=='female']==specs.type.near[i]) / sum(raab$spectacles_used_near[raab$gender=='female']==TRUE))
+  specs.type.near.table$male.n[i] <- sum(raab$spectacles_type_near[raab$gender == 'male' & raab$specs.near.met.undermet.need.denom==TRUE] == specs.type.near[i], na.rm = TRUE)
+  specs.type.near.table$male.pct[i] <- specs.type.near.table$male.n[i] / sum(raab$specs.near.met.undermet.need.denom[raab$gender == 'male'] == TRUE, na.rm = TRUE)
   
-  specs.type.near.table$male.n[i] <- sum(raab$spectacles_type_near[raab$gender=='male']==specs.type.near[i])
-  specs.type.near.table$male.pct[i] <- (sum(raab$spectacles_type_near[raab$gender=='male']==specs.type.near[i]) / sum(raab$spectacles_used_near[raab$gender=='male']==TRUE))
-  
-  specs.type.near.table$total.n[i] <- sum(raab$spectacles_type_near==specs.type.near[i])
-  specs.type.near.table$total.pct[i] <- (sum(raab$spectacles_type_near==specs.type.near[i]) / sum(raab$spectacles_used_near==TRUE))
-  
+  specs.type.near.table$total.n[i] <- sum(raab$spectacles_type_near[raab$specs.near.met.undermet.need.denom==TRUE] == specs.type.near[i], na.rm = TRUE)
+  specs.type.near.table$total.pct[i] <- specs.type.near.table$total.n[i] / sum(raab$specs.near.met.undermet.need.denom == TRUE, na.rm = TRUE)
 }
+
 
 pcts <- grep("pct",names(specs.type.near.table))
 specs.type.near.table[,pcts] <- format(round(specs.type.near.table[,pcts] * 100, 1), nsmall=1)
@@ -115,19 +110,16 @@ names(specs.assess.near.table) <- c("specs.assess.near",
                                   "total.n",
                                   "total.pct")
 
-for (i in 1:length(specs.assess.near)) 
+for (i in 1:length(specs.assess.near)) {
   
-{
+  specs.assess.near.table$female.n[i] <- sum(raab$spectacles_assessed_near[raab$gender == 'female' & raab$specs.near.met.undermet.need.denom==TRUE] == specs.assess.near[i], na.rm = TRUE)
+  specs.assess.near.table$female.pct[i] <- specs.assess.near.table$female.n[i] / sum(raab$specs.near.met.undermet.need.denom[raab$gender == 'female'] == TRUE, na.rm = TRUE)
   
-  specs.assess.near.table$female.n[i] <- sum(raab$spectacles_assessed_near[raab$gender=='female']==specs.assess.near[i])
-  specs.assess.near.table$female.pct[i] <- (sum(raab$spectacles_assessed_near[raab$gender=='female']==specs.assess.near[i]) / sum(raab$spectacles_used_near[raab$gender=='female']==TRUE))
+  specs.assess.near.table$male.n[i] <- sum(raab$spectacles_assessed_near[raab$gender == 'male' & raab$specs.near.met.undermet.need.denom==TRUE] == specs.assess.near[i], na.rm = TRUE)
+  specs.assess.near.table$male.pct[i] <- specs.assess.near.table$male.n[i] / sum(raab$specs.near.met.undermet.need.denom[raab$gender == 'male'] == TRUE, na.rm = TRUE)
   
-  specs.assess.near.table$male.n[i] <- sum(raab$spectacles_assessed_near[raab$gender=='male']==specs.assess.near[i])
-  specs.assess.near.table$male.pct[i] <- (sum(raab$spectacles_assessed_near[raab$gender=='male']==specs.assess.near[i]) / sum(raab$spectacles_used_near[raab$gender=='male']==TRUE))
-  
-  specs.assess.near.table$total.n[i] <- sum(raab$spectacles_assessed_near==specs.assess.near[i])
-  specs.assess.near.table$total.pct[i] <- (sum(raab$spectacles_assessed_near==specs.assess.near[i]) / sum(raab$spectacles_used_near==TRUE))
-  
+  specs.assess.near.table$total.n[i] <- sum(raab$spectacles_assessed_near[raab$specs.near.met.undermet.need.denom==TRUE] == specs.assess.near[i], na.rm = TRUE)
+  specs.assess.near.table$total.pct[i] <- specs.assess.near.table$total.n[i] / sum(raab$specs.near.met.undermet.need.denom == TRUE, na.rm = TRUE)
 }
 
 pcts <- grep("pct",names(specs.assess.near.table))
@@ -148,19 +140,16 @@ names(specs.free.near.table) <- c("specs.free.near",
                                     "total.n",
                                     "total.pct")
 
-for (i in 1:length(specs.free.near)) 
+for (i in 1:length(specs.free.near)) {
   
-{
+  specs.free.near.table$female.n[i] <- sum(raab$spectacles_free_near[raab$gender == 'female' & raab$specs.near.met.undermet.need.denom==TRUE] == specs.free.near[i], na.rm = TRUE)
+  specs.free.near.table$female.pct[i] <- specs.free.near.table$female.n[i] / sum(raab$specs.near.met.undermet.need.denom[raab$gender == 'female'] == TRUE, na.rm = TRUE)
   
-  specs.free.near.table$female.n[i] <- sum(raab$spectacles_free_near[raab$gender=='female']==specs.free.near[i])
-  specs.free.near.table$female.pct[i] <- (sum(raab$spectacles_free_near[raab$gender=='female']==specs.free.near[i]) / sum(raab$spectacles_used_near[raab$gender=='female']==TRUE))
+  specs.free.near.table$male.n[i] <- sum(raab$spectacles_free_near[raab$gender == 'male' & raab$specs.near.met.undermet.need.denom==TRUE] == specs.free.near[i], na.rm = TRUE)
+  specs.free.near.table$male.pct[i] <- specs.free.near.table$male.n[i] / sum(raab$specs.near.met.undermet.need.denom[raab$gender == 'male'] == TRUE, na.rm = TRUE)
   
-  specs.free.near.table$male.n[i] <- sum(raab$spectacles_free_near[raab$gender=='male']==specs.free.near[i])
-  specs.free.near.table$male.pct[i] <- (sum(raab$spectacles_free_near[raab$gender=='male']==specs.free.near[i]) / sum(raab$spectacles_used_near[raab$gender=='male']==TRUE))
-  
-  specs.free.near.table$total.n[i] <- sum(raab$spectacles_free_near==specs.free.near[i])
-  specs.free.near.table$total.pct[i] <- (sum(raab$spectacles_free_near==specs.free.near[i]) / sum(raab$spectacles_used_near==TRUE))
-  
+  specs.free.near.table$total.n[i] <- sum(raab$spectacles_free_near[raab$specs.near.met.undermet.need.denom==TRUE] == specs.free.near[i], na.rm = TRUE)
+  specs.free.near.table$total.pct[i] <- specs.free.near.table$total.n[i] / sum(raab$specs.near.met.undermet.need.denom == TRUE, na.rm = TRUE)
 }
 
 pcts <- grep("pct",names(specs.free.near.table))
@@ -181,20 +170,18 @@ names(specs.replace.near.table) <- c("specs.replace.near",
                                   "total.n",
                                   "total.pct")
 
-for (i in 1:length(specs.replace.near)) 
+for (i in 1:length(specs.replace.near)) {
   
-{
+  specs.replace.near.table$female.n[i] <- sum(raab$spectacles_purchase_replacement_near[raab$gender == 'female' & raab$specs.near.met.undermet.need.denom==TRUE] == specs.replace.near[i], na.rm = TRUE)
+  specs.replace.near.table$female.pct[i] <- specs.replace.near.table$female.n[i] / sum(raab$specs.near.met.undermet.need.denom[raab$gender == 'female'] == TRUE, na.rm = TRUE)
+
+  specs.replace.near.table$male.n[i] <- sum(raab$spectacles_purchase_replacement_near[raab$gender == 'male' & raab$specs.near.met.undermet.need.denom==TRUE] == specs.replace.near[i], na.rm = TRUE)
+  specs.replace.near.table$male.pct[i] <- specs.replace.near.table$male.n[i] / sum(raab$specs.near.met.undermet.need.denom[raab$gender == 'male'] == TRUE, na.rm = TRUE)
   
-  specs.replace.near.table$female.n[i] <- sum(raab$spectacles_purchase_replacement_near[raab$gender=='female']==specs.replace.near[i])
-  specs.replace.near.table$female.pct[i] <- (sum(raab$spectacles_purchase_replacement_near[raab$gender=='female']==specs.replace.near[i]) / sum(raab$spectacles_used_near[raab$gender=='female']==TRUE))
-  
-  specs.replace.near.table$male.n[i] <- sum(raab$spectacles_purchase_replacement_near[raab$gender=='male']==specs.replace.near[i])
-  specs.replace.near.table$male.pct[i] <- (sum(raab$spectacles_purchase_replacement_near[raab$gender=='male']==specs.replace.near[i]) / sum(raab$spectacles_used_near[raab$gender=='male']==TRUE))
-  
-  specs.replace.near.table$total.n[i] <- sum(raab$spectacles_purchase_replacement_near==specs.replace.near[i])
-  specs.replace.near.table$total.pct[i] <- (sum(raab$spectacles_purchase_replacement_near==specs.replace.near[i]) / sum(raab$spectacles_used_near==TRUE))
-  
+  specs.replace.near.table$total.n[i] <- sum(raab$spectacles_purchase_replacement_near[raab$specs.near.met.undermet.need.denom==TRUE] == specs.replace.near[i], na.rm = TRUE)
+  specs.replace.near.table$total.pct[i] <- specs.replace.near.table$total.n[i] / sum(raab$specs.near.met.undermet.need.denom == TRUE, na.rm = TRUE)
 }
+
 
 pcts <- grep("pct",names(specs.replace.near.table))
 specs.replace.near.table[,pcts] <- format(round(specs.replace.near.table[,pcts] * 100, 1), nsmall=1)
@@ -216,19 +203,16 @@ names(specs.ever.near.table) <- c("specs.ever.near",
                                      "total.n",
                                      "total.pct")
 
-for (i in 1:length(specs.ever.near)) 
+for (i in 1:length(specs.ever.near)) {
   
-{
+  specs.ever.near.table$female.n[i] <- sum(raab$spectacles_used_ever_near[raab$gender == 'female' & raab$gg_case==1] == specs.ever.near[i], na.rm = TRUE)
+  specs.ever.near.table$female.pct[i] <- specs.ever.near.table$female.n[i] / sum(raab$gg_case[raab$gender == 'female'] == 1, na.rm = TRUE)
   
-  specs.ever.near.table$female.n[i] <- sum(raab$spectacles_used_ever_near[raab$gender=='female']==specs.ever.near[i])
-  specs.ever.near.table$female.pct[i] <- (sum(raab$spectacles_used_ever_near[raab$gender=='female']==specs.ever.near[i]) / sum(raab$gg_case[raab$gender=='female']==1))
+  specs.ever.near.table$male.n[i] <- sum(raab$spectacles_used_ever_near[raab$gender == 'male'& raab$gg_case==1] == specs.ever.near[i], na.rm = TRUE)
+  specs.ever.near.table$male.pct[i] <- specs.ever.near.table$male.n[i] / sum(raab$gg_case[raab$gender == 'male'] == 1, na.rm = TRUE)
   
-  specs.ever.near.table$male.n[i] <- sum(raab$spectacles_used_ever_near[raab$gender=='male']==specs.ever.near[i])
-  specs.ever.near.table$male.pct[i] <- (sum(raab$spectacles_used_ever_near[raab$gender=='male']==specs.ever.near[i]) / sum(raab$gg_case[raab$gender=='male']==1))
-  
-  specs.ever.near.table$total.n[i] <- sum(raab$spectacles_used_ever_near==specs.ever.near[i])
-  specs.ever.near.table$total.pct[i] <- (sum(raab$spectacles_used_ever_near==specs.ever.near[i]) / sum(raab$gg_case==1))
-  
+  specs.ever.near.table$total.n[i] <- sum(raab$spectacles_used_ever_near[raab$gg_case==1] == specs.ever.near[i], na.rm = TRUE)
+  specs.ever.near.table$total.pct[i] <- specs.ever.near.table$total.n[i] / sum(raab$gg_case == 1, na.rm = TRUE)
 }
 
 pcts <- grep("pct",names(specs.ever.near.table))
@@ -249,19 +233,16 @@ names(specs.not.now.near.table) <- c("specs.not.now.near",
                                   "total.n",
                                   "total.pct")
 
-for (i in 1:length(specs.not.now.near)) 
+for (i in 1:length(specs.not.now.near)) {
   
-{
+  specs.not.now.near.table$female.n[i] <- sum(raab$spectacles_not_using_near[raab$gender == 'female' & raab$gg_case==1] == specs.not.now.near[i], na.rm = TRUE)
+  specs.not.now.near.table$female.pct[i] <- specs.not.now.near.table$female.n[i] / sum(raab$specs.ever.used.true.denom[raab$gender == 'female'] == 1, na.rm = TRUE)
   
-  specs.not.now.near.table$female.n[i] <- sum(raab$spectacles_not_using_near[raab$gender=='female']==specs.not.now.near[i])
-  specs.not.now.near.table$female.pct[i] <- (sum(raab$spectacles_not_using_near[raab$gender=='female']==specs.not.now.near[i]) / sum(raab$specs.ever.used.true.denom[raab$gender=='female']==1))
-  
-  specs.not.now.near.table$male.n[i] <- sum(raab$spectacles_not_using_near[raab$gender=='male']==specs.not.now.near[i])
-  specs.not.now.near.table$male.pct[i] <- (sum(raab$spectacles_not_using_near[raab$gender=='male']==specs.not.now.near[i]) / sum(raab$specs.ever.used.true.denom[raab$gender=='male']==1))
-  
-  specs.not.now.near.table$total.n[i] <- sum(raab$spectacles_not_using_near==specs.not.now.near[i])
-  specs.not.now.near.table$total.pct[i] <- (sum(raab$spectacles_not_using_near==specs.not.now.near[i]) / sum(raab$specs.ever.used.true.denom==1))
-  
+  specs.not.now.near.table$male.n[i] <- sum(raab$spectacles_not_using_near[raab$gender == 'male' & raab$gg_case==1] == specs.not.now.near[i], na.rm = TRUE)
+  specs.not.now.near.table$male.pct[i] <- specs.not.now.near.table$male.n[i] / sum(raab$specs.ever.used.true.denom[raab$gender == 'male'] == 1, na.rm = TRUE)
+
+  specs.not.now.near.table$total.n[i] <- sum(raab$spectacles_not_using_near[raab$gg_case==1] == specs.not.now.near[i], na.rm = TRUE)
+  specs.not.now.near.table$total.pct[i] <- specs.not.now.near.table$total.n[i] / sum(raab$specs.ever.used.true.denom == 1, na.rm = TRUE)
 }
 
 pcts <- grep("pct",names(specs.not.now.near.table))
@@ -282,19 +263,16 @@ names(specs.not.replaced.near.table) <- c("specs.not.replaced.near",
                                      "total.n",
                                      "total.pct")
 
-for (i in 1:length(specs.not.replaced.near)) 
+for (i in 1:length(specs.not.replaced.near)) {
   
-{
-  
-  specs.not.replaced.near.table$female.n[i] <- sum(raab$spectacles_not_replaced_near[raab$gender=='female']==specs.not.replaced.near[i])
-  specs.not.replaced.near.table$female.pct[i] <- (sum(raab$spectacles_not_replaced_near[raab$gender=='female']==specs.not.replaced.near[i]) / sum(raab$specs.not.replaced.near.denom[raab$gender=='female']==1))
-  
-  specs.not.replaced.near.table$male.n[i] <- sum(raab$spectacles_not_replaced_near[raab$gender=='male']==specs.not.replaced.near[i])
-  specs.not.replaced.near.table$male.pct[i] <- (sum(raab$spectacles_not_replaced_near[raab$gender=='male']==specs.not.replaced.near[i]) / sum(raab$specs.not.replaced.near.denom[raab$gender=='male']==1))
-  
-  specs.not.replaced.near.table$total.n[i] <- sum(raab$spectacles_not_replaced_near==specs.not.replaced.near[i])
-  specs.not.replaced.near.table$total.pct[i] <- (sum(raab$spectacles_not_replaced_near==specs.not.replaced.near[i]) / sum(raab$specs.not.replaced.near.denom==1))
-  
+  specs.not.replaced.near.table$female.n[i] <- sum(raab$spectacles_not_replaced_near[raab$gender == 'female' & raab$gg_case==1] == specs.not.replaced.near[i], na.rm = TRUE)
+  specs.not.replaced.near.table$female.pct[i] <- specs.not.replaced.near.table$female.n[i] / sum(raab$specs.not.replaced.near.denom[raab$gender == 'female'] == 1, na.rm = TRUE)
+
+  specs.not.replaced.near.table$male.n[i] <- sum(raab$spectacles_not_replaced_near[raab$gender == 'male' & raab$gg_case==1] == specs.not.replaced.near[i], na.rm = TRUE)
+  specs.not.replaced.near.table$male.pct[i] <- specs.not.replaced.near.table$male.n[i] / sum(raab$specs.not.replaced.near.denom[raab$gender == 'male'] == 1, na.rm = TRUE)
+
+  specs.not.replaced.near.table$total.n[i] <- sum(raab$spectacles_not_replaced_near[raab$gg_case==1] == specs.not.replaced.near[i], na.rm = TRUE)
+  specs.not.replaced.near.table$total.pct[i] <- specs.not.replaced.near.table$total.n[i] / sum(raab$specs.not.replaced.near.denom == 1, na.rm = TRUE)
 }
 
 pcts <- grep("pct",names(specs.not.replaced.near.table))
@@ -315,24 +293,20 @@ names(specs.never.near.table) <- c("specs.never.near",
                                           "total.n",
                                           "total.pct")
 
-for (i in 1:length(specs.never.near)) 
-  
-{
-  
-  specs.never.near.table$female.n[i] <- sum(raab$spectacles_not_used_near[raab$gender=='female']==specs.never.near[i])
-  specs.never.near.table$female.pct[i] <- (sum(raab$spectacles_not_used_near[raab$gender=='female']==specs.never.near[i]) / sum(raab$specs.ever.used.false.denom[raab$gender=='female']==1))
-  
-  specs.never.near.table$male.n[i] <- sum(raab$spectacles_not_used_near[raab$gender=='male']==specs.never.near[i])
-  specs.never.near.table$male.pct[i] <- (sum(raab$spectacles_not_used_near[raab$gender=='male']==specs.never.near[i]) / sum(raab$specs.ever.used.false.denom[raab$gender=='male']==1))
-  
-  specs.never.near.table$total.n[i] <- sum(raab$spectacles_not_used_near==specs.never.near[i])
-  specs.never.near.table$total.pct[i] <- (sum(raab$spectacles_not_used_near==specs.never.near[i]) / sum(raab$specs.ever.used.false.denom==1))
-  
+for (i in 1:length(specs.never.near)) {
+
+  specs.never.near.table$female.n[i] <- sum(raab$spectacles_not_used_near[raab$gender == 'female' & raab$gg_case==1] == specs.never.near[i], na.rm = TRUE)
+  specs.never.near.table$female.pct[i] <- specs.never.near.table$female.n[i] / sum(raab$specs.ever.used.false.denom[raab$gender == 'female'] == 1, na.rm = TRUE)
+
+  specs.never.near.table$male.n[i] <- sum(raab$spectacles_not_used_near[raab$gender == 'male' & raab$gg_case==1] == specs.never.near[i], na.rm = TRUE)
+  specs.never.near.table$male.pct[i] <- specs.never.near.table$male.n[i] / sum(raab$specs.ever.used.false.denom[raab$gender == 'male'] == 1, na.rm = TRUE)
+
+  specs.never.near.table$total.n[i] <- sum(raab$spectacles_not_used_near[raab$gg_case==1] == specs.never.near[i], na.rm = TRUE)
+  specs.never.near.table$total.pct[i] <- specs.never.near.table$total.n[i] / sum(raab$specs.ever.used.false.denom == 1, na.rm = TRUE)
 }
 
 pcts <- grep("pct",names(specs.never.near.table))
 specs.never.near.table[,pcts] <- format(round(specs.never.near.table[,pcts] * 100, 1), nsmall=1)
-
 
 ## create two new tables combining all questions for with and without near specs
 
@@ -375,7 +349,7 @@ specs.near.none <- c("Have you ever used near spectacles",
                      "Yes", "No",
                      "If yes, why not currently using",
                      "Need not felt", "No longer effective", "Lost/broken", "Disliked appearance",
-                     "Why have you not replaced them",
+                     "Why have you not replaced them*",
                      "Not available", "Not affordable", "Other reason",
                      "If no, why not used before",
                      "Need not felt", "Not available", "Not affordable", "Other reason")
