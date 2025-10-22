@@ -466,3 +466,26 @@ raab <- raab %>% mutate(
 )
 
 dr.last.exam <- c("dr_diabetic_last_exam_none", "dr_diabetic_last_exam_0_12_months", "dr_diabetic_last_exam_13_24_months", "dr_diabetic_last_exam_over_24_months")
+
+#Time since cataract surgery
+time_since_catop_cats <- c("less than 2 years", "2 or more but less than 4 years", "4 or more but less than 6 years", "6 or more but less than 8 years", "8 or more years")
+
+raab <- raab %>% mutate(
+  time_since_catop_re = (age - surgery_age_right),
+  time_since_catop_le = (age - surgery_age_left)
+)
+
+raab <- raab %>% mutate(
+  time.cat.op.re.0 = case_when(raab$time_since_catop_re<2 ~ 1, TRUE ~ 0),
+  time.cat.op.re.2 = case_when(raab$time_since_catop_re>=2 & raab$time_since_catop_re<4 ~ 1, TRUE ~ 0),
+  time.cat.op.re.4 = case_when(raab$time_since_catop_re>=4 & raab$time_since_catop_re<6 ~ 1, TRUE ~ 0),
+  time.cat.op.re.6 = case_when(raab$time_since_catop_re>=6 & raab$time_since_catop_re<8 ~ 1, TRUE ~ 0),
+  time.cat.op.re.8 = case_when(raab$time_since_catop_re>=8 ~ 1, TRUE ~ 0),
+  
+  time.cat.op.le.0 = case_when(raab$time_since_catop_le<2 ~ 1, TRUE ~ 0),
+  time.cat.op.le.2 = case_when(raab$time_since_catop_le>=2 & raab$time_since_catop_le<4 ~ 1, TRUE ~ 0),
+  time.cat.op.le.4 = case_when(raab$time_since_catop_le>=4 & raab$time_since_catop_le<6 ~ 1, TRUE ~ 0),
+  time.cat.op.le.6 = case_when(raab$time_since_catop_le>=6 & raab$time_since_catop_le<8 ~ 1, TRUE ~ 0),
+  time.cat.op.le.8 = case_when(raab$time_since_catop_le>=8 ~ 1, TRUE ~ 0)
+)
+
