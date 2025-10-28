@@ -63,6 +63,7 @@ if(sum(!is.na(DR_check$dr_diabetes_blood_consent)==TRUE)>0){
   
 }
 
+# Dynamic inclusion of all prebigboi* objects including optional ones
 bigboiTMP<-as.data.frame(Reduce("cbind", mget(ls(pattern = "prebigboi*"))))
 bigboi<-as.data.frame(cbind(bigboiTMP,loc_vars))
 

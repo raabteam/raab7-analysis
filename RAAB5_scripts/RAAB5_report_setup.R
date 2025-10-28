@@ -190,7 +190,7 @@ raab <- raab %>% mutate(
 raab$total.operated<-(raab$bilat.operated==1 | raab$unilat.operated==1)+0
 
 # Bilateral operable cataract cases used to report barriers to cataract surgery  
-raab$bilateral_operable_cataract<-(raab$right_operable_660==1 & raab$left_operable_660)+0
+raab$bilateral_operable_cataract<-(raab$right_operable_660==1 & raab$left_operable_660==1)+0
 
 raab <- raab %>% mutate(
   

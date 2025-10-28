@@ -50,6 +50,7 @@ vars_to_drop<-c("map_complete","exclude_repo","repo_meta","repo_data","ecsc_cons
 raab_meta<-meta[meta$raab_id==ID,!(names(meta) %in% vars_to_drop)]
 # Check if row of NAs included, remove if there
 raab_meta <- raab_meta[rowSums(is.na(raab_meta)) != ncol(raab_meta), ]
+raab_meta$va_threshold <- 612 # required for raab.world results display logic
 
 meta_report<-data.frame(
   title=NA,
@@ -94,9 +95,8 @@ meta_dataset<-data.frame(
 meta_report$title<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
 meta_dataset$title<-paste0("Rapid Assessment of Avoidable Blindness Dataset: ",raab_meta$survey_title)
 
-url_string<-gsub("[[:punct:]]", "", raab_meta$survey_title)
-url_string<-gsub(" ", "-", tolower(url_string))
-
+# url_string<-gsub("[[:punct:]]", "", raab_meta$survey_title)
+# url_string<-gsub(" ", "-", tolower(url_string))
 # meta_report$identifier<-paste0("https://www.raab.world/survey/",url_string,"/report")
 # meta_dataset$identifier<-paste0("https://www.raab.world/survey/",url_string,"/data")
 
@@ -129,7 +129,6 @@ meta_dataset$identifier<-paste0(response, "/data")
 
 }
   
-
 meta_report$doi<-paste0("10.17037/RAABREPORT.",ID)
 meta_dataset$doi<-paste0("10.17037/RAABDATASET.",ID)
 
