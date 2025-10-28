@@ -1,7 +1,9 @@
 #RAAB6
 
+# Vision impairment
 prebigboi1<-dcast(melt(sum3[,c("vi.level","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.female.n","extrapolated.male.n","extrapolated.total.n")], id.var="vi.level"), 1~variable+vi.level)
 
+# eCSC/CSC
 prev14_360<-prev14[prev14$denom.thresh==360 & (prev14$num.thresh=="csc" | prev14$num.thresh=="ecsc_612"),]
 prev14_660<-prev14[prev14$denom.thresh==660 & (prev14$num.thresh=="csc" | prev14$num.thresh=="ecsc_612"),]
 prev14_618<-prev14[prev14$denom.thresh==618 & (prev14$num.thresh=="csc" | prev14$num.thresh=="ecsc_612"),]
@@ -16,23 +18,36 @@ names(prebigboi4)<-paste0(names(prebigboi4),"_operable_thresh_618")
 prebigboi5<-dcast(melt(prev14_612[,2:20], id.var="num.thresh"), 1~variable+num.thresh)
 names(prebigboi5)<-paste0(names(prebigboi5),"_operable_thresh_612")
 
+# Unmet need for cataract surgery
 prebigboi6<-dcast(melt(catcovdenom[,c("out.names","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.male.n","extrapolated.female.n","extrapolated.total.n")], id.var="out.names"), 1~variable+out.names)
 names(prebigboi6)<-gsub("\\ <","_",names(prebigboi6))
 names(prebigboi6)<-gsub("/","",names(prebigboi6))
 
+# Top three causes of blindness
 causes<-sum6[1:13,]
 causes<-causes[order(causes$blind.pct,decreasing=T),]
 top_causes<-causes[1:3,c("principal.cause","blind.n","blind.pct")]
 prebigboi7<-dcast(melt(top_causes,id.var="principal.cause"),1~variable+principal.cause)
 
+# Refractive error prevalence
 prebigboi8<-dcast(melt(newtab4[,c("vi.level","male.adj.pct","male.adj.pct.lci","male.adj.pct.uci","female.adj.pct","female.adj.pct.lci","female.adj.pct.uci","total.adj.pct","total.adj.pct.lci","total.adj.pct.uci","extrapolated.male.n","extrapolated.female.n","extrapolated.total.n")], id.var="vi.level"), 1~variable+vi.level)
 
+# Distance eREC/REC
 prebigboi9<-dcast(melt(newtab5,id.vars="rec_metric"), 1~variable+rec_metric)
 names(prebigboi9)<-paste0(names(prebigboi9),"_pva")
 
-loc_vars<-data.frame(iso_2=raab_meta$iso_2,year_end=raab_meta$year_end,gbd_reg=raab_meta$gbd_reg,gbd_superreg=raab_meta$gbd_superreg)
+#DR if used
+if(sum(!is.na(DR_check$dr_diabetes_blood_consent)==TRUE)>0){
+  
+  dr.last.exam.table_12<-dr.last.exam.table[dr.last.exam.table$last.dr.exam=="dr_diabetic_last_exam_0_12_months",]
+  prebigboi12<-dcast(melt(dr.last.exam.table_12, id.vars="last.dr.exam"), 1~variable+last.dr.exam)
+  
+}
 
-bigboi<-as.data.frame(cbind(prebigboi1,prebigboi2,prebigboi3,prebigboi4,prebigboi5,prebigboi6,prebigboi7,prebigboi8,prebigboi9,loc_vars))
+# Dynamic inclusion of all prebigboi* objects including optional ones
+bigboiTMP <- as.data.frame(Reduce("cbind", mget(ls(pattern = "prebigboi*"))))
+loc_vars<-data.frame(iso_2=raab_meta$iso_2,year_end=raab_meta$year_end,gbd_reg=raab_meta$gbd_reg,gbd_superreg=raab_meta$gbd_superreg)
+bigboi <- as.data.frame(cbind(bigboiTMP, loc_vars))
 
 bigboi[bigboi=="*"]<-NA
 
