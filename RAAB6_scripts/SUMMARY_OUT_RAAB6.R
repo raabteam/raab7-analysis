@@ -36,6 +36,30 @@ prebigboi8<-dcast(melt(newtab4[,c("vi.level","male.adj.pct","male.adj.pct.lci","
 prebigboi9<-dcast(melt(newtab5,id.vars="rec_metric"), 1~variable+rec_metric)
 names(prebigboi9)<-paste0(names(prebigboi9),"_pva")
 
+# Equity dashboard
+# blindness by age
+blind_row <- equity.blindness.age[1, ]
+age.working.adj.pct_blind<-blind_row$age_50_64.adj.pct
+age.retired.adj.pct_blind<-blind_row$age_65_plus.adj.pct
+prebigboi_age_blind <- data.frame(
+  age.working.adj.pct_blind = age.working.adj.pct_blind,
+  age.retired.adj.pct_blind = age.retired.adj.pct_blind
+)
+# ecsc by age
+ecsc612_612_row <- equity.ecsc.age[equity.ecsc.age$num.thresh=="ecsc_612" & equity.ecsc.age$denom.thresh=="612",]
+ecsc612_660_row <- equity.ecsc.age[equity.ecsc.age$num.thresh=="ecsc_612" & equity.ecsc.age$denom.thresh=="660",]
+age.working.adjusted_ecsc_612_operable_thresh_612 <- ecsc612_612_row$age_50_64.adjusted
+age.working.adjusted_ecsc_612_operable_thresh_660 <- ecsc612_660_row$age_50_64.adjusted
+age.retired.adjusted_ecsc_612_operable_thresh_612 <- ecsc612_612_row$age_65_plus.adjusted
+age.retired.adjusted_ecsc_612_operable_thresh_660 <- ecsc612_660_row$age_65_plus.adjusted
+prebigboi_age_ecsc <- data.frame(
+  age.working.adjusted_ecsc_612_operable_thresh_612 = age.working.adjusted_ecsc_612_operable_thresh_612,
+  age.working.adjusted_ecsc_612_operable_thresh_660 = age.working.adjusted_ecsc_612_operable_thresh_660,
+  age.retired.adjusted_ecsc_612_operable_thresh_612 = age.retired.adjusted_ecsc_612_operable_thresh_612,
+  age.retired.adjusted_ecsc_612_operable_thresh_660 = age.retired.adjusted_ecsc_612_operable_thresh_660,
+  stringsAsFactors = FALSE
+)
+
 #DR if used
 if(sum(!is.na(DR_check$dr_diabetes_blood_consent)==TRUE)>0){
   
@@ -45,14 +69,16 @@ if(sum(!is.na(DR_check$dr_diabetes_blood_consent)==TRUE)>0){
 }
 
 # Dynamic inclusion of all prebigboi* objects including optional ones
-bigboiTMP <- as.data.frame(Reduce("cbind", mget(ls(pattern = "prebigboi*"))))
+bigboiTMP <- as.data.frame(Reduce("cbind", mget(ls(pattern = "^prebigboi"))))
 loc_vars<-data.frame(iso_2=raab_meta$iso_2,year_end=raab_meta$year_end,gbd_reg=raab_meta$gbd_reg,gbd_superreg=raab_meta$gbd_superreg)
 bigboi <- as.data.frame(cbind(bigboiTMP, loc_vars))
 
 bigboi[bigboi=="*"]<-NA
 
-bigboi[1,1]<-ID
-names(bigboi)[1]<-"raab_id"
+bigboi <- cbind(
+  raab_id = ID,
+  bigboi
+)
 
 spots<-grep("^\\.",names(bigboi))
 bigboi<-bigboi[,-spots]
