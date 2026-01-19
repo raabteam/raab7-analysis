@@ -942,7 +942,7 @@ source(here("RAAB7_scripts","cat-barriers.R"))
 
 sum11.nice.names<-surgery.bars[, c("Barrier","female_n","female_pct","male_n","male_pct","total_n","total_pct")]
 
-sum11.nice.names$Barrier<-recode_factor(surgery.bars$Barrier,surgery_none_reason_access = "Cannot access surgery", surgery_none_reason_cost = "Cost", surgery_none_reason_denied = "Surgery denied by provider", surgery_none_reason_fear = "Fear", surgery_none_reason_other = "Other", surgery_none_reason_unaware = "Unaware treatment possible", surgery_none_reason_unnecessary = "Felt not needed", Total = "Total")  
+sum11.nice.names$Barrier<-recode_factor(surgery.bars$Barrier,surgery_none_reason_access = "Cannot access surgery", surgery_none_reason_cost = "Cost", surgery_none_reason_denied = "Surgery denied by provider", surgery_none_reason_fear = "Fear", surgery_none_reason_other = "Local reason", surgery_none_reason_unaware = "Unaware treatment possible", surgery_none_reason_unnecessary = "Felt not needed", Total = "Total")  
 
 write.table(sum11.nice.names,here("outputs", ID, "summary", "data", "cat7.csv"),row.names=F,col.names=T,sep=",")
 

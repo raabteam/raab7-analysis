@@ -137,6 +137,39 @@ prop.age.adjust<-function(pop.subtab,raab.subtab,numerator.subpop,denominator.su
   
 }
 
+# Usage: prop.sex.adjust(pop.subtab,raab.subtab,numerator.subpop,denominator.subpop)
+# pop.subtab = RAAB7-format population file for the age group of interest (50–64 or 65+), both sexes
+# raab.subtab = table of individual-level RAAB data from subpopulation you are analysing (i.e., age groups 50-64 or 65+)
+# numerator.subtab = variable from raab.subtab with cases coded as 1, others as 0
+# denominator.subtab =  variable from raab.subtab with those examined coded as 1, others as 0
+
+prop.sex.adjust <- function(pop.subtab, raab.subtab, numerator.subpop, denominator.subpop) {
+  
+  sex.groups<-c("male","female")
+  
+  subpop<-aggregate(pop.subtab$population,by=list(pop.subtab$gender),FUN=sum)
+  
+  names(subpop)<-c("gender","n")
+  subpop$gender<-as.numeric(as.factor(sex.groups))
+  raab.subtab$gender<-as.numeric(as.factor(raab.subtab$gender))
+  
+  for (j in 1:length(sex.groups))
+    
+  {
+    
+    subpop$examined[subpop$gender==j] <- sum(raab.subtab$exam_status[raab.subtab$gender==j]=="exam_status_examined",na.rm=T)
+    
+    subpop$numerator[subpop$gender==j] <- sum(numerator.subpop[raab.subtab$gender==j],na.rm=T) 
+    subpop$denominator[subpop$gender==j] <- sum(denominator.subpop[raab.subtab$gender==j],na.rm=T)
+    
+  } 
+  
+  subpop$exam.infl.fact<-subpop$n/subpop$examined    
+  
+  p.sex.adj<-sum(subpop$numerator * subpop$exam.infl.fact)/sum(subpop$denominator * subpop$exam.infl.fact)
+  
+}
+
 #Where a confidence interval is over 100, replace with 100; where it is under 0, replace with 0.
 
 lci_0<-function(x){if(!is.na(x) & x < 0){x <- 0} else {x <- x}}

@@ -2,19 +2,25 @@
 
 # Script to create new variables to support major data analyses and visualisations
 
-# Categorise continuous age variable into 10-year binds in RAAB data file
-
+# Categorise continuous age variable into 10-year bins in RAAB data file
 age.groups.tens<-c("50-59","60-69","70-79","80+")
 raab$age.groups.tens<-cut(raab$age,breaks=c(49,59,69,79,150),labels=age.groups.tens)
 
-# Categorise continuous age variable into 10-year bins in population census file
+# Categorise continuous age variable into two bins for equity dash in RAAB data file
+age.groups.working<-c("age_50_64","age_65_plus")
+raab$age.groups.working<-cut(raab$age,breaks=c(49,64,150),labels=age.groups.working)
 
+# Categorise continuous age variable into 10-year bins in population census file
 popfives$age.groups.tens<-cut(popfives$ageStart,breaks=c(49,59,69,79,110),labels=age.groups.tens)
 
-# Extract gender-specific subsets of census data
+# Categorise continuous age variable into two bins for equity dash in population census file
+popfives$age.groups.working<-cut(popfives$ageStart,breaks=c(49,64,150),labels=age.groups.working)
 
+# Extract gender-specific and working-age-specific subsets of census data
 female.subpop<-popfives[popfives$gender=="female",]
 male.subpop<-popfives[popfives$gender=="male",]
+age.5064.subpop<-popfives[popfives$age.groups.working=="age_50_64",]
+age.65p.subpop<-popfives[popfives$age.groups.working=="age_65_plus",]
 
 # Charatcerise study participant by visual acuity according to WHO thresholds
 # Define numerators and denominators
