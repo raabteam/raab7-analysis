@@ -20,17 +20,17 @@ newtab6$female.n[newtab6$specs=="near"] <- sum(raab$spectacles_used_near[raab$ge
 newtab6$male.n[newtab6$specs=="near"] <- sum(raab$spectacles_used_near[raab$gender=='male']==TRUE, na.rm = T)
 newtab6$total.n[newtab6$specs=="near"] <- sum(raab$spectacles_used_near==TRUE, na.rm = T)
 
-newtab6$female.pct[newtab6$specs=="near"] <- round( sum(raab$spectacles_used_near[raab$gender=='female']==TRUE, na.rm = TRUE) / sum(raab$exam_status[raab$gender=="female"]=="exam_status_examined") * 100,1)
-newtab6$male.pct[newtab6$specs=="near"] <- round( sum(raab$spectacles_used_near[raab$gender=='male']==TRUE, na.rm = TRUE) / sum(raab$exam_status[raab$gender=="male"]=="exam_status_examined") * 100,1)
-newtab6$total.pct[newtab6$specs=="near"] <- round( sum(raab$spectacles_used_near==TRUE, na.rm = TRUE) / sum(raab$exam_status=="exam_status_examined") * 100,1)
+newtab6$female.pct[newtab6$specs=="near"] <- round( sum(raab$spectacles_used_near[raab$gender=='female']==TRUE, na.rm = TRUE) / sum(raab$exam_status[raab$gender=="female"]=="exam_status_examined", na.rm = T) * 100,1)
+newtab6$male.pct[newtab6$specs=="near"] <- round( sum(raab$spectacles_used_near[raab$gender=='male']==TRUE, na.rm = TRUE) / sum(raab$exam_status[raab$gender=="male"]=="exam_status_examined", na.rm = T) * 100,1)
+newtab6$total.pct[newtab6$specs=="near"] <- round( sum(raab$spectacles_used_near==TRUE, na.rm = TRUE) / sum(raab$exam_status=="exam_status_examined", na.rm = T) * 100,1)
 
 newtab6$female.n[newtab6$specs=="distance.total"] <- sum(raab$spectacles_used_distance[raab$gender=='female']==TRUE, na.rm = T)
 newtab6$male.n[newtab6$specs=="distance.total"] <- sum(raab$spectacles_used_distance[raab$gender=='male']==TRUE, na.rm = T)
 newtab6$total.n[newtab6$specs=="distance.total"] <- sum(raab$spectacles_used_distance==TRUE, na.rm = T)
 
-newtab6$female.pct[newtab6$specs=="distance.total"] <- round( sum(raab$spectacles_used_distance[raab$gender=='female']==TRUE, na.rm = TRUE) / sum(raab$exam_status[raab$gender=="female"]=="exam_status_examined") * 100,1)
-newtab6$male.pct[newtab6$specs=="distance.total"] <- round( sum(raab$spectacles_used_distance[raab$gender=='male']==TRUE, na.rm = TRUE) / sum(raab$exam_status[raab$gender=="male"]=="exam_status_examined") * 100,1)
-newtab6$total.pct[newtab6$specs=="distance.total"] <- round( sum(raab$spectacles_used_distance==TRUE, na.rm = TRUE) / sum(raab$exam_status=="exam_status_examined") * 100,1)
+newtab6$female.pct[newtab6$specs=="distance.total"] <- round( sum(raab$spectacles_used_distance[raab$gender=='female']==TRUE, na.rm = TRUE) / sum(raab$exam_status[raab$gender=="female"]=="exam_status_examined", na.rm = T) * 100,1)
+newtab6$male.pct[newtab6$specs=="distance.total"] <- round( sum(raab$spectacles_used_distance[raab$gender=='male']==TRUE, na.rm = TRUE) / sum(raab$exam_status[raab$gender=="male"]=="exam_status_examined", na.rm = T) * 100,1)
+newtab6$total.pct[newtab6$specs=="distance.total"] <- round( sum(raab$spectacles_used_distance==TRUE, na.rm = TRUE) / sum(raab$exam_status=="exam_status_examined", na.rm = T) * 100,1)
 
 newtab6$female.n[newtab6$specs=="distance.under.2"] <- sum(raab$spectacles_age_distance[raab$gender=='female']=="spectacles_age_under_2", na.rm = T)
 newtab6$male.n[newtab6$specs=="distance.under.2"] <- sum(raab$spectacles_age_distance[raab$gender=='male']=="spectacles_age_under_2", na.rm = T)
