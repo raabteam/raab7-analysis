@@ -209,7 +209,7 @@ raab$cataract.severe.vi <- (raab$z_case_660)+0
 raab$cataract.moderate.vi <- (raab$z_case_618)+0
 raab$cataract.mild.vi <- (raab$z_case_612)+0
 
-# Vars for counting operated people (bilateral or unilateral, exclusive categories)
+# Vars for counting operated people (bilateral or unilateral, exclusive categories) - note right_operated and left_operated excludes couched eyes 
 raab <- raab %>% mutate(
   bilat.operated = case_when(raab$right_operated==1 & raab$left_operated==1 ~1, TRUE~0)
 )
@@ -332,7 +332,7 @@ raab <- raab %>% mutate(
 
 surgery_places <- c("surgery_place_camp_improvised","surgery_place_gov_hospital","surgery_place_private_hospital","surgery_place_traditional","surgery_place_voluntary_hospital")
 
-#cataract surgery types and outcomes
+#cataract surgery types and outcomes (right.operated.eyes.denom & left.operated.eyes.denom include couched eyes cf right_operated and left_operated vars)
 
 raab <- raab %>% mutate(
   
