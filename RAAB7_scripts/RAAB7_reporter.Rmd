@@ -611,33 +611,6 @@ knitr::kable(adj.near.re.prev.nice.names, booktabs=T, linesep="",
 ```
 
 
-```{r adj-nv-prev,echo=FALSE,eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
-
-source(here("RAAB7_scripts","crude-adj-prev-near-re.R"))
-
-adj.near.re.prev.nice.names<-near.re.prev.total
-
-adj.near.re.prev.nice.names$male.adj.ci<-paste0(adj.near.re.prev.nice.names$male.adj.pct.lci," - ",adj.near.re.prev.nice.names$male.adj.pct.uci)
-adj.near.re.prev.nice.names$female.adj.ci<-paste0(adj.near.re.prev.nice.names$female.adj.pct.lci," - ",adj.near.re.prev.nice.names$female.adj.pct.uci)
-adj.near.re.prev.nice.names$total.adj.ci<-paste0(adj.near.re.prev.nice.names$total.adj.pct.lci," - ",adj.near.re.prev.nice.names$total.adj.pct.uci)
-
-adj.near.re.prev.nice.names[1,1]<-"Near VI"
-adj.near.re.prev.nice.names<-adj.near.re.prev.nice.names[,c("age.groups.tens","female.adj.pct","female.adj.ci","female.extrapolated.n","male.adj.pct","male.adj.ci","male.extrapolated.n","total.adj.pct","total.adj.ci","total.extrapolated.n")]
-
-write.table(adj.near.re.prev.nice.names,here("outputs", ID, "summary", "data", "prev8.csv"),row.names=F,col.names=T,sep=",")
-
-names(adj.near.re.prev.nice.names) <- c(' ', 'Adj. %', '95% CI', 'Extrapolated magnitude', 'Adj. %', '95% CI', 'Extrapolated magnitude', 'Adj. %', '95% CI', 'Extrapolated magnitude')
-
-knitr::kable(adj.near.re.prev.nice.names,booktabs=T, linesep = "",caption="Adjusted prevalence of near vision impairment (PREV8)",align='lccccccccc') %>%
-  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
-  row_spec(0,italic=TRUE) %>%
-  column_spec(1,width='1.5cm') %>%
-  column_spec(c(4,7,10),width='1.5cm') %>%
-  add_header_above(c(" " = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) 
-
-```
-
-
 \newpage
 
 # Causes of distance vision impairment
