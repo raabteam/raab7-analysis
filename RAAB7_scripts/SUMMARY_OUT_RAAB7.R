@@ -47,7 +47,7 @@ if("gbd_reg" %in% names(meta) & ("gbd_superreg" %in% names(meta))){
 # Near VI/ near eREC if used
 if(sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0){
   
-  prebigboi10<-dcast(melt(near.re.prev.final,id_vars="age.groups.tens"), 1~variable+age.groups.tens)
+  prebigboi10<-dcast(melt(near.vi.prev.final,id_vars="age.groups.tens"), 1~variable+age.groups.tens)
   names(prebigboi10)<-paste0(names(prebigboi10),"_near_re_ucva")
   
   prebigboi11<-dcast(melt(newtab7,id.vars="rec_metric"), 1~variable+rec_metric)
