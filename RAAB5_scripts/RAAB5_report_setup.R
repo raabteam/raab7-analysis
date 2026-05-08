@@ -310,7 +310,7 @@ raab <- raab %>% mutate(
 
 surgery_places <- c("surgery_place_camp_improvised","surgery_place_gov_hospital","surgery_place_private_hospital","surgery_place_traditional","surgery_place_voluntary_hospital")
 
-#cataract surgery types and outcomes
+#cataract surgery types and outcomes (right.operated.eyes.denom & left.operated.eyes.denom include couched eyes cf right_operated and left_operated vars)
 
 raab <- raab %>% mutate(
   
