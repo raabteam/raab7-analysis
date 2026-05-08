@@ -463,10 +463,26 @@ raab <- raab %>% mutate(
 )
 
 # Define near VI based on presenting near VA (only one level, binary screening test at N6 threshold)
-  
+
+# All near VI, irrespective of distance vision 
 raab <- raab %>% mutate(
-  near.vi = case_when(raab$binocular_near_presenting_result=="acuity_evaluation_result_fail" ~ 1, TRUE ~ 0)
+  near.vi = case_when(
+    binocular_near_presenting_result=="acuity_evaluation_result_fail" ~ 1, 
+    TRUE ~ 0)
 )
+# Near VI due to presbyopia, i.e., among people with 6/12 pinva in the better eye
+raab <- raab %>% mutate(
+  near.vi.presb = case_when(
+    binocular_near_presenting_result=="acuity_evaluation_result_fail" & better.eye.pinva==0.3 ~ 1, 
+    TRUE ~ 0)
+)
+
+raab <- raab %>% mutate(
+  vi.denom.presb = case_when(
+    vi.denom==1 & better.eye.pinva==0.3 ~ 1, 
+    TRUE ~ 0)
+)
+
 
 # Define near eREC terms (for "spectacle coverage for near vision impairment due to presbyopia")
 
@@ -530,7 +546,7 @@ if(!is.logical(raab$spectacles_used_ever_near)){
 
 #denoms for near specs question
 
-#met and undermet need
+# spectacle ownership history among met and undermet need
 raab <- raab %>% mutate(
   specs.near.met.undermet.need.denom = case_when(
     (ee_case==1 | ff_case==1) ~TRUE, TRUE ~ FALSE
