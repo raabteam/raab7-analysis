@@ -34,16 +34,21 @@ dir.create(here("outputs",ID,"/summary/data"))
 dir.create(here("outputs",ID,"/raw"))
 dir.create(here("outputs",ID,"/raw/data"))
 
-raab_merged<-read.csv(here("data","surveys.csv"),check.names=F,na.strings=c("","NA"))
+raab_merged <- read.csv(file.path(data_root, "surveys.csv"),     check.names=F, na.strings=c("","NA"))
+pop_merged  <- read.csv(file.path(data_root, "population.csv"),  check.names=F, na.strings=c("","NA"))
+meta        <- read.csv(file.path(metadata_root, "meta.csv"),    check.names=F, na.strings=c("","NA"))
 
+# raab_merged<-read.csv(here("data","surveys.csv"),check.names=F,na.strings=c("","NA"))
+# 
 raab<-raab_merged[raab_merged$raab_id==ID,]
 raab$date<-as.Date(raab$date)
-
-pop_merged<-read.csv(here("data","population.csv"),check.names=F,na.strings=c("","NA"))
+# 
+# pop_merged<-read.csv(here("data","population.csv"),check.names=F,na.strings=c("","NA"))
 popfives<-pop_merged[pop_merged$raab_id==ID,]
-
-meta<-read.csv(here("data","meta.csv"),check.names=F,na.strings=c("","NA"))
+# 
+# meta<-read.csv(here("data","meta.csv"),check.names=F,na.strings=c("","NA"))
 # meta<-read_xlsx(here("data","meta.xlsx"), sheet=1, na=c("",NA))
+
 
 vars_to_drop<-c("map_complete","exclude_repo","repo_meta","repo_data","ecsc_consent","pi_email1","pi_email2","pi_email1 active","pi_int_auth_grp","trainer_email1","trainer_email2")
 
@@ -1965,10 +1970,84 @@ knitr::kable(wgq.ecsc.nice.names, booktabs=T, linesep = "", caption = "Adjusted 
   pack_rows("Cataract surgical threshold <6/18",2,2) %>%
   pack_rows("Cataract surgical threshold <6/60",3,3) %>%
   pack_rows("Cataract surgical threshold <3/60",4,4) %>%
-  add_header_above(c(" " = 1, "Any disability" = 2, "Any non-seeing disability" = 2, "No disbaility" = 2),bold=T) %>%
+  add_header_above(c(" " = 1, "Any disability" = 2, "Any non-seeing disability" = 2, "No disability" = 2),bold=T) %>%
   add_footnote("eCSC: Effective Cataract Surgical Coverage",notation="symbol")
 
 ```
+
+```{r, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
+
+asis_output("## Disability and refractive error")
+
+```
+
+```{r wgq-erec-dist-adj, echo=FALSE, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
+
+source(here("RAAB7_scripts","wgq-erec-dist.R"))
+
+wgq.erec.dist.nice.names<-erec.dist.dis
+
+wgq.erec.dist.nice.names$any.dis.adj.pct.ci        <- paste0(wgq.erec.dist.nice.names$any.dis.adj.pct.lci, " - ", wgq.erec.dist.nice.names$any.dis.adj.pct.uci)
+wgq.erec.dist.nice.names$any.non.vi.dis.adj.pct.ci <- paste0(wgq.erec.dist.nice.names$any.non.vi.dis.adj.pct.lci, " - ", wgq.erec.dist.nice.names$any.non.vi.dis.adj.pct.uci)
+wgq.erec.dist.nice.names$no.dis.adj.pct.ci         <- paste0(wgq.erec.dist.nice.names$no.dis.adj.pct.lci, " - ", wgq.erec.dist.nice.names$no.dis.adj.pct.uci)
+
+wgq.erec.dist.nice.names$rec_metric[wgq.erec.dist.nice.names$rec_metric=="dist_erec"]<-"Distance eREC"
+wgq.erec.dist.nice.names$rec_metric[wgq.erec.dist.nice.names$rec_metric=="dist_rec"]<-"Distance REC"
+
+wgq.erec.dist.nice.names <- wgq.erec.dist.nice.names[, c(
+  "rec_metric",
+  "any.dis.adj.pct", "any.dis.adj.pct.ci",
+  "any.non.vi.dis.adj.pct", "any.non.vi.dis.adj.pct.ci",
+  "no.dis.adj.pct", "no.dis.adj.pct.ci"
+)]
+
+write.table(wgq.erec.dist.nice.names,here("outputs", ID, "summary", "data", "wgq5.csv"),row.names=F,col.names=T,sep=",")
+
+names(wgq.erec.dist.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
+
+knitr::kable(wgq.erec.dist.nice.names, booktabs=T, linesep = "", caption = "Adjusted distance refractive error coverage and effective refractive error coverage by disability status (WGQ5)",row.names=F,align='lcccccc') %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down"),font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  column_spec(1,width='2cm') %>%
+  column_spec(c(3,5,7),'1.5cm') %>%
+  add_header_above(c(" " = 1, "Any disability" = 2, "Any non-seeing disability" = 2, "No disability" = 2),bold=T) %>%
+  add_footnote("eREC: Effective Refractive Error Coverage; REC: Refractive Error Coverage",notation="symbol")
+
+```
+
+```{r wgq-erec-near-adj, echo=FALSE, eval = (sum(!is.na(WQ_check$wg_difficulty_seeing)) + sum(!is.na(WQ_check$wg_difficulty_hearing)) + sum(!is.na(WQ_check$wg_difficulty_memory)) + sum(!is.na(WQ_check$wg_difficulty_mobility)) + sum(!is.na(WQ_check$wg_difficulty_selfcare)) > 0) && (sum(!is.na(NV_check$binocular_near_corrected_result)) > 0)}
+
+source(here("RAAB7_scripts","wgq-erec-near.R"))
+
+wgq.erec.near.nice.names<-erec.near.dis
+
+wgq.erec.near.nice.names$any.dis.adj.pct.ci        <- paste0(wgq.erec.near.nice.names$any.dis.adj.pct.lci, " - ", wgq.erec.near.nice.names$any.dis.adj.pct.uci)
+wgq.erec.near.nice.names$any.non.vi.dis.adj.pct.ci <- paste0(wgq.erec.near.nice.names$any.non.vi.dis.adj.pct.lci, " - ", wgq.erec.near.nice.names$any.non.vi.dis.adj.pct.uci)
+wgq.erec.near.nice.names$no.dis.adj.pct.ci         <- paste0(wgq.erec.near.nice.names$no.dis.adj.pct.lci, " - ", wgq.erec.near.nice.names$no.dis.adj.pct.uci)
+
+wgq.erec.near.nice.names$rec_metric[wgq.erec.near.nice.names$rec_metric=="near_erec"]<-"Near eREC"
+wgq.erec.near.nice.names$rec_metric[wgq.erec.near.nice.names$rec_metric=="near_rec"]<-"Near REC"
+
+wgq.erec.near.nice.names <- wgq.erec.near.nice.names[, c(
+  "rec_metric",
+  "any.dis.adj.pct", "any.dis.adj.pct.ci",
+  "any.non.vi.dis.adj.pct", "any.non.vi.dis.adj.pct.ci",
+  "no.dis.adj.pct", "no.dis.adj.pct.ci"
+)]
+
+write.table(wgq.erec.near.nice.names,here("outputs", ID, "summary", "data", "wgq6.csv"),row.names=F,col.names=T,sep=",")
+
+names(wgq.erec.near.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
+
+knitr::kable(wgq.erec.near.nice.names, booktabs=T, linesep = "", caption = "Adjusted near refractive error coverage and effective refractive error coverage by disability status (WGQ6)",row.names=F,align='lcccccc') %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down"),font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  column_spec(1,width='2cm') %>%
+  column_spec(c(3,5,7),'1.5cm') %>%
+  add_header_above(c(" " = 1, "Any disability" = 2, "Any non-seeing disability" = 2, "No disability" = 2),bold=T) %>%
+  add_footnote("eREC: Effective Refractive Error Coverage; REC: Refractive Error Coverage",notation="symbol")
+```
+
 
 \newpage
 
@@ -2118,7 +2197,6 @@ C = Individuals with distance PinVA ≥6/12 in at least one eye who do not have 
 
 Note: Near eREC terms used here are based on definitions set out in the appendix of the following publication: Keel S, Muller A, Block S et al. Keeping an eye on eye care: monitoring progress towards effective coverage. Lancet Global Health. 2021. https://doi.org/10.1016/S2214-109X(21)00212-6.
 
-
 ## 95% Confidence Interval
 
 The 95% confidence intervals are based on standard errors calculated for the clustering of the sample and the variability between clusters, specifically using the formula provided by:
@@ -2126,6 +2204,10 @@ The 95% confidence intervals are based on standard errors calculated for the clu
 Bennett S, Woods T, Liyanage WM, Smith DL. A simplified general method for cluster-sample surveys of health in developing countries. World Health Stat Q. 1991;44(3):98-106.
 
 ```{r big_boi_maker, include=FALSE}
+
+source(here("RAAB7_scripts","equity_blindness_age_RAAB7.R"))
+source(here("RAAB7_scripts","equity_ecsc_age_RAAB7.R"))
+source(here("RAAB7_scripts","equity_erec_age_RAAB7.R"))
 
 source(here("RAAB7_scripts","SUMMARY_OUT_RAAB7.R"))
 
