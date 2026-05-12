@@ -10,18 +10,24 @@
 # Script to create new variables to support major data analyses and visualisations
 
 # Categorise continuous age variable into 10-year binds in RAAB data file
-
 age.groups.tens<-c("50-59","60-69","70-79","80+")
 raab$age.groups.tens<-cut(raab$age,breaks=c(49,59,69,79,150),labels=age.groups.tens)
 
-# Categorise continuous age variable into 10-year bins in population census file
+# Categorise continuous age variable into two bins for equity dash in RAAB data file
+age.groups.working<-c("age_50_64","age_65_plus")
+raab$age.groups.working<-cut(raab$age,breaks=c(49,64,150),labels=age.groups.working)
 
+# Categorise continuous age variable into 10-year bins in population census file
 popfives$age.groups.tens<-cut(popfives$ageStart,breaks=c(49,59,69,79,110),labels=age.groups.tens)
 
-# Extract gender-specific subsets of census data
+# Categorise continuous age variable into two bins for equity dash in population census file
+popfives$age.groups.working<-cut(popfives$ageStart,breaks=c(49,64,150),labels=age.groups.working)
 
+# Extract gender-specific and working-age-specific subsets of census data
 female.subpop<-popfives[popfives$gender=="female",]
 male.subpop<-popfives[popfives$gender=="male",]
+age.5064.subpop<-popfives[popfives$age.groups.working=="age_50_64",]
+age.65p.subpop<-popfives[popfives$age.groups.working=="age_65_plus",]
 
 # Characterise study participant by visual acuity according to WHO thresholds
 # Define numerators and denominators
@@ -107,7 +113,7 @@ raab <- raab %>% mutate(
                              (raab$left_distance_acuity_presenting>=1.8 & raab$right_distance_acuity_presenting==0.3) ~ 1, TRUE ~ 0),
   
   severe.unilat = case_when((raab$right_distance_acuity_presenting==1.3 & raab$left_distance_acuity_presenting==0.3)  |
-                              (raab$left_distance_acuity_presentin==1.3 & raab$right_distance_acuity_presenting==0.3) ~ 1, TRUE ~ 0),
+                              (raab$left_distance_acuity_presenting==1.3 & raab$right_distance_acuity_presenting==0.3) ~ 1, TRUE ~ 0),
   
   moderate.unilat = case_when((raab$right_distance_acuity_presenting==1.0 & raab$left_distance_acuity_presenting==0.3)  |
                                 (raab$left_distance_acuity_presenting==1.0 & raab$right_distance_acuity_presenting==0.3) ~ 1, TRUE ~ 0),
@@ -223,7 +229,7 @@ raab <- raab %>% mutate(
 raab$total.operated<-(raab$bilat.operated==1 | raab$unilat.operated==1)+0
 
 # Bilateral operable cataract cases used to report barriers to cataract surgery  
-raab$bilateral_operable_cataract<-(raab$right_operable_660==1 & raab$left_operable_660)+0
+raab$bilateral_operable_cataract<-(raab$right_operable_660==1 & raab$left_operable_660==1)+0
 
 raab <- raab %>% mutate(
   
@@ -463,10 +469,26 @@ raab <- raab %>% mutate(
 )
 
 # Define near VI based on presenting near VA (only one level, binary screening test at N6 threshold)
-  
+
+# All near VI, irrespective of distance vision 
 raab <- raab %>% mutate(
-  near.vi = case_when(raab$binocular_near_presenting_result=="acuity_evaluation_result_fail" ~ 1, TRUE ~ 0)
+  near.vi = case_when(
+    binocular_near_presenting_result=="acuity_evaluation_result_fail" ~ 1, 
+    TRUE ~ 0)
 )
+# Near VI due to presbyopia, i.e., among people with 6/12 pinva in the better eye
+raab <- raab %>% mutate(
+  near.vi.presb = case_when(
+    binocular_near_presenting_result=="acuity_evaluation_result_fail" & better.eye.pinva==0.3 ~ 1, 
+    TRUE ~ 0)
+)
+
+raab <- raab %>% mutate(
+  vi.denom.presb = case_when(
+    vi.denom==1 & better.eye.pinva==0.3 ~ 1, 
+    TRUE ~ 0)
+)
+
 
 # Define near eREC terms (for "spectacle coverage for near vision impairment due to presbyopia")
 
@@ -530,7 +552,7 @@ if(!is.logical(raab$spectacles_used_ever_near)){
 
 #denoms for near specs question
 
-#met and undermet need
+# spectacle ownership history among met and undermet need
 raab <- raab %>% mutate(
   specs.near.met.undermet.need.denom = case_when(
     (ee_case==1 | ff_case==1) ~TRUE, TRUE ~ FALSE
@@ -687,24 +709,50 @@ dr.last.exam <- c("dr_diabetic_last_exam_none", "dr_diabetic_last_exam_0_12_mont
 # Income.Status <- c(1,2,3) 
 
 #Causes of post-operative presenting VA <6/12 in cataract operated eyes with borderline and poor outcomes [CAT14]
+# Note: this def previously included couched eyes and has been updated to include only operated eyes
+
+# raab <- raab %>% mutate(
+#   postop.eyes.right.denom = case_when(!is.na(raab$surgery_poor_vision_reason_right) ~ 1, TRUE ~ 0),
+#   postop.eyes.left.denom  = case_when(!is.na(raab$surgery_poor_vision_reason_left) ~ 1, TRUE ~ 0))
 
 raab <- raab %>% mutate(
-  postop.eyes.right.denom = case_when(!is.na(raab$surgery_poor_vision_reason_right) ~ 1, TRUE ~ 0),
-  postop.eyes.left.denom  = case_when(!is.na(raab$surgery_poor_vision_reason_left) ~ 1, TRUE ~ 0))
+  postop.eyes.right.denom = case_when(!is.na(raab$surgery_poor_vision_reason_right) & 
+                                      raab$surgery_type_right!="surgery_type_couching" ~ 1, 
+                                      TRUE ~ 0),
+  postop.eyes.left.denom  = case_when(!is.na(raab$surgery_poor_vision_reason_left) & 
+                                      raab$surgery_type_left!="surgery_type_couching" ~ 1, 
+                                      TRUE ~ 0)
+  )
 
 raab <- raab %>% mutate(
+  surgery_ocular_comorbidity.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_ocular_comorbidity" & 
+                                            raab$surgery_type_right!="surgery_type_couching" ~ 1, TRUE ~ 0),
+  surgery_ocular_comorbidity.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_ocular_comorbidity" & 
+                                            raab$surgery_type_left!="surgery_type_couching" ~ 1, TRUE ~ 0),
   
-  surgery_ocular_comorbidity.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_ocular_comorbidity" ~ 1, TRUE ~ 0),
-  surgery_ocular_comorbidity.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_ocular_comorbidity" ~ 1, TRUE ~ 0),
-  surgery_op_comp.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_operative_complications" ~ 1, TRUE ~ 0),
-  surgery_op_comp.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_operative_complications" ~ 1, TRUE ~ 0),
-  surgery_ref_err.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_uncorrected_refractive_error" ~ 1, TRUE ~ 0),
-  surgery_ref_err.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_uncorrected_refractive_error" ~ 1, TRUE ~ 0),
-  surgery_pco.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_right=="lens_status_pseudophakia_with_pco" ~ 1, TRUE ~ 0),
-  surgery_pco.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_left=="lens_status_pseudophakia_with_pco" ~ 1, TRUE ~ 0),
-  surgery_other_seq.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_right!="lens_status_pseudophakia_with_pco"  ~ 1, TRUE ~ 0),
-  surgery_other_seq.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_longterm_complications"& raab$lens_status_left!="lens_status_pseudophakia_with_pco" ~ 1, TRUE ~ 0)
+  surgery_op_comp.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_operative_complications" & 
+                                 raab$surgery_type_right!="surgery_type_couching"~ 1, TRUE ~ 0),
+  surgery_op_comp.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_operative_complications" & 
+                                 raab$surgery_type_left!="surgery_type_couching"~ 1, TRUE ~ 0),
   
+  surgery_ref_err.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_uncorrected_refractive_error" & 
+                                 raab$surgery_type_right!="surgery_type_couching"~ 1, TRUE ~ 0),
+  surgery_ref_err.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_uncorrected_refractive_error" & 
+                                 raab$surgery_type_left!="surgery_type_couching" ~ 1, TRUE ~ 0),
+  
+  surgery_pco.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_longterm_complications" & 
+                             raab$lens_status_right=="lens_status_pseudophakia_with_pco" & 
+                             raab$surgery_type_right!="surgery_type_couching"~ 1, TRUE ~ 0),
+  surgery_pco.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_longterm_complications" & 
+                             raab$lens_status_left=="lens_status_pseudophakia_with_pco" & 
+                             raab$surgery_type_left!="surgery_type_couching" ~ 1, TRUE ~ 0),
+  
+  surgery_other_seq.re = case_when(raab$surgery_poor_vision_reason_right=="surgery_poor_vision_reason_longterm_complications" & 
+                                     raab$lens_status_right!="lens_status_pseudophakia_with_pco" & 
+                                     raab$surgery_type_right!="surgery_type_couching"~ 1, TRUE ~ 0),
+  surgery_other_seq.le = case_when(raab$surgery_poor_vision_reason_left=="surgery_poor_vision_reason_longterm_complications" & 
+                                     raab$lens_status_left!="lens_status_pseudophakia_with_pco" & 
+                                     raab$surgery_type_left!="surgery_type_couching" ~ 1, TRUE ~ 0)
   )
 
 

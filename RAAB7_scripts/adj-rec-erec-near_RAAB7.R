@@ -1,6 +1,7 @@
 #RAAB7
 
-#v1 231123 IM
+# v1 231123 IM
+# v2 260511 IM - reduces extrapolated N to reflect proportion of total pop eligible by presbyopia definition (distance PinVA ≥6/12)
 
 # eREC for near: Crude calculation using the gold standard definition
 
@@ -14,9 +15,9 @@ raab$erec_near_num <-(raab$ee_case==1)+0
 raab$rec_near_num <-(raab$ee_case==1 | raab$ff_case==1)+0
 raab$erec_rec_near_denom <-(raab$ee_case==1 | raab$ff_case==1 | raab$gg_case==1)+0
 
-erec_output <- c("near_erec","near_rec")
+erec_output_near <- c("near_erec","near_rec")
 
-newtab7<-data.frame(erec_output)
+newtab7<-data.frame(erec_output_near)
 newtab7[,2:19] <- NA
 names(newtab7) <- c("rec_metric",
                     
@@ -256,9 +257,14 @@ near.re.need$male.adj.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.ne
 near.re.need$female.adj.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$female.adj.pct[near.re.need$need=="none"],raab$hh_case[raab$gender=="female"],raab$near_need_denom[raab$gender=="female"]==1,raab$clusterId[raab$gender=="female"])
 near.re.need$total.adj.pct.uci[near.re.need$need=="none"]<-bennett.uci(near.re.need$total.adj.pct[near.re.need$need=="none"],raab$hh_case,raab$near_need_denom==1,raab$clusterId)
 
-near.re.need$male.extrapolated.n<-round( near.re.need$male.adj.pct*sum(male.subpop$population,na.rm=T),0)
-near.re.need$female.extrapolated.n<-round( near.re.need$female.adj.pct*sum(female.subpop$population,na.rm=T),0)
-near.re.need$total.extrapolated.n<-round( near.re.need$total.adj.pct*sum(popfives$population,na.rm=T),0)
+# Share of each sex's sample that is presbyopia-eligible (better eye distance PinVA ≥6/12) for extrapolated need
+near.re.need.frac.f     <- sum(raab$erec_rec_near_denom[raab$gender=="female"], na.rm=T) / sum(raab$vi.denom[raab$gender=="female"], na.rm=T)
+near.re.need.frac.m     <- sum(raab$erec_rec_near_denom[raab$gender=="male"],   na.rm=T) / sum(raab$vi.denom[raab$gender=="male"],   na.rm=T)
+near.re.need.frac.total <- sum(raab$erec_rec_near_denom, na.rm=T) / sum(raab$vi.denom, na.rm=T)
+
+near.re.need$male.extrapolated.n    <- round(near.re.need$male.adj.pct * sum(male.subpop$population, na.rm=T) * near.re.need.frac.m, 0)
+near.re.need$female.extrapolated.n  <- round(near.re.need$female.adj.pct * sum(female.subpop$population,na.rm=T) * near.re.need.frac.f, 0)
+near.re.need$total.extrapolated.n   <- round(near.re.need$total.adj.pct * sum(popfives$population,na.rm=T) * near.re.need.frac.total, 0)
 
 lcis<-grep("lci",names(near.re.need))
 ucis<-grep("uci",names(near.re.need))

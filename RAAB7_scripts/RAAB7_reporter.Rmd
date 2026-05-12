@@ -34,22 +34,28 @@ dir.create(here("outputs",ID,"/summary/data"))
 dir.create(here("outputs",ID,"/raw"))
 dir.create(here("outputs",ID,"/raw/data"))
 
-raab_merged<-read.csv(here("data","surveys.csv"),check.names=F,na.strings=c("","NA"))
+raab_merged <- read.csv(file.path(data_root, "surveys.csv"),     check.names=F, na.strings=c("","NA"))
+pop_merged  <- read.csv(file.path(data_root, "population.csv"),  check.names=F, na.strings=c("","NA"))
+meta        <- read.csv(file.path(metadata_root, "meta.csv"),    check.names=F, na.strings=c("","NA"))
 
+# raab_merged<-read.csv(here("data","surveys.csv"),check.names=F,na.strings=c("","NA"))
+# 
 raab<-raab_merged[raab_merged$raab_id==ID,]
 raab$date<-as.Date(raab$date)
-
-pop_merged<-read.csv(here("data","population.csv"),check.names=F,na.strings=c("","NA"))
+# 
+# pop_merged<-read.csv(here("data","population.csv"),check.names=F,na.strings=c("","NA"))
 popfives<-pop_merged[pop_merged$raab_id==ID,]
-
-meta<-read.csv(here("data","meta.csv"),check.names=F,na.strings=c("","NA"))
+# 
+# meta<-read.csv(here("data","meta.csv"),check.names=F,na.strings=c("","NA"))
 # meta<-read_xlsx(here("data","meta.xlsx"), sheet=1, na=c("",NA))
+
 
 vars_to_drop<-c("map_complete","exclude_repo","repo_meta","repo_data","ecsc_consent","pi_email1","pi_email2","pi_email1 active","pi_int_auth_grp","trainer_email1","trainer_email2")
 
 raab_meta<-meta[meta$raab_id==ID,!(names(meta) %in% vars_to_drop)]
 # Check if row of NAs included, remove if there
 raab_meta <- raab_meta[rowSums(is.na(raab_meta)) != ncol(raab_meta), ]
+raab_meta$va_threshold <- 612 # required for raab.world results display logic
 
 meta_report<-data.frame(
   title=NA,
@@ -94,9 +100,8 @@ meta_dataset<-data.frame(
 meta_report$title<-paste0("Rapid Assessment of Avoidable Blindness Report: ",raab_meta$survey_title)
 meta_dataset$title<-paste0("Rapid Assessment of Avoidable Blindness Dataset: ",raab_meta$survey_title)
 
-url_string<-gsub("[[:punct:]]", "", raab_meta$survey_title)
-url_string<-gsub(" ", "-", tolower(url_string))
-
+# url_string<-gsub("[[:punct:]]", "", raab_meta$survey_title)
+# url_string<-gsub(" ", "-", tolower(url_string))
 # meta_report$identifier<-paste0("https://www.raab.world/survey/",url_string,"/report")
 # meta_dataset$identifier<-paste0("https://www.raab.world/survey/",url_string,"/data")
 
@@ -129,7 +134,6 @@ meta_dataset$identifier<-paste0(response, "/data")
 
 }
   
-
 meta_report$doi<-paste0("10.17037/RAABREPORT.",ID)
 meta_dataset$doi<-paste0("10.17037/RAABDATASET.",ID)
 
@@ -552,23 +556,25 @@ Cases of unilateral vision impairment acknowledge an additional sight loss burde
 
 asis_output("## Near vision impairment prevalence
 
-Crude and adjusted prevalence of near vision impairment (cannot see N6 at 40cm). Note this threshold is assessed binocularly, ie, with both eyes open.")
+Near vision impairment is defined as an inability to see N6 at 40cm. In RAAB, this threshold is assessed binocularly, ie, with both eyes open.
+
+The following tables report the crude and adjusted prevalence of all near vision impairment (irrespective of distance VA) and presbyopic near vision impairment (among those with better eye distance pinhole VA 6/12). Both outcomes use presenting near vision, ie, with near correction if available")
 
 ```
 
 
 ```{r crude-nv-prev,echo=FALSE,eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
 
-source(here("RAAB7_scripts","crude-adj-prev-near-re.R"))
+source(here("RAAB7_scripts","crude-adj-prev-near-vi.R"))
 
-crude.near.re.prev.nice.names<-near.re.prev.total
+crude.near.re.prev.nice.names <- rbind(near.vi.prev.total, near.vi.presb.prev.total)
 
-crude.near.re.prev.nice.names$male.ci<-paste0(crude.near.re.prev.nice.names$male.pct.lci," - ",crude.near.re.prev.nice.names$male.pct.uci)
-crude.near.re.prev.nice.names$female.ci<-paste0(crude.near.re.prev.nice.names$female.pct.lci," - ",crude.near.re.prev.nice.names$female.pct.uci)
-crude.near.re.prev.nice.names$total.ci<-paste0(crude.near.re.prev.nice.names$total.pct.lci," - ",crude.near.re.prev.nice.names$total.pct.uci)
-
-crude.near.re.prev.nice.names[1,1]<-"Near VI"
-crude.near.re.prev.nice.names<-crude.near.re.prev.nice.names[,c("age.groups.tens","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
+crude.near.re.prev.nice.names$male.ci   <- paste0(crude.near.re.prev.nice.names$male.pct.lci,   " - ", crude.near.re.prev.nice.names$male.pct.uci)
+crude.near.re.prev.nice.names$female.ci <- paste0(crude.near.re.prev.nice.names$female.pct.lci, " - ", crude.near.re.prev.nice.names$female.pct.uci)
+crude.near.re.prev.nice.names$total.ci  <- paste0(crude.near.re.prev.nice.names$total.pct.lci,  " - ", crude.near.re.prev.nice.names$total.pct.uci)
+crude.near.re.prev.nice.names[1,1] <- "Near VI - all"
+crude.near.re.prev.nice.names[2,1] <- "Near VI - presbyopia"
+crude.near.re.prev.nice.names <- crude.near.re.prev.nice.names[, c("age.groups.tens","female.n","female.pct","female.ci","male.n","male.pct","male.ci","total.n","total.pct","total.ci")]
 
 write.table(crude.near.re.prev.nice.names,here("outputs", ID, "summary", "data", "prev7.csv"),row.names=F,col.names=T,sep=",")
 
@@ -586,28 +592,27 @@ knitr::kable(crude.near.re.prev.nice.names,booktabs=T, linesep = "",caption="Cru
 
 ```{r adj-nv-prev,echo=FALSE,eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
 
-source(here("RAAB7_scripts","crude-adj-prev-near-re.R"))
+adj.near.re.prev.nice.names <- rbind(near.vi.prev.total, near.vi.presb.prev.total)
 
-adj.near.re.prev.nice.names<-near.re.prev.total
-
-adj.near.re.prev.nice.names$male.adj.ci<-paste0(adj.near.re.prev.nice.names$male.adj.pct.lci," - ",adj.near.re.prev.nice.names$male.adj.pct.uci)
-adj.near.re.prev.nice.names$female.adj.ci<-paste0(adj.near.re.prev.nice.names$female.adj.pct.lci," - ",adj.near.re.prev.nice.names$female.adj.pct.uci)
-adj.near.re.prev.nice.names$total.adj.ci<-paste0(adj.near.re.prev.nice.names$total.adj.pct.lci," - ",adj.near.re.prev.nice.names$total.adj.pct.uci)
-
-adj.near.re.prev.nice.names[1,1]<-"Near VI"
-adj.near.re.prev.nice.names<-adj.near.re.prev.nice.names[,c("age.groups.tens","female.adj.pct","female.adj.ci","female.extrapolated.n","male.adj.pct","male.adj.ci","male.extrapolated.n","total.adj.pct","total.adj.ci","total.extrapolated.n")]
+adj.near.re.prev.nice.names$male.adj.ci   <- paste0(adj.near.re.prev.nice.names$male.adj.pct.lci,   " - ", adj.near.re.prev.nice.names$male.adj.pct.uci)
+adj.near.re.prev.nice.names$female.adj.ci <- paste0(adj.near.re.prev.nice.names$female.adj.pct.lci, " - ", adj.near.re.prev.nice.names$female.adj.pct.uci)
+adj.near.re.prev.nice.names$total.adj.ci  <- paste0(adj.near.re.prev.nice.names$total.adj.pct.lci,  " - ", adj.near.re.prev.nice.names$total.adj.pct.uci)
+adj.near.re.prev.nice.names[1,1] <- "Near VI - all"
+adj.near.re.prev.nice.names[2,1] <- "Near VI - presbyopia"
+adj.near.re.prev.nice.names <- adj.near.re.prev.nice.names[, c("age.groups.tens","female.adj.pct","female.adj.ci","female.extrapolated.n","male.adj.pct","male.adj.ci","male.extrapolated.n","total.adj.pct","total.adj.ci","total.extrapolated.n")]
 
 write.table(adj.near.re.prev.nice.names,here("outputs", ID, "summary", "data", "prev8.csv"),row.names=F,col.names=T,sep=",")
 
 names(adj.near.re.prev.nice.names) <- c(' ', 'Adj. %', '95% CI', 'Extrapolated magnitude', 'Adj. %', '95% CI', 'Extrapolated magnitude', 'Adj. %', '95% CI', 'Extrapolated magnitude')
 
-knitr::kable(adj.near.re.prev.nice.names,booktabs=T, linesep = "",caption="Adjusted prevalence of near vision impairment (PREV8)",align='lccccccccc') %>%
-  kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
-  row_spec(0,italic=TRUE) %>%
-  column_spec(1,width='1.5cm') %>%
-  column_spec(c(4,7,10),width='1.5cm') %>%
-  add_header_above(c(" " = 1, "Female" = 3, "Male" = 3, "Total" = 3),bold=T) 
-
+knitr::kable(adj.near.re.prev.nice.names, booktabs=T, linesep="",
+             caption="Adjusted prevalence of near vision impairment (PREV8)",
+             align='lccccccccc') %>%
+  kable_styling(latex_options = c("scale_down","HOLD_position"), font_size=8) %>%
+  row_spec(0, italic=TRUE) %>%
+  column_spec(1, width='3cm') %>%
+  column_spec(c(4,7,10), width='2cm') %>%
+  add_header_above(c(" " = 1, "Female" = 3, "Male" = 3, "Total" = 3), bold=T)
 ```
 
 
@@ -943,7 +948,7 @@ source(here("RAAB7_scripts","cat-barriers.R"))
 
 sum11.nice.names<-surgery.bars[, c("Barrier","female_n","female_pct","male_n","male_pct","total_n","total_pct")]
 
-sum11.nice.names$Barrier<-recode_factor(surgery.bars$Barrier,surgery_none_reason_access = "Cannot access surgery", surgery_none_reason_cost = "Cost", surgery_none_reason_denied = "Surgery denied by provider", surgery_none_reason_fear = "Fear", surgery_none_reason_other = "Other", surgery_none_reason_unaware = "Unaware treatment possible", surgery_none_reason_unnecessary = "Felt not needed", Total = "Total")  
+sum11.nice.names$Barrier<-recode_factor(surgery.bars$Barrier,surgery_none_reason_access = "Cannot access surgery", surgery_none_reason_cost = "Cost", surgery_none_reason_denied = "Surgery denied by provider", surgery_none_reason_fear = "Fear", surgery_none_reason_other = "Local reason", surgery_none_reason_unaware = "Unaware treatment possible", surgery_none_reason_unnecessary = "Felt not needed", Total = "Total")  
 
 write.table(sum11.nice.names,here("outputs", ID, "summary", "data", "cat7.csv"),row.names=F,col.names=T,sep=",")
 
@@ -1360,9 +1365,9 @@ knitr::kable(newtab7.nice.names, booktabs=T, linesep = "", caption = "Adjusted n
 
 ```{r, eval=sum(!is.na(NV_check$binocular_near_corrected_result)==TRUE)>0}
 
-asis_output("eREC for near vision measures the number of people in a population in need of near optical (presbyopic) correction who have received correction and had a good outcome (ie, can see at least N6 at 40cm corrected) as a proportion of all people in need of near optical (presbyopic) correction who have accessed correction or still require it. 
+asis_output("eREC for near vision measures the number of people in a population in need of near (presbyopic) optical correction (ie, cannot see N6 at 40cm uncorrected) who have received correction and had a good outcome (ie, can see at least N6 at 40cm corrected) as a proportion of all people in need of near (presbyopic) optical correction who have accessed correction or still require it. 
 
-Note: Met need, undermet need and unmet need for near vision (presbyopic) correction are calculated only among people with presenting or pinhole VA of 6/12 to exclude those with reduced near vision due to other non-refractive error causes, eg, cataract or glaucoma.
+Note: Met need, undermet need and unmet need for near (presbyopic) correction are calculated only among people with better eye presenting or pinhole VA of 6/12 to exclude those with reduced near vision due to other non-refractive error causes, eg, cataract or glaucoma.
 
 ## Need for near refractive error correction")
 
@@ -1965,10 +1970,84 @@ knitr::kable(wgq.ecsc.nice.names, booktabs=T, linesep = "", caption = "Adjusted 
   pack_rows("Cataract surgical threshold <6/18",2,2) %>%
   pack_rows("Cataract surgical threshold <6/60",3,3) %>%
   pack_rows("Cataract surgical threshold <3/60",4,4) %>%
-  add_header_above(c(" " = 1, "Any disability" = 2, "Any non-seeing disability" = 2, "No disbaility" = 2),bold=T) %>%
+  add_header_above(c(" " = 1, "Any disability" = 2, "Any non-seeing disability" = 2, "No disability" = 2),bold=T) %>%
   add_footnote("eCSC: Effective Cataract Surgical Coverage",notation="symbol")
 
 ```
+
+```{r, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
+
+asis_output("## Disability and refractive error")
+
+```
+
+```{r wgq-erec-dist-adj, echo=FALSE, eval=sum(!is.na(WQ_check$wg_difficulty_seeing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_hearing)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_memory)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_mobility)==TRUE) + sum(!is.na(WQ_check$wg_difficulty_selfcare)==TRUE) >0}
+
+source(here("RAAB7_scripts","wgq-erec-dist.R"))
+
+wgq.erec.dist.nice.names<-erec.dist.dis
+
+wgq.erec.dist.nice.names$any.dis.adj.pct.ci        <- paste0(wgq.erec.dist.nice.names$any.dis.adj.pct.lci, " - ", wgq.erec.dist.nice.names$any.dis.adj.pct.uci)
+wgq.erec.dist.nice.names$any.non.vi.dis.adj.pct.ci <- paste0(wgq.erec.dist.nice.names$any.non.vi.dis.adj.pct.lci, " - ", wgq.erec.dist.nice.names$any.non.vi.dis.adj.pct.uci)
+wgq.erec.dist.nice.names$no.dis.adj.pct.ci         <- paste0(wgq.erec.dist.nice.names$no.dis.adj.pct.lci, " - ", wgq.erec.dist.nice.names$no.dis.adj.pct.uci)
+
+wgq.erec.dist.nice.names$rec_metric[wgq.erec.dist.nice.names$rec_metric=="dist_erec"]<-"Distance eREC"
+wgq.erec.dist.nice.names$rec_metric[wgq.erec.dist.nice.names$rec_metric=="dist_rec"]<-"Distance REC"
+
+wgq.erec.dist.nice.names <- wgq.erec.dist.nice.names[, c(
+  "rec_metric",
+  "any.dis.adj.pct", "any.dis.adj.pct.ci",
+  "any.non.vi.dis.adj.pct", "any.non.vi.dis.adj.pct.ci",
+  "no.dis.adj.pct", "no.dis.adj.pct.ci"
+)]
+
+write.table(wgq.erec.dist.nice.names,here("outputs", ID, "summary", "data", "wgq5.csv"),row.names=F,col.names=T,sep=",")
+
+names(wgq.erec.dist.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
+
+knitr::kable(wgq.erec.dist.nice.names, booktabs=T, linesep = "", caption = "Adjusted distance refractive error coverage and effective refractive error coverage by disability status (WGQ5)",row.names=F,align='lcccccc') %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down"),font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  column_spec(1,width='2cm') %>%
+  column_spec(c(3,5,7),'1.5cm') %>%
+  add_header_above(c(" " = 1, "Any disability" = 2, "Any non-seeing disability" = 2, "No disability" = 2),bold=T) %>%
+  add_footnote("eREC: Effective Refractive Error Coverage; REC: Refractive Error Coverage",notation="symbol")
+
+```
+
+```{r wgq-erec-near-adj, echo=FALSE, eval = (sum(!is.na(WQ_check$wg_difficulty_seeing)) + sum(!is.na(WQ_check$wg_difficulty_hearing)) + sum(!is.na(WQ_check$wg_difficulty_memory)) + sum(!is.na(WQ_check$wg_difficulty_mobility)) + sum(!is.na(WQ_check$wg_difficulty_selfcare)) > 0) && (sum(!is.na(NV_check$binocular_near_corrected_result)) > 0)}
+
+source(here("RAAB7_scripts","wgq-erec-near.R"))
+
+wgq.erec.near.nice.names<-erec.near.dis
+
+wgq.erec.near.nice.names$any.dis.adj.pct.ci        <- paste0(wgq.erec.near.nice.names$any.dis.adj.pct.lci, " - ", wgq.erec.near.nice.names$any.dis.adj.pct.uci)
+wgq.erec.near.nice.names$any.non.vi.dis.adj.pct.ci <- paste0(wgq.erec.near.nice.names$any.non.vi.dis.adj.pct.lci, " - ", wgq.erec.near.nice.names$any.non.vi.dis.adj.pct.uci)
+wgq.erec.near.nice.names$no.dis.adj.pct.ci         <- paste0(wgq.erec.near.nice.names$no.dis.adj.pct.lci, " - ", wgq.erec.near.nice.names$no.dis.adj.pct.uci)
+
+wgq.erec.near.nice.names$rec_metric[wgq.erec.near.nice.names$rec_metric=="near_erec"]<-"Near eREC"
+wgq.erec.near.nice.names$rec_metric[wgq.erec.near.nice.names$rec_metric=="near_rec"]<-"Near REC"
+
+wgq.erec.near.nice.names <- wgq.erec.near.nice.names[, c(
+  "rec_metric",
+  "any.dis.adj.pct", "any.dis.adj.pct.ci",
+  "any.non.vi.dis.adj.pct", "any.non.vi.dis.adj.pct.ci",
+  "no.dis.adj.pct", "no.dis.adj.pct.ci"
+)]
+
+write.table(wgq.erec.near.nice.names,here("outputs", ID, "summary", "data", "wgq6.csv"),row.names=F,col.names=T,sep=",")
+
+names(wgq.erec.near.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
+
+knitr::kable(wgq.erec.near.nice.names, booktabs=T, linesep = "", caption = "Adjusted near refractive error coverage and effective refractive error coverage by disability status (WGQ6)",row.names=F,align='lcccccc') %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down"),font_size=8) %>%
+  row_spec(0,italic=TRUE) %>%
+  column_spec(1,width='2cm') %>%
+  column_spec(c(3,5,7),'1.5cm') %>%
+  add_header_above(c(" " = 1, "Any disability" = 2, "Any non-seeing disability" = 2, "No disability" = 2),bold=T) %>%
+  add_footnote("eREC: Effective Refractive Error Coverage; REC: Refractive Error Coverage",notation="symbol")
+```
+
 
 \newpage
 
@@ -1982,17 +2061,21 @@ CNS = Central nervous system
 
 CSC = Cataract surgical coverage
 
+CVA = Corrected visual acuity (i.e., with own spectacle correction)
+
 eCSC = Effective cataract surgical coverage
 
 eREC = Effective refractive error coverage
 
-NGO = Nongovernmental organisation
+NGO = Non-governmental organisation
 
 PinVA = Pinhole visual acuity
 
-PVA = Presenting visual acuity
+PVA = Presenting visual acuity (i.e., with own spectacle correction if available, or without spectacle correction if none used)
 
 REC = Refractive error coverage
+
+UCVA = Uncorrected visual acuity
 
 VI = Vision impairment
 
@@ -2040,7 +2123,11 @@ Mild VI: PVA worse than 6/12 to 6/18 in one eye, PVA 6/12 in the other eye
 
 ## Near VI
 
-Near VI: Near PVA worse than N6 at 40cm
+Near VI is defined using near PVA, i.e., with near correction if available. The threshold tested is: cannot see N6 at 40cm
+
+'Near VI - all' prevalence = among all people examined irrespective of distance VA
+
+'Near VI - presbyopia' prevalence = among people with distance PinVA of 6/12 or better, i.e., where other possible causes of near VI have been excluded
 
 ## Cataract surgical coverage (CSC) and effective cataract surgical coverage (eCSC)
 
@@ -2051,7 +2138,7 @@ CSC is defined as (X + Y) / (X + Y + Z)
 eCSC is defined as (A + B) / (X + Y + Z)
 
 where, e.g., at the <6/12 cataract surgical threshold:
-
+  
 A = individuals with unilateral operated cataract attaining 6/12 or better post-operative presenting VA in the operated eye, who have BCVA <6/12 in the other eye
 
 B = individuals with bilateral operated cataract attaining 6/12 or better post-operative presenting VA in at least one eye
@@ -2083,7 +2170,7 @@ Distance REC is defined as (A + B) / (A + B + C)
 Distance eREC is defined as (A) / (A + B + C)
 
 where:
-
+  
 A = Individuals who present with spectacles or contact lenses for distance and whose UCVA is \<6/12 in the better eye and CVA is 6/12 in the better eye (Met Need)
 
 B = Individuals who present with spectacles or contact lenses for distance and whose UCVA is \<6/12 in the better eye and whose CVA is \<6/12 in the better eye, but who improve to 6/12 on PinVA (Undermet Need)
@@ -2101,7 +2188,7 @@ Near REC is defined as (A + B) / (A + B + C)
 Near eREC is defined as (A) / (A + B + C)
 
 where:
-
+  
 A = Individuals with distance PinVA ≥6/12 in at least one eye and with near UCVA <N6 at 40 cm in the better eye who present with spectacles for near vision and whose near corrected VA is ≥N6 at 40 cm in the better eye (Met need)
 
 B = Individuals with distance PinVA ≥6/12 in at least one eye who present with spectacles for near vision and with near UCVA <N6 at 40cm and whose near corrected VA is <N6 at 40 cm in the better eye (Undermet need)
@@ -2110,14 +2197,17 @@ C = Individuals with distance PinVA ≥6/12 in at least one eye who do not have 
 
 Note: Near eREC terms used here are based on definitions set out in the appendix of the following publication: Keel S, Muller A, Block S et al. Keeping an eye on eye care: monitoring progress towards effective coverage. Lancet Global Health. 2021. https://doi.org/10.1016/S2214-109X(21)00212-6.
 
-
 ## 95% Confidence Interval
 
 The 95% confidence intervals are based on standard errors calculated for the clustering of the sample and the variability between clusters, specifically using the formula provided by:
-
+  
 Bennett S, Woods T, Liyanage WM, Smith DL. A simplified general method for cluster-sample surveys of health in developing countries. World Health Stat Q. 1991;44(3):98-106.
 
 ```{r big_boi_maker, include=FALSE}
+
+source(here("RAAB7_scripts","equity_blindness_age_RAAB7.R"))
+source(here("RAAB7_scripts","equity_ecsc_age_RAAB7.R"))
+source(here("RAAB7_scripts","equity_erec_age_RAAB7.R"))
 
 source(here("RAAB7_scripts","SUMMARY_OUT_RAAB7.R"))
 
