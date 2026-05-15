@@ -202,12 +202,22 @@ erec.near.dis$no.dis.adj.pct.uci[erec.near.dis$rec_metric=="near_rec"]      <- b
                                                                                            raab$erec_rec_near_denom[raab$wgq.dis.any==0],
                                                                                            raab$clusterId[raab$wgq.dis.any==0])
 
-lcis<-grep("lci",names(erec.near.dis))
-ucis<-grep("uci",names(erec.near.dis))
-erec.near.dis[,lcis][erec.near.dis[,lcis]<0]<-0
-erec.near.dis[,ucis][erec.near.dis[,ucis]>1]<-1
+lcis <- grep("lci", names(erec.dist.dis))
+ucis <- grep("uci", names(erec.dist.dis))
+pcts <- grep("pct", names(erec.dist.dis))
 
-pcts<-grep("pct",names(erec.near.dis))
-erec.near.dis[,pcts]<-round(erec.near.dis[,pcts]*100,1)
-erec.near.dis[,pcts]<-format(erec.near.dis[,pcts], nsmall=1)
+# empty subgroups (0/0) produce NaN — set non-finite to NA before formatting
+erec.dist.dis[, pcts][!is.finite(as.matrix(erec.dist.dis[, pcts]))] <- NA
 
+erec.dist.dis[, lcis][erec.dist.dis[, lcis] < 0] <- 0
+erec.dist.dis[, ucis][erec.dist.dis[, ucis] > 1] <- 1
+
+erec.dist.dis[, pcts] <- round(erec.dist.dis[, pcts] * 100, 1)
+erec.dist.dis[, pcts] <- format(erec.dist.dis[, pcts], nsmall = 1)
+
+# format() stringifies NA as "NA" — convert back so kable(na=...) catches them
+erec.dist.dis[, pcts] <- lapply(erec.dist.dis[, pcts], function(x) {
+  x <- trimws(x)
+  x[x %in% c("NA", "NaN")] <- NA
+  x
+})
