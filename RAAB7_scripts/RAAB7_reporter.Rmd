@@ -1803,11 +1803,11 @@ wgq.domains.table.a.nice.names$total.adj.ci<-paste0(wgq.domains.table.a.nice.nam
 
 wgq.domains.table.a.nice.names<-wgq.domains.table.a.nice.names[,c("disability","female.adj.pct","female.adj.ci","male.adj.pct","male.adj.ci","total.adj.pct","total.adj.ci")]
 
-write.table(wgq.domains.table.a.nice.names,file.path(output_root, ID, "summary", "data", "wgq5.csv"),row.names=F,col.names=T,sep=",")
+write.table(wgq.domains.table.a.nice.names,file.path(output_root, ID, "summary", "data", "wgq2.csv"),row.names=F,col.names=T,sep=",")
 
 names(wgq.domains.table.a.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
 
-knitr::kable(wgq.domains.table.a.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence of self-reported disability by functional domain (WGQ5)",align='lcccccc') %>% 
+knitr::kable(wgq.domains.table.a.nice.names, booktabs=T, linesep = "", caption = "Adjusted prevalence of self-reported disability by functional domain (WGQ2)",align='lcccccc') %>% 
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='5cm') %>%
@@ -1879,7 +1879,7 @@ wgq.vi.table.nice.names<-wgq.vi.table
 
 wgq.vi.table.a<-wgq.vi.table.nice.names[,c("vi.level","any.dis.n","any.dis.pct","any.dis.pct.lci","any.dis.pct.uci","any.non.vi.dis.n","any.non.vi.dis.pct","any.non.vi.dis.pct.lci","any.non.vi.dis.pct.uci","no.dis.n","no.dis.pct","no.dis.pct.lci","no.dis.pct.uci")]
 
-write.table(wgq.vi.table.a,file.path(output_root, ID, "summary", "data", "wgq2.csv"),row.names=F,col.names=T,sep=",")
+write.table(wgq.vi.table.a,file.path(output_root, ID, "summary", "data", "wgq3.csv"),row.names=F,col.names=T,sep=",")
 
 wgq.vi.table.a$any.dis.ci<-paste0(wgq.vi.table.a$any.dis.pct.lci," - ",wgq.vi.table.a$any.dis.pct.uci)
 wgq.vi.table.a$any.non.vi.dis.ci<-paste0(wgq.vi.table.a$any.non.vi.dis.pct.lci," - ",wgq.vi.table.a$any.non.vi.dis.pct.uci)
@@ -1895,7 +1895,7 @@ wgq.vi.table.a<-wgq.vi.table.a[,c("vi.level","any.dis.n","any.dis.pct","any.dis.
 
 names(wgq.vi.table.a)<-c("","n","%","95% CI","n","%","95% CI","n","%","95% CI")
 
-knitr::kable(wgq.vi.table.a, booktabs=T, linesep = "", caption = "Crude prevalence of vision impairment by disability status (WGQ2)",align='lccccccccc') %>% 
+knitr::kable(wgq.vi.table.a, booktabs=T, linesep = "", caption = "Crude prevalence of vision impairment by disability status (WGQ3)",align='lccccccccc') %>% 
   kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   add_header_above(c("VI level" = 1, "Any disability" = 3, "Any non-seeing disability" = 3, "No disability" = 3),bold=T)
@@ -1907,7 +1907,7 @@ knitr::kable(wgq.vi.table.a, booktabs=T, linesep = "", caption = "Crude prevalen
 
 wgq.vi.table.b<-wgq.vi.table.nice.names[,c("vi.level","any.dis.adj.pct","any.dis.adj.pct.lci","any.dis.adj.pct.uci","any.non.vi.dis.adj.pct","any.non.vi.dis.adj.pct.lci","any.non.vi.dis.adj.pct.uci","no.dis.adj.pct","no.dis.adj.pct.lci","no.dis.adj.pct.uci")]
 
-write.table(wgq.vi.table.b,file.path(output_root, ID, "summary", "data", "wgq3.csv"),row.names=F,col.names=T,sep=",")
+write.table(wgq.vi.table.b,file.path(output_root, ID, "summary", "data", "wgq4.csv"),row.names=F,col.names=T,sep=",")
 
 wgq.vi.table.b$any.dis.adj.ci<-paste0(wgq.vi.table.b$any.dis.adj.pct.lci," - ",wgq.vi.table.b$any.dis.adj.pct.uci)
 wgq.vi.table.b$any.non.vi.dis.adj.ci<-paste0(wgq.vi.table.b$any.non.vi.dis.adj.pct.lci," - ",wgq.vi.table.b$any.non.vi.dis.adj.pct.uci)
@@ -1923,7 +1923,7 @@ wgq.vi.table.b<-wgq.vi.table.b[,c("vi.level","any.dis.adj.pct","any.dis.adj.ci",
 
 names(wgq.vi.table.b)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
 
-knitr::kable(wgq.vi.table.b, booktabs=T, linesep = "", caption = "Adjusted prevalence of vision impairment by disability status (WGQ3)",align='lcccccc') %>% 
+knitr::kable(wgq.vi.table.b, booktabs=T, linesep = "", caption = "Adjusted prevalence of vision impairment by disability status (WGQ4)",align='lcccccc') %>% 
   kable_styling(full_width=T, latex_options = "HOLD_position",font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='2.5cm') %>%						  
@@ -1953,11 +1953,11 @@ wgq.ecsc.nice.names$num.thresh<-"eCSC"
 
 wgq.ecsc.nice.names<-wgq.ecsc.nice.names[,c("num.thresh","any.dis.adjusted","any.dis.adjusted.ci","any.non.vi.dis.adjusted","any.non.vi.dis.adjusted.ci","no.dis.adjusted","no.dis.adjusted.ci")]
 
-write.table(wgq.ecsc.nice.names,file.path(output_root, ID, "summary", "data", "wgq4.csv"),row.names=F,col.names=T,sep=",")
+write.table(wgq.ecsc.nice.names,file.path(output_root, ID, "summary", "data", "wgq5.csv"),row.names=F,col.names=T,sep=",")
 
 names(wgq.ecsc.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
 
-knitr::kable(wgq.ecsc.nice.names, booktabs=T, linesep = "", caption = "Adjusted effective cataract surgical coverage by disability status (WGQ4)",row.names=F,align='lcccccc') %>%
+knitr::kable(wgq.ecsc.nice.names, booktabs=T, linesep = "", caption = "Adjusted effective cataract surgical coverage by disability status (WGQ5)",row.names=F,align='lcccccc') %>%
   kable_styling(latex_options = c("scale_down","HOLD_position"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='5cm') %>%
@@ -2006,12 +2006,12 @@ wgq.erec.dist.nice.names <- wgq.erec.dist.nice.names[, c(
   "no.dis.adj.pct", "no.dis.adj.pct.ci"
 )]
 
-write.table(wgq.erec.dist.nice.names,file.path(output_root, ID, "summary", "data", "wgq5.csv"),row.names=F,col.names=T,sep=",")
+write.table(wgq.erec.dist.nice.names,file.path(output_root, ID, "summary", "data", "wgq6.csv"),row.names=F,col.names=T,sep=",")
 
 names(wgq.erec.dist.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
 
 options(knitr.kable.NA = "-")
-knitr::kable(wgq.erec.dist.nice.names, booktabs=T, linesep = "", caption = "Adjusted distance refractive error coverage and effective refractive error coverage by disability status (WGQ5)",row.names=F,align='lcccccc') %>%
+knitr::kable(wgq.erec.dist.nice.names, booktabs=T, linesep = "", caption = "Adjusted distance refractive error coverage and effective refractive error coverage by disability status (WGQ6)",row.names=F,align='lcccccc') %>%
   kable_styling(latex_options = c("HOLD_position", "scale_down"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='2cm') %>%
@@ -2051,12 +2051,12 @@ wgq.erec.near.nice.names <- wgq.erec.near.nice.names[, c(
   "no.dis.adj.pct", "no.dis.adj.pct.ci"
 )]
 
-write.table(wgq.erec.near.nice.names,file.path(output_root, ID, "summary", "data", "wgq6.csv"),row.names=F,col.names=T,sep=",")
+write.table(wgq.erec.near.nice.names,file.path(output_root, ID, "summary", "data", "wgq7.csv"),row.names=F,col.names=T,sep=",")
 
 names(wgq.erec.near.nice.names)<-c("","Adj. %","95% CI","Adj. %","95% CI","Adj. %","95% CI")
 
 options(knitr.kable.NA = "-")
-knitr::kable(wgq.erec.near.nice.names, booktabs=T, linesep = "", caption = "Adjusted near refractive error coverage and effective refractive error coverage by disability status (WGQ6)",row.names=F,align='lcccccc') %>%
+knitr::kable(wgq.erec.near.nice.names, booktabs=T, linesep = "", caption = "Adjusted near refractive error coverage and effective refractive error coverage by disability status (WGQ7)",row.names=F,align='lcccccc') %>%
   kable_styling(latex_options = c("HOLD_position", "scale_down"),font_size=8) %>%
   row_spec(0,italic=TRUE) %>%
   column_spec(1,width='2cm') %>%
