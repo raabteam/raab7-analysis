@@ -1,42 +1,37 @@
-ARG R_VERSION
-FROM rocker/r-base:4.3.1
+# syntax=docker/dockerfile:1
+# =============================================================================
+# peek-raab  (PRIVATE ECR)  —  the RAAB7 code, layered on the frozen base (~quarterly)
+#
+# Installs NOTHING. Just COPYs code onto peek-raab-base. If a new dependency is
+# ever needed it goes in docker/Dockerfile.base, not here (that keeps this image
+# unable to drift from the base). See docker/RENV_MIGRATION_PLAN.md (§3, §8).
+#
+#   Build (multi-arch; pins the exact base by digest):
+#     docker buildx build -f docker/Dockerfile \
+#       --build-arg BASE_IMAGE=<ecr>/peek-raab-base@<digest> \
+#       --platform linux/amd64,linux/arm64 \
+#       --target prod -t <ecr>/peek-raab:<tag> --push .
+#
+#   Run a report (data/ + outputs/ mounted at runtime):
+#     docker run --rm -v ./data:/raab7/data:ro -v ./outputs:/raab7/outputs \
+#       <ecr>/peek-raab:<tag> Rscript rmd_wrapper_PEEK_server.R <RAAB_ID>
+# =============================================================================
 
-RUN apt-get update && \
-    apt-get install --yes libssl-dev libsasl2-dev libcurl4-openssl-dev libxml2-dev \
-                          pandoc libfontconfig1-dev openssh-server sudo libv8-dev \
-                          libharfbuzz-dev libfribidi-dev libfreetype-dev libpng-dev \
-                          libtiff5-dev libjpeg-dev r-cran-igraph libfreetype-dev \
-                          libfreetype6 libfreetype6-dev pkg-config libbz2-dev libbz2-dev \
-                          zlib1g-dev && \
-    apt-get clean
+ARG BASE_IMAGE=peek-raab-base:latest
 
-RUN R -e ' \
-    install.packages(c("remotes","treemap")); \
-    require(remotes); \
-    install_version("extrafont", version = "0.18"); \
-    install_version("float", version = "0.3.0"); \
-    install_version("here", version = "1.0.1"); \
-    install_version("systemfonts", version = "1.0.6"); \
-    install_version("svglite", version = "2.1.3"); \
-    install_version("kableExtra", version = "1.3.4"); \
-    install_version("knitr", version = "1.41"); \
-    install_version("maditr", version = "0.8.3"); \
-    install_version("RColorBrewer", version = "1.1.3"); \
-    install_version("rmarkdown", version = "2.19"); \
-    install_version("stringr", version = "1.5.0"); \
-    install_version("tidyverse", version = "1.3.2"); \
-    install_version("tinytex", version = "0.43"); \
-    install_version("jsonlite", version = "1.8.8"); \
-    install_version("RCurl", version = "1.98-1.16"); '
+# ---- app: code on the base (dev target; no SSH) ----
+FROM ${BASE_IMAGE} AS app
+WORKDIR /raab7
+# .here pins here() to /raab7; renv.lock kept for traceability (packages come
+# from the base's /opt/R-lib via R_LIBS_SITE — no renv activation at runtime).
+COPY RAAB7_scripts/ ./RAAB7_scripts/
+COPY rmd_wrapper_PEEK_server.R renv.lock .here ./
+# data/ (input, ro) and outputs/ (output, rw) are MOUNTED at runtime — not copied.
 
-RUN R -e ' \
-    require(tinytex); \
-    deps <- c("fancyhdr","tabu","float","lipsum","multirow","wrapfig","colortbl","pdflscape","threeparttable","threeparttablex","environ","ulem","makecell","caption","bookmark"); \
-        install_tinytex(repository="https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/2022/tlnet-final",version="2022.12",force=TRUE, extra_packages = deps); \
-    library(tinytex); \
-    options(tinytex.tlmgr.options = "--no-auto-install")'
+# ---- prod: app + SSH server (matches the existing cloud invocation model) ----
+FROM app AS prod
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-server sudo \
+    && rm -rf /var/lib/apt/lists/* && mkdir -p /var/run/sshd
 EXPOSE 22
-
-
-
-
+CMD ["/usr/sbin/sshd", "-D"]

@@ -1,0 +1,28 @@
+# Build context for docker/Dockerfile.base and docker/Dockerfile.
+# Keep: RAAB7_scripts/, rmd_wrapper_PEEK_server.R, renv.lock, .here, docker/sysreqs.txt
+
+.git
+.idea
+*.Rproj
+**/.Rhistory
+**/.RData
+
+# Out-of-scope survey versions (RAAB7-only — plan §4)
+RAAB5_scripts/
+RAAB6_scripts/
+rmd_wrapper_all_surveys.R
+rmd_wrapper_single_survey.R
+
+# renv library is restored inside the image, never copied from the host
+renv/library/
+renv/staging/
+renv/cache/
+
+# Mounted at runtime, not baked in
+data/
+outputs/
+
+# Docs / tooling not needed in the image
+docker/RENV_MIGRATION_PLAN.md
+docker/generate-deps.R
+README.md
