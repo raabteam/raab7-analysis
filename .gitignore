@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.positai
+
+data/
+outputs/
+testing/
+docker/
