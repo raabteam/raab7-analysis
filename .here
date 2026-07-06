@@ -1,2 +1,2 @@
 # Sentinel for the R `here` package: pins here::here() to this project root.
-# See docker/RENV_MIGRATION_PLAN.md (§9). Intentionally committed.
+# Intentionally committed.
