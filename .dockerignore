@@ -1,5 +1,6 @@
-# Build context for docker/Dockerfile.base and docker/Dockerfile.
-# Keep: RAAB7_scripts/, rmd_wrapper_PEEK_server.R, renv.lock, .here, docker/sysreqs.txt
+# Build context for docker/Dockerfile (single multi-stage image).
+# Keep: RAAB7_scripts/, rmd_wrapper_PEEK_server.R, renv.lock, .here,
+#       http-server.js, docker/sysreqs.txt
 
 .git
 .idea
@@ -23,6 +24,6 @@ data/
 outputs/
 
 # Docs / tooling not needed in the image
-docker/RENV_MIGRATION_PLAN.md
+docker/*.md
 docker/generate-deps.R
 README.md
