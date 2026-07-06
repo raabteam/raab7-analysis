@@ -8,7 +8,7 @@ name: image
 
 on:
   push:
-    branches: [main,DL-2425-try-renv] # merge to main -> new image
+    branches: [main,DL-2425-peek-integration-v2] # merge to main -> new image
   workflow_dispatch: {} # manual (first build, or force a dep rebuild)
 
 permissions:
