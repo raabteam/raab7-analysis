@@ -3,11 +3,12 @@
 # raab-analysis  (PUBLIC GHCR: ghcr.io/raabteam/raab-analysis)
 #
 # ONE multi-stage image (see docker/DL-2425-RAAB_IMAGE_CI_PLAN.md):
-#   - builder : installs the R library (renv.lock) + TeXLive.  Heavy, rarely
-#               changes.  Holds the full toolchain + -dev headers; discarded.
-#   - app     : slim runtime.  Runtime shared libs + Node only.  COPYs the R
-#               library + TeXLive from builder, then the RAAB7 code LAST so a
-#               code change only busts the final COPY layers (deps stay cached).
+#   - builder : restores the R library (renv.lock). Full toolchain + -dev
+#               headers; discarded from the final image.
+#   - app     : slim runtime. Runtime shared libs + TeXLive (Ubuntu apt packages)
+#               + Node. COPYs the R library from builder, then the RAAB7 code LAST
+#               (code changes only bust the final COPY layers). No CTAN/tinytex
+#               downloads at build — TeXLive comes from the Ubuntu mirrors.
 #
 # Default CMD = the HTTP invocation server (http-server.js) on :8000. Local
 # runs / K8s Jobs override the command to run Rscript directly (docker/run-local.sh).
@@ -47,52 +48,55 @@ RUN R -e "options(repos=c(CRAN='${PPM}')); install.packages('renv')" && \
               paste(getRversion(), R.version[['platform']], R.version[['arch']], R.version[['os']]))); \
           renv::restore(lockfile='/build/renv.lock', library='/opt/R-lib', prompt=FALSE)"
 
-# TeXLive via tinytex (renv does NOT manage LaTeX). TinyTeX publishes versioned
-# bundles only for x86_64, so for cross-arch (amd64+arm64) consistency we install
-# the 'daily' bundle on BOTH arches from the default current repository.
-# Reproducibility comes from the frozen image digest (plan §2), not a pinned
-# TeXLive year. extra_packages = the LaTeX packages the RAAB7 report needs.
-ENV R_LIBS_SITE=/opt/R-lib
-RUN R -e "library(tinytex); \
-    deps <- c('fancyhdr','tabu','float','lipsum','multirow','wrapfig','colortbl', \
-              'pdflscape','threeparttable','threeparttablex','environ','ulem', \
-              'makecell','caption','bookmark'); \
-    install_tinytex(force=TRUE, dir='/opt/TinyTeX', version='daily', extra_packages=deps); \
-    options(tinytex.tlmgr_update=FALSE, tinytex.install_packages=FALSE)"
-
 # ============================ app (runtime) stage ============================
-# The published image. Slim: runtime shared libs + Node only — no compilers,
-# no -dev headers. Carries the restored R library + TeXLive from the builder,
-# then the RAAB7 code (copied LAST so code changes don't bust the deps layers).
+# The published image. Slim: runtime shared libs + TeXLive + Node — no compilers,
+# no -dev headers. Carries the restored R library from the builder, then the
+# RAAB7 code (copied LAST so code changes don't bust the deps layers).
 FROM ${R_BASE} AS app
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    R_LIBS_SITE=/opt/R-lib \
-    PATH=/opt/TinyTeX/bin/x86_64-linux:/opt/TinyTeX/bin/aarch64-linux:$PATH
+    R_LIBS_SITE=/opt/R-lib
 
-# Runtime shared libs (names derived from apt — note Noble's t64 renames),
-# pandoc (rmarkdown), fontconfig/ca-certificates, full perl (tlmgr needs
-# File::Find, not just perl-base), and nodejs (for http-server.js).
+# Runtime shared libs (names derived from apt — note Noble's t64 renames), Node
+# (http-server.js), and TeXLive via APT. TeXLive is installed from Ubuntu's own
+# packages (served by the same reliable Ubuntu mirrors as every other apt dep) —
+# NOT from CTAN/tinytex — so the build has no flaky external TeX mirror dependency.
+# noble ships TeXLive 2023, frozen with the distro. The texlive-* set below covers
+# every LaTeX package the report needs (verified by the compile guard). tinytex
+# (the R package, from renv.lock) drives this system TeXLive via latexmk/xelatex.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      ca-certificates fontconfig pandoc \
-      perl \
-      nodejs \
+      ca-certificates fontconfig pandoc nodejs \
       libcurl4t64 libssl3t64 libxml2 zlib1g \
       libfontconfig1 libfreetype6 libfribidi0 libharfbuzz0b libpng16-16t64 \
       libtiff6 libjpeg-turbo8 libicu74 libglpk40 libuv1t64 libwebp7 libx11-6 \
+      texlive-latex-base texlive-latex-recommended texlive-latex-extra \
+      texlive-fonts-recommended texlive-xetex texlive-plain-generic latexmk \
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
-COPY --from=builder /opt/R-lib   /opt/R-lib
-COPY --from=builder /opt/TinyTeX /opt/TinyTeX
+COPY --from=builder /opt/R-lib /opt/R-lib
 
-# Build-time guard: fail the build here (never in prod) if a runtime lib is
-# missing or TeXLive isn't wired up. Loads every top-level package + checks tlmgr.
+# Build-time guard on the FINAL image: fail here (never in prod) if a runtime lib
+# is missing or the report's LaTeX packages aren't present. Loads every top-level
+# R package, then xelatex-compiles docker/latex-smoke.tex (which \usepackage's all
+# report packages). Prod has NO network, so a missing package at render is
+# unrecoverable — this gate stops a broken image shipping (a stale one once had
+# multirow.sty missing).
+COPY docker/latex-smoke.tex /tmp/latex-smoke.tex
 RUN R -e "pkgs <- c('rmarkdown','readxl','knitr','tinytex','kableExtra','RColorBrewer', \
             'RCurl','jsonlite','tidyverse','stringr','treemap','maditr','here', \
             'extrafont','float','systemfonts','svglite'); \
           invisible(lapply(pkgs, function(p) library(p, character.only=TRUE))); \
           cat('OK: all top-level packages load\n')" \
- && tlmgr --version > /dev/null && echo "OK: tlmgr on PATH"
+ && (cd /tmp && xelatex -interaction=nonstopmode -halt-on-error latex-smoke.tex > /tmp/latex-smoke.log 2>&1) \
+      || { echo "LaTeX guard FAILED:"; grep -E '^!' /tmp/latex-smoke.log; exit 1; } \
+ && echo "OK: all report LaTeX packages compile" \
+ && rm -f /tmp/latex-smoke.*
+
+# Belt-and-suspenders: the render session (Rscript, spawned by http-server.js)
+# must never try to auto-install a LaTeX package (prod has no egress). Bake it
+# into the site profile so it persists to runtime (build-session options() don't).
+RUN printf '\n# Baked by docker/Dockerfile: no network TeX installs at render time.\noptions(tinytex.install_packages = FALSE, tinytex.tlmgr_update = FALSE)\n' \
+      >> "$(R RHOME)/etc/Rprofile.site"
 
 WORKDIR /raab7
 
@@ -101,6 +105,25 @@ WORKDIR /raab7
 # data/ (input, ro) and outputs/ (output, rw) are MOUNTED at runtime, not copied.
 COPY RAAB7_scripts/ ./RAAB7_scripts/
 COPY rmd_wrapper_PEEK_server.R renv.lock .here docker/http-server.js ./
+
+# OCI + provenance metadata (no runtime effect; readable via `docker inspect`).
+# ARGs declared LAST so a changed SHA/date rebuilds only this tiny layer. Values
+# flow from docker/versions.env via build.sh / the CI workflow (build-args); the
+# static ones are inline. Empty on a bare `docker build` that passes no args.
+ARG R_BASE
+ARG PPM_SNAPSHOT
+ARG IMAGE_VERSION
+ARG VCS_REF
+ARG BUILD_DATE
+LABEL org.opencontainers.image.title="raab-analysis" \
+      org.opencontainers.image.description="RAAB7 report-generation environment (R + TeXLive)" \
+      org.opencontainers.image.source="https://github.com/raabteam/raab-analysis" \
+      org.opencontainers.image.version="${IMAGE_VERSION}" \
+      org.opencontainers.image.revision="${VCS_REF}" \
+      org.opencontainers.image.created="${BUILD_DATE}" \
+      raab.r-base="${R_BASE}" \
+      raab.ppm-snapshot="${PPM_SNAPSHOT}" \
+      raab.texlive="apt-noble"
 
 # TODO(non-root): running as an unprivileged user is a cheap hardening win, but
 # the runtime-mounted outputs/ dir must then be writable by that uid. Until the

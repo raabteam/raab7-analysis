@@ -38,6 +38,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Provenance values for the image LABELs (docker/versions.env is the source
+      # of truth; VCS_REF/BUILD_DATE are per-build).
+      - name: Provenance values
+        run: |
+          set -a; source docker/versions.env; set +a
+          {
+            echo "R_BASE=$R_BASE"
+            echo "PPM_SNAPSHOT=$PPM_SNAPSHOT"
+            echo "IMAGE_VERSION=$IMAGE_VERSION"
+            echo "BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } >> "$GITHUB_ENV"
+
       - id: build
         uses: docker/build-push-action@v6
         with:
@@ -45,6 +57,12 @@ jobs:
           file: docker/Dockerfile
           target: app
           platforms: linux/${{ matrix.arch }}
+          build-args: |
+            R_BASE=${{ env.R_BASE }}
+            PPM_SNAPSHOT=${{ env.PPM_SNAPSHOT }}
+            IMAGE_VERSION=${{ env.IMAGE_VERSION }}
+            VCS_REF=${{ github.sha }}
+            BUILD_DATE=${{ env.BUILD_DATE }}
           cache-from: type=gha,scope=${{ matrix.arch }}
           cache-to: type=gha,mode=max,scope=${{ matrix.arch }}
           outputs: type=image,name=${{ env.IMAGE }},push-by-digest=true,name-canonical=true,push=true

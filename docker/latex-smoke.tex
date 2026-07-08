@@ -1,0 +1,6 @@
+% Build-time smoke test: \usepackage's every LaTeX package the RAAB7 report needs.
+% docker/Dockerfile compiles this in the app stage; a missing package fails the
+% build (never prod, which has no network). Keep in sync with the report preamble.
+\documentclass{article}
+\usepackage{fancyhdr,tabu,float,lipsum,multirow,wrapfig,colortbl,pdflscape,threeparttable,threeparttablex,environ,ulem,makecell,caption,bookmark}
+\begin{document}ok\end{document}

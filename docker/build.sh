@@ -31,13 +31,10 @@ docker buildx build -f docker/Dockerfile \
   --platform "$PLAT" \
   --build-arg R_BASE="$R_BASE" \
   --build-arg PPM="https://packagemanager.posit.co/cran/__linux__/noble/${PPM_SNAPSHOT}" \
-  --label "org.opencontainers.image.title=raab-analysis" \
-  --label "org.opencontainers.image.version=${IMAGE_VERSION}" \
-  --label "org.opencontainers.image.revision=${GIT_SHA}" \
-  --label "org.opencontainers.image.created=${BUILD_DATE}" \
-  --label "raab.r-base=${R_BASE}" \
-  --label "raab.ppm-snapshot=${PPM_SNAPSHOT}" \
-  --label "raab.texlive-bundle=${TEXLIVE_BUNDLE}" \
+  --build-arg PPM_SNAPSHOT="$PPM_SNAPSHOT" \
+  --build-arg IMAGE_VERSION="$IMAGE_VERSION" \
+  --build-arg VCS_REF="$GIT_SHA" \
+  --build-arg BUILD_DATE="$BUILD_DATE" \
   -t "${IMAGE}:${IMAGE_TAG}" \
   -t "${IMAGE}:${IMAGE_VERSION}" \
   -t "${IMAGE}:latest" \
