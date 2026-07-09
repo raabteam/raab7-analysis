@@ -70,26 +70,27 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       libfontconfig1 libfreetype6 libfribidi0 libharfbuzz0b libpng16-16t64 \
       libtiff6 libjpeg-turbo8 libicu74 libglpk40 libuv1t64 libwebp7 libx11-6 \
       texlive-latex-base texlive-latex-recommended texlive-latex-extra \
-      texlive-fonts-recommended texlive-xetex texlive-plain-generic latexmk \
+      texlive-fonts-recommended texlive-xetex texlive-plain-generic lmodern latexmk \
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
 COPY --from=builder /opt/R-lib /opt/R-lib
 
 # Build-time guard on the FINAL image: fail here (never in prod) if a runtime lib
-# is missing or the report's LaTeX packages aren't present. Loads every top-level
-# R package, then xelatex-compiles docker/latex-smoke.tex (which \usepackage's all
-# report packages). Prod has NO network, so a missing package at render is
-# unrecoverable — this gate stops a broken image shipping (a stale one once had
-# multirow.sty missing).
-COPY docker/latex-smoke.tex /tmp/latex-smoke.tex
+# is missing or the LaTeX toolchain can't produce a PDF. (1) load every top-level
+# R package (checks runtime shared libs); (2) render docker/latex-smoke.Rmd through
+# the REAL rmarkdown -> pandoc -> xelatex path — this exercises the rmarkdown template
+# preamble (e.g. lmodern) + kableExtra's injected deps + a figure, which a bare .tex
+# missed. Prod has NO network, so a missing package at render is unrecoverable; this
+# gate stops a broken image shipping (stale ones once had multirow.sty / lmodern.sty missing).
+COPY docker/latex-smoke.Rmd /tmp/latex-smoke.Rmd
 RUN R -e "pkgs <- c('rmarkdown','readxl','knitr','tinytex','kableExtra','RColorBrewer', \
             'RCurl','jsonlite','tidyverse','stringr','treemap','maditr','here', \
             'extrafont','float','systemfonts','svglite'); \
           invisible(lapply(pkgs, function(p) library(p, character.only=TRUE))); \
           cat('OK: all top-level packages load\n')" \
- && (cd /tmp && xelatex -interaction=nonstopmode -halt-on-error latex-smoke.tex > /tmp/latex-smoke.log 2>&1) \
-      || { echo "LaTeX guard FAILED:"; grep -E '^!' /tmp/latex-smoke.log; exit 1; } \
- && echo "OK: all report LaTeX packages compile" \
+ && R -e "rmarkdown::render('/tmp/latex-smoke.Rmd', output_dir='/tmp', quiet=TRUE); \
+          if (!file.exists('/tmp/latex-smoke.pdf')) stop('no PDF produced'); \
+          cat('OK: rmarkdown -> xelatex renders a PDF\n')" \
  && rm -f /tmp/latex-smoke.*
 
 # Belt-and-suspenders: the render session (Rscript, spawned by http-server.js)
