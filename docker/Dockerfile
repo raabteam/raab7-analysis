@@ -2,7 +2,7 @@
 # =============================================================================
 # raab-analysis  (PUBLIC GHCR: ghcr.io/raabteam/raab-analysis)
 #
-# ONE multi-stage image (see docker/DL-2425-RAAB_IMAGE_CI_PLAN.md):
+# ONE multi-stage image (see docker/DL-2425-rabb-image-ci-plan.md):
 #   - builder : restores the R library (renv.lock). Full toolchain + -dev
 #               headers; discarded from the final image.
 #   - app     : slim runtime. Runtime shared libs + TeXLive (Ubuntu apt packages)

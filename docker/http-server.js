@@ -3,7 +3,7 @@
 //
 // The default CMD of the raab-analysis image. Reachable ONLY on the internal
 // overlay/pod network — there is NO auth token, so it must never be published
-// externally (deploy concern; see docker/DL-2425-RAAB_IMAGE_CI_PLAN.md §7).
+// externally (deploy concern; see docker/DL-2425-rabb-image-ci-plan.md §7).
 //
 //   POST /run  {"raabId":"<id>"} -> runs `Rscript rmd_wrapper_PEEK_server.R <id>`
 //              in /raab7, streams combined stdout+stderr as chunked text/plain,

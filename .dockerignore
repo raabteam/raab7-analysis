@@ -8,7 +8,7 @@
 **/.Rhistory
 **/.RData
 
-# Out-of-scope survey versions (RAAB7-only — plan §4)
+# Out-of-scope survey versions (RAAB7-only)
 RAAB5_scripts/
 RAAB6_scripts/
 rmd_wrapper_all_surveys.R

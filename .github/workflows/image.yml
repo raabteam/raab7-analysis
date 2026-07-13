@@ -1,10 +1,10 @@
 name: image
 
-# Builds ONE public multi-arch image (ghcr.io/raabteam/raab-analysis) from the
-# single multi-stage docker/Dockerfile. The two arches build in parallel on
+# Builds one public multi-arch image (ghcr.io/raabteam/raab-analysis) from the
+# single multi-stage docker/Dockerfile. The two architecturess build in parallel on
 # NATIVE runners (no QEMU), each pushes by digest, then a manifest job stitches
 # one multi-arch tag. Per-arch buildx layer caching keeps code-only builds fast.
-# See docker/DL-2425-RAAB_IMAGE_CI_PLAN.md §8.
+# See .claude/specs/DL-2425-rabb-image-ci-plan.md
 
 on:
   push:
