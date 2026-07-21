@@ -73,6 +73,28 @@ library to the same app-stage apt list.)
 > Editing the list + regenerating in the container is what keeps the result reproducible and identical
 > to the built image.
 
+## Adopt a new image (pin the digest)
+
+A build publishes a multi-arch image and moves the `:latest` tag — but **production should run a
+specific immutable `@sha256` digest, not `:latest`**. After a new image is built (a code merge, or a
+dependency change from the section above), adopt it:
+
+1. **Get the new digest** — the Actions `manifest` job prints it in its run summary, or:
+   ```bash
+   docker buildx imagetools inspect ghcr.io/raabteam/raab-analysis:latest | grep -i digest
+   # Digest: sha256:<digest>
+   ```
+   The reference to pin is `ghcr.io/raabteam/raab-analysis@sha256:<digest>`.
+2. **Peek (production)** — set that pinned reference wherever Peek's deployment config names the image
+   (its K8s manifest / compose / Helm values), and redeploy. Peek builds nothing; it just pulls the digest.
+3. **Local (`docker/run-local.sh`)** — to run the *exact* image prod runs, either pass it per run:
+   ```bash
+   RAAB_IMAGE=ghcr.io/raabteam/raab-analysis@sha256:<digest> docker/run-local.sh <RAAB_ID>
+   ```
+   or pin it for the whole team by replacing `:latest` with `@sha256:<digest>` in the `IMAGE=` line of
+   `docker/run-local.sh` and committing. (Leaving `:latest` floats to the newest published build —
+   convenient for local iteration, but not guaranteed to match what Peek runs.)
+
 ## renv is the source of truth for versions
 
 `renv::restore()` installs exactly what `renv.lock` pins. PPM only decides **binary vs. source** for that

@@ -11,6 +11,9 @@
 set -euo pipefail
 
 RAAB_ID="${1:?usage: run-local.sh <RAAB_ID>}"
+# Image to run. ':latest' floats to the newest published build. To run EXACTLY what
+# Peek runs, override per-invocation with RAAB_IMAGE=...@sha256:<digest>, or pin the
+# digest here and commit. See README → "Adopt a new image (pin the digest)".
 IMAGE="${RAAB_IMAGE:-ghcr.io/raabteam/raab-analysis:latest}"
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 
