@@ -12,6 +12,19 @@ To accommodate differences between RAAB versions, separate scripts have been wri
 
 These pages contain a suite of scripts for analysing raw RAAB data and exporting key summary data to a report. 
 
+## Running a report locally
+
+You don't need R installed — reports run in the published Docker image, which carries R, every package,
+and TeXLive. Place a survey's exported CSVs (`surveys.csv`, `population.csv`, `meta.csv`) in a folder
+under `data/` (gitignored), e.g. `data/London/`, then:
+
+```bash
+docker/run-local.sh London
+```
+
+The PDF and summary CSVs appear under `outputs/<raab_id>/`. See `docker/README.md` → "Local
+development" for details (data layout, pinning the exact production image, updating dependencies).
+
 ## More information
 
 Find out more about RAAB7 and see data from previous surveys here: https://www.raab.world/

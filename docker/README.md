@@ -28,12 +28,39 @@ image to GHCR on every merge to `main` (and on manual dispatch). Peek consumes t
 ### Run reports without rebuilding dependencies (common)
 
 A one-line wrapper pulls the image (it carries R + all packages at `/opt/R-lib`), mounts your working tree, and 
-runs `Rscript` directly (skipping the HTTP-server entrypoint):
-```bash
-docker/run-local.sh "<RAAB_ID>"
+runs `Rscript` directly (skipping the HTTP-server entrypoint).
+
+**Put your input data in a folder per survey under `data/`** (the whole of `data/` is gitignored — raw
+survey data never gets committed). Each survey folder holds the three CSVs exported for it:
+
 ```
+data/
+  London/               # any name you like — it's just a local label
+    surveys.csv         # participant-level survey data
+    population.csv      # population figures
+    meta.csv            # survey metadata (carries the survey's raab_id UUID)
+```
+
+Then run the report by folder name:
+
+```bash
+docker/run-local.sh London
+# survey 'London' -> raab_id 54d944b6-... (mounting .../data/Nord as /raab7/data)
+```
+
+The report lands in `outputs/<raab_id>/` (also gitignored), with the PDF under `summary/`.
+
+**How this maps to production:** the R code (`rmd_wrapper_PEEK_server.R` → `RAAB7_reporter.Rmd`)
+expects prod's layout — a *flat* `data/` containing merged `surveys.csv`/`population.csv`/`meta.csv`
+for possibly many surveys, filtered by the UUID `raab_id` that Peek passes in. `run-local.sh` bridges
+the two layouts without touching the R code: when its argument names a folder under `data/`, it
+bind-mounts that folder over `/raab7/data` and reads the `raab_id` out of its `meta.csv`. Passing a
+raw `raab_id` instead (with flat CSVs directly in `data/`) still works and is exactly what prod does.
+
 Edit `.R`/`.Rmd` and re-run instantly. (The library at `/opt/R-lib` is outside `/raab7`, so mounting your
-code at `/raab7` can't shadow it; `.here` keeps `here()` deterministic.) No compose needed.
+code at `/raab7` can't shadow it; `.here` keeps `here()` deterministic; the wrapper disables renv's
+autoloader inside the container so the mounted `.Rprofile` can't hijack `.libPaths()` — packages come
+from `/opt/R-lib`, as in prod.) No compose needed.
 
 ### Update dependencies and generate a new image (infrequent)
 
@@ -66,8 +93,9 @@ LaTeX package fails the build instead of reaching prod. (If a newly added R pack
 library *at runtime*, the guard's package-load check fails with a clear "cannot load X" — add that
 library to the same app-stage apt list.)
 
-> **Why not `renv::install()` locally?** This project has no live renv project on your host — the package
-> set is the `pkgs` list, and `gen-deps.sh` rebuilds the lock from it inside a container that matches the
+> **Why not `renv::install()` locally?** The repo does carry renv's activation files (`.Rprofile` →
+> `renv/activate.R`, for interactive sessions on a host with R), but the canonical package set is the
+> `pkgs` list, and `gen-deps.sh` rebuilds the lock from it inside a container that matches the
 > build. Installing on your host (macOS/Windows) would update `renv.lock` but not `sysreqs.txt`, would
 > drift from the `pkgs` list, and would be **overwritten** the next time anyone runs `gen-deps.sh`.
 > Editing the list + regenerating in the container is what keeps the result reproducible and identical
@@ -111,7 +139,7 @@ by `@sha256` digest for production.
 | `docker/generate-deps.R` | The R-package list (`pkgs <- c(...)`) + logic; edit the list to add/remove an R package (§B1). Run in-container by `gen-deps.sh`. |
 | `docker/gen-deps.sh` | Regenerate `renv.lock` + `sysreqs.txt` by running `generate-deps.R` in the pinned Noble container. Run after editing the `pkgs` list. |
 | `docker/build.sh` | Build/push helper (called by the workflow / used locally). |
-| `docker/run-local.sh` | Local wrapper: `docker run` the image with mounts, run `Rscript` directly. |
+| `docker/run-local.sh` | Local wrapper: `docker run` the image with mounts, run `Rscript` directly. Takes a survey folder name under `data/` (or a raw `raab_id`). |
 | `docker/sysreqs.txt` | **Generated** apt list (`pak::pkg_sysreqs`). Do not hand-edit. |
-| `http-server.js` | The invocation server (default CMD; see the CI plan §7). |
+| `docker/http-server.js` | The invocation server (default CMD; see the CI plan §7). |
 | `.github/workflows/image.yml` | The GHCR publish pipeline (see the CI plan §8). |
