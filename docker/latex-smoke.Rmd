@@ -1,0 +1,38 @@
+---
+output:
+  pdf_document:
+    latex_engine: xelatex
+header-includes:
+- \usepackage{float}
+- \usepackage{tabu}
+- \usepackage{lipsum}
+- \usepackage{fancyhdr}
+---
+
+<!--
+Build-time guard: docker/Dockerfile renders THIS through the real
+rmarkdown -> pandoc -> xelatex path (the report's actual toolchain), so the build
+fails if the LaTeX environment can't produce a PDF.
+
+It mirrors how RAAB7_reporter.Rmd loads LaTeX: the header-includes above are the
+report's OWN explicit \usepackage set (float/tabu/lipsum/fancyhdr); everything
+else (multirow, colortbl, ulem, booktabs, longtable, ...) is injected by kableExtra
+below, and the rmarkdown template pulls the rest (e.g. lmodern). Do NOT list the
+kableExtra-injected packages here too — that double-loads them and triggers a
+LaTeX "option clash" (ulem). Keep header-includes in sync with the report preamble.
+
+Prod has no network, so a missing package at render is unrecoverable; this catches
+it at build (stale images once had multirow.sty / lmodern.sty missing).
+-->
+
+```{r tbl}
+library(kableExtra)
+kbl(head(mtcars, 3), booktabs = TRUE) |>
+  kable_styling(latex_options = c("HOLD_position", "scale_down"))
+```
+
+```{r fig, fig.width=4, fig.height=3}
+library(treemap)
+treemap(data.frame(x = c("a", "b"), v = c(3, 1)),
+        index = "x", vSize = "v", title = "guard")
+```

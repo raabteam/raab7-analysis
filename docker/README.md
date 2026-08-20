@@ -1,4 +1,145 @@
-# Running RAAB scripts in docker for compatibility with Peek Server
+# RAAB analysis Docker image
 
-Run with:
-`docker compose run raab7 Rscript rmd_wrapper_PEEK_server.R "[add RAAB ID here]"`
+This repo builds **one** public image on **GitHub Container Registry (GHCR)** and publishes it from its
+own GitHub Actions — no AWS, no external registry credentials. Consumers (the Peek servers, other
+maintainers) pull it without any credentials.
+
+> The full design + setup (image, workflow, `http-server.js`, validation) is in
+> `.claude/specs/DL-2425-rabb-image-ci-plan.md`. This README is the day-to-day operational guide.
+
+## One image
+
+`ghcr.io/raabteam/raab-analysis` — a single **multi-stage** image: a builder stage installs the R library
++ TeXLive; a slim runtime stage copies them in and adds the RAAB7 code + `http-server.js`. Ordering +
+buildx **layer caching** keep code rebuilds fast, so there's no separate base image:
+
+- **Code change** (merge to `main`) → only the final `COPY` layers rebuild (deps restored from cache).
+- **Dependency change** (`renv.lock` / `sysreqs.txt`) → the deps layer is invalidated and reinstalled
+  automatically. No version-tag bookkeeping.
+
+## Who does what
+
+Everything — code, dependencies, **and** image builds — lives in this repo. GitHub Actions publishes the
+image to GHCR on every merge to `main` (and on manual dispatch). Peek consumes the published image
+**pinned by digest** and builds nothing.
+
+## Local development
+
+### Run reports without rebuilding dependencies (common)
+
+A one-line wrapper pulls the image (it carries R + all packages at `/opt/R-lib`), mounts your working tree, and 
+runs `Rscript` directly (skipping the HTTP-server entrypoint).
+
+**Put your input data in a folder per survey under `data/`** (the whole of `data/` is gitignored — raw
+survey data never gets committed). Each survey folder holds the three CSVs exported for it:
+
+```
+data/
+  London/               # any name you like — it's just a local label
+    surveys.csv         # participant-level survey data
+    population.csv      # population figures
+    meta.csv            # survey metadata (carries the survey's raab_id UUID)
+```
+
+Then run the report by folder name:
+
+```bash
+docker/run-local.sh London
+# survey 'London' -> raab_id 54d944b6-... (mounting .../data/Nord as /raab7/data)
+```
+
+The report lands in `outputs/<raab_id>/` (also gitignored), with the PDF under `summary/`.
+
+**How this maps to production:** the R code (`rmd_wrapper_PEEK_server.R` → `RAAB7_reporter.Rmd`)
+expects prod's layout — a *flat* `data/` containing merged `surveys.csv`/`population.csv`/`meta.csv`
+for possibly many surveys, filtered by the UUID `raab_id` that Peek passes in. `run-local.sh` bridges
+the two layouts without touching the R code: when its argument names a folder under `data/`, it
+bind-mounts that folder over `/raab7/data` and reads the `raab_id` out of its `meta.csv`. Passing a
+raw `raab_id` instead (with flat CSVs directly in `data/`) still works and is exactly what prod does.
+
+Edit `.R`/`.Rmd` and re-run instantly. (The library at `/opt/R-lib` is outside `/raab7`, so mounting your
+code at `/raab7` can't shadow it; `.here` keeps `here()` deterministic; the wrapper disables renv's
+autoloader inside the container so the mounted `.Rprofile` can't hijack `.libPaths()` — packages come
+from `/opt/R-lib`, as in prod.) No compose needed.
+
+### Update dependencies and generate a new image (infrequent)
+
+There are two kinds of dependency and they are changed differently.
+
+#### Changes to R package dependencies (add/remove a package, or bump a version). 
+
+The set of R packages lives in ONE place: the
+`pkgs <- c(...)` list near the top of `docker/generate-deps.R`. 
+A helper script materialises that list into two committed files:
+  - `renv.lock` — the exact version of every package *and* its dependencies (the lockfile), and
+  - `docker/sysreqs.txt` — the system libraries those packages need to build.
+
+Steps:
+1. **Edit the `pkgs` list** in `docker/generate-deps.R` (add/remove the package name). To bump the R
+   version or the PPM snapshot instead, edit `docker/versions.env`.
+2. **Run `docker/gen-deps.sh`.** It starts the pinned Noble container (identical to the build), installs
+   the set from the pinned PPM snapshot, and **regenerates `renv.lock` + `docker/sysreqs.txt`**. You need
+   Docker running; you do **not** need R installed on your machine.
+3. **Review the `renv.lock` diff** (this is the gate — it shows exactly which versions changed), then
+   commit `generate-deps.R` + `renv.lock` + `sysreqs.txt` and open a PR.
+4. On merge, GitHub Actions rebuilds the image (the deps layer is invalidated and reinstalled from the
+   lock). **Validate the report output** before Peek pins the new digest.
+
+#### A system or LaTeX package (a shared library, a font, or a `texlive-*` package
+
+These are **not** managed by renv. Edit the `apt-get install` list in the **app stage of
+`docker/Dockerfile`** directly, then rebuild. The build-time guard renders a test report, so a missing
+LaTeX package fails the build instead of reaching prod. (If a newly added R package needs a system
+library *at runtime*, the guard's package-load check fails with a clear "cannot load X" — add that
+library to the same app-stage apt list.)
+
+> **Why not `renv::install()` locally?** The repo does carry renv's activation files (`.Rprofile` →
+> `renv/activate.R`, for interactive sessions on a host with R), but the canonical package set is the
+> `pkgs` list, and `gen-deps.sh` rebuilds the lock from it inside a container that matches the
+> build. Installing on your host (macOS/Windows) would update `renv.lock` but not `sysreqs.txt`, would
+> drift from the `pkgs` list, and would be **overwritten** the next time anyone runs `gen-deps.sh`.
+> Editing the list + regenerating in the container is what keeps the result reproducible and identical
+> to the built image.
+
+## Adopt a new image (pin the digest)
+
+A build publishes a multi-arch image and moves the `:latest` tag — but **production should run a
+specific immutable `@sha256` digest, not `:latest`**. After a new image is built (a code merge, or a
+dependency change from the section above), adopt it:
+
+1. **Get the new digest** — the Actions `manifest` job prints it in its run summary, or:
+   ```bash
+   docker buildx imagetools inspect ghcr.io/raabteam/raab-analysis:latest | grep -i digest
+   # Digest: sha256:<digest>
+   ```
+   The reference to pin is `ghcr.io/raabteam/raab-analysis@sha256:<digest>`.
+2. **Peek (production)** — set that pinned reference wherever Peek's deployment config names the image
+   (its K8s manifest / compose / Helm values), and redeploy. Peek builds nothing; it just pulls the digest.
+3. **Local (`docker/run-local.sh`)** — to run the *exact* image prod runs, either pass it per run:
+   ```bash
+   RAAB_IMAGE=ghcr.io/raabteam/raab-analysis@sha256:<digest> docker/run-local.sh <RAAB_ID>
+   ```
+   or pin it for the whole team by replacing `:latest` with `@sha256:<digest>` in the `IMAGE=` line of
+   `docker/run-local.sh` and committing. (Leaving `:latest` floats to the newest published build —
+   convenient for local iteration, but not guaranteed to match what Peek runs.)
+
+## renv is the source of truth for versions
+
+`renv::restore()` installs exactly what `renv.lock` pins. PPM only decides **binary vs. source** for that
+version — it never changes the version. Regenerating the lock at dependency-bump time and
+building right after means "locked == current" → binaries on both amd64 and arm64. Peek pins the image
+by `@sha256` digest for production.
+
+## File map
+
+| File | Purpose |
+|---|---|
+| `docker/Dockerfile` | Single multi-stage image: deps (builder) + code + `http-server.js` (runtime). System/LaTeX packages (apt, incl. `texlive-*`) are edited here (§B2). |
+| `docker/versions.env` | Build inputs: R base digest, PPM snapshot, platforms. Edit to bump R/snapshot. |
+| `docker/generate-deps.R` | The R-package list (`pkgs <- c(...)`) + logic; edit the list to add/remove an R package (§B1). Run in-container by `gen-deps.sh`. |
+| `docker/gen-deps.sh` | Regenerate `renv.lock` + `sysreqs.txt` by running `generate-deps.R` in the pinned Noble container. Run after editing the `pkgs` list. |
+| `docker/build.sh` | Build/push helper (called by the workflow / used locally). |
+| `docker/run-local.sh` | Local wrapper: `docker run` the image with mounts, run `Rscript` directly. Takes a survey folder name under `data/` (or a raw `raab_id`). |
+| `docker/sysreqs.txt` | **Generated** apt list (`pak::pkg_sysreqs`). Do not hand-edit. |
+| `docker/http-server.js` | The invocation server (default CMD; see the CI plan §7). |
+| `.github/workflows/image.yml` | The GHCR publish pipeline (see the CI plan §8). |
