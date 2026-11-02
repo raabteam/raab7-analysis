@@ -54,7 +54,12 @@ fi
 # must come from /opt/R-lib via R_LIBS_SITE, exactly as in prod (whose image has
 # no .Rprofile). Without this, renv activates against an empty renv/library in
 # the mount and every library() call fails.
+#
+# --user: run as you rather than the image's uid 1000, so on Linux the mounted tree is writable
+# (render() writes next to the .Rmd, the report into outputs/) and the outputs are yours. HOME=/tmp
+# because your uid may have no home in the image.
 exec docker run --rm \
+  --user "$(id -u):$(id -g)" -e HOME=/tmp \
   -v "$REPO":/raab7 \
   ${DATA_MOUNT[@]+"${DATA_MOUNT[@]}"} \
   -e RENV_CONFIG_AUTOLOADER_ENABLED=FALSE \

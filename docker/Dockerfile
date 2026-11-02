@@ -99,12 +99,19 @@ RUN R -e "pkgs <- c('rmarkdown','readxl','knitr','tinytex','kableExtra','RColorB
 RUN printf '\n# Baked by docker/Dockerfile: no network TeX installs at render time.\noptions(tinytex.install_packages = FALSE, tinytex.tlmgr_update = FALSE)\n' \
       >> "$(R RHOME)/etc/Rprofile.site"
 
+# Unprivileged runtime user, uid/gid 1000: the same uid as the Peek server image, which shares
+# outputs/ with this container (each deletes the other's files before a re-run), and the uid
+# that owns the Peek hosts' data folders. A real user, so HOME exists for R and LaTeX caches.
+RUN useradd --uid 1000 --user-group --create-home raab
+
 WORKDIR /raab7
 
 # Code LAST. .here pins here() to /raab7; renv.lock kept for traceability
 # (packages come from /opt/R-lib via R_LIBS_SITE — no renv activation at runtime).
 # data/ (input, ro) and outputs/ (output, rw) are MOUNTED at runtime, not copied.
-COPY RAAB7_scripts/ ./RAAB7_scripts/
+# RAAB7_scripts/ belongs to the runtime user: render() writes its intermediates (.knit.md,
+# figures, .tex/.log) next to RAAB7_reporter.Rmd, and the wrapper deletes the *.log there.
+COPY --chown=1000:1000 RAAB7_scripts/ ./RAAB7_scripts/
 COPY rmd_wrapper_PEEK_server.R renv.lock .here docker/http-server.js ./
 
 # OCI + provenance metadata (no runtime effect; readable via `docker inspect`).
@@ -126,10 +133,9 @@ LABEL org.opencontainers.image.title="raab-analysis" \
       raab.ppm-snapshot="${PPM_SNAPSHOT}" \
       raab.texlive="apt-noble"
 
-# TODO(non-root): running as an unprivileged user is a cheap hardening win, but
-# the runtime-mounted outputs/ dir must then be writable by that uid. Until the
-# caller (Peek deploy / K8s) is confirmed to own/allow that path, we stay root to
-# avoid breaking the outputs/ write path. Revisit once the mount ownership is known.
+# Run as the unprivileged user. The mounted outputs/ must be writable by uid 1000: on the Peek
+# swarm hosts deployAndMigrate.sh chowns the data folders to it; in K8s set fsGroup: 1000.
+USER 1000:1000
 
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
